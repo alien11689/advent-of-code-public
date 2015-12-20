@@ -1,5 +1,5 @@
 
-def text = new File('data5').text
+def text = new File('day5.data').text
 
 def vowels = 'aeiou'
 
