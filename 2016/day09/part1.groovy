@@ -7,25 +7,26 @@ def main(String input) {
 }
 
 def decompress(String text){
-	def split = text.split(/[\(\)]/).findAll().collectMany {isRule(it) ? ["($it)"] : it.toCharArray().collect {it as String}}
-	List<String> newText = []
-	for(int i = 0; i < split.size(); ++i){
-		println "Split: ${split[i]}"
-		if(isRule(split[i])){
-			def ruleSplit = split[i].split(/[\(x\)]/)
-			def howMany = ruleSplit[2] as int
-			def chars = ruleSplit[1]  as int
-			howMany.times {
-				println (split[(i+1)..-1].collectMany{println it; (it.toCharArray() as List<String>) })
-				newText.addAll(split[(i+1)..-1].collectMany{(it.toCharArray() as List<String>) }
-					[0..<chars]
-					.collectMany {it as String})	
+	List<String> response = []
+	for(int i =0; i < text.size(); ){
+		if(text[i] == '('){
+			int ruleEnd = text.indexOf(')', i + 1)
+			if(ruleEnd == -1) {
+				throw new Exception()	
 			}
-		}else{
-			newText << split[i]
-		}	
+			int chars = text[i..ruleEnd].split(/[\(x\)]/)[1] as int 
+			int repeat = text[i..ruleEnd].split(/[\(x\)]/)[2] as int
+			String newText = text[(ruleEnd + 1)..(ruleEnd + chars)]
+			repeat.times {
+				response << newText
+			}
+			i = ruleEnd + chars +1
+		}else {
+			response << text[i]
+			++i
+		}
 	}
-	newText.join('')
+	response.join('')
 }
 
 def isRule(String text){
@@ -34,4 +35,4 @@ def isRule(String text){
 
 println(main('sample.txt'))
 println()
-//println(main('input.txt'))
+println(main('input.txt'))
