@@ -48,15 +48,9 @@ def generateMoves(int elevator, List<Set<Integer>> floors, def memory){
             }else {
                 null
             }
-        }.findAll {it}
-        .collect { m ->
-            def newE
-            if(m.size() == 2){
-                newE = elevator + 1
-            }else {
-                newE = elevator - 1
-            }
-            if(newE in (0..<4) && (newE != 0 || !floors[0].empty) && (!(newE == 1 && floors[0].empty &&floors[1].empty)) ){
+        }.findAll()
+        .collectMany { m ->
+            [ elevator + 1, elevator -1].findAll {it in (0..<4)}.collect {newE -> 
                 List<Set<String>> newFloors = floors.collect { it.collect {it} as Set}
                 newFloors[newE] = newFloors[newE] + m
                 newFloors[elevator] = newFloors[elevator] - m
@@ -72,8 +66,6 @@ def generateMoves(int elevator, List<Set<Integer>> floors, def memory){
                 }else {
                     null
                 }
-            }else {
-                null
             }
         }.findAll()
 }
