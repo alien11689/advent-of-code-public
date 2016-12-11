@@ -3,7 +3,7 @@ def main(List<Set<Integer>> floors) {
     Queue<Move> q = new LinkedList()
     def first = new Move(0, new Stage(0, floors))
     q << first
-    memory << first.stage
+    memory << genStates(first.stage)
     while(!q.empty){
         Move move = q.poll()
         println move
@@ -13,11 +13,26 @@ def main(List<Set<Integer>> floors) {
         int next = move.stepCount + 1
         generateMoves( move.stage.e, move.stage.floors, memory)
             .each {
-               memory << it
                q.offer (new Move(next, it))
             }
     }
     return null
+}
+
+def genStates(Stage st){
+    return [
+        st.e,
+        st.floors.collect { floor -> 
+            def gs = floor.findAll {it > 0} as Set
+            def ms = floor.findAll {it < 0}.collect {-it} as Set
+            [
+                (gs - ms).size(),
+                (ms - gs).size(),
+                gs.intersect(ms).size()
+            ]
+        } 
+    ]
+    
 }
 
 def generateMoves(int elevator, List<Set<Integer>> floors, def memory){
@@ -46,8 +61,14 @@ def generateMoves(int elevator, List<Set<Integer>> floors, def memory){
                 newFloors[newE] = newFloors[newE] + m
                 newFloors[elevator] = newFloors[elevator] - m
                 if(isValid(newFloors[newE])){
-                    def st = new Stage(newE, newFloors)
-                    st in memory ? null : st
+                    Stage st = new Stage(newE, newFloors)
+                    def toMem = genStates(st)
+                    if(toMem in memory) {
+                        null
+                    } else {
+                        memory << toMem
+                        st
+                    }
                 }else {
                     null
                 }
