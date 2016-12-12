@@ -1,24 +1,41 @@
-def main(List<Set<Object>> floors) {
-    def memory = [] as Set
+def main(List<Set<Integer>> floors) {
+    def memory = [] as HashSet
     Queue<Move> q = new LinkedList()
-    q << new Move(0, new Stage(0, floors))
+    def first = new Move(0, new Stage(0, floors))
+    q << first
+    memory << genStates(first.stage)
     while(!q.empty){
-        Move move = q.remove()
+        Move move = q.poll()
         println move
         if(isFinished(move.stage.floors)){
             return move.stepCount
         }
-        generateMoves( move.stage.e, move.stage.floors)
-            .findAll { !(it in memory)}
+        int next = move.stepCount + 1
+        generateMoves( move.stage.e, move.stage.floors, memory)
             .each {
-               memory << it
-               q.offer (new Move(move.stepCount + 1, it))
+               q.offer (new Move(next, it))
             }
     }
     return null
 }
 
-def generateMoves(int elevator, List<Set<Object>> floors){
+def genStates(Stage st){
+    return [
+        st.e,
+        st.floors.collect { floor -> 
+            def gs = floor.findAll {it > 0} as Set
+            def ms = floor.findAll {it < 0}.collect {-it} as Set
+            [
+                (gs - ms).size(),
+                (ms - gs).size(),
+                gs.intersect(ms).size()
+            ]
+        } 
+    ]
+    
+}
+
+def generateMoves(int elevator, List<Set<Integer>> floors, def memory){
     def currentFloor = floors[elevator]
     def possibleMoves = [currentFloor, currentFloor].combinations()
         .collect {it as Set}
@@ -26,31 +43,37 @@ def generateMoves(int elevator, List<Set<Object>> floors){
             cur << a
         }
         .collect {
-            def newFloor = currentFloor - it
-            if(isValid(newFloor)){
+            if(isValid(currentFloor - it)){
                 it
             }else {
                 null
             }
-        }.findAll {it}
-    [elevator + 1, elevator -1].findAll {it in (0..<4)}.collectMany { e->
-        possibleMoves.collect { pm ->
-            List<Set<String>> newFloors = floors.collect { it.collect {it} as Set}
-            newFloors[e] = newFloors[e] + pm
-            newFloors[elevator] = newFloors[elevator] - pm
-            if(isValid(newFloors[e])){
-                new Stage(e, newFloors)
-            }else {
-                null
+        }.findAll()
+        .collectMany { m ->
+            [ elevator + 1, elevator -1].findAll {it in (0..<4)}.collect {newE -> 
+                List<Set<String>> newFloors = floors.collect { it.collect {it} as Set}
+                newFloors[newE] = newFloors[newE] + m
+                newFloors[elevator] = newFloors[elevator] - m
+                if(isValid(newFloors[newE])){
+                    Stage st = new Stage(newE, newFloors)
+                    def toMem = genStates(st)
+                    if(toMem in memory) {
+                        null
+                    } else {
+                        memory << toMem
+                        st
+                    }
+                }else {
+                    null
+                }
             }
-        }
-    }.findAll() 
+        }.findAll()
 }
 
 @groovy.transform.Immutable
 class Stage {
     int e
-    List<Set<Object>> floors
+    List<Set<Integer>> floors
 }
 
 @groovy.transform.Immutable
@@ -59,9 +82,11 @@ class Move {
     Stage stage
 }
 
+@groovy.transform.Memoized
 def isValid(Set<Objects> floor){
-    floor.empty || floor.findAll {it instanceof M}.every {m ->
-        floor.findAll {it instanceof G }.empty || floor.findAll {it instanceof G}.any {g -> g.type == m.type}
+    def gs = floor.findAll {it > 0 }
+    gs.empty || floor.findAll {it < 0 }.every {m ->
+        gs.any {g -> m == -g}
     }
 }
 
@@ -69,27 +94,11 @@ def isFinished(List floors){
     floors[0..2].every {it.empty}
 }
 
-
-def canCharge(Set<Object> floor){
-    floor.findAll {it instanceof M}.any {m ->
-        floor.findAll {it instanceof G}.any {g -> g.type == m.type}
-    }
-}
-
-@groovy.transform.Immutable
-class M {
-    String type
-}
-@groovy.transform.Immutable
-class G {
-    String type
-}
-
 println(main(
     [
-        [new M('H'), new M('L')] as Set,
-        [new G('H')] as Set,
-        [new G('L')] as Set,
+        [-1, -2] as Set,
+        [1] as Set,
+        [2] as Set,
         [] as Set
     ]
 ))
@@ -97,8 +106,8 @@ println()
 
 println(main(
     [
-        [new G('Po'),new  G ('T'),new M ('T'),new G ('Pr'),new G ('R'),new M ('R'),new G ('C'),new M ('C') ]  as Set,
-        [new M ('Po'),new M ('Pr')] as Set,
+        [1,2,-2,3,4,-4,5,-5]  as Set,
+        [-1,-3] as Set,
         [] as Set,
         [] as Set,
     ]
