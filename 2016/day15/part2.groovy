@@ -1,11 +1,13 @@
 def main(List<Disk> disks) {
-	int time = 0
+	Disk bigger = disks.max {it.positions}
+	def time = bigger.first()
+	def step = bigger.positions
 	while(true){
 		println time
 		if(disks.every {it.at0(time)}){
 			return time	
 		}
-		++time	
+		time += step	
 	}
 }
 
@@ -17,8 +19,11 @@ class Disk {
 
 	def at0(int time){
 		def at = (start + time + num) % positions 
-//		println "Disk $num is at position $at"
 		at == 0
+	}
+
+	def first(){
+		positions - (start + num) % positions	
 	}
 }
 
