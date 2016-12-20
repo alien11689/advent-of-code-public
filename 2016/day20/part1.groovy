@@ -4,7 +4,9 @@ def main(String input, long base) {
 			def split = it.split('-')
 			new Range(from: split[0] as long, to: split[1] as long)
 		}
+    int help = 0
 	while(ranges.size() > 1){
+        ranges = help % 2 == 0 ? ranges : ranges.reverse()
 		def minimized = ranges[1..-1].inject([ranges[0]] as Set){acc, cur ->
 			acc.collectMany {it.combine(cur)} as Set
 		}.sort()
@@ -13,8 +15,10 @@ def main(String input, long base) {
 			break	
 		}
 		ranges = minimized
+        ++help
 	}
-	return ranges
+    println ranges
+	return ranges.first().to + 1
 }
 
 @groovy.transform.Sortable
