@@ -4,25 +4,29 @@ def main(String input, long base) {
 			def split = it.split('-')
 			new Range(from: split[0] as long, to: split[1] as long)
 		}
+	int help = 0
 	while(ranges.size() > 1){
 		println "Ranges size: ${ranges.size()}"
-		def minimized = ranges.inject([ranges[0]] as Set){acc, cur ->
+		def init = help % 2 == 0 ? ranges : ranges.reverse()
+		def minimized = init.inject([init.first()] as Set){acc, cur ->
 				acc.collectMany {it.combine(cur)} as Set
-			}.sort()
+			}
+		minimized = minimized.sort()
 		if(minimized == ranges){
 			ranges = minimized
 			break	
 		}
 		ranges = minimized
+		++help
 	}
 	println ranges
 	long sum = 0
 	for(int i =0; i < ranges.size() - 1; ++i){
-		long diff = ranges[i+1].from - ranges[i].to
+		long diff = ranges[i+1].from - ranges[i].to - 1
 		if(diff < 0){
-			println	"${ranges[i]} ${ranges[i+1]}"
+			throw new RuntimeException(	"${ranges[i]} ${ranges[i+1]}")
 		}
-		sum += diff < 0 ? -diff : diff
+		sum += diff 
 	}
 	return sum
 }
