@@ -18,19 +18,22 @@ lines.each {
 (1): 2,
 (4): 4,
 (6): 4
-]
-*/
+]*/
 
-int myPos = 0
-Set caught = [] as Set
-int max = pos2Range.keySet().max()
+memory = [:]
 	
-	def countPos(current, range) {
+	def countPos(current, range, delay) {
 		boolean down = true
 		int start = 0
-		int tick = 0 
-		while(tick < current){
-			println "Laser $current is in pos $start/$range"
+		int tick = 0
+		def fromMem = memory[[current, current + delay - 1]]
+		if(fromMem != null){
+			start = fromMem[0]
+			down = fromMem[1]
+			tick = current + delay - 1
+		}
+		while(tick < current + delay){
+			println "Laser $current is in pos $start/$range with delay $delay"
 			start += (down ? 1 : -1)
 			if(start == range - 1){
 				down = false
@@ -40,23 +43,33 @@ int max = pos2Range.keySet().max()
 			}
 			++tick
 		}
+		memory[[current, tick]] = [start, down]
 		return start
 	}
 
+int delay = 3000
+	int max = pos2Range.keySet().max()
+while(true){
+	int myPos = 0
+	Set caught = [] as Set
+	++delay
 while(myPos <= max){
 	def range = pos2Range[myPos]
 	if(range == null) { ++myPos; continue }
-	if(countPos(myPos, range) == 0) {
+	if(countPos(myPos, range, delay) == 0) {
 		println "$myPos/$max caught"
 		caught << myPos
+		break
 	}else {
 		
 		println "$myPos/$max not caught"
 	}
 	++myPos
 }
-
-int sum = caught.collect {pos2Range[it] * it}.sum()
-
-println sum
+if(caught.empty){
+	
+	println delay
+	return
+}
+}
 
