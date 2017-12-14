@@ -1,5 +1,5 @@
-//def input = "flqrgnkx"
-def input = "ugkiagan"
+def input = "flqrgnkx"
+input = "ugkiagan"
 
 def knotHash(text){
 List lengths = text.collect {(int) (it as char).charValue()}
@@ -45,11 +45,43 @@ def map = [
 	'f':'1111',
 ]
 
-def grid =  ((0..127).collect {"$input-$it"}.collect {knotHash(it)})
+List<List<String>> grid =  ((0..127).collect {"$input-$it"}.collect {knotHash(it)})
 	.collect {
 		it.collect {
 			map[it]
-		}.join('')
+		}.join('') as List
 	}
 
-println grid.join('').findAll {it == '1'}.size()
+int currentGroup = 0
+
+def neighbour(i,j, size) {
+	return [
+		[i -1, j],
+		[i+1, j],
+		[i, j-1],
+		[i, j+1]
+	].findAll {it[0] >= 0 && it[0] < size && it[1] >= 0 && it[1] < size}
+}
+
+(0..<(grid.size())).each { i->
+	(0..<(grid[0].size())).each { j->
+		if(grid[i][j] == '1'){
+			int val = currentGroup--
+			def mem = [] as Set
+			List neighbours = [[i,j]]
+			while(!neighbours.empty){
+					def cur = neighbours.pop()
+					if(grid[cur[0]][cur[1]] == '1'){
+						grid[cur[0]][cur[1]] = "$val"
+						def n = neighbour(cur[0], cur[1], grid.size()).findAll {! (it in mem)}
+						mem.addAll(n)
+						neighbours.addAll(n)
+					}
+
+			}
+
+		}
+	}
+}
+
+println (currentGroup * (-1))
