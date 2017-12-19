@@ -19,20 +19,21 @@ def changeDir(grid, dir, oldCur, cur){
 	.find()
 	
 }
-
+int steps = 0
 while(dir){
-	println "$cur -> ${grid[cur[1]][cur[0]]}"
 	def oldCur = cur
+	++steps
 	cur = [cur[0] + dir[0],cur[1] + dir[1]]
 	def sign = grid[cur[1]][cur[0]]
 	if(!(sign in ['-', '+', '|'])){
 		letters << sign
-		println letters.join()
 	}
 	if(sign == '+'){
 		dir = changeDir(grid, dir, oldCur, cur)
 	}
 	if(sign == ' '){
-		throw new Exception("Boom at $cur")
+		println letters.join()
+		println steps
+		return
 	}
 }
