@@ -1,4 +1,5 @@
 String input = new File('input.txt').text
+//input = new File('inputPfs.txt').text
 
 List lines = input.split('\n').collect{it.trim()}
 
