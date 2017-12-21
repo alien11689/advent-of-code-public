@@ -54,10 +54,9 @@ def rules = lines.collect {line ->
 		input,
 		input.collect {it.reverse()},
 		input.transpose().collect {it.reverse()}.transpose(),
-		rotate(input),
-		rotate(rotate(input)),
-		rotate(rotate(rotate(input))),
-	] as Set
+	].collectMany {
+		[it, rotate(it), rotate(rotate(it)), rotate(rotate(rotate(it)))]
+	} as Set
 	return new Rule(
 		output.size() - 1,
 		inputs,
@@ -69,6 +68,7 @@ def printGrid(it){
 	println it.collect {it.join('')}.join('\n')
 }
 
+/**
 rules.each {it
 	println "Rule:"
 	it.inputs.each {
@@ -80,6 +80,7 @@ rules.each {it
 
 	println()
 }
+*/
 
 int iter = 0
 while(iter < 5){
