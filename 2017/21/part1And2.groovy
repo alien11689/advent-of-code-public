@@ -68,25 +68,11 @@ def printGrid(it){
 	println it.collect {it.join('')}.join('\n')
 }
 
-/**
-rules.each {it
-	println "Rule:"
-	it.inputs.each {
-		println "From: "
-		printGrid(it)
-	}
-	println "To:"
-	printGrid(it.output)
-
-	println()
-}
-*/
-
 int iter = 0
-while(iter < 5){
+while(iter < 18){
 	++iter
-	println "Iter $iter"
-	println image.collect {it.join('')}.join('\n')
+	//println "Iter $iter"
+	//println printGrid(image)
 	def newImage = []
 	int split = image.size() % 2 == 0 ? 2 : 3
 	for (int i = 0; i < image.size(); i += split) {
@@ -108,7 +94,10 @@ while(iter < 5){
 		})
 	}
 	image = newImage
+	if(iter in [5,18]){
+		print "For iter $iter "
+		println image.collectMany {it}.findAll {it == '#'}.size()
+	}
 }
+//printGrid(image)
 
-println image.collect {it.join('')}.join('\n')
-println image.collectMany {it}.findAll {it == '#'}.size()
