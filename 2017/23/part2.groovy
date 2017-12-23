@@ -1,4 +1,4 @@
-String input = new File('inputFixed.txt').text
+String input = new File('input.txt').text
 
 List lines = input.split('\n').collect{it.trim()}
 
@@ -102,11 +102,33 @@ while(cur < actions.size()){
 	def r = reg.reg
 	println "${cur+1}: ${actions[cur]} ${r}"
 //	Thread.sleep(100)
-	if(cur == 19 && r.get('g') != 0) {
-		r.put('e', r.get('e') - r.get('g') - 1)
-		r.put('g', -1)
-		//reg.reg.put('d', reg.reg.get('b') - 1)
-		//reg.reg.put('f', 0)
+	if(cur == 11) {
+		println "Opt in line ${cur + 1}"
+		int b = r.get('b')
+		int d = r.get('d')
+		int e = r.get('e')
+		int div = b / d
+		if(b % d == 0 && div >= e && d * div == b ){
+			r.put('f', 0)
+			cur = 24
+			continue
+		}
+		cur = 20
+		continue
+	}
+	if(cur == 20){
+		println "Opt in line ${cur + 1}"
+		int d = r.get('d')
+		int b = r.get('b')
+		while(d < b){
+			++d
+			if(b % d == 0){
+				r.put('d', d)
+				break
+			}
+		}
+		++cur
+		continue			
 	}
 	cur += actions[cur].apply(reg)
 }
