@@ -32,9 +32,9 @@ def nextAccept(prev, factor, divider){
 while( i < 5000000){
 	genA = nextAccept(genA, factorA, divA)
 	genB = nextAccept(genB, factorB, divB)
-	String a = String.format("%32s", Integer.toBinaryString(genA as int)).replace(' ', '0').substring(16)
-	String b = String.format("%32s", Integer.toBinaryString(genB as int)).replace(' ', '0').substring(16)
-	if(a == b){println("Found on $i");++judge}
+	int a = genA % 65536
+	int b = genB % 65536
+	if(a == b){++judge}
 	++i
 }
 

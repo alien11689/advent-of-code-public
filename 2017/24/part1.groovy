@@ -37,7 +37,6 @@ Stack stack = new Stack()
 stack.push(new Chain([], 0))
 
 while(!stack.empty){
-	println "Stack size: ${stack.size()}"
 	Chain parent = stack.pop()
 	List newChains = cpus.collect {
 		parent.connectTo(it)
