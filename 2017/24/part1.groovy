@@ -8,10 +8,17 @@ class Cpu {
 	List<Integer> pins
 }
 
-@groovy.transform.Immutable
+@groovy.transform.EqualsAndHashCode
 class Chain {
 	List<Cpu> cpus
 	int lastPin
+	int length
+
+	Chain(c, l){
+		cpus = c
+		lastPin = l
+		length = cpus.collectMany {it.pins}.sum() ?: 0
+	}
 
 	Chain connectTo(Cpu c){
 		if(c in cpus){
@@ -22,29 +29,27 @@ class Chain {
 		}
 		return new Chain(cpus + [c], lastPin == c.pins[0]? c.pins[1] : c.pins[0])
 	}
-
-	int length(){
-		return cpus.collectMany {it.pins}.sum()
-	}
 }
 
 List cpus = lines.collect { 
 	new Cpu(it.split('/').collect {it as int})
 }
 
-List chains = []
-Stack stack = new Stack()
-stack.push(new Chain([], 0))
+int bestLength = 0
+Queue queue = new LinkedList()
+queue.offer(new Chain([], 0))
 
-while(!stack.empty){
-	Chain parent = stack.pop()
+while(!queue.empty){
+	Chain parent = queue.poll()
+	if(parent.length > bestLength ){
+		bestLength = parent.length
+	}
 	List newChains = cpus.collect {
 		parent.connectTo(it)
 	}.findAll()
-	chains.addAll newChains
 	newChains.each {
-		stack.push(it)
+		queue.offer(it)
 	}
 }
 
-println chains.collect {it.length()}.max()
+println bestLength
