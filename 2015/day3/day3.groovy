@@ -1,5 +1,5 @@
 
-def text = new File('data3').text
+def text = new File('day3.data').text
 
 def visited = [[0,0]] as Set
 

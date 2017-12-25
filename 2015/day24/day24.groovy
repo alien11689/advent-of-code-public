@@ -51,7 +51,7 @@ def selectSizes(){
     }
 } 
 
-(1..1000000000).each {
+(1..5000).each {
     
     def newBuckets = selectSizes()
     println "New Buckets $newBuckets"

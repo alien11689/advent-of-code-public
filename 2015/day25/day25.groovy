@@ -26,11 +26,11 @@ def nextIdx(int i, int j){
         def tmp = i
         i = j
         j = tmp + 1
-        println ([i,j])
+//        println ([i,j])
     }else if (i == 0){
         i = j + 1
         j = 0
-        println ([i,j])
+//        println ([i,j])
     }else {
         ++j
         --i

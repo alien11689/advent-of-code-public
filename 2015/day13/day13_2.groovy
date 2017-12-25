@@ -61,7 +61,7 @@ def random = new Random()
 
 memory << []
 
-(1..10000000000).each {
+(1..10000).each {
     println it
     def newList = []
     while(newList in memory){
