@@ -38,4 +38,14 @@ carpets.each {
         }
     }
 }
-println(field.flatten().findAll { it.ids.size() > 1 }.size())
+println('Built carpet')
+List<Cell> flattenOneField = field.flatten().findAll { it.ids.size() == 1 }
+
+Set idsToCheck = flattenOneField.ids.flatten() as Set
+
+carpets.findAll { it.id in idsToCheck }.collect { c ->
+    if (flattenOneField.findAll { it.contains(c.id) }.size() == c.height * c.width) {
+        println(c.id)
+        throw new RuntimeException()
+    }
+}
