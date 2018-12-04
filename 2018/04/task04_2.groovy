@@ -1,6 +1,3 @@
-import groovy.transform.ToString
-
-import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -12,17 +9,9 @@ def lines = text.split('\n')
 
 
 def lastGuardId = null
-def fall = null
+LocalDateTime fall = null
 
 def m = [:]
-
-@ToString
-class Sleep {
-    int dur
-    LocalTime start
-    LocalTime end
-    LocalDate date
-}
 
 def asleep = 0
 lines.each { line ->
@@ -36,22 +25,17 @@ lines.each { line ->
         fall = ts
     } else {
         LocalDateTime ts = LocalDateTime.of(LocalDate.parse(parts[0]), LocalTime.parse(parts[1]))
-        def dur = Duration.between(fall, ts).toMinutes()
-        m[lastGuardId] << new Sleep(dur: dur, date: fall.toLocalDate(), start: fall.toLocalTime(), end: ts.toLocalTime())
+        m[lastGuardId] << (fall.minute..<(ts.minute))
     }
 }
-
-def max = m.max { it.value.dur.sum() }
-println max.key
-Map minutes = [:].withDefault { _ -> 0 }
-
-max.value.each { Sleep s ->
-    int start = s.start.minute
-    int end = s.end.minute
-    for (int i = 0; i < 60; ++i) {
-        if (i >= start && i < end) {
-            minutes[i] += 1
+int curMax = -1
+int guardMax = -1
+m.findAll { it.value }.collect { entry ->
+    Map minMap = [:].withDefault { _ -> 0 }
+    entry.value.each { Range r ->
+        r.each {
+            minMap[it]++
         }
     }
-}
-println(max.key * minutes.max { it.value }.key)
+    [(entry.key): minMap.max { it.value }]
+}.max {  }
