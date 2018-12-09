@@ -112,5 +112,5 @@ while (true) {
         ticks++
     }
 }
-println(ticks)
 println(order.join())
+println(ticks)

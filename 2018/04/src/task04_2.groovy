@@ -28,9 +28,7 @@ lines.each { line ->
         m[lastGuardId] << (fall.minute..<(ts.minute))
     }
 }
-int curMax = -1
-int guardMax = -1
-m.findAll { it.value }.collect { entry ->
+Map result = m.findAll { it.value }.collectEntries { entry ->
     Map minMap = [:].withDefault { _ -> 0 }
     entry.value.each { Range r ->
         r.each {
@@ -38,4 +36,7 @@ m.findAll { it.value }.collect { entry ->
         }
     }
     [(entry.key): minMap.max { it.value }]
-}.max {  }
+}
+Map.Entry entry = result.max { it.value.value }
+println(entry.key * entry.value.key)
+//println(result.max {it.value.})

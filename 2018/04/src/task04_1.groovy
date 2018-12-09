@@ -42,7 +42,6 @@ lines.each { line ->
 }
 
 def max = m.max { it.value.dur.sum() }
-println max.key
 Map minutes = [:].withDefault { _ -> 0 }
 
 max.value.each { Sleep s ->
