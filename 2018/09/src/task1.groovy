@@ -6,7 +6,7 @@ int maxScore = 71498
 @ToString
 class Player {
     int id
-    int score = 0
+    long score = 0
 
 
     def addScore(int score) {
@@ -14,31 +14,76 @@ class Player {
     }
 }
 
+@ToString(includes = ['value'])
+class Node {
+    int value
+    Node prev = null
+    Node next = null
+
+    Node insertAfter(int score) {
+        Node newNode = new Node(value: score)
+        newNode.prev = this.next
+        newNode.next = this.next.next
+        this.next.next.prev = newNode
+        this.next.next = newNode
+        return newNode
+    }
+
+    def removeBehind(int steps) {
+        Node toRemove = this
+        int count = 0
+        while (count < 7) {
+            count++
+            toRemove = toRemove.prev
+        }
+        int value = toRemove.value
+        Node newCur = toRemove.next
+        toRemove.prev.next = toRemove.next
+        toRemove.next.prev = toRemove.prev
+        return [newCur, value]
+    }
+}
+
+def printMarbles(Node root) {
+    List values = [root.value]
+    Node cur = root
+    while (cur.next != root) {
+        values << cur.next.value
+        cur = cur.next
+    }
+    println(values)
+}
+
 def findHighestScore(int playersCount, int maxScore) {
     List<Player> players = (1..playersCount).collect { new Player(id: it) }
 
-    List<Integer> marbles = [0]
+    Node root = new Node(value: 0)
+    root.prev = root
+    root.next = root
 
     int score = 1
-    int index = 0
     int curPlayer = 0
 
+    Node cur = root
+
     while (score <= maxScore) {
-//    println(marbles)
+//        printMarbles(root)
+//        println("Cur ${cur}")
+        if (score % 10000 == 0) {
+            println(score)
+        }
         if (score % 23 == 0) {
             players[curPlayer].addScore(score)
-            int toRemoveIndex = (marbles.size() + index - 8) % marbles.size()
-            players[curPlayer].addScore(marbles[toRemoveIndex])
-            marbles.remove(toRemoveIndex)
-            index = (toRemoveIndex + 1) % marbles.size()
+            List result = cur.removeBehind(8)
+            players[curPlayer].addScore(result[1])
+            cur = result[0]
         } else {
-            marbles.add(index + 1, score)
-            index = (index + 2) % marbles.size()
+            cur = cur.insertAfter(score)
         }
         score++
         curPlayer = (curPlayer + 1) % playersCount
     }
-//println(marbles)
+//    printMarbles(root)
     return players.max { it.score }.score
 }
 
