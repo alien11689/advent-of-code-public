@@ -43,27 +43,28 @@ def printPoints(List<Point> points) {
     for (int y = minY; y <= maxY; ++y) {
         for (int x = minX; x <= maxX; ++x) {
             if (ps.contains([x, y])) {
-//                    sb.append("#")
                 print('#')
             } else {
-//                    sb.append(".")
                 print('.')
             }
         }
-//            sb.append('\n')
         println()
     }
     println(sb)
 }
 
 int tick = 0
+int prevMax = Integer.MAX_VALUE
 while (true) {
-    println("Tick $tick")
     int minX = points.x.min()
     int maxX = points.x.max()
+    if(prevMax < maxX){
+        break   
+    }
+    prevMax = maxX
+    println("Tick $tick")
     if (maxX - minX < 100) {
         printPoints(points)
-        Thread.sleep(1000)
     }
     ++tick
     points.each { it.move() }
