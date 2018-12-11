@@ -27,8 +27,8 @@ def buildBoard(n, m, serialNumber) {
     (1..n).collect { y ->
         (1..m).collect { x ->
             getFuelLevel(x, y, serialNumber)
-        }
-    }
+        } as int[]
+    } as int[][]
 
 }
 
@@ -42,25 +42,26 @@ class Point2 {
     int rackSize
 }
 
-Point2 calculateRacksMax(List<List<Integer>> board) {
+Point2 calculateRacksMax(int[][] board) {
     int maxFuel = -1000000
     Point2 currentMax = null
-    (1..(board.size())).each { y ->
-        (1..(board[0].size())).each { x ->
+    for(int y = 1; y <= board.size(); ++y){
+        for(int x = 1; x <= board.size(); ++x){
             int rackSize = 0
             Point2 current = new Point2(x, y, board[y - 1][x - 1] as int, rackSize + 1)
             rackSize++
             while (rackSize + x <= board.size() && rackSize + y <= board.size()) {
                 int additionalX = x + rackSize
                 int additionalY = y + rackSize
-                int rightSide = (y..additionalY).collect { i ->
-                    board[i - 1][additionalX - 1]
-                }.sum()
+		int newSize = current.sum
+		for(int i = y; i <= additionalY; ++i ){
+                     newSize += board[i - 1][additionalX - 1]
+		}
 
-                int bottomSide = (x..additionalX).collect { j ->
-                    board[additionalY - 1][j - 1]
-                }.sum()
-                int newSize = current.sum + rightSide + bottomSide - board[additionalY - 1][additionalX - 1]
+		for(int i = x; i <= additionalX; ++i ){
+           		newSize += board[additionalY - 1][i - 1]
+                }
+                newSize -= board[additionalY - 1][additionalX - 1]
                 current = new Point2(x, y, newSize, rackSize + 1)
                 if (current.sum > maxFuel) {
                     maxFuel = current.sum
