@@ -129,8 +129,7 @@ class Player implements Comparable<Player> {
                     players.find { !it.dead && it.type != type && it.onPosition(n) }
                 }.findAll()
                 if (es) {
-                    println("move and attack")
-//                    println("Attack $enemy")
+//                    println("Move and attack $enemy")
                     return [e.move, new Attack(es.sort().sort { it.hitPoints }.first(), this)]
                 }
                 return [e.move]
