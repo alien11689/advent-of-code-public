@@ -43,6 +43,7 @@ class Player implements Comparable<Player> {
     int y
     PlayerType type
     int hitPoints
+    int attackPower
     boolean moved = false
 
     boolean isDead() {
@@ -85,7 +86,7 @@ class Player implements Comparable<Player> {
         }.findAll()
         if (enemies) {
 //                    println("Attack $enemy")
-            return [new Attack(enemies.sort().sort { it.hitPoints }.first())]
+            return [new Attack(enemies.sort().sort { it.hitPoints }.first(), this)]
         }
 //        println("I won't attack an enemy")
         Set<Position> memory = [] as Set
@@ -130,7 +131,7 @@ class Player implements Comparable<Player> {
                 if (es) {
                     println("move and attack")
 //                    println("Attack $enemy")
-                    return [e.move, new Attack(es.sort().sort { it.hitPoints }.first())]
+                    return [e.move, new Attack(es.sort().sort { it.hitPoints }.first(), this)]
                 }
                 return [e.move]
             }
@@ -166,9 +167,10 @@ class Move implements Action {
 @Canonical
 class Attack implements Action {
     Player enemy
+    Player attacker
 
     void action() {
-        enemy.hitPoints -= 3
+        enemy.hitPoints -= attacker.attackPower
     }
 }
 
@@ -200,14 +202,14 @@ def buildBoard(List<String> lines) {
 }
 
 
-def buildPlayers(List<String> lines) {
+def buildPlayers(List<String> lines, int attack) {
     List<Player> players = []
     for (int y = 0; y < lines.size(); ++y) {
         for (int x = 0; x < lines[y].size(); ++x) {
             if (lines[y][x] == 'G') {
-                players << new Player(x, y, PlayerType.G, 200)
+                players << new Player(x, y, PlayerType.G, 200, 3)
             } else if (lines[y][x] == 'E') {
-                players << new Player(x, y, PlayerType.E, 200)
+                players << new Player(x, y, PlayerType.E, 200, attack)
             }
         }
     }
@@ -238,6 +240,9 @@ int game(List<Player> players, CellType[][] board) {
                     }
                 }
             }
+            if (players.find { it.type == PlayerType.E && it.dead }) {
+                throw new ElfDied()
+            }
             players.removeAll { it.dead }
             ++round
             println(round)
@@ -249,6 +254,10 @@ int game(List<Player> players, CellType[][] board) {
         printBoard(players, board)
         return end.round
     }
+}
+
+@Canonical
+class ElfDied extends RuntimeException {
 }
 
 @Canonical
@@ -275,20 +284,29 @@ def whole(String file) {
     String text = new File(file).text.trim()
     List<String> lines = text.split('\n')
     CellType[][] board = buildBoard(lines)
-    List<Player> players = buildPlayers(lines)
-    int round = game(players, board)
-    int sum = players.sum { it.hitPoints }
-    println("Round: $round, Sum: $sum")
-    println(round * sum)
-    return (round * sum)
+    for (int i = 4; i < 100000; ++i) {
+        List<Player> players = buildPlayers(lines, i)
+        int round
+        try {
+            round = game(players, board)
+            int sum = players.sum { it.hitPoints }
+            println("Round: $round, Sum: $sum")
+            println(round * sum)
+            println(i)
+            Thread.sleep(1000)
+            return (round * sum)
+        } catch (ElfDied e){
+
+        }
+    }
 }
 
 //print(whole('other7.txt'))
-assert whole('other1.txt') == 27730
-assert whole('other2.txt') == 36334
-assert whole('other3.txt') == 39514
-assert whole('other4.txt') == 27755
-assert whole('other5.txt') == 28944
-assert whole('other6.txt') == 18740
+//assert whole('other1.txt') == 27730
+//assert whole('other2.txt') == 36334
+//assert whole('other3.txt') == 39514
+//assert whole('other4.txt') == 27755
+//assert whole('other5.txt') == 28944
+//assert whole('other6.txt') == 18740
 
 println(whole('input.txt'))

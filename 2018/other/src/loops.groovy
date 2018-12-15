@@ -12,7 +12,13 @@ void printAddingTime(String message, long to, Closure<Long> adder) {
 printAddingTime('for with sum', n) {
     long sum = 0
     for (long i = 1; i <= n; ++i) {
-        for (long j = 1; j <= n; ++j) {
+        for (long j = 1; j <= n; ++j
+
+
+
+
+
+        ) {
             sum += i * j
         }
     }
