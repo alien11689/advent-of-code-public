@@ -12,16 +12,30 @@ void printAddingTime(String message, long to, Closure<Long> adder) {
 printAddingTime('for with sum', n) {
     long sum = 0
     for (long i = 1; i <= n; ++i) {
-        for (long j = 1; j <= n; ++j
-
-
-
-
-
-        ) {
+        for (long j = 1; j <= n; ++j) {
             sum += i * j
         }
     }
+    sum
+}
+
+printAddingTime('while with sum', n) {
+    long sum = 0
+    long i = 1
+    while(i <= n){
+	long j = 0
+    	while(j <= n){
+	    sum+= i*j
+	    ++j
+    	}
+	++i
+    }
+    sum
+}
+
+printAddingTime('times', n) {
+    long sum = 0
+    n.times {long i-> n.times { long j -> sum += (i + 1)*(j+1)}}
     sum
 }
 
