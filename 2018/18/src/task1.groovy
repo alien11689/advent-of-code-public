@@ -26,20 +26,12 @@ List<List<Integer>> neighbours(int x, int y, List<List<String>> board) {
 }
 
 def printBoard(List<List<String>> board) {
-    println(boardAsString(board))
+    println(board.collect { it.join() }.join('\n'))
 }
-
-private String boardAsString(List<List<String>> board) {
-    board.collect { it.join() }.join('\n')
-}
-
-def memory = [:]
-
-boolean increased = false
 
 printBoard(board)
 int tick = 0
-while (tick < 1000000000) {
+while (tick < 10) {
     ++tick
     List<List<String>> newBoard = board.collect { it.collect() }
     for (int y = 0; y < board.size(); ++y) {
@@ -65,19 +57,6 @@ while (tick < 1000000000) {
     board = newBoard
     println(tick)
     printBoard(board)
-    if (!increased) {
-        String b = boardAsString(board)
-        if (memory.keySet().contains(b)) {
-            int step = tick - memory[b]
-            println("Previosly in tick ${memory[b]}")
-            while (tick + step < 1000000000) {
-                tick += step
-            }
-            println("Move to tick $tick")
-            increased = true
-        }
-        memory[b] = tick
-    }
 }
 
 List<String> flat = board.flatten()
