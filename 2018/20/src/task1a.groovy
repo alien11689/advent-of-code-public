@@ -12,21 +12,30 @@ String input = readInput('input.txt').trim()
 //input = '^ENNWSWW(NEWS|)SSSEEN(WNSE|)EE(SWEN|)NNN$'
 //input = '^S(E|W(N|WS|)N)E$'
 //input = '^ESSWWN(E|NNENN(EESS(WNSE|)SSS|WWWSSSSE(SW|NNNE)))$'
-input = '^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$'
+//input = '^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$'
 
 List<String> buildPaths(String input) {
     Stack<List<String>> stack = []
     List<String> result = null
+    StringBuilder bufor = new StringBuilder()
     input.substring(1).each { c ->
 //        println(c)
-        if (c == 'E' || c == 'W' || c == 'N' || c == 'S' || c == '(') {
+        if (c == 'E' || c == 'W' || c == 'N' || c == 'S') {
+            bufor.append(c)
+        } else if (c == '(') {
+            stack.push([bufor.toString()])
+            bufor = new StringBuilder()
             stack.push([c])
         } else if (c == '|') {
+            stack.push([bufor.toString()])
+            bufor = new StringBuilder()
             if (stack.peek() == ['|'] || stack.peek() == ['(']) {
                 stack.push([''])
             }
             stack.push([c])
         } else if (c == ')') {
+            stack.push([bufor.toString()])
+            bufor = new StringBuilder()
             List<String> paths = []
             List<String> curPath = ['']
             while (stack.peek() != ['(']) {
