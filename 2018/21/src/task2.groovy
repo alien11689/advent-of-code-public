@@ -118,7 +118,7 @@ for (int i = 1; i < lines.size(); ++i) {
 
 instructions.eachWithIndex { it, i -> println("$i: $it") }
 
-int threshold = 10000000
+long threshold = 100000
 int curMinR4 = 10000000000
 long operations = 0
 Map<Long, Long> result2Iteration = [:]
@@ -126,30 +126,30 @@ for (int i = 0; i < 1; ++i) {
     println(i)
     long[] registers = [i, 0, 0, 0, 0, 0, 0]
     def count
-    Map<Integer, Integer> instrToCount = [:].withDefault { 0 }
     while (true) {
-        ++operations
         int cur = registers[6]
         registers[ip] = registers[6]
 //        println("$cur: ${instructions[cur]}")
 //        print("Before $registers || ")
-//        if (cur == 20 && registers[2] <= registers[3]) {
-//            while ((registers[5] + 1) * 256 < registers[3]) {
-//                operations += 7
-//                ++registers[5]
-//            }
-//        }
-        instrToCount[cur]++
+        if (cur == 20 && registers[5] == 0 && registers[2] < registers[3]) {
+            while ((registers[5] + 1) * 256 < registers[3]) {
+               operations += 7
+                ++registers[5]
+		registers[2] = (registers[5] + 1) * 256
+            }
+        }
         instructions[cur].apply(registers)
 //        println(registers)
         if (cur == 28) {
+            ++operations
             Long current = result2Iteration[registers[4]]
             if(current == null){
                 result2Iteration[registers[4]] = operations
                 println("Max: ${result2Iteration.max {it.value}.key}")
             }
-            if(operations > 100000000000){
+            if(result2Iteration.size() > threshold || operations > threshold * 100000){
                 println("Max: ${result2Iteration.max {it.value}.key}")
+            	throw new RuntimeException("End")
             }
         }
         if (registers[ip] + 1 >= instructions.size()) {
@@ -159,41 +159,3 @@ for (int i = 0; i < 1; ++i) {
         registers[6] = registers[ip] + 1
     }
 }
-//
-//println("Checking nums:")
-//List<Integer> nums = r4s.sort()
-//threshold = 100
-//println(nums)
-//for (int i : nums) {
-//    println(i)
-//    int[] registers = [i, 0, 0, 0, 0, 0, 0]
-//    def count
-//    Map<Integer, Integer> instrToCount = [:].withDefault { 0 }
-//    while (true) {
-//        int cur = registers[6]
-//        registers[ip] = registers[6]
-//        if (cur == 28) {
-////            r4s << registers[4]
-////            println(instructions[cur])
-////            print("Before $registers || ")
-//        }
-//        instrToCount[cur]++
-//        instructions[cur].apply(registers)
-//        if (cur == 28) {
-////            println(registers)
-//        }
-//        if (registers[ip] + 1 >= instructions.size()) {
-//            break
-//        }
-//        registers[6] = registers[ip] + 1
-//        count = instrToCount[28] > threshold
-//        if (count) {
-//            println("Break $i: is in loop")
-//            break
-//        }
-//    }
-//    if (!count) {
-//        break
-//    }
-//}
-//println(r4s.min())
