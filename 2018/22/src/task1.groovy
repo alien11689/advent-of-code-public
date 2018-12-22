@@ -54,6 +54,9 @@ long geologicalIndex(Pos pos) {
 }
 
 int erosionLevel(Pos pos) {
+    if (pos.x < 0 || pos.y < 0) {
+        return 0
+    }
     if (pos2Erosion.keySet().contains(pos)) {
         return pos2Erosion[pos]
     }
