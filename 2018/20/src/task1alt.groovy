@@ -48,6 +48,7 @@ class Pos implements Comparable<Pos> {
 Map<Pos, String> pos2Char = [:]
 Stack<Pos> cross = []
 Pos curPos = new Pos(0, 0)
+
 input.substring(1).each { c ->
 //    println(c)
     if (c == '(') {
