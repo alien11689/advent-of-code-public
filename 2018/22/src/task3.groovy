@@ -68,9 +68,13 @@ class Pos implements Comparable<Pos> {
     List<Pos> neighbours() {
         [
                 new Pos(x, y + 1),
-                new Pos(x, y - 1),
+                new Pos(x + 1, y + 1),
                 new Pos(x + 1, y),
+                new Pos(x + 1, y-1),
+                new Pos(x, y - 1),
+                new Pos(x - 1, y - 1),
                 new Pos(x - 1, y),
+                new Pos(x - 1, y+1),
         ].findAll {
             it.x >= 0 && it.y >= 0
         }
@@ -84,8 +88,8 @@ class Pos implements Comparable<Pos> {
         return y <=> o.y
     }
 
-    int dist(Pos o) {
-        return Math.abs(x - o.x) + Math.abs(y - o.y)
+    double dist(Pos o) {
+        return ((x - o.x)**2 + (y - o.y)**2)**0.5
     }
 
 }
@@ -115,7 +119,7 @@ enum Equip {
 class Here implements Comparable<Here> {
     Pos pos
     int minutes
-    int distToTarget
+    double distToTarget
     Equip equip
     List<Pos> path
 
@@ -127,7 +131,7 @@ class Here implements Comparable<Here> {
         if (distToTarget != o.distToTarget) {
             return distToTarget <=> o.distToTarget
         }
-        return 0//pos <=> o.pos
+        return pos <=> o.pos
     }
 }
 
@@ -178,7 +182,7 @@ List<Pos> copyPath(List<Pos> prev, Pos cur) {
 }
 
 Here winner
-int minDist = 10000
+double minDist = 1000
 while (!pq.empty) {
 //    println("Size: ${pq.size()}")
     Here cur = pq.poll()
@@ -207,7 +211,6 @@ while (!pq.empty) {
     Type curType = getType(cur.pos)
     cur.pos
             .neighbours()
-//            .findAll { !(it in mem) }
             .collect { Pos next ->
         Type nextType = getType(next)
 //        println("Neighbour: $next")
