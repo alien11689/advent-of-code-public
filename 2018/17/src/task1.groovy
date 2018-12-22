@@ -45,11 +45,13 @@ List<Clay> clays = lines.collect { line ->
     new Clay(fromX, toX, fromY, toY)
 }
 
-def printClays(List<Clay> clays, Set<List<Integer>> claysSet, Set<List<Integer>> water) {
+def printClays(List<Clay> clays, Set<List<Integer>> claysSet, Set<List<Integer>> water, Set<List<Integer>> drained) {
     for (int j = clays.fromY.min(); j <= clays.toY.max(); ++j) {
         for (int i = clays.fromX.min() - 1; i <= clays.toX.max() + 1; ++i) {
-            if (water.contains([i, j])) {
+            if (drained.contains([i, j])) {
                 print('~')
+            } else if (water.contains([i, j])) {
+                print('|')
             } else if (isClay(claysSet, i, j)) {
                 print('#')
             } else {
@@ -84,7 +86,7 @@ int maxCount = 0
 
 goDown = [] as Set
 
-def goDown(claysSet, filled, x, y) {
+def goDown(claysSet, filled, x, y, drained) {
     goDown << [x, y]
 //    println("Cur [$x,$y]")
     int maxY = claysSet.collect { it[1] }.max()
@@ -96,37 +98,35 @@ def goDown(claysSet, filled, x, y) {
 //        println("Reaching end $x")
         return
     }
-//    if (isFilled(filled, x - 1, y) || isFilled(filled, x + 1, y)) {
-//        return
-//    }
-    //try to fill
-//    println("In res [$x, $y]")
-//    int i = x
-//    while (!isClay(claysSet, i - 1, y)) {
-//        --x
-//    }
-//    int j = y
-//    while (isClay(claysSet, i - 1, j)) {
-//        --j
-//    }
-    Action boundLeft = fillLeft(x, claysSet, y, filled)
-    Action boundRight = fillRight(x, claysSet, y, filled)
+    Action boundLeft = fillLeft(x, claysSet, y, filled, drained)
+    Action boundRight = fillRight(x, claysSet, y, filled, drained)
     while (boundLeft.type == ActionType.GoUp && boundRight.type == ActionType.GoUp) {
+        drained << [x, y]
+        int i = x - 1
+        while (!isClay(claysSet, i, y)) {
+            drained << [i, y]
+            --i
+        }
+        i = x + 1
+        while (!isClay(claysSet, i, y)) {
+            drained << [i, y]
+            ++i
+        }
         --y
-        boundLeft = fillLeft(x, claysSet, y, filled)
-        boundRight = fillRight(x, claysSet, y, filled)
+        boundLeft = fillLeft(x, claysSet, y, filled, drained)
+        boundRight = fillRight(x, claysSet, y, filled, drained)
     }
     if (boundLeft.type == ActionType.Leak) {
 //        println("Leaking left $boundLeft.curX")
-        goDown(claysSet, filled, boundLeft.curX, y)
+        goDown(claysSet, filled, boundLeft.curX, y, drained)
     }
     if (boundRight.type == ActionType.Leak) {
 //        println("Leaking right $boundRight.curX")
-        goDown(claysSet, filled, boundRight.curX, y)
+        goDown(claysSet, filled, boundRight.curX, y, drained)
     }
 }
 
-private Action fillRight(int x, Set claysSet, int y, Set filled) {
+private Action fillRight(int x, Set claysSet, int y, Set filled, drained) {
 //    println("Filling right")
     int cur = x
     while (true) {
@@ -154,7 +154,7 @@ private Action fillRight(int x, Set claysSet, int y, Set filled) {
     }
 }
 
-private Action fillLeft(int x, Set claysSet, int y, Set filled) {
+private Action fillLeft(int x, Set claysSet, int y, Set filled, Set drained) {
     int cur = x
     while (true) {
         int prevX = cur - 1
@@ -165,7 +165,7 @@ private Action fillLeft(int x, Set claysSet, int y, Set filled) {
         boolean prevIsClay = isClay(claysSet, prevX, y + 1)
         boolean prevIsFilled = filled.contains([prevX, y + 1])
         if (!prevIsClay && !prevIsFilled) {
-            if (goDown.contains([prevX + 1, y]) || goDown.contains([prevX - 1, y])) {
+            if (goDown.contains([prevX + 1, y])) {
                 return new Action(ActionType.Nop)
             }
             filled << [prevX, y]
@@ -193,24 +193,24 @@ clays.each {
 }
 
 println("Calculating")
-//for (int x = clays.fromX.min() - 1; x <= clays.toX.max() + 1; ++x) {
-for (int x = 500; x <= 500; ++x) {
-    println("Checking $x")
     Set<List<Integer>> filled = [] as Set
+    Set<List<Integer>> drained = [] as Set
     int y = clays.fromY.min() - 1
-    goDown(claysSet, filled, x, y)
-//    println("Filling empty slots between water")
-//    for (int i = clays.fromX.min(); i <= clays.toX.max(); ++i) {
-//        for (int j = clays.fromY.min(); j <= clays.toY.max(); ++j) {
-//            if (isFilled(filled, i - 1, j) && isFilled(filled, i + 1, j) && !isFilled(filled, i, j) && !isClay(claysSet, i, j))
-//                filled << [i, j]
-//        }
-//    }
+    goDown(claysSet, filled, 500, y, drained)
+    filled.addAll(drained)
+    println("Filling empty slots between water")
+    // |.|
+    // ~~~
+    for (int i = clays.fromX.min(); i <= clays.toX.max(); ++i) {
+        for (int j = clays.fromY.min(); j <= clays.toY.max(); ++j) {
+            if (!isFilled(filled, i, j - 1) && drained.contains([i, j]) && isFilled(filled, i - 1, j - 1) && isFilled(filled, i + 1, j - 1) && !isClay(claysSet, i, j -1))
+                filled << [i, j -1]
+        }
+    }
 
-    printClays(clays, claysSet, filled)
+    printClays(clays, claysSet, filled, drained)
     if (filled.size() > maxCount) {
         maxCount = filled.size()
     }
-    println("Current max is $maxCount")
-    println('Manually add spots looking like `~.~`')
-}
+println("Water: $maxCount")
+println("Drained ${drained.size()}")
