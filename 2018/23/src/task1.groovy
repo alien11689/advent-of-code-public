@@ -99,47 +99,25 @@ int minR = drones.range.min()
 int maxR = drones.range.max()
 println("x = <${minR},${maxR}>")
 
-println("ZERO count ${ZERO.fDest(drones)}")
-
-List<Point> dronesAsPoints = [] //drones.collect { it.toPoint() }
-dronesAsPoints.addAll(drones.collectMany { it.maxNeighbours() })
+int distX = (maxX - minX) / 2
+int distY = (maxY - minY) / 2
+int distZ = (maxZ - minZ) / 2
 
 Point best = null
 int maxFDest = 0
 int minDist = 10000000000
 
-dronesAsPoints.each {
-    int fdest = it.fDest(drones)
-    int dist = it.manhattan(ZERO)
-    if (fdest > maxFDest || fdest == maxFDest && dist < minDist) {
-        maxFDest = fdest
-        best = it
-        minDist = dist
-    }
-}
-
-println("Best $best, count $maxFDest, distTo0 $minDist")
-
-int region = 20
-
 int iter = 0
-while (true) {
-    println(iter++)
-    boolean changed = false
-    int curX = best.x
-    int curY = best.y
-    int curZ = best.z
-    for (int x = curX - region; x <= curX + region; ++x) {
-//        println("x = $x")
-        for (int y = curY - region; y <= curY + region; ++y) {
-//            println("y = $y")
-            for (int z = curZ - region; z <= curZ + region; ++z) {
-//                println("z = $z")
+while (distX > 1) {
+    ++iter
+    println("Iter $iter - dists ($distX, $distY, $distZ)")
+    for (int x = minX; x <= maxX; x += distX) {
+        for (int y = minY; y <= maxY; y += distY) {
+            for (int z = minZ; z <= maxZ; z += distZ) {
                 Point p = new Point(x, y, z)
                 int fdest = p.fDest(drones)
                 int dist = p.manhattan(ZERO)
                 if (fdest > maxFDest || fdest == maxFDest && dist < minDist) {
-                    changed = true
                     maxFDest = fdest
                     best = p
                     minDist = dist
@@ -148,7 +126,14 @@ while (true) {
             }
         }
     }
-    if (!changed) {
-        break
-    }
+    minX = best.x - distX
+    maxX = best.x + distX
+    minY = best.y - distY
+    maxY = best.y + distY
+    minZ = best.z - distZ
+    maxZ = best.z + distZ
+    distX /= 2
+    distY /= 2
+    distZ /= 2
 }
+println()
