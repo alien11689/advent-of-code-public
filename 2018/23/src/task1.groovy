@@ -103,7 +103,6 @@ println("ZERO count ${ZERO.fDest(drones)}")
 
 List<Point> dronesAsPoints = [] //drones.collect { it.toPoint() }
 dronesAsPoints.addAll(drones.collectMany { it.maxNeighbours() })
-//dronesAsPoints << new Point(24647057, 51008921, 52010655) // it has 888 but does not count...
 
 Point best = null
 int maxFDest = 0
