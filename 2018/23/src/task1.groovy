@@ -27,6 +27,22 @@ class Drone {
     int manhattan(Point o) {
         Math.abs(x - o.x) + Math.abs(y - o.y) + Math.abs(z - o.z)
     }
+
+    Point toPoint() {
+        return new Point(x, y, z)
+    }
+
+    List<Point> maxNeighbours() {
+        List<Point> points = []
+        [-1, 0, 1].each { x ->
+            [-1, 0, 1].each { y ->
+                [-1, 0, 1].each { z ->
+                    points << new Point(this.x + x, this.y + y, this.z + z)
+                }
+            }
+        }
+        points
+    }
 }
 
 List<Drone> drones = input.collect { it.split(/[<>,=]+/) }.collect {
@@ -40,6 +56,8 @@ println(drones.count { it.manhattan(max) <= max.range })
 
 println("Part2")
 
+Point ZERO = new Point(0, 0, 0)
+
 @Canonical
 class Point {
     int x
@@ -47,25 +65,19 @@ class Point {
     int z
     int fdest
 
-    int fDest(List<Drone> drones) {
-        int count = drones.count { it.manhattan(this) <= it.range }
-        fdest = count
-        return count
+    Point(int x, int y, int z) {
+        this.x = x
+        this.y = y
+        this.z = z
     }
 
-    List<Point> neighbours(Random random) {
-        int step = random.nextInt() % 10 + 1
-        int dx = random.nextInt() % 2 == 1 ? step : 0
-        int dy = random.nextInt() % 2 == 1 ? step : 0
-        int dz = random.nextInt() % 2 == 1 ? step : 0
-        [
-                new Point(x + dx, y + dy, z + dz),
-                new Point(x - dx, y - dy, z - dz),
-                new Point(x + dx, y - dy, z + dz),
-                new Point(x - dx, y + dy, z - dz),
-                new Point(x + dx, y + dy, z - dz),
-                new Point(x - dx, y - dy, z + dz),
-        ]
+    int fDest(List<Drone> drones) {
+        int count = 0
+        for (int i = 0; i < drones.size(); ++i) {
+            count += drones[i].manhattan(this) <= drones[i].range ? 1 : 0
+        }
+        fdest = count
+        return count
     }
 
     int manhattan(Point o) {
@@ -87,61 +99,57 @@ int minR = drones.range.min()
 int maxR = drones.range.max()
 println("x = <${minR},${maxR}>")
 
-//println("minR + 50%: ${int percent = (maxR - minR) / 5*4; drones.count { it.range <= minR + percent } / drones.size()}")
+println("ZERO count ${ZERO.fDest(drones)}")
 
-int maxIter = 1000
-int population = 6000
-Random random = new Random(System.currentTimeMillis())
+List<Point> dronesAsPoints = [] //drones.collect { it.toPoint() }
+dronesAsPoints.addAll(drones.collectMany { it.maxNeighbours() })
+//dronesAsPoints << new Point(24647057, 51008921, 52010655) // it has 888 but does not count...
 
-def nextInt(Random r, int min, int max) {
-    return r.nextInt(max + 1 - min) + min
-}
+Point best = null
+int maxFDest = 0
+int minDist = 10000000000
 
-List<Point> points = generatePoints(population, random, minX, maxX, minY, maxY, minZ, maxZ)
-
-private List<Point> generatePoints(int population, Random random, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-    (1..population).collect {
-        new Point(
-                x: nextInt(random, minX, maxX),
-                y: nextInt(random, minY, maxY),
-                z: nextInt(random, minZ, maxZ)
-        )
+dronesAsPoints.each {
+    int fdest = it.fDest(drones)
+    int dist = it.manhattan(ZERO)
+    if (fdest > maxFDest || fdest == maxFDest && dist < minDist) {
+        maxFDest = fdest
+        best = it
+        minDist = dist
     }
 }
 
-points[0] = new Point(23214783, 52699925, 53755415)
-points[1] = new Point(24566547, 51779123, 52088929)
-points[2] = new Point(24566496, 51779078, 52088906)
-points[3] = new Point(24566474, 51779064, 52088892)
+println("Best $best, count $maxFDest, distTo0 $minDist")
+
+int region = 20
 
 int iter = 0
-Point best = new Point(0, 0, 0)
-int bestCount = 0
-int bestDist = 1000000000
-while (iter < maxIter) {
-    println("Iter $iter; best ${best}; bestCount $bestCount; distTo0: $bestDist")
-    for (int i = 0; i < points.size(); ++i) {
-        Point it = points[i]
-//        println("Checking point $it")
-        int cel = it.fDest(drones)
-        if (cel > bestCount) {
-            println("Changing best to $it")
-            best = it
-            bestCount = cel
-            bestDist = it.manhattan(new Point(0, 0, 0))
-        } else if (cel == bestCount) {
-            int distTo0 = it.manhattan(new Point(0, 0, 0))
-            if (bestDist > distTo0) {
-                best = it
-                bestDist = distTo0
+while (true) {
+    println(iter++)
+    boolean changed = false
+    int curX = best.x
+    int curY = best.y
+    int curZ = best.z
+    for (int x = curX - region; x <= curX + region; ++x) {
+//        println("x = $x")
+        for (int y = curY - region; y <= curY + region; ++y) {
+//            println("y = $y")
+            for (int z = curZ - region; z <= curZ + region; ++z) {
+//                println("z = $z")
+                Point p = new Point(x, y, z)
+                int fdest = p.fDest(drones)
+                int dist = p.manhattan(ZERO)
+                if (fdest > maxFDest || fdest == maxFDest && dist < minDist) {
+                    changed = true
+                    maxFDest = fdest
+                    best = p
+                    minDist = dist
+                    println("New best $best, count $maxFDest, distTo0 $minDist")
+                }
             }
         }
     }
-    if (iter % 5 == 0) {
-        List<Point> newPoints = points.subList(0, population / 10 as int)
-        newPoints.addAll(generatePoints(population / 10 * 9 as int, random, minX, maxX, minY, maxY, minZ, maxZ))
-    } else {
-        points = points.sort { -it.fdest }.subList(0, population / 6 as int).collectMany { it.neighbours(random) }
+    if (!changed) {
+        break
     }
-    ++iter
 }
