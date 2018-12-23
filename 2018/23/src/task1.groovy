@@ -99,9 +99,9 @@ int minR = drones.range.min()
 int maxR = drones.range.max()
 println("x = <${minR},${maxR}>")
 
-int distX = (maxX - minX) / 2
-int distY = (maxY - minY) / 2
-int distZ = (maxZ - minZ) / 2
+int distX = (maxX - minX) / 4
+int distY = (maxY - minY) / 4
+int distZ = (maxZ - minZ) / 4
 
 Point best = null
 int maxFDest = 0
@@ -136,4 +136,4 @@ while (distX > 1) {
     distY /= 2
     distZ /= 2
 }
-println()
+println(minDist)
