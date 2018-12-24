@@ -165,21 +165,24 @@ Result fight(List<Group> groups) {
     return new Result(groups[0].team, groups.sum { it.units } as int)
 }
 
-int iter = 0
-while (true) {
+int minBound = 0
+int maxBound = 1000
+int score = 0
+while (maxBound >= minBound) {
 
     List<Group> groups = generateGroups()
 
-    int boost = iter
+    int boost = minBound + (maxBound - minBound) / 2
     println("Checking boost $boost")
     groups.findAll { it.team == Team.Immune }.each { it.attack += boost }
 
     Result result = fight(groups)
     if (result.team == Team.Immune) {
-        println(result.sum)
-        break
+        score = result.sum
+        maxBound = boost - 1
+    } else {
+        minBound = boost + 1
     }
-    ++iter
 
 }
-
+println(score)
