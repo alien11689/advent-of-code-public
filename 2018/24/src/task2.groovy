@@ -1,4 +1,5 @@
 import groovy.transform.Canonical
+import groovy.transform.Immutable
 
 enum Team {
     Immune,
@@ -38,27 +39,30 @@ class Group implements Comparable<Group> {
         attacker = null
     }
 
-    void attack() {
+    int attack() {
         if (target == null || units <= 0) {
-            return
+            return 0
         }
-        target.takeDamage(target.weak.contains(attackType) ? effectivePower() * 2 : effectivePower())
+        return target.takeDamage(target.weak.contains(attackType) ? effectivePower() * 2 : effectivePower())
     }
 
-    void takeDamage(int damage) {
-        println("\tI take $damage damage and I have $hitPoints ,")
+    int takeDamage(int damage) {
+//        println("\tI take $damage damage and I have $hitPoints ,")
         int toKill = damage / hitPoints as int
-        println("\tTo kill $toKill")
+//        println("\tTo kill $toKill")
         units -= toKill
+        return toKill
     }
 }
 
-String bludgeoning = 'bludgeoning'
-String cold = 'cold'
-String slashing = 'slashing'
-String fire = 'fire'
-String radiation = 'radiation'
-List<Group> groups = [
+List<Group> generateGroups() {
+    String bludgeoning = 'bludgeoning'
+    String cold = 'cold'
+    String slashing = 'slashing'
+    String fire = 'fire'
+    String radiation = 'radiation'
+
+    [
 //        new Group(Team.Immune, 1, 17, 5390, ['radiation', 'bludgeoning'], [], 2, 4507, 'fire'),
 //        new Group(Team.Immune, 2, 989, 1274, ['bludgeoning', 'slashing'], ['fire'], 3, 25, 'slashing'),
 //        new Group(Team.Infection, 1, 801, 4706, ['radiation'], [], 1, 116, 'bludgeoning'),
@@ -85,72 +89,97 @@ new Group(Team.Infection, 7, 8025, 43789, [cold], [radiation], 9, 8, radiation),
 new Group(Team.Infection, 8, 1405, 53896, [], [], 14, 70, slashing),
 new Group(Team.Infection, 9, 566, 7820, [], [cold], 2, 26, cold),
 new Group(Team.Infection, 10, 1641, 7807, [fire], [slashing, bludgeoning], 3, 7, radiation),
-]
-
-int boost = args[0] as int
-groups.findAll { it.team == Team.Immune }.each { it.attack += boost }
-
-while ((groups.team as Set).size() > 1) {
-    println('-------------------')
-    groups.sort { [it.team, it.id] }.each {
-        println("${it.team} ${it.id} has ${it.units}")
-    }
-    groups = groups.sort()
-    groups.each { it.reset() }
-    // selection
-    groups.each { cur ->
-        Integer target = null
-        int mostDamage = -1
-        int opponentEffectivePower = -1
-        int initiative = -1
-        groups.findAll { it.team != cur.team }.each { opponent ->
-            if (opponent.attacker != null) {
-                return
-            }
-            int damage
-            if (cur.attackType in opponent.immune) {
-                damage = 0
-            } else {
-                damage = cur.effectivePower()
-                if (opponent.weak.contains(cur.attackType)) {
-                    damage *= 2
-                }
-            }
-
-            if (damage == 0) {
-                return
-            }
-            if (damage > mostDamage) {
-                target = opponent.id
-                mostDamage = damage
-                opponentEffectivePower = opponent.effectivePower()
-                initiative = opponent.initiative
-            } else if (damage == mostDamage && opponent.effectivePower() > opponentEffectivePower) {
-                target = opponent.id
-                opponentEffectivePower = opponent.effectivePower()
-                initiative = opponent.initiative
-            } else if (damage == mostDamage && opponent.effectivePower() == opponentEffectivePower && opponent.initiative > initiative) {
-                target = opponent.id
-                initiative = opponent.initiative
-            }
-        }
-        if (target) {
-            Group targetGroup = groups.find { it.team != cur.team && it.id == target }
-            cur.target = targetGroup
-            targetGroup.attacker = cur.id
-        }
-    }
-//    groups.each {
-//        println("${it.team} ${it.id} chooses opponent ${it.target?.id}")
-//    }
-    // attack
-    groups.sort { -it.initiative }.each {
-        println("${it.team} ${it.id} attacks ${it.target?.id}")
-        it.attack()
-    }
-    // remove dead
-    groups.removeAll { it.units <= 0 }
+    ]
 }
 
-println("Winner ${groups[0].team}")
-println(groups.sum { it.units })
+@Immutable
+class Result {
+    Team team
+    Integer sum
+}
+
+Result fight(List<Group> groups) {
+    while ((groups.team as Set).size() > 1) {
+//        println('-------------------')
+//        groups.sort { [it.team, it.id] }.each {
+//            println("${it.team} ${it.id} has ${it.units}")
+//        }
+        groups = groups.sort()
+        groups.each { it.reset() }
+        // selection
+        groups.each { cur ->
+            Integer target = null
+            int mostDamage = -1
+            int opponentEffectivePower = -1
+            int initiative = -1
+            groups.findAll { it.team != cur.team }.each { opponent ->
+                if (opponent.attacker != null) {
+                    return
+                }
+                int damage
+                if (cur.attackType in opponent.immune) {
+                    damage = 0
+                } else {
+                    damage = cur.effectivePower()
+                    if (opponent.weak.contains(cur.attackType)) {
+                        damage *= 2
+                    }
+                }
+
+                if (damage == 0) {
+                    return
+                }
+                if (damage > mostDamage) {
+                    target = opponent.id
+                    mostDamage = damage
+                    opponentEffectivePower = opponent.effectivePower()
+                    initiative = opponent.initiative
+                } else if (damage == mostDamage && opponent.effectivePower() > opponentEffectivePower) {
+                    target = opponent.id
+                    opponentEffectivePower = opponent.effectivePower()
+                    initiative = opponent.initiative
+                } else if (damage == mostDamage && opponent.effectivePower() == opponentEffectivePower && opponent.initiative > initiative) {
+                    target = opponent.id
+                    initiative = opponent.initiative
+                }
+            }
+            if (target) {
+                Group targetGroup = groups.find { it.team != cur.team && it.id == target }
+                cur.target = targetGroup
+                targetGroup.attacker = cur.id
+            }
+        }
+        // attack
+        int killed = groups.sort { -it.initiative }.collect {
+//            println("${it.team} ${it.id} attacks ${it.target?.id}")
+            it.attack()
+        }.sum()
+        if (killed == 0) {
+            println('Infinite loop')
+            return new Result()
+        }
+        // remove dead
+        groups.removeAll { it.units <= 0 }
+    }
+    println("Winner ${groups[0].team}")
+    return new Result(groups[0].team, groups.sum { it.units } as int)
+}
+
+int iter = 0
+while (true) {
+
+    List<Group> groups = generateGroups()
+
+    int boost = iter
+    println("Checking boost $boost")
+    groups.findAll { it.team == Team.Immune }.each { it.attack += boost }
+
+    Result result = fight(groups)
+    if (result.team == Team.Immune) {
+        println(result.sum)
+        break
+    }
+    ++iter
+
+}
+
