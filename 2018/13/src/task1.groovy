@@ -222,7 +222,7 @@ int tick = 0
 //return
 
 while (true) {
-    println(tick)
+//    println(tick)
 //    if(tick == 201 || tick == 202 | tick == 203) {
 //        printBoard(cells, drivers)
 //    }
@@ -233,7 +233,7 @@ while (true) {
         drivers.each { positions[[it.x, it.y]] << it }
         def crashes = positions.findAll { it.value.size() > 1 }.keySet()
         if (crashes) {
-            printBoard(cells, drivers)
+//            printBoard(cells, drivers)
             println(crashes)
             throw new RuntimeException()
         }

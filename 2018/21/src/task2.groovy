@@ -116,14 +116,14 @@ for (int i = 1; i < lines.size(); ++i) {
     instructions << new Operation(name: line[0], a: line[1] as int, b: line[2] as int, c: line[3] as int)
 }
 
-instructions.eachWithIndex { it, i -> println("$i: $it") }
+//instructions.eachWithIndex { it, i -> println("$i: $it") }
 
 long threshold = 100000
 int curMinR4 = 10000000000
 long operations = 0
 Map<Long, Long> result2Iteration = [:]
 for (int i = 0; i < 1; ++i) {
-    println(i)
+//    println(i)
     long[] registers = [i, 0, 0, 0, 0, 0, 0]
     def count
     while (true) {
@@ -145,15 +145,15 @@ for (int i = 0; i < 1; ++i) {
             Long current = result2Iteration[registers[4]]
             if(current == null){
                 result2Iteration[registers[4]] = operations
-                println("Max: ${result2Iteration.max {it.value}.key}")
+//                println("Max: ${result2Iteration.max {it.value}.key}")
             }
             if(result2Iteration.size() > threshold || operations > threshold * 100000){
-                println("Max: ${result2Iteration.max {it.value}.key}")
+//                println("Max: ${result2Iteration.max {it.value}.key}")
             	throw new RuntimeException("End")
             }
         }
         if (registers[ip] + 1 >= instructions.size()) {
-            println("Halts")
+//            println("Halts")
             throw new RuntimeException("WIn $i")
         }
         registers[6] = registers[ip] + 1

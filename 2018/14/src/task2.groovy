@@ -15,9 +15,9 @@ while (true) {
 //    println(elves)
 //    println(scores)
 //    println('----------')
-    if (scores.size() % 1000 == 0) {
-        println(scores.size())
-    }
+//    if (scores.size() % 1000 == 0) {
+//        println(scores.size())
+//    }
     int newValue = scores[elves[0]] + scores[elves[1]]
     scores.addAll(newValue.toString().collect { it as int })
     elves[0] = (elves[0] + scores[elves[0]] + 1) % scores.size()

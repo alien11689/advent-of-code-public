@@ -38,7 +38,6 @@ carpets.each {
         }
     }
 }
-println('Built carpet')
 List<Cell> flattenOneField = field.flatten().findAll { it.ids.size() == 1 }
 
 Set idsToCheck = flattenOneField.ids.flatten() as Set

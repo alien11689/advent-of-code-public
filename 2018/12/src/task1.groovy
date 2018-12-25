@@ -102,7 +102,7 @@ def printState(Map state) {
     println()
 }
 
-printState(state)
+//printState(state)
 
 while (generation < 20) {
     generation++
@@ -139,11 +139,11 @@ while (generation < 20) {
         }
     }
     state = newGeneration
-    println(generation)
-    printState(state)
-    if (generation % 1000000 == 0) {
-        println(generation)
-    }
+//    println(generation)
+//    printState(state)
+//    if (generation % 1000000 == 0) {
+//        println(generation)
+//    }
 }
 println("Sum")
 println(state.findAll { it.value == '#' }.collect { it.key }.sum())

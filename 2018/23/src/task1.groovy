@@ -87,17 +87,17 @@ class Point {
 
 int minX = drones.x.min()
 int maxX = drones.x.max()
-println("x = <${minX},${maxX}>")
+//println("x = <${minX},${maxX}>")
 int minY = drones.y.min()
 int maxY = drones.y.max()
-println("x = <${minY},${maxY}>")
+//println("x = <${minY},${maxY}>")
 int minZ = drones.z.min()
 int maxZ = drones.z.max()
-println("x = <${minZ},${maxZ}>")
+//println("x = <${minZ},${maxZ}>")
 
 int minR = drones.range.min()
 int maxR = drones.range.max()
-println("x = <${minR},${maxR}>")
+//println("x = <${minR},${maxR}>")
 
 int distX = (maxX - minX) / 4
 int distY = (maxY - minY) / 4
@@ -110,7 +110,7 @@ int minDist = 10000000000
 int iter = 0
 while (distX > 1) {
     ++iter
-    println("Iter $iter - dists ($distX, $distY, $distZ)")
+//    println("Iter $iter - dists ($distX, $distY, $distZ)")
     for (int x = minX; x <= maxX; x += distX) {
         for (int y = minY; y <= maxY; y += distY) {
             for (int z = minZ; z <= maxZ; z += distZ) {
@@ -121,7 +121,7 @@ while (distX > 1) {
                     maxFDest = fdest
                     best = p
                     minDist = dist
-                    println("New best $best, count $maxFDest, distTo0 $minDist")
+//                    println("New best $best, count $maxFDest, distTo0 $minDist")
                 }
             }
         }

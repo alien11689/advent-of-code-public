@@ -66,7 +66,7 @@ Point2 calculateRacksMax(int[][] board) {
                 if (current.sum > maxFuel) {
                     maxFuel = current.sum
                     currentMax = current
-                    println("Current max $currentMax")
+//                    println("Current max $currentMax")
                 }
                 rackSize++
             }

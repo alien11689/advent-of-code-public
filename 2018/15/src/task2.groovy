@@ -217,8 +217,8 @@ def buildPlayers(List<String> lines, int attack) {
 
 int game(List<Player> players, CellType[][] board) {
     int round = 0
-    println(round)
-    printBoard(players, board)
+//    println(round)
+//    printBoard(players, board)
     try {
         while (true) {
             players.each {
@@ -244,13 +244,13 @@ int game(List<Player> players, CellType[][] board) {
             }
             players.removeAll { it.dead }
             ++round
-            println(round)
-            printBoard(players, board)
+//            println(round)
+//            printBoard(players, board)
 //        Thread.sleep(1000)
         }
     } catch (End end) {
-        println(round)
-        printBoard(players, board)
+//        println(round)
+//        printBoard(players, board)
         return end.round
     }
 }
@@ -289,10 +289,10 @@ def whole(String file) {
         try {
             round = game(players, board)
             int sum = players.sum { it.hitPoints }
-            println("Round: $round, Sum: $sum")
-            println(round * sum)
-            println(i)
-            Thread.sleep(1000)
+//            println("Round: $round, Sum: $sum")
+//            println(round * sum)
+//            println(i)
+            //Thread.sleep(1000)
             return (round * sum)
         } catch (ElfDied e){
 

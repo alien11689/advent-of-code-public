@@ -63,5 +63,5 @@ input.substring(1).each { c ->
     }
 }
 
-println(posToDist.values().max())
+//println(posToDist.values().max())
 println(posToDist.values().count { it >= 1000 })

@@ -194,7 +194,7 @@ while (!pq.empty) {
     assert (getType(cur.pos) == Type.N && cur.equip in [Equip.TORCH, Equip.NOTHING]) || (getType(cur.pos) == Type.R && cur.equip in [Equip.TORCH, Equip.CLIMB_GEAR]) || (getType(cur.pos) == Type.W && cur.equip in [Equip.CLIMB_GEAR, Equip.NOTHING])
     if (cur.pos == target) {
         if (cur.equip == Equip.TORCH) {
-            println("Found: $cur")
+//            println("Found: $cur")
             winner = cur
             break
         } else {
@@ -202,7 +202,7 @@ while (!pq.empty) {
             continue
         }
     }
-    println("Dist: ${cur.distToTarget}; minutes: ${cur.minutes}, cur: $cur.pos")
+//    println("Dist: ${cur.distToTarget}; minutes: ${cur.minutes}, cur: $cur.pos")
     mem << [cur.pos, cur.equip]
     Type curType = getType(cur.pos)
     cur.pos
@@ -219,27 +219,27 @@ while (!pq.empty) {
     }
 }
 
-for (int y = 0; y <= winner.path.max {it.y}.y; ++y) {
-    for (int x = 0; x <= winner.path.max {it.x}.x; ++x) {
-        Pos pos = new Pos(x, y)
-        if (target == pos) {
-            print('T')
-        } else if (start == pos) {
-            print('M')
-        } else if (pos in winner.path) {
-            print('X')
-        } else {
-            def type = getType(pos)
-            if (type == Type.N) {
-                print('|')
-            } else if (type == Type.W) {
-                print('=')
-            } else {
-                print('.')
-            }
-        }
-    }
-    println()
-}
+//for (int y = 0; y <= winner.path.max {it.y}.y; ++y) {
+//    for (int x = 0; x <= winner.path.max {it.x}.x; ++x) {
+//        Pos pos = new Pos(x, y)
+//        if (target == pos) {
+//            print('T')
+//        } else if (start == pos) {
+//            print('M')
+//        } else if (pos in winner.path) {
+//            print('X')
+//        } else {
+//            def type = getType(pos)
+//            if (type == Type.N) {
+//                print('|')
+//            } else if (type == Type.W) {
+//                print('=')
+//            } else {
+//                print('.')
+//            }
+//        }
+//    }
+//    println()
+//}
 
 println(winner.minutes)

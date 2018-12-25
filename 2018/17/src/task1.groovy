@@ -181,8 +181,7 @@ private Action fillLeft(int x, Set claysSet, int y, Set filled, Set drained) {
     }
 }
 
-
-println("Reading clays")
+//println("Reading clays")
 Set<List<Integer>> claysSet = [] as Set
 clays.each {
     for (int j = it.fromY; j <= it.toY; ++j) {
@@ -192,25 +191,25 @@ clays.each {
     }
 }
 
-println("Calculating")
-    Set<List<Integer>> filled = [] as Set
-    Set<List<Integer>> drained = [] as Set
-    int y = clays.fromY.min() - 1
-    goDown(claysSet, filled, 500, y, drained)
-    filled.addAll(drained)
-    println("Filling empty slots between water")
-    // |.|
-    // ~~~
-    for (int i = clays.fromX.min(); i <= clays.toX.max(); ++i) {
-        for (int j = clays.fromY.min(); j <= clays.toY.max(); ++j) {
-            if (!isFilled(filled, i, j - 1) && drained.contains([i, j]) && isFilled(filled, i - 1, j - 1) && isFilled(filled, i + 1, j - 1) && !isClay(claysSet, i, j -1))
-                filled << [i, j -1]
-        }
+//println("Calculating")
+Set<List<Integer>> filled = [] as Set
+Set<List<Integer>> drained = [] as Set
+int y = clays.fromY.min() - 1
+goDown(claysSet, filled, 500, y, drained)
+filled.addAll(drained)
+//println("Filling empty slots between water")
+// |.|
+// ~~~
+for (int i = clays.fromX.min(); i <= clays.toX.max(); ++i) {
+    for (int j = clays.fromY.min(); j <= clays.toY.max(); ++j) {
+        if (!isFilled(filled, i, j - 1) && drained.contains([i, j]) && isFilled(filled, i - 1, j - 1) && isFilled(filled, i + 1, j - 1) && !isClay(claysSet, i, j - 1))
+            filled << [i, j - 1]
     }
+}
 
-    printClays(clays, claysSet, filled, drained)
-    if (filled.size() > maxCount) {
-        maxCount = filled.size()
-    }
+//    printClays(clays, claysSet, filled, drained)
+if (filled.size() > maxCount) {
+    maxCount = filled.size()
+}
 println("Water: $maxCount")
 println("Drained ${drained.size()}")

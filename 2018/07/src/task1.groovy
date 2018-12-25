@@ -30,12 +30,12 @@ lines.each { l ->
     }
 }
 
-println(instructions)
+//println(instructions)
 
 List order = []
 
 while (!instructions.empty) {
-    println(order)
+//    println(order)
     Instr next = instructions.findAll { it.before == [] as Set }.sort { it.dest }.first()
     String letter = next.dest
     order << letter

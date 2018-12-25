@@ -37,7 +37,7 @@ def memory = [:]
 
 boolean increased = false
 
-printBoard(board)
+//printBoard(board)
 int tick = 0
 while (tick < 1000000000) {
     ++tick
@@ -63,17 +63,17 @@ while (tick < 1000000000) {
         }
     }
     board = newBoard
-    println(tick)
-    printBoard(board)
+//    println(tick)
+//    printBoard(board)
     if (!increased) {
         String b = boardAsString(board)
         if (memory.keySet().contains(b)) {
             int step = tick - memory[b]
-            println("Previosly in tick ${memory[b]}")
+//            println("Previosly in tick ${memory[b]}")
             while (tick + step < 1000000000) {
                 tick += step
             }
-            println("Move to tick $tick")
+//            println("Move to tick $tick")
             increased = true
         }
         memory[b] = tick
@@ -83,6 +83,6 @@ while (tick < 1000000000) {
 List<String> flat = board.flatten()
 int woods = flat.count { it == '|' }
 int lumb = flat.count { it == '#' }
-println("Woods: $woods")
-println("Lumbs: $lumb")
+//println("Woods: $woods")
+//println("Lumbs: $lumb")
 println("Multi: ${lumb * woods}")

@@ -29,7 +29,7 @@ def printBoard(List<List<String>> board) {
     println(board.collect { it.join() }.join('\n'))
 }
 
-printBoard(board)
+//printBoard(board)
 int tick = 0
 while (tick < 10) {
     ++tick
@@ -55,13 +55,13 @@ while (tick < 10) {
         }
     }
     board = newBoard
-    println(tick)
-    printBoard(board)
+//    println(tick)
+//    printBoard(board)
 }
 
 List<String> flat = board.flatten()
 int woods = flat.count { it == '|' }
 int lumb = flat.count { it == '#' }
-println("Woods: $woods")
-println("Lumbs: $lumb")
+//println("Woods: $woods")
+//println("Lumbs: $lumb")
 println("Multi: ${lumb * woods}")

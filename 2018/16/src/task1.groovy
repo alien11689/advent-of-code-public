@@ -233,7 +233,7 @@ def readOperations(List<String> lines) {
     }
     //TODO read program
     println("Part 1: $countWhenMultipleMatch")
-    println('--------------')
+//    println('--------------')
     Map<Integer, Operation> mapping = [:]
     unknownOperations.removeAll {it.matches.empty}
     while (!unknownOperations.empty && mapping.size() != 16) {

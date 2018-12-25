@@ -38,18 +38,18 @@ long geologicalIndex(Pos pos) {
     if (pos.y == 0) {
         def value = pos.x * 16807l
         geoIndex[pos] = value
-        println("GI: $pos -> $value")
+//        println("GI: $pos -> $value")
         return value
     }
     if (pos.x == 0) {
         def value = pos.y * 48271l
         geoIndex[pos] = value
-        println("GI: $pos -> $value")
+//        println("GI: $pos -> $value")
         return value
     }
     def value = pos2Erosion[pos.left()] * pos2Erosion[pos.up()]
     geoIndex[pos] = value
-    println("GI: $pos -> $value")
+//    println("GI: $pos -> $value")
     return value
 }
 
@@ -62,7 +62,7 @@ int erosionLevel(Pos pos) {
     }
     long level = (geologicalIndex(pos) + depth) % 20183
     pos2Erosion[pos] = level
-    println("ER: $pos -> $level")
+//    println("ER: $pos -> $level")
     return level
 }
 

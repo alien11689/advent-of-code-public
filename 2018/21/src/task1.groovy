@@ -116,13 +116,13 @@ for (int i = 1; i < lines.size(); ++i) {
     instructions << new Operation(name: line[0], a: line[1] as int, b: line[2] as int, c: line[3] as int)
 }
 
-instructions.eachWithIndex { it, i -> println("$i: $it") }
+//instructions.eachWithIndex { it, i -> println("$i: $it") }
 
 int threshold = 10000
 int curMinR4 = 10000000000
 long operations = 0
 for (int i = 0; i < 1; ++i) {
-    println(i)
+//    println(i)
     long[] registers = [i, 0, 0, 0, 0, 0, 0]
     def count
     Map<Integer, Integer> instrToCount = [:].withDefault { 0 }

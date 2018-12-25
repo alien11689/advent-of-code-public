@@ -158,9 +158,9 @@ while (generation < 6000) {
         int sum = state.findAll { it.value == '#' }.collect { it.key }.sum()
         after6000 = sum
     }
-    if(generation % 1000 == 0){
-        println("Generation $generation")
-    }
+//    if(generation % 1000 == 0){
+//        println("Generation $generation")
+//    }
 }
 
 println("Sum")

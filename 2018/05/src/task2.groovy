@@ -12,7 +12,7 @@ def reduce(text) {
     def nextSize = 0
     while (curSize != nextSize) {
         curSize = nextSize
-        println("Iteration: ${iteration++} - size ${curSize}")
+//        println("Iteration: ${iteration++} - size ${curSize}")
         changes.each {
             before = before.replaceAll(it, '')
         }
@@ -23,4 +23,4 @@ def reduce(text) {
 
 def result = reduce(text)
 
-println(reducting.collect { println("Reducing $it"); reduce(result.replaceAll(it, '')) }.min{it.size()}.size())
+println(reducting.collect { /**println("Reducing $it");*/ reduce(result.replaceAll(it, '')) }.min{it.size()}.size())

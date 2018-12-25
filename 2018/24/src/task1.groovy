@@ -46,9 +46,9 @@ class Group implements Comparable<Group> {
     }
 
     void takeDamage(int damage) {
-        println("\tI take $damage damage and I have $hitPoints ,")
+//        println("\tI take $damage damage and I have $hitPoints ,")
         int toKill = damage / hitPoints as int
-        println("\tTo kill $toKill")
+//        println("\tTo kill $toKill")
         units -= toKill
     }
 }
@@ -88,10 +88,10 @@ new Group(Team.Infection, 10, 1641, 7807, [fire], [slashing, bludgeoning], 3, 7,
 ]
 
 while ((groups.team as Set).size() > 1) {
-    println('-------------------')
-    groups.sort { [it.team, it.id] }.each {
-        println("${it.team} ${it.id} has ${it.units}")
-    }
+//    println('-------------------')
+//    groups.sort { [it.team, it.id] }.each {
+//        println("${it.team} ${it.id} has ${it.units}")
+//    }
     groups = groups.sort()
     groups.each { it.reset() }
     // selection
@@ -142,7 +142,7 @@ while ((groups.team as Set).size() > 1) {
 //    }
     // attack
     groups.sort { -it.initiative }.each {
-        println("${it.team} ${it.id} attacks ${it.target?.id}")
+//        println("${it.team} ${it.id} attacks ${it.target?.id}")
         it.attack()
     }
     // remove dead

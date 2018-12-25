@@ -117,5 +117,5 @@ while (!toCheck.empty) {
         toCheck.offer(new Dist(pos, cur.doors + 1))
     }
 }
-println maxDoors
+//println maxDoors
 println(memory.values().count { it >= 1000 })

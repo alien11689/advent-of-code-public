@@ -223,7 +223,7 @@ int tick = 0
 //return
 
 while (true) {
-    println(tick)
+//    println(tick)
 //    if(tick == 201 || tick == 202 | tick == 203) {
 //    printBoard(cells, drivers)
 //    }
@@ -242,7 +242,7 @@ while (true) {
         }
     }
     crashes.each { car ->
-        println("Crash on ${car.x} ${car.y}")
+//        println("Crash on ${car.x} ${car.y}")
         drivers.remove(car)
     }
     if (drivers.size() == 1) {

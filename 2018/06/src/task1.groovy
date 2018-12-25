@@ -54,7 +54,7 @@ def board = (0..(points.max { it.y }.y + 1)).collect { y ->
 
 Map mins1 = points.collectEntries { p ->
     int count = board.flatten().findAll { Cell c -> c.nearestPoints == [p.id] as Set }.size()
-    println("${p.id} -> $count")
+//    println("${p.id} -> $count")
     [(p.id): count]
 }
 
@@ -70,7 +70,7 @@ def board2 = (-10..(points.max { it.y }.y + 10)).collect { y ->
 
 Map mins2 = points.collectEntries { p ->
     int count = board2.flatten().findAll { Cell c -> c.nearestPoints == [p.id] as Set }.size()
-    println("${p.id} -> $count")
+//    println("${p.id} -> $count")
     [(p.id): count]
 }
 

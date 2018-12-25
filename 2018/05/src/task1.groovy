@@ -5,16 +5,16 @@ def iteration = 0
 def curSize = text.size()
 def nextSize = 0
 
-def changes = ('a'..'z').collectMany{[/$it${it.toUpperCase()}/, /${it.toUpperCase()}$it/]}
+def changes = ('a'..'z').collectMany { [/$it${it.toUpperCase()}/, /${it.toUpperCase()}$it/] }
 
 while (curSize != nextSize) {
     curSize = nextSize
-    println("Iteration: ${iteration++} - size ${curSize}")
-    changes.each{
+//    println("Iteration: ${iteration++} - size ${curSize}")
+    changes.each {
         before = before.replaceAll(it, '')
     }
     nextSize = before.size()
 }
 
-println(before)
+//println(before)
 println(nextSize)

@@ -155,13 +155,13 @@ Result fight(List<Group> groups) {
             it.attack()
         }.sum()
         if (killed == 0) {
-            println('Infinite loop')
+//            println('Infinite loop')
             return new Result()
         }
         // remove dead
         groups.removeAll { it.units <= 0 }
     }
-    println("Winner ${groups[0].team}")
+//    println("Winner ${groups[0].team}")
     return new Result(groups[0].team, groups.sum { it.units } as int)
 }
 
@@ -173,7 +173,7 @@ while (maxBound >= minBound) {
     List<Group> groups = generateGroups()
 
     int boost = minBound + (maxBound - minBound) / 2
-    println("Checking boost $boost")
+//    println("Checking boost $boost")
     groups.findAll { it.team == Team.Immune }.each { it.attack += boost }
 
     Result result = fight(groups)

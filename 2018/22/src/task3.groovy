@@ -1,3 +1,6 @@
+// Experiment when neighbours are also on diagonals
+return
+
 import groovy.transform.Canonical
 
 depth = 510l

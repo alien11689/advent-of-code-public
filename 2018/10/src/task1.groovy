@@ -1,11 +1,11 @@
-import groovy.transform.ToString
+import groovy.transform.Canonical
 
 //def text = new File('other.txt').text.trim()
 def text = new File('input.txt').text.trim()
 
 def lines = text.split('\n')
 
-@ToString
+@Canonical
 class Point {
     int x
     int y
@@ -19,6 +19,10 @@ class Point {
 
     def isPoint(x, y) {
         return this.x == x && this.y == y
+    }
+
+    Point copy(){
+        new Point(x, y, vx,vy)
     }
 }
 
@@ -55,6 +59,8 @@ def printPoints(List<Point> points) {
 
 int tick = 0
 int prevMax = Integer.MAX_VALUE
+int bestTick = 0
+List<Point> bestPoints = null
 while (true) {
     int minX = points.x.min()
     int maxX = points.x.max()
@@ -62,10 +68,14 @@ while (true) {
         break   
     }
     prevMax = maxX
-    println("Tick $tick")
+//    println("Tick $tick")
     if (maxX - minX < 100) {
-        printPoints(points)
+//        printPoints(points)
+	bestTick = tick
+	bestPoints = points.collect {it.copy()}
     }
     ++tick
     points.each { it.move() }
 }
+printPoints(bestPoints)
+println("Best tick $bestTick")
