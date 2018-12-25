@@ -18,6 +18,7 @@ class Instr {
     int b
     int c
 
+
     Integer process(Stack<Integer> stack, int[] registers) {
         switch (name) {
             case 'halt': return -1
@@ -62,14 +63,11 @@ class Instr {
                 registers[a % 32768] = (valueOrRegisterValue(b, registers) | valueOrRegisterValue(c, registers)) % 32768
                 break
             case 'not':
-                println("BITWISE NOT $a $b")
-                println(registers)
-                registers[a % 32768] = Integer.parseInt(String.format("%15s", valueOrRegisterValue(b, registers))
+                registers[a % 32768] = Integer.parseInt(String.format("%15s", Integer.toBinaryString(valueOrRegisterValue(b, registers)))
                         .replace(' ', '0')
                         .collect {
                     it == '0' ? '1' : '0'
                 }.join(), 2) % 32768
-                println(registers)
                 break
             default:
                 throw new RuntimeException("Unknown instr $name")
@@ -79,6 +77,11 @@ class Instr {
 
     private int valueOrRegisterValue(int num, int[] registers) {
         num >= 32768 ? registers[num % 32768] : num
+    }
+
+    @Override
+    public String toString() {
+        return "$address: ${name.toUpperCase()} ${[a, b, c].join(' ')}";
     }
 }
 
@@ -129,7 +132,7 @@ int[] registers = [0, 0, 0, 0, 0, 0, 0, 0]
 int pointer = 0
 while (pointer < instructions.size()) {
     Instr instr = instructions[pointer]
-//    println("=========== ${instr.name} ===========")
+    if (args.size() > 0 && args[0] == 'debug') println(instr)
     Integer newPointer = instr.process(stack, registers)
     if (newPointer != null) {
         if (newPointer == -1) {
