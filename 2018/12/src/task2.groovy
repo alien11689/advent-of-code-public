@@ -7,26 +7,26 @@ import groovy.transform.ToString
 
 String exampleInitialState = '#..#.#..##......###...###'
 String exampleRawRules = "...## => #\n" +
-    "..#.. => #\n" +
-    ".#... => #\n" +
-    ".#.#. => #\n" +
-    ".#.## => #\n" +
-    ".##.. => #\n" +
-    ".#### => #\n" +
-    "#.#.# => #\n" +
-    "#.### => #\n" +
-    "##.#. => #\n" +
-    "##.## => #\n" +
-    "###.. => #\n" +
-    "###.# => #\n" +
-    "####. => #"
+        "..#.. => #\n" +
+        ".#... => #\n" +
+        ".#.#. => #\n" +
+        ".#.## => #\n" +
+        ".##.. => #\n" +
+        ".#### => #\n" +
+        "#.#.# => #\n" +
+        "#.### => #\n" +
+        "##.#. => #\n" +
+        "##.## => #\n" +
+        "###.. => #\n" +
+        "###.# => #\n" +
+        "####. => #"
 
 String myInput = '##.#..#.#..#.####.#########.#...#.#.#......##.#.#...##.....#...#...#.##.#...##...#.####.##..#.#..#.'.trim()
 
 def readRules(String rawRules) {
     return rawRules.trim()
-        .split('\n')
-        .collect {
+            .split('\n')
+            .collect {
         def split = it.split(" => ")
         new Rule(from: split[0].trim(), to: split[1].trim())
     }
@@ -34,37 +34,37 @@ def readRules(String rawRules) {
 }
 
 String myRawRules = "..#.. => .\n" +
-    "..#.# => .\n" +
-    "#.#.. => .\n" +
-    ".#..# => .\n" +
-    "#.... => .\n" +
-    "....# => .\n" +
-    ".#.#. => #\n" +
-    "#.### => .\n" +
-    "####. => .\n" +
-    "..... => .\n" +
-    ".#... => #\n" +
-    "##### => #\n" +
-    ".#### => .\n" +
-    "#..#. => #\n" +
-    "#...# => #\n" +
-    ".###. => .\n" +
-    "###.# => #\n" +
-    "...## => #\n" +
-    "#.##. => #\n" +
-    ".#.## => #\n" +
-    "##.#. => #\n" +
-    "...#. => .\n" +
-    "..### => #\n" +
-    "###.. => #\n" +
-    "##... => .\n" +
-    "..##. => .\n" +
-    ".##.# => .\n" +
-    "##.## => .\n" +
-    ".##.. => .\n" +
-    "##..# => #\n" +
-    "#.#.# => .\n" +
-    "#..## => #"
+        "..#.# => .\n" +
+        "#.#.. => .\n" +
+        ".#..# => .\n" +
+        "#.... => .\n" +
+        "....# => .\n" +
+        ".#.#. => #\n" +
+        "#.### => .\n" +
+        "####. => .\n" +
+        "..... => .\n" +
+        ".#... => #\n" +
+        "##### => #\n" +
+        ".#### => .\n" +
+        "#..#. => #\n" +
+        "#...# => #\n" +
+        ".###. => .\n" +
+        "###.# => #\n" +
+        "...## => #\n" +
+        "#.##. => #\n" +
+        ".#.## => #\n" +
+        "##.#. => #\n" +
+        "...#. => .\n" +
+        "..### => #\n" +
+        "###.. => #\n" +
+        "##... => .\n" +
+        "..##. => .\n" +
+        ".##.# => .\n" +
+        "##.## => .\n" +
+        ".##.. => .\n" +
+        "##..# => #\n" +
+        "#.#.# => .\n" +
+        "#..## => #"
 
 String initialState = exampleInitialState
 String rawRules = exampleRawRules
@@ -102,14 +102,20 @@ def printState(Map state) {
     println()
 }
 
+def stateAsString(Map state) {
+    int min = state.findAll { it.value == '#' }.min { it.key }.key
+    int max = state.findAll { it.value == '#' }.max { it.key }.key
+    StringBuilder sb = new StringBuilder()
+    for (int i = min; i < max + 1; ++i) {
+        sb.append(state[i])
+    }
+    return sb.toString()
+}
+
 long maxIter = 20
 maxIter = 50000000000
 
-long after3000 = 0
-long after5000 = 0
-long after6000 = 0
-
-while (generation < 6000) {
+while (true) {
     generation++
     Set<Integer> nonEmpty = state.findAll { it.value == '#' }.keySet()
     int minNonEmpty = nonEmpty.min()
@@ -143,25 +149,13 @@ while (generation < 6000) {
             newGeneration[i] = '.'
         }
     }
-    if (state == newGeneration) {
-        state = newGeneration
+    if (stateAsString(state) == stateAsString(newGeneration)) {
+        int base = state.findAll { it.value == '#' }.collect { it.key }.sum()
+        println(base)
+        int stepAfterBase = newGeneration.findAll { it.value == '#' }.collect { it.key }.sum() - base
+        println(stepAfterBase)
+        println((maxIter - generation + 1) * stepAfterBase + base)
         break
     }
     state = newGeneration
-    if (generation == 3000) {
-        int sum = state.findAll { it.value == '#' }.collect { it.key }.sum()
-        after3000 = sum
-    } else if (generation == 5000) {
-        int sum = state.findAll { it.value == '#' }.collect { it.key }.sum()
-        after5000 = sum
-    } else if (generation == 6000) {
-        int sum = state.findAll { it.value == '#' }.collect { it.key }.sum()
-        after6000 = sum
-    }
-//    if(generation % 1000 == 0){
-//        println("Generation $generation")
-//    }
 }
-
-println("Sum")
-println((maxIter - 3000) * (after6000 - after5000) / 1000 + after3000)
