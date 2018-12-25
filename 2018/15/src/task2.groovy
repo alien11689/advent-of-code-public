@@ -283,7 +283,11 @@ def whole(String file) {
     String text = new File(file).text.trim()
     List<String> lines = text.split('\n')
     CellType[][] board = buildBoard(lines)
-    for (int i = 4; i < 100000; ++i) {
+    int minBound = 4
+    int maxBound = 100
+    int maxSum = -1
+    while(minBound <= maxBound){
+	int i = (minBound + maxBound) / 2
         List<Player> players = buildPlayers(lines, i)
         int round
         try {
@@ -293,11 +297,13 @@ def whole(String file) {
 //            println(round * sum)
 //            println(i)
             //Thread.sleep(1000)
-            return (round * sum)
+            maxSum = (round * sum)
+	    maxBound = i - 1
         } catch (ElfDied e){
-
+	    minBound = i + 1
         }
     }
+    return maxSum
 }
 
 //print(whole('other7.txt'))
