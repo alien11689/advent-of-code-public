@@ -52,6 +52,25 @@ class Instr {
             case 'pop':
                 registers[a % 32768] = stack.pop()
                 break
+            case 'gt':
+                registers[a % 32768] = valueOrRegisterValue(b, registers) > valueOrRegisterValue(c, registers) ? 1 : 0
+                break
+            case 'and':
+                registers[a % 32768] = (valueOrRegisterValue(b, registers) & valueOrRegisterValue(c, registers)) % 32768
+                break
+            case 'or':
+                registers[a % 32768] = (valueOrRegisterValue(b, registers) | valueOrRegisterValue(c, registers)) % 32768
+                break
+            case 'not':
+                println("BITWISE NOT $a $b")
+                println(registers)
+                registers[a % 32768] = Integer.parseInt(String.format("%15s", valueOrRegisterValue(b, registers))
+                        .replace(' ', '0')
+                        .collect {
+                    it == '0' ? '1' : '0'
+                }.join(), 2) % 32768
+                println(registers)
+                break
             default:
                 throw new RuntimeException("Unknown instr $name")
         }
