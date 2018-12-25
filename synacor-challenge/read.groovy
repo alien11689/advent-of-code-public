@@ -19,7 +19,7 @@ class Instr {
     int c
 
 
-    Integer process(Stack<Integer> stack, int[] registers) {
+    Integer process(Stack<Integer> stack, int[] registers, List<Integer> memory, Integer nextInstrAddress) {
         switch (name) {
             case 'halt': return -1
             case 'noop': break
@@ -40,11 +40,15 @@ class Instr {
                 registers[a % 32768] = valueOrRegisterValue(b, registers)
                 break
             case 'add':
-                //println("ADD $a $b $c")
                 registers[a % 32768] = (valueOrRegisterValue(b, registers) + valueOrRegisterValue(c, registers)) % 32768
                 break
+            case 'mult':
+                registers[a % 32768] = (valueOrRegisterValue(b, registers) * valueOrRegisterValue(c, registers)) % 32768
+                break
+            case 'mod':
+                registers[a % 32768] = (valueOrRegisterValue(b, registers) % valueOrRegisterValue(c, registers)) % 32768
+                break
             case 'eq':
-                //println("EQ $a $b $c -> ${valueOrRegisterValue(b, registers)} == ${valueOrRegisterValue(c, registers)}")
                 registers[a % 32768] = valueOrRegisterValue(b, registers) == valueOrRegisterValue(c, registers) ? 1 : 0
                 break
             case 'push':
@@ -69,6 +73,17 @@ class Instr {
                     it == '0' ? '1' : '0'
                 }.join(), 2) % 32768
                 break
+            case 'call':
+                stack.push(nextInstrAddress)
+                return valueOrRegisterValue(a, registers)
+            case 'rmem':
+                registers[a % 32768] = memory[valueOrRegisterValue(b, registers)] % 32768
+                break
+            case 'wmem':
+                memory[valueOrRegisterValue(a, registers)] = valueOrRegisterValue(b, registers) // TODO it does not change anything...
+                break
+            case 'ret':
+                return stack.pop()
             default:
                 throw new RuntimeException("Unknown instr $name")
         }
@@ -123,9 +138,9 @@ List<Instr> readInstr(List<Integer> nums) {
 //println("Reading bytes...")
 int[] bytes = new File('challenge.bin').bytes.collect { it & 0xff }
 //println("Converting to numbers")
-List<Integer> nums = readNums(bytes)
+List<Integer> memory = readNums(bytes)
 //println("Generating instructions")
-List<Instr> instructions = readInstr(nums)
+List<Instr> instructions = readInstr(memory)
 //println("Executing:")
 Stack stack = new Stack()
 int[] registers = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -133,7 +148,8 @@ int pointer = 0
 while (pointer < instructions.size()) {
     Instr instr = instructions[pointer]
     if (args.size() > 0 && args[0] == 'debug') println(instr)
-    Integer newPointer = instr.process(stack, registers)
+    int nextInstructionAddress = pointer + 1 < instructions.size() ? instructions[pointer + 1].address : null
+    Integer newPointer = instr.process(stack, registers, memory, nextInstructionAddress)
     if (newPointer != null) {
         if (newPointer == -1) {
             return
