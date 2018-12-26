@@ -1,170 +1,175 @@
-import groovy.transform.Canonical
-
-List<Integer> readNums(int[] bytes) {
-    List<Integer> instr = []
+List<Integer> readMemory(int[] bytes) {
+    List<Integer> memory = []
     for (int i = 0; i < bytes.size(); i += 2) {
         int a = bytes[i]
         int b = bytes[i + 1]
-        instr << a + b * (2**8)
+        memory << a + b * (2**8)
     }
-    return instr
+    return memory
 }
 
-@Canonical
-class Instr {
-    int address
-    String name
-    int a
-    int b
-    int c
+private static int valueOrRegisterValue(int num, int[] registers) {
+    num >= 32768 ? registers[num % 32768] : num
+}
 
-
-    Integer process(Stack<Integer> stack, int[] registers, List<Integer> memory, Integer nextInstrAddress) {
-        switch (name) {
-            case 'halt': return -1
-            case 'noop': break
-            case 'out': print(a as char); break
-            case 'jmp': return a
-            case 'jt':
-                if (valueOrRegisterValue(a, registers) > 0) {
-                    return b
-                }
-                break
-            case 'jf':
-                if (valueOrRegisterValue(a, registers) == 0) {
-                    return b
-                }
-                break
-            case 'set':
-                //println("SET $a $b")
-                registers[a % 32768] = valueOrRegisterValue(b, registers)
-                break
-            case 'add':
-                registers[a % 32768] = (valueOrRegisterValue(b, registers) + valueOrRegisterValue(c, registers)) % 32768
-                break
-            case 'mult':
-                registers[a % 32768] = (valueOrRegisterValue(b, registers) * valueOrRegisterValue(c, registers)) % 32768
-                break
-            case 'mod':
-                registers[a % 32768] = (valueOrRegisterValue(b, registers) % valueOrRegisterValue(c, registers)) % 32768
-                break
-            case 'eq':
-                registers[a % 32768] = valueOrRegisterValue(b, registers) == valueOrRegisterValue(c, registers) ? 1 : 0
-                break
-            case 'push':
-                stack.push(valueOrRegisterValue(a, registers))
-                break
-            case 'pop':
-                registers[a % 32768] = stack.pop()
-                break
-            case 'gt':
-                registers[a % 32768] = valueOrRegisterValue(b, registers) > valueOrRegisterValue(c, registers) ? 1 : 0
-                break
-            case 'and':
-                registers[a % 32768] = (valueOrRegisterValue(b, registers) & valueOrRegisterValue(c, registers)) % 32768
-                break
-            case 'or':
-                registers[a % 32768] = (valueOrRegisterValue(b, registers) | valueOrRegisterValue(c, registers)) % 32768
-                break
-            case 'not':
-                registers[a % 32768] = Integer.parseInt(String.format("%15s", Integer.toBinaryString(valueOrRegisterValue(b, registers)))
-                        .replace(' ', '0')
-                        .collect {
-                    it == '0' ? '1' : '0'
-                }.join(), 2) % 32768
-                break
-            case 'call':
-                stack.push(nextInstrAddress)
-                return valueOrRegisterValue(a, registers)
-            case 'rmem':
-                registers[a % 32768] = memory[valueOrRegisterValue(b, registers)] % 32768
-                break
-            case 'wmem':
-                memory[valueOrRegisterValue(a, registers)] = valueOrRegisterValue(b, registers) // TODO it does not change anything...
-                break
-            case 'ret':
-                return stack.pop()
-            default:
-                throw new RuntimeException("Unknown instr $name")
-        }
-        return null
-    }
-
-    private int valueOrRegisterValue(int num, int[] registers) {
-        num >= 32768 ? registers[num % 32768] : num
-    }
-
-    @Override
-    public String toString() {
-        return "$address: ${name.toUpperCase()} ${[a, b, c].join(' ')}";
+int process(Stack<Integer> stack, int[] registers, List<Integer> memory, int pointer) {
+    int curInstr = memory[pointer]
+    switch (curInstr) {
+        case Opcode.HALT: return -1
+        case Opcode.NOOP: return pointer + 1
+        case Opcode.OUT:
+            int a = memory[pointer + 1]
+            print(valueOrRegisterValue(a, registers) as char)
+            return pointer + 2
+        case Opcode.JMP:
+            int a = memory[pointer + 1]
+            return valueOrRegisterValue(a, registers)
+        case Opcode.JT:
+            int a = memory[pointer + 1]
+            if (valueOrRegisterValue(a, registers) > 0) {
+                int b = memory[pointer + 2]
+                return valueOrRegisterValue(b, registers)
+            }
+            return pointer + 3
+        case Opcode.JF:
+            int a = memory[pointer + 1]
+            if (valueOrRegisterValue(a, registers) == 0) {
+                int b = memory[pointer + 2]
+                return valueOrRegisterValue(b, registers)
+            }
+            return pointer + 3
+        case Opcode.SET:
+            //println("SET $a $b")
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            registers[a % 32768] = valueOrRegisterValue(b, registers)
+            return pointer + 3
+        case Opcode.ADD:
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            int c = memory[pointer + 3]
+            registers[a % 32768] = (valueOrRegisterValue(b, registers) + valueOrRegisterValue(c, registers)) % 32768
+            return pointer + 4
+        case Opcode.MULT:
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            int c = memory[pointer + 3]
+            registers[a % 32768] = (valueOrRegisterValue(b, registers) * valueOrRegisterValue(c, registers)) % 32768
+            return pointer + 4
+        case Opcode.MOD:
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            int c = memory[pointer + 3]
+            registers[a % 32768] = (valueOrRegisterValue(b, registers) % valueOrRegisterValue(c, registers)) % 32768
+            return pointer + 4
+        case Opcode.EQ:
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            int c = memory[pointer + 3]
+            registers[a % 32768] = valueOrRegisterValue(b, registers) == valueOrRegisterValue(c, registers) ? 1 : 0
+            return pointer + 4
+        case Opcode.PUSH:
+            int a = memory[pointer + 1]
+            stack.push(valueOrRegisterValue(a, registers))
+            return pointer + 2
+        case Opcode.POP:
+            int a = memory[pointer + 1]
+            registers[a % 32768] = stack.pop()
+            return pointer + 2
+        case Opcode.GT:
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            int c = memory[pointer + 3]
+            registers[a % 32768] = valueOrRegisterValue(b, registers) > valueOrRegisterValue(c, registers) ? 1 : 0
+            return pointer + 4
+        case Opcode.AND:
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            int c = memory[pointer + 3]
+            registers[a % 32768] = (valueOrRegisterValue(b, registers) & valueOrRegisterValue(c, registers)) % 32768
+            return pointer + 4
+        case Opcode.OR:
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            int c = memory[pointer + 3]
+            registers[a % 32768] = (valueOrRegisterValue(b, registers) | valueOrRegisterValue(c, registers)) % 32768
+            return pointer + 4
+        case Opcode.NOT:
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            registers[a % 32768] = Integer.parseInt(String.format("%15s", Integer.toBinaryString(valueOrRegisterValue(b, registers)))
+                    .replace(' ', '0')
+                    .collect {
+                it == '0' ? '1' : '0'
+            }.join(), 2) % 32768
+            return pointer + 3
+        case Opcode.CALL:
+            int a = memory[pointer + 1]
+            stack.push(pointer + 2)
+            return valueOrRegisterValue(a, registers)
+        case Opcode.RMEM:
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            registers[a % 32768] = memory[valueOrRegisterValue(b, registers)] % 32768
+            return pointer + 3
+        case Opcode.WMEM:
+            int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            memory[valueOrRegisterValue(a, registers)] = valueOrRegisterValue(b, registers)
+            return pointer + 3
+        case Opcode.RET:
+            return stack.pop()
+        case Opcode.IN:
+            int a = memory[pointer + 1]
+//            println("Saving output in $a")
+            int value = System.in.read() % 32768
+//            println("Read value $value")
+            registers[a % 32768] = value
+            return pointer + 2
+        default:
+            throw new RuntimeException("Unknown instr $curInstr")
     }
 }
 
-List<Instr> readInstr(List<Integer> nums) {
-    int i = 0
-    List<Instr> instructions = []
-    StringBuilder message = new StringBuilder()
-    while (i < nums.size()) {
-        switch (nums[i]) {
-            case 0: instructions << new Instr(i, 'halt'); break
-            case 1: instructions << new Instr(i, 'set', nums[++i], nums[++i]); break
-            case 2: instructions << new Instr(i, 'push', nums[++i]); break
-            case 3: instructions << new Instr(i, 'pop', nums[++i]); break
-            case 4: instructions << new Instr(i, 'eq', nums[++i], nums[++i], nums[++i]); break
-            case 5: instructions << new Instr(i, 'gt', nums[++i], nums[++i], nums[++i]); break
-            case 6: instructions << new Instr(i, 'jmp', nums[++i]); break
-            case 7: instructions << new Instr(i, 'jt', nums[++i], nums[++i]); break
-            case 8: instructions << new Instr(i, 'jf', nums[++i], nums[++i]); break
-            case 9: instructions << new Instr(i, 'add', nums[++i], nums[++i], nums[++i]); break
-            case 10: instructions << new Instr(i, 'mult', nums[++i], nums[++i], nums[++i]); break
-            case 11: instructions << new Instr(i, 'mod', nums[++i], nums[++i], nums[++i]); break
-            case 12: instructions << new Instr(i, 'and', nums[++i], nums[++i], nums[++i]); break
-            case 13: instructions << new Instr(i, 'or', nums[++i], nums[++i], nums[++i]); break
-            case 14: instructions << new Instr(i, 'not', nums[++i], nums[++i]); break
-            case 15: instructions << new Instr(i, 'rmem', nums[++i], nums[++i]); break
-            case 16: instructions << new Instr(i, 'wmem', nums[++i], nums[++i]); break
-            case 17: instructions << new Instr(i, 'call', nums[++i]); break
-            case 18: instructions << new Instr(i, 'ret'); break
-            case 19: instructions << new Instr(i, 'out', nums[++i]); message.append(nums[i] as char); break
-            case 20: instructions << new Instr(i, 'in', nums[++i]); break
-            case 21: instructions << new Instr(i, 'noop'); break
-            default: ++i; break// throw new RuntimeException("Unknown operation on $i: ${nums[i]}, ${nums[i+1]}, ${nums[i+2]}")
-        }
-        ++i
-    }
-    instructions
+class Opcode {
+    static int HALT = 0
+    static int SET = 1
+    static int PUSH = 2
+    static int POP = 3
+    static int EQ = 4
+    static int GT = 5
+    static int JMP = 6
+    static int JT = 7
+    static int JF = 8
+    static int ADD = 9
+    static int MULT = 10
+    static int MOD = 11
+    static int AND = 12
+    static int OR = 13
+    static int NOT = 14
+    static int RMEM = 15
+    static int WMEM = 16
+    static int CALL = 17
+    static int RET = 18
+    static int OUT = 19
+    static int IN = 20
+    static int NOOP = 21
+
 }
 
 //println("Reading bytes...")
 int[] bytes = new File('challenge.bin').bytes.collect { it & 0xff }
 //println("Converting to numbers")
-List<Integer> memory = readNums(bytes)
-//println("Generating instructions")
-List<Instr> instructions = readInstr(memory)
+List<Integer> memory = readMemory(bytes)
 //println("Executing:")
 Stack stack = new Stack()
 int[] registers = [0, 0, 0, 0, 0, 0, 0, 0]
 int pointer = 0
-while (pointer < instructions.size()) {
-    Instr instr = instructions[pointer]
-    if (args.size() > 0 && args[0] == 'debug') println(instr)
-    int nextInstructionAddress = pointer + 1 < instructions.size() ? instructions[pointer + 1].address : null
-    Integer newPointer = instr.process(stack, registers, memory, nextInstructionAddress)
-    if (newPointer != null) {
-        if (newPointer == -1) {
-            return
-        }
-        int realNewPointer = -1
-        for (int i = 0; i < instructions.size(); ++i) {
-            if (instructions[i].address == newPointer) {
-                realNewPointer = i
-            }
-        }
-        if (realNewPointer == -1) {
-            throw new RuntimeException("Received new pointer")
-        }
-        pointer = realNewPointer
-    } else {
-        ++pointer
+while (pointer < memory.size()) {
+//    if (args.size() > 0 && args[0] == 'debug') println(instr)
+    int newPointer = process(stack, registers, memory, pointer)
+    if (newPointer == -1) {
+        return
     }
+    pointer = newPointer
 }
