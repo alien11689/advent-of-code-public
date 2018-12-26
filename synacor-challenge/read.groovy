@@ -12,29 +12,38 @@ private static int valueOrRegisterValue(int num, int[] registers) {
     num >= 32768 ? registers[num % 32768] : num
 }
 
+debug = false
+
 int process(Stack<Integer> stack, int[] registers, List<Integer> memory, int pointer) {
     int curInstr = memory[pointer]
     switch (curInstr) {
-        case Opcode.HALT: return -1
-        case Opcode.NOOP: return pointer + 1
+        case Opcode.HALT:
+            if (debug) println("$pointer\t\t$registers\t\tHALT")
+            return -1
+        case Opcode.NOOP:
+            if (debug) println('NOOP')
+            return pointer + 1
         case Opcode.OUT:
             int a = memory[pointer + 1]
             print(valueOrRegisterValue(a, registers) as char)
             return pointer + 2
         case Opcode.JMP:
             int a = memory[pointer + 1]
+            if (debug) println("$pointer\t\t$registers\t\tJMP $a")
             return valueOrRegisterValue(a, registers)
         case Opcode.JT:
             int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            if (debug) println("$pointer\t\t$registers\t\tJT $a $b")
             if (valueOrRegisterValue(a, registers) > 0) {
-                int b = memory[pointer + 2]
                 return valueOrRegisterValue(b, registers)
             }
             return pointer + 3
         case Opcode.JF:
             int a = memory[pointer + 1]
+            int b = memory[pointer + 2]
+            if (debug) println("$pointer\t\t$registers\t\tJF $a $b")
             if (valueOrRegisterValue(a, registers) == 0) {
-                int b = memory[pointer + 2]
                 return valueOrRegisterValue(b, registers)
             }
             return pointer + 3
@@ -42,61 +51,72 @@ int process(Stack<Integer> stack, int[] registers, List<Integer> memory, int poi
             //println("SET $a $b")
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
+            if (debug) println("$pointer\t\t$registers\t\tSET $a $b")
             registers[a % 32768] = valueOrRegisterValue(b, registers)
             return pointer + 3
         case Opcode.ADD:
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
             int c = memory[pointer + 3]
+            if (debug) println("$pointer\t\t$registers\t\tADD $a $b $c")
             registers[a % 32768] = (valueOrRegisterValue(b, registers) + valueOrRegisterValue(c, registers)) % 32768
             return pointer + 4
         case Opcode.MULT:
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
             int c = memory[pointer + 3]
+            if (debug) println("$pointer\t\t$registers\t\tMULT $a $b $c")
             registers[a % 32768] = (valueOrRegisterValue(b, registers) * valueOrRegisterValue(c, registers)) % 32768
             return pointer + 4
         case Opcode.MOD:
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
             int c = memory[pointer + 3]
+            if (debug) println("$pointer\t\t$registers\t\tMOD $a $b $c")
             registers[a % 32768] = (valueOrRegisterValue(b, registers) % valueOrRegisterValue(c, registers)) % 32768
             return pointer + 4
         case Opcode.EQ:
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
             int c = memory[pointer + 3]
+            if (debug) println("$pointer\t\t$registers\t\tEQ $a $b $c")
             registers[a % 32768] = valueOrRegisterValue(b, registers) == valueOrRegisterValue(c, registers) ? 1 : 0
             return pointer + 4
         case Opcode.PUSH:
             int a = memory[pointer + 1]
+            if (debug) println("$pointer\t\t$registers\t\tPUSH $a")
             stack.push(valueOrRegisterValue(a, registers))
             return pointer + 2
         case Opcode.POP:
             int a = memory[pointer + 1]
+            if (debug) println("$pointer\t\t$registers\t\tPOP $a")
             registers[a % 32768] = stack.pop()
             return pointer + 2
         case Opcode.GT:
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
             int c = memory[pointer + 3]
+            if (debug) println("$pointer\t\t$registers\t\tGT $a $b $c")
             registers[a % 32768] = valueOrRegisterValue(b, registers) > valueOrRegisterValue(c, registers) ? 1 : 0
             return pointer + 4
         case Opcode.AND:
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
             int c = memory[pointer + 3]
+            if (debug) println("$pointer\t\t$registers\t\tAND $a $b $c")
             registers[a % 32768] = (valueOrRegisterValue(b, registers) & valueOrRegisterValue(c, registers)) % 32768
             return pointer + 4
         case Opcode.OR:
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
             int c = memory[pointer + 3]
+            if (debug) println("$pointer\t\t$registers\t\tOR $a $b $c")
             registers[a % 32768] = (valueOrRegisterValue(b, registers) | valueOrRegisterValue(c, registers)) % 32768
             return pointer + 4
         case Opcode.NOT:
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
+            if (debug) println("$pointer\t\t$registers\t\tNOT $a $b")
             registers[a % 32768] = Integer.parseInt(String.format("%15s", Integer.toBinaryString(valueOrRegisterValue(b, registers)))
                     .replace(' ', '0')
                     .collect {
@@ -105,24 +125,33 @@ int process(Stack<Integer> stack, int[] registers, List<Integer> memory, int poi
             return pointer + 3
         case Opcode.CALL:
             int a = memory[pointer + 1]
+            if (debug) println("$pointer\t\t$registers\t\tCALL $a")
             stack.push(pointer + 2)
             return valueOrRegisterValue(a, registers)
         case Opcode.RMEM:
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
+            if (debug) println("$pointer\t\t$registers\t\tRMEM $a $b")
             registers[a % 32768] = memory[valueOrRegisterValue(b, registers)] % 32768
             return pointer + 3
         case Opcode.WMEM:
             int a = memory[pointer + 1]
             int b = memory[pointer + 2]
+            if (debug) println("$pointer\t\t$registers\t\tWMEM $a $b")
             memory[valueOrRegisterValue(a, registers)] = valueOrRegisterValue(b, registers)
             return pointer + 3
         case Opcode.RET:
+            if (debug) println("$pointer\t\t$registers\t\tRET")
             return stack.pop()
         case Opcode.IN:
             int a = memory[pointer + 1]
 //            println("Saving output in $a")
             int value = System.in.read() % 32768
+            if (value == 48) {
+                debug = true
+                println "Turn on debug"
+                value = System.in.read() % 32768
+            }
 //            println("Read value $value")
             registers[a % 32768] = value
             return pointer + 2
