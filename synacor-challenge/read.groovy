@@ -151,6 +151,7 @@ int process(Stack<Integer> stack, int[] registers, List<Integer> memory, int poi
                 debug = true
                 println "Turn on debug"
                 value = System.in.read() % 32768
+                registers[7] = 1 // TODO find good value
             }
 //            println("Read value $value")
             registers[a % 32768] = value
