@@ -187,8 +187,6 @@ def findH(Map panel){
 panel.find {it.value == 3}.key    
 }
 
-def prevB = findB(panel)
-boolean hit = false
 int i = 0
 while(!state.ended){
     ++i
@@ -200,30 +198,13 @@ while(!state.ended){
     def curH = findH(panel)
     //println("Ball is on " + curB)
     //println("H is on " + curH)
-    hit = prevB[1] < curB[1] && curB[1] +1 == curH[1]
-    if(hit){
-       // println("Will HIT")
-    }
     if(curB[0] == curH[0]){
         inputQ.offer(0)
-    }else if(curB[0] < prevB[0]){
-        if(curH[0] == curB[0] - 1){
-            inputQ.offer(0)
-        }else if(curH[0] < curB[0] - 1){
-            inputQ.offer(1)
-        }else{
-            inputQ.offer(-1)
-        }
+    }else if(curB[0] < curH[0]){
+        inputQ.offer(-1)
     }else{
-        if(curH[0] == curB[0] + 1){
-            inputQ.offer(0)
-        }else if(curH[0] > curB[0] + 1){
-            inputQ.offer(-1)
-        }else{
-            inputQ.offer(1)
-        }
+        inputQ.offer(1)
     }
-    prevB = curB
 }
 //println(state.ended)
 println("Iter: $i")
