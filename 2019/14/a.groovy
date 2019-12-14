@@ -35,14 +35,14 @@ Set<Reaction> reactions = lines.collect { line ->
 
 Set<Reaction> usedReactions = []
 
-Map<String, Integer> needs = [FUEL: 1].withDefault { 0 }
+Map<String, Long> needs = [FUEL: 1L].withDefault { 0L }
 int iter = 0
 while (needs.keySet() != ['ORE']) {
     if (reactions.empty) {
         break
     }
     Set<String> basic = reactions.collectMany { it.from }.collect { it.name }
-    Map.Entry<String, Integer> needed = needs.find { !(it.key in basic) }
+    Map.Entry<String, Long> needed = needs.find { !(it.key in basic) }
     if (needed == null) {
         break
     }
@@ -50,15 +50,12 @@ while (needs.keySet() != ['ORE']) {
     Reaction r = reactions.find { it.to.name == needed.key }
     reactions.remove(r)
     usedReactions << r
-    int amount = 0
-    Map<String, Integer> m = [:].withDefault { 0 }
-    while (amount < needed.value) {
-        r.from.each { c ->
-            needs[c.name] += c.amount
-        }
-        amount += r.to.amount
+    long times = needed.value % r.to.amount == 0 ? needed.value / r.to.amount : ((long) (needed.value / r.to.amount) + 1)
+    r.from.each { c ->
+        needs[c.name] += times * c.amount
     }
-    println("${++iter}: $needs")
+    
+    println("${++iter}: Resolved ${needed.key} results $needs")
 }
 
 

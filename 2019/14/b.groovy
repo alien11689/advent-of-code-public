@@ -63,19 +63,23 @@ long countOre(Set<Reaction> reactions, long fuel) {
 long expected = 1000000000000L
 long a = 1L
 long b = 10000000L
+long best = 1L
 long bestOre = -1L
 while (a < b) {
     long c = (b + a) / 2
-    long ore = countOre(new HashSet<>(reactions), c)
-    println("($a,$b): $c => $ore (${ore < expected})")
     if (c == a) {
         break
     }
+    long ore = countOre(new HashSet<>(reactions), c)
+    println("($a,$b): $c => $ore (${ore < expected})")
     if (ore > expected) {
         b = c
     } else {
         a = c
-        bestOre = ore
+        if(bestOre < ore) {
+            bestOre = ore
+            best = c
+        }
     }
 }
-println("${a} fuel units from $bestOre ore")
+println("${best} fuel units from $bestOre ore")
