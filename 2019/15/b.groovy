@@ -208,9 +208,6 @@ while (true) {
 printBoard(board)
 
 //=====================================
-int manhattan(List<Integer> a, List<Integer> b) {
-    (a[0] - b[0]).abs() + (a[1] - b[1]).abs()
-}
 
 List<Integer> dest = board.find { it.value == 2 }.key
 

@@ -208,10 +208,6 @@ while (true) {
 printBoard(board)
 
 //=====================================
-int manhattan(List<Integer> a, List<Integer> b) {
-    (a[0] - b[0]).abs() + (a[1] - b[1]).abs()
-}
-
 cur = [0, 0]
 List<Integer> dest = board.find { it.value == 2 }.key
 
@@ -227,7 +223,6 @@ PriorityQueue<List<Integer>> pq = new PriorityQueue<>({ a, b ->
 })
 pq.offer([0, 0, 0])
 while (!pq.empty) {
-    println("Size: ${pq.size()}")
     List<Integer> c = pq.poll()
     if (c[1] == dest[0] && c[2] == dest[1]) {
         println("Minimal ${c[0]}")
