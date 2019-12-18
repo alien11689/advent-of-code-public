@@ -34,6 +34,25 @@ for (int j = 0; j < input.size(); j++) {
     }
 }
 
+int changes = 0
+while (true) {
+    boolean changed = false
+    for (int j = 0; j < input.size(); j++) {
+        for (int i = 0; i < input[j].size(); i++) {
+            Point point = new Point(i, j)
+            if (map[point] && keysAndDoors[point] == null && point.neighbours().findAll { !map[it] }.size() == 3) {
+                changed = true
+                ++changes
+                map[point] = false
+            }
+        }
+    }
+    if (!changed) {
+        break
+    }
+}
+println("Changes: $changes")
+
 @Immutable
 class State implements Comparable<State> {
     Point cur
@@ -58,17 +77,21 @@ class LocalState implements Comparable<LocalState> {
     Point cur
     int length
 
-    int compareTo(LocalState o){
+    int compareTo(LocalState o) {
         return length <=> o.length
     }
 }
 
 Map<Character, Integer> findReachable(Point start, Map<Point, Boolean> map, Map<Point, Character> keysAndDoors) {
+    Set<Character> max = keysAndDoors.collect { it.value.toLowerCase() } as Set
     Set<Point> visited = [] as Set
     PriorityQueue pq = new PriorityQueue()
     pq.offer(new LocalState(start, 0))
     Map<Character, Integer> result = [:]
     while (!pq.empty) {
+        if (result.size() == max.size()) {
+            break
+        }
         LocalState localState = pq.poll()
         Point cur = localState.cur
         visited << cur
