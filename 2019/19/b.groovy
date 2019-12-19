@@ -158,49 +158,28 @@ Long uberProgram(Map v, int x, int y) {
 class Point {
     int x
     int y
+}
 
-    int distX(Point o) {
-        return (o.x - x).abs()
+Point findLast(Map v, int i, int j) {
+    long val = uberProgram(v, i, j)
+    while (true) {
+        long newVal = uberProgram(v, i + 1, j)
+        if (val == 1 && newVal == 0) {
+            return new Point(i, j)
+        }
+        val = newVal
+        ++i
     }
 }
 
-int j = 100
-int nextI = 0
+int j = 10
+int i = 0
+Point last = findLast(v, i, j)
+
 while (true) {
-    boolean has1 = false
-    int i = nextI
-    Point first = null
-    Point last = null
-    while (true) {
-        Long val = uberProgram(v, i, j)
-        Point point = new Point(i, j)
-//        m[point] = val
-        if (val == 1 && !has1) {
-            first = point
-            has1 = true
-            if (uberProgram(v, i + 99, j) == 1L) {
-                i += 99
-                continue
-            } else {
-                last = first
-                break
-            }
-        }
-        if (val == 0 && has1) {
-            last = new Point(i - 1, j)
-            break
-        }
-        ++i
+    if (uberProgram(v, last.x, last.y + 99) == 1 && uberProgram(v, last.x - 99, last.y + 99) == 1) {
+        println("Found: ${(last.x - 99) * 10000 + last.y}")
+        break
     }
-//    println(j)
-    if (first.distX(last) >= 100) {
-        long rightBottom = uberProgram(v, last.x, last.y + 99)
-        long leftBottom = uberProgram(v, last.x - 99, last.y + 99)
-        if (rightBottom == 1 && leftBottom == 1) {
-            println("Found: ${(last.x - 99) * 10000 + last.y}")
-            return
-        }
-    }
-    nextI = first.x
-    j++
+    last = findLast(v, last.x, last.y + 1)
 }
