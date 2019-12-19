@@ -133,7 +133,6 @@ class State {
 //        pos: 0,
 //        input: inputQ,
 //)
-//==============================================
 
 Long uberProgram(Map v, int x, int y) {
     Queue output = new LinkedList<Long>()
@@ -153,6 +152,8 @@ Long uberProgram(Map v, int x, int y) {
     }
 }
 
+//==============================================
+
 @Immutable
 class Point {
     int x
@@ -163,12 +164,10 @@ class Point {
     }
 }
 
-Map<Point, Long> m = [:]
-
-int j = 1100
+int j = 100
 int nextI = 0
 while (true) {
-    long has1 = 0
+    boolean has1 = false
     int i = nextI
     Point first = null
     Point last = null
@@ -176,24 +175,27 @@ while (true) {
         Long val = uberProgram(v, i, j)
         Point point = new Point(i, j)
 //        m[point] = val
-        if (val == 1 && has1 == 0l) {
+        if (val == 1 && !has1) {
             first = point
+            has1 = true
+            if (uberProgram(v, i + 99, j) == 1L) {
+                i += 99
+                continue
+            } else {
+                last = first
+                break
+            }
         }
-        if (val == 1) {
-            has1 += 1
-        }
-        if (val == 0 && has1 > 0) {
+        if (val == 0 && has1) {
             last = new Point(i - 1, j)
             break
         }
         ++i
     }
 //    println(j)
-//    println("Dist X: ${first.distX(last)}")
     if (first.distX(last) >= 100) {
         long rightBottom = uberProgram(v, last.x, last.y + 99)
         long leftBottom = uberProgram(v, last.x - 99, last.y + 99)
-//        println("LeftBottom: $leftBottom, rightBottom: $rightBottom")
         if (rightBottom == 1 && leftBottom == 1) {
             println("Found: ${(last.x - 99) * 10000 + last.y}")
             return
