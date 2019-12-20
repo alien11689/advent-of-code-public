@@ -54,14 +54,14 @@ Map<Point, Set<String>> betterWarps = warps.collectEntries {
 Set<Point> warpPoints = betterWarps.keySet()
 
 //println(warps.size())
-println(betterWarps.size())
+//println(betterWarps.size())
 
-println(betterWarps)
+//println(betterWarps)
 
 Point start = betterWarps.find { it.value == ['A'] as Set }.key
-println(start)
+//println(start)
 Point dest = betterWarps.find { it.value == ['Z'] as Set }.key
-println(dest)
+//println(dest)
 
 Set<Point> visited = [] as Set
 
@@ -81,10 +81,11 @@ PriorityQueue<State> pq = new PriorityQueue<>()
 pq.offer(new State(start, 0, []))
 
 while (!pq.empty) {
-    println("pq size ${pq.size()}")
+//    println("pq size ${pq.size()}")
     State state = pq.poll()
-    println("Checking $state")
+//    println("Checking $state")
     if (state.cur in dest) {
+        println("State is ${state}")
         println("Get in ${state.length} steps")
         break
     }
@@ -95,7 +96,7 @@ while (!pq.empty) {
     state.cur.neighbours().findAll { map[it] }.each { Point checkedPoint ->
         if (checkedPoint in warpPoints && !(checkedPoint in [dest, start])) {
             Set<String> warp = betterWarps[checkedPoint]
-            println("Using warp $warp")
+//            println("Using warp $warp")
             Point to = betterWarps.find { it.value == warp && it.key != checkedPoint }.key
             pq.offer(new State(to, state.length + 2, state.path + [warp]))
         } else {
