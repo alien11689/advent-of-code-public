@@ -95,16 +95,16 @@ void program(State s, Queue<Long> output) {
                     s.v = v
                     s.pos = pos
                     s.rel = rel
-                    println("Empty input")
+                    //println("Empty input")
                     return
                 }
-                println "Get input from $s.input"
+                //println "Get input from $s.input"
                 assignTo(v, pos + 1, p1Mode(op), s.input.poll(), rel)
                 pos += 2
                 break
             case 4:
                 long out = param(v, pos + 1, p1Mode(op), rel)
-                println "Out: $out"
+//                println "Out: $out"
                 output.offer(out)
                 pos += 2
                 break
@@ -163,39 +163,42 @@ class Computer {
 //}
 //==============================================
 
-Map<Integer, Computer> computers = [:]
+void runProgram(Map<Long, Long> v) {
+    Map<Integer, Computer> computers = [:]
 
-for (int i = 0; i < 50; ++i) {
-    computers[i] = new Computer(i, v)
-}
-computers.each { comp ->
-    println("Running comp ${comp.key}")
-    program(comp.value.state, comp.value.output)
-}
+    for (int i = 0; i < 50; ++i) {
+        computers[i] = new Computer(i, v)
+    }
 
-while (true) {
-    computers.each { comp ->
-        println("Running comp ${comp.key}")
-        Computer computer = comp.value
-        while (true) {
-            if (computer.inputQ.empty) {
-                computer.inputQ.offer(-1)
-            }
-            program(computer.state, computer.output)
-            if (computer.output.empty) {
-                break
-            }
-            while (!computer.output.empty) {
-                int id = computer.output.poll()
-                long x = computer.output.poll()
-                long y = computer.output.poll()
-                println("Sending $x $y to $id")
-                if (id == 255) {
-                    throw new RuntimeException("BOOM")
+    boolean solve = false
+    while (!solve) {
+        computers.each { comp ->
+//            println("Running comp ${comp.key}")
+            Computer computer = comp.value
+            while (!solve) {
+                if (computer.inputQ.empty) {
+                    computer.inputQ.offer(-1)
                 }
-                computers[id].inputQ.offer(x)
-                computers[id].inputQ.offer(y)
+                program(computer.state, computer.output)
+                if (computer.output.empty) {
+                    break
+                }
+                while (!computer.output.empty) {
+                    int id = computer.output.poll()
+                    long x = computer.output.poll()
+                    long y = computer.output.poll()
+                    println("${comp.key} is sending $x $y to $id")
+                    if (id == 255) {
+                        solve = true
+                        println("Solution $y")
+                        break
+                    }
+                    computers[id].inputQ.offer(x)
+                    computers[id].inputQ.offer(y)
+                }
             }
         }
     }
 }
+
+runProgram(v)
