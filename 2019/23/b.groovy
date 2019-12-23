@@ -95,16 +95,16 @@ void program(State s, Queue<Long> output) {
                     s.v = v
                     s.pos = pos
                     s.rel = rel
-                    println("Empty input")
+//                    println("Empty input")
                     return
                 }
-                println "Get input from $s.input"
+//                println "Get input from $s.input"
                 assignTo(v, pos + 1, p1Mode(op), s.input.poll(), rel)
                 pos += 2
                 break
             case 4:
                 long out = param(v, pos + 1, p1Mode(op), rel)
-                println "Out: $out"
+//                println "Out: $out"
                 output.offer(out)
                 pos += 2
                 break
@@ -163,63 +163,70 @@ class Computer {
 //}
 //==============================================
 
-Map<Integer, Computer> computers = [:]
+void runProgram(Map<Long,Long> v) {
+    Map<Integer, Computer> computers = [:]
 
-for (int i = 0; i < 50; ++i) {
-    computers[i] = new Computer(i, v)
-}
-computers[255] = new Computer(255, v)
+    for (int i = 0; i < 50; ++i) {
+        computers[i] = new Computer(i, v)
+    }
+    computers[255] = new Computer(255, v)
 
-computers.findAll { it.key < 255 }.each { comp ->
-    println("Running comp ${comp.key}")
-    program(comp.value.state, comp.value.output)
-}
-
-Long prevY = null
-
-while (true) {
-    computers.each { comp ->
+    computers.findAll { it.key < 255 }.each { comp ->
         println("Running comp ${comp.key}")
-        if (comp.key == 255) {
-            if (computers.findAll { it.key < 255 }.every { it.value.inputQ.empty }) {
-                println("NAT fired")
+        program(comp.value.state, comp.value.output)
+    }
+
+    Long prevY = null
+
+    boolean solved = false
+
+    while (!solved) {
+        computers.each { comp ->
+//            println("Running comp ${comp.key}")
+            if (comp.key == 255) {
+                if (computers.findAll { it.key < 255 }.every { it.value.inputQ.empty }) {
+                    println("NAT fired")
+                    Computer computer = comp.value
+                    long id
+                    long x
+                    long y
+                    while (!computer.inputQ.empty) {
+                        id = computer.inputQ.poll()
+                        x = computer.inputQ.poll()
+                        y = computer.inputQ.poll()
+                    }
+                    if (y == prevY) {
+                        solved = true
+                        println("Y in a row $y")
+                        return
+                    }
+                    prevY = y
+                    println("NAT is sending $x $y to 0")
+                    computers[0].inputQ.offer(x)
+                    computers[0].inputQ.offer(y)
+                }
+            } else {
                 Computer computer = comp.value
-                long id
-                long x
-                long y
-                while (!computer.inputQ.empty) {
-                    id = computer.inputQ.poll()
-                    x = computer.inputQ.poll()
-                    y = computer.inputQ.poll()
-                }
-                if (y == prevY) {
-                    println("Y in a row $y")
-                    throw new RuntimeException("Boom")
-                }
-                prevY = y
-                println("NAT is sending $x $y to 0")
-                computers[0].inputQ.offer(x)
-                computers[0].inputQ.offer(y)
-            }
-        } else {
-            Computer computer = comp.value
-            while (true) {
-                if (computer.inputQ.empty) {
-                    computer.inputQ.offer(-1)
-                }
-                program(computer.state, computer.output)
-                if (computer.output.empty) {
-                    break
-                }
-                while (!computer.output.empty) {
-                    int id = computer.output.poll()
-                    long x = computer.output.poll()
-                    long y = computer.output.poll()
-                    println("Sending $x $y to $id")
-                    computers[id].inputQ.offer(x)
-                    computers[id].inputQ.offer(y)
+                while (!solved) {
+                    if (computer.inputQ.empty) {
+                        computer.inputQ.offer(-1)
+                    }
+                    program(computer.state, computer.output)
+                    if (computer.output.empty) {
+                        break
+                    }
+                    while (!computer.output.empty) {
+                        int id = computer.output.poll()
+                        long x = computer.output.poll()
+                        long y = computer.output.poll()
+                        println("${comp.key} is sending $x $y to $id")
+                        computers[id].inputQ.offer(x)
+                        computers[id].inputQ.offer(y)
+                    }
                 }
             }
         }
     }
 }
+
+runProgram(v)

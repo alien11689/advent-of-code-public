@@ -170,12 +170,12 @@ void runProgram(Map<Long, Long> v) {
         computers[i] = new Computer(i, v)
     }
 
-    boolean solve = false
-    while (!solve) {
+    boolean solved = false
+    while (!solved) {
         computers.each { comp ->
 //            println("Running comp ${comp.key}")
             Computer computer = comp.value
-            while (!solve) {
+            while (!solved) {
                 if (computer.inputQ.empty) {
                     computer.inputQ.offer(-1)
                 }
@@ -189,7 +189,7 @@ void runProgram(Map<Long, Long> v) {
                     long y = computer.output.poll()
                     println("${comp.key} is sending $x $y to $id")
                     if (id == 255) {
-                        solve = true
+                        solved = true
                         println("Solution $y")
                         break
                     }
