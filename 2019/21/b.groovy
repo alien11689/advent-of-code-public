@@ -225,4 +225,3 @@ while (!output.empty) {
         default: print(cur as char)
     }
 }
-println(last)

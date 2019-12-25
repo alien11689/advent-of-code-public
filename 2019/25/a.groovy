@@ -125,14 +125,6 @@ class State {
     int rel = 0
 }
 
-Queue output = new LinkedList<Long>()
-Queue inputQ = new LinkedList<Long>()
-State state = new State(
-        v: v.collectEntries { it }.withDefault { 0L },
-        pos: 0,
-        input: inputQ,
-)
-
 //class Computer {
 //    Computer(int address, Map<Long, Long> v) {
 //        this.address = address
@@ -170,3 +162,141 @@ State state = new State(
 //    }
 //}
 //==============================================
+
+def instruction(Queue input, String text) {
+    text.each {
+        input.offer((it as char) as int)
+    }
+    input.offer(10)
+}
+
+
+void runInteractive(Map<Long,Long> v) {
+    Queue output = new LinkedList<Long>()
+    Queue inputQ = new LinkedList<Long>()
+    State state = new State(
+            v: v.collectEntries { it }.withDefault { 0L },
+            pos: 0,
+            input: inputQ,
+    )
+    State saved = null
+    while (true) {
+        program(state, output)
+
+        while (!output.empty) {
+            int cur = output.poll()
+            switch (cur) {
+                case 10: println(); break
+                default: print(cur as char)
+            }
+        }
+        String command = System.console().readLine()
+        switch (command) {
+            case 'e': command = 'east'; break
+            case 's': command = 'south'; break
+            case 'n': command = 'north'; break
+            case 'w': command = 'west'; break
+            case 'save': saved = new State(
+                    v: state.v.collectEntries { it }.withDefault { 0L },
+                    pos: state.pos,
+                    input: inputQ,
+                    rel: state.rel
+            ); println "saved"; break
+            case 'load': state = saved; println("loaded"); break
+            default: break
+        }
+        instruction(inputQ, command)
+    }
+}
+
+void solve(Map<Long,Long> v) {
+    Queue output = new LinkedList<Long>()
+    Queue inputQ = new LinkedList<Long>()
+    State state = new State(
+            v: v.collectEntries { it }.withDefault { 0L },
+            pos: 0,
+            input: inputQ,
+    )
+    [
+            'south',
+            'west',
+            'take hologram',
+            'south',
+            'west',
+            'west',
+            'take hypercube',
+            'east',
+            'east',
+            'north',
+            'east',
+            'south',
+            'west',
+            'north',
+            'take coin',
+            'south',
+            'east',
+            'take cake',
+            'east',
+            'south',
+            'east',
+            'south',
+            'south',
+    ].each {
+        instruction(inputQ, it)
+    }
+    program(state, output)
+    while (!output.empty) {
+        int cur = output.poll()
+        switch (cur) {
+            case 10: println(); break
+            default: print(cur as char)
+        }
+    }
+}
+
+//runInteractive(v)
+solve(v)
+
+return
+
+//photons > X
+//molten lava > X
+//food ration > X
+//astrolabe > X
+//space law space brochure > X
+//
+//cake < X
+//escape pod < X
+//hypercube < X
+//hologram < X
+//wreath < X
+//coin < X
+//
+//hologram + cake + wreath + coin < X
+//hologram + cake + wreath + coin + hypercube > X
+//coin < hypercube
+//
+//Solution:
+//s
+//w
+//take hologram
+//s
+//w
+//w
+//take hypercube
+//e
+//e
+//n
+//e
+//s
+//w
+//n
+//take coin
+//s
+//e
+//take cake
+//e
+//s
+//e
+//s
+//s
