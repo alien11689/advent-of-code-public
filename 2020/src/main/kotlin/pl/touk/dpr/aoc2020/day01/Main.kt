@@ -43,7 +43,7 @@ object Main {
                         listOf()
                     }
                 }
-                .take(1))
+                .take(1)[0])
     }
 
 }
