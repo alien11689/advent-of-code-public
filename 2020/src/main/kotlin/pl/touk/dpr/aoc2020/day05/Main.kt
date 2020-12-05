@@ -40,13 +40,10 @@ object Main {
 
         companion object {
             fun from(s: String): Seat {
-                val row = s.subSequence(0, s.length - 3).fold(0) { acc, c ->
-                    acc * 2 + if (c == 'F') 0 else 1
+                val num = s.fold(0) { acc, c ->
+                    acc * 2 + if (c in setOf('F', 'L')) 0 else 1
                 }
-                val col = s.subSequence(s.length - 3, s.length).fold(0) { acc, c ->
-                    acc * 2 + if (c == 'L') 0 else 1
-                }
-                return Seat(row, col)
+                return from(num)
             }
 
             fun from(id: Int): Seat = Seat(id / 8, id % 8)
