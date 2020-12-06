@@ -1,36 +1,21 @@
 column = 3083
 row = 2978
-bound = 10000
 
-board = (1..bound).collect {
-    (1..bound).collect {
-        0L
-    }
-}
-
-board[0][0] = 20151125L
 
 def next(cur){
     cur * 252533 % 33554393
 }
 
-i = 0 //row
-j = 0 //collumn
-cur = board[0][0]
-iter = 1
+i = 1 //row
+j = 1 //collumn
+cur = 20151125L
 
 def nextIdx(int i, int j){
-    if(i == 0 && j == 0){
+    if(i == 1 && j == 1){
         ++i
-    }else if(j == bound - 1){
-        def tmp = i
-        i = j
-        j = tmp + 1
-//        println ([i,j])
-    }else if (i == 0){
+    }else if (i == 1){
         i = j + 1
-        j = 0
-//        println ([i,j])
+        j = 1
     }else {
         ++j
         --i
@@ -38,18 +23,9 @@ def nextIdx(int i, int j){
     return [i,j]
 }
 
-while(board[row -1][column -1] == 0l ){
-    if(i == 0 && j == 0){
-        board[0][0] = 20151125L
-    }else{
-        board[i][j] = next(cur)
-    }
-    cur = board[i][j]
+while(i != row || j != column ){
+    cur = next(cur)
     (i,j) = nextIdx(i,j)
-    ++iter
 }
 
-//board.each {
-//    println it
-//}
-println (board[row -1][column -1])
+println (cur)
