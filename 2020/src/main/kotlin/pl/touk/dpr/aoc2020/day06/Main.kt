@@ -13,13 +13,13 @@ object Main {
     private fun part1(input: String) {
         val lines = input.lines()
         var sum = 0
-        var current = mutableSetOf<Char>()
+        var current = setOf<Char>()
         lines.forEach { line ->
             if (line.isEmpty()) {
                 sum += current.size
-                current = mutableSetOf()
+                current = setOf()
             } else {
-                current.addAll(line.toCharArray().toList())
+                current = current + line.toCharArray().toSet()
             }
         }
         println(sum)
@@ -41,4 +41,3 @@ object Main {
         println(sum)
     }
 }
-
