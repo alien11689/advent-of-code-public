@@ -2,27 +2,10 @@ package pl.touk.dpr.aoc2020.day11
 
 import pl.touk.dpr.aoc2020.Util
 
-private val Pair<Int, Int>.neighbours: Set<Pair<Int, Int>>
-    get() {
-        return setOf(
-                Pair(first + 1, second),
-                Pair(first - 1, second),
-                Pair(first, second + 1),
-                Pair(first, second - 1),
-                Pair(first + 1, second + 1),
-                Pair(first + 1, second - 1),
-                Pair(first - 1, second - 1),
-                Pair(first - 1, second + 1)
-        )
-    }
-
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/11/input.txt")
-//        val input = Util.getFileContent("/11/test.txt")
-                .lines()
-                .filter { it.isNotEmpty() }
+        val input = Util.getNotEmptyLinesFromFile("/11/input.txt")
         part1(input)
         part2(input)
     }
@@ -30,11 +13,12 @@ object Main {
     private fun part1(input: List<String>) {
         var seats = readSeats(input)
         while (true) {
-            val newSeats = mutableMapOf<Pair<Int, Int>, Boolean>()
+            val newSeats = mutableMapOf<Seat, Boolean>()
             seats.forEach { entry ->
-                if (!entry.value && entry.key.neighbours.filter { it in seats.keys }.all { seats[it] == false }) {
+                val neighbours = entry.key.neighbours().count { seats[it] == true }
+                if (!entry.value && neighbours == 0) {
                     newSeats[entry.key] = true
-                } else if (entry.value && entry.key.neighbours.filter { it in seats.keys }.count { seats[it]!! } >= 4) {
+                } else if (entry.value && neighbours >= 4) {
                     newSeats[entry.key] = false
                 } else {
                     newSeats[entry.key] = entry.value
@@ -48,12 +32,12 @@ object Main {
         println(seats.count { it.value })
     }
 
-    private fun readSeats(input: List<String>): MutableMap<Pair<Int, Int>, Boolean> {
-        val seats = mutableMapOf<Pair<Int, Int>, Boolean>()
+    private fun readSeats(input: List<String>): MutableMap<Seat, Boolean> {
+        val seats = mutableMapOf<Seat, Boolean>()
         input.forEachIndexed { i, line ->
             line.forEachIndexed { j, c ->
                 if (c == 'L') {
-                    seats[Pair(i, j)] = false
+                    seats[Seat(i, j)] = false
                 }
             }
         }
@@ -67,7 +51,7 @@ object Main {
         var iter = 0
         while (true) {
             ++iter
-            val newSeats = mutableMapOf<Pair<Int, Int>, Boolean>()
+            val newSeats = mutableMapOf<Seat, Boolean>()
             seats.forEach { entry ->
                 val neighbours = listOf(
                         findValidOccupied(seats, entry.key, -1, -1, maxI, maxJ),
@@ -91,26 +75,15 @@ object Main {
                 break
             }
             seats = newSeats
-//            println(iter)
-//            (0..(maxI - 1)).forEach { i ->
-//                (0..(maxJ - 1)).forEach { j ->
-//                    when(seats[Pair(i,j)]){
-//                        true -> print('#')
-//                        false -> print('L')
-//                        else -> print('.')
-//                    }
-//                }
-//                println()
-//            }
         }
         println(seats.count { it.value })
 
     }
 
-    private fun findValidOccupied(seats: MutableMap<Pair<Int, Int>, Boolean>, current: Pair<Int, Int>, changeI: Int, changeJ: Int, maxI: Int, maxJ: Int): Boolean {
+    private fun findValidOccupied(seats: MutableMap<Seat, Boolean>, current: Seat, changeI: Int, changeJ: Int, maxI: Int, maxJ: Int): Boolean {
         var cur = current
         while (true) {
-            val next = Pair(cur.first + changeI, cur.second + changeJ)
+            val next = Seat(cur.i + changeI, cur.j + changeJ)
             if (!next.isValid(maxI, maxJ)) {
                 return false
             }
@@ -123,8 +96,21 @@ object Main {
             cur = next
         }
     }
-}
 
-private fun Pair<Int, Int>.isValid(maxI: Int, maxJ: Int): Boolean {
-    return first >= 0 && second >= 0 && first < maxI && second < maxJ
+    data class Seat(val i: Int, val j: Int) {
+        fun neighbours(): Set<Seat> = setOf(
+                Seat(i + 1, j),
+                Seat(i - 1, j),
+                Seat(i, j + 1),
+                Seat(i, j - 1),
+                Seat(i + 1, j + 1),
+                Seat(i + 1, j - 1),
+                Seat(i - 1, j - 1),
+                Seat(i - 1, j + 1)
+        )
+
+        fun isValid(maxI: Int, maxJ: Int): Boolean {
+            return i >= 0 && j >= 0 && i < maxI && j < maxJ
+        }
+    }
 }
