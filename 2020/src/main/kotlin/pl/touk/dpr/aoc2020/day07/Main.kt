@@ -6,15 +6,13 @@ import java.util.Stack
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/07/input.txt")
+        val input = Util.getNotEmptyLinesFromFile("/07/input.txt")
         part1(input)
         part2(input)
     }
 
-    private fun part1(input: String) {
-        val rules = input.lines()
-                .filter { it.isNotEmpty() }
-                .map { Rule.parse(it) }
+    private fun part1(input: List<String>) {
+        val rules = input.map { Rule.parse(it) }
         val target = Bag("shiny", "gold")
         val stack = Stack<Bag>()
         stack.push(target)
@@ -31,10 +29,8 @@ object Main {
         println(needed.size - 1)
     }
 
-    private fun part2(input: String) {
-        val rules = input.lines()
-                .filter { it.isNotEmpty() }
-                .map { Rule.parse(it) }
+    private fun part2(input: List<String>) {
+        val rules = input.map { Rule.parse(it) }
         val target = Bag("shiny", "gold")
         var count = 0
         val stack = Stack<Bag>()

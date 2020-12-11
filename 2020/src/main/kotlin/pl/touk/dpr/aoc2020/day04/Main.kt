@@ -5,16 +5,15 @@ import pl.touk.dpr.aoc2020.Util
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/04/input.txt")
+        val input = Util.getLinesFromFile("/04/input.txt")
         part1(input)
         part2(input)
     }
 
-    private fun part1(input: String) {
-        val lines = input.lines()
+    private fun part1(input: List<String>) {
         var valid = 0
         var current = mutableSetOf<String>()
-        lines.forEach { line ->
+        input.forEach { line ->
             if (line.isEmpty()) {
                 valid += if (current.size == 8 || current.size == 7 && !current.contains("cid")) 1 else 0
                 current = mutableSetOf()
@@ -27,11 +26,10 @@ object Main {
         println(valid)
     }
 
-    private fun part2(input: String) {
-        val lines = input.lines()
+    private fun part2(input: List<String>) {
         var valid = 0
         var current = mutableMapOf<String, String>()
-        lines.forEach { line ->
+        input.forEach { line ->
             if (line.isEmpty()) {
                 val id = Id.fromMap(current)
                 valid += if (id.valid()) 1 else 0

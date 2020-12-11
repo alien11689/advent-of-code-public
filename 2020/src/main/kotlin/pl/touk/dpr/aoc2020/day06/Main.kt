@@ -5,16 +5,15 @@ import pl.touk.dpr.aoc2020.Util
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/06/input.txt")
+        val input = Util.getLinesFromFile("/06/input.txt")
         part1(input)
         part2(input)
     }
 
-    private fun part1(input: String) {
-        val lines = input.lines()
+    private fun part1(input: List<String>) {
         var sum = 0
         var current = setOf<Char>()
-        lines.forEach { line ->
+        input.forEach { line ->
             if (line.isEmpty()) {
                 sum += current.size
                 current = setOf()
@@ -25,11 +24,10 @@ object Main {
         println(sum)
     }
 
-    private fun part2(input: String) {
-        val lines = input.lines()
+    private fun part2(input: List<String>) {
         var sum = 0
         var current = ('a'..'z').toSet()
-        lines.forEach { line ->
+        input.forEach { line ->
             if (line.isEmpty()) {
                 sum += current.size
                 current = ('a'..'z').toMutableSet()

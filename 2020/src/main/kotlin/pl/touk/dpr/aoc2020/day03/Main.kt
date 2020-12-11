@@ -6,17 +6,15 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
 //        val input = Util.getFileContent("/03/test1")
-        val input = Util.getFileContent("/03/input.txt")
+        val input = Util.getNotEmptyLinesFromFile("/03/input.txt")
         part1(input)
         part2(input)
     }
 
-    private fun part1(input: String) {
-        val lines = input.lines()
-                .filter { it.isNotEmpty() }
+    private fun part1(input: List<String>) {
         val stepX = 3
         val stepY = 1
-        val trees = countTrees(lines, stepY, stepX)
+        val trees = countTrees(input, stepY, stepX)
         println(trees)
     }
 
@@ -32,14 +30,12 @@ object Main {
         return trees
     }
 
-    private fun part2(input: String) {
-        val lines = input.lines()
-                .filter { it.isNotEmpty() }
-        println(countTrees(lines, 1, 1) *
-                countTrees(lines, 1, 3) *
-                countTrees(lines, 1, 5) *
-                countTrees(lines, 1, 7) *
-                countTrees(lines, 2, 1)
+    private fun part2(input: List<String>) {
+        println(countTrees(input, 1, 1) *
+                countTrees(input, 1, 3) *
+                countTrees(input, 1, 5) *
+                countTrees(input, 1, 7) *
+                countTrees(input, 2, 1)
 
         )
     }

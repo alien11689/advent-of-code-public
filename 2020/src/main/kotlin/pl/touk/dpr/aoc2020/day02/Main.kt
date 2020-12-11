@@ -5,35 +5,33 @@ import pl.touk.dpr.aoc2020.Util
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/02/input.txt")
+        val input = Util.getNotEmptyLinesFromFile("/02/input.txt")
         part1(input)
         part2(input)
     }
 
-    private fun part1(input: String) {
-        val c = input.lines()
-                .filter { it.isNotEmpty() }
+    private fun part1(input: List<String>) {
+        val c = input
                 .map { Line.fromLine(it) }
                 .count { it.valid() }
         println(c)
     }
 
-    private fun part2(input: String) {
-        val c = input.lines()
-                .filter { it.isNotEmpty() }
+    private fun part2(input: List<String>) {
+        val c = input
                 .map { Line.fromLine(it) }
                 .count { it.valid2() }
         println(c)
     }
 
     data class Line(val min: Int, val max: Int, val c: Char, val s: String) {
-        fun valid():Boolean {
+        fun valid(): Boolean {
             val count = s.count { it == c }
             return count in min..max
         }
 
-        fun valid2():Boolean {
-            return (s[min-1] == c || s[max-1] == c) && s[max-1] != s[min-1]
+        fun valid2(): Boolean {
+            return (s[min - 1] == c || s[max - 1] == c) && s[max - 1] != s[min - 1]
         }
 
         companion object {

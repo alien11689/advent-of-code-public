@@ -5,13 +5,13 @@ import pl.touk.dpr.aoc2020.Util
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/01/input.txt")
+        val input = Util.getNotEmptyLinesFromFile("/01/input.txt")
         part1(input)
         part2(input)
     }
 
-    private fun part2(input: String) {
-        val nums = input.lines().filter { it.isNotEmpty() }.map { it.toInt() }
+    private fun part2(input: List<String>) {
+        val nums = input.map { it.toInt() }
         nums.withIndex().forEach {
             val a = it.value
             val i = it.index
@@ -29,10 +29,9 @@ object Main {
         }
     }
 
-    private fun part1(input: String) {
+    private fun part1(input: List<String>) {
         val mem = mutableSetOf<Int>()
-        println(input.lines()
-                .filter { it.isNotEmpty() }
+        println(input
                 .flatMap { s ->
                     val n = s.toInt()
                     val compliant = 2020 - n;

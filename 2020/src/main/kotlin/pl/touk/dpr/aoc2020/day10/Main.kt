@@ -6,11 +6,9 @@ import java.util.Stack
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/10/input.txt")
 //        val input = Util.getFileContent("/10/test.txt")
 //        val input = Util.getFileContent("/10/test2.txt")
-                .lines()
-                .filter { it.isNotEmpty() }
+        val input = Util.getNotEmptyLinesFromFile("/10/input.txt")
                 .map { it.toInt() }
         part1(input)
         part2(input)

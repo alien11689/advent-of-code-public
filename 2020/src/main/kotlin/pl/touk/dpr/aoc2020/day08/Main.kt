@@ -5,14 +5,13 @@ import pl.touk.dpr.aoc2020.Util
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/08/input.txt")
+        val input = Util.getNotEmptyLinesFromFile("/08/input.txt")
         part1(input)
         part2(input)
     }
 
-    private fun part1(input: String) {
-        val instr = input.lines()
-                .filter { it.isNotEmpty() }
+    private fun part1(input: List<String>) {
+        val instr = input
         val usedInstructons = mutableSetOf<Int>()
         var pointer = 0
         var acc = 0
@@ -36,9 +35,8 @@ object Main {
         println(acc)
     }
 
-    private fun part2(input: String) {
-        val instr = input.lines()
-                .filter { it.isNotEmpty() }
+    private fun part2(input: List<String>) {
+        val instr = input
         var i = 0
         while (i < instr.size) {
             if (instr[i].contains("nop") || instr[i].contains("jmp")) {
@@ -52,7 +50,7 @@ object Main {
                     }
                 }
                 val (acc, loop) = runProgram(newInstr)
-                if(!loop){
+                if (!loop) {
                     println(acc)
                     break
                 }

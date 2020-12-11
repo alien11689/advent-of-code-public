@@ -5,10 +5,8 @@ import pl.touk.dpr.aoc2020.Util
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/05/input.txt")
-        val seats = input.lines()
-                .filter { it.isNotEmpty() }
-                .map { Seat.from(it) }
+        val input = Util.getNotEmptyLinesFromFile("/05/input.txt")
+        val seats = input.map { Seat.from(it) }
         part1(seats)
         part2(seats)
     }
