@@ -1,5 +1,5 @@
 
-def text = new File('data').text
+def text = new File('day2.data').text
 
 class Box{
 	int l;

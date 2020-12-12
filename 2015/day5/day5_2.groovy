@@ -21,7 +21,7 @@ def hasForbidden(String input){
 
 def pairReapeated(String input){
     def found = false
-    println "Checking $input"
+    //println "Checking $input"
     input[0..<-3].eachWithIndex { elem, i -> 
         String search = elem + input[i+1]
         if(input[i+2..-1].indexOf(search) >= 0){
@@ -29,7 +29,7 @@ def pairReapeated(String input){
         } 
     }
     if(found){
-        println input
+        //println input
     }
     found
 }
