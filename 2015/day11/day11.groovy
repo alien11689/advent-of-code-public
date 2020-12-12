@@ -55,8 +55,8 @@ def isValid(String input){
         first = second
         second = third
     }
-    println doubleCh
-    println containsThree
+    //println doubleCh
+    //println containsThree
     return containsThree && doubleCh.size() >= 2
 }
 
@@ -65,9 +65,10 @@ println "Next of dqbeansu is ${next('dqbeansu')}"
 
 while(!isValid(iteration)){
     iteration = next(iteration)
-    println iteration
+    //println iteration
     if(iteration == 'ghjaabcc'){
         println 'Example?'
         break
     }
 }
+println iteration

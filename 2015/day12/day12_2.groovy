@@ -12,7 +12,7 @@ while(!stack.empty){
     def cur = stack.pop()
     String className = cur.getClass().name
     println className
-    if(className == 'groovy.json.internal.LazyMap'){
+    if(className == 'groovy.json.internal.LazyMap' || className == 'org.apache.groovy.json.internal.LazyMap'){
         if(cur.values().find{ it == 'red'} == null) {
             stack.addAll(cur.values())
         }
