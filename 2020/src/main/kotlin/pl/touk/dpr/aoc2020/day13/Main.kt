@@ -9,12 +9,12 @@ object Main {
 //        val input = Util.getNotEmptyLinesFromFile("/12/test.txt")
         val input = Util.getNotEmptyLinesFromFile("/13/input.txt")
         println(part1(input))
-//        test(part2("7,13,x,x,59,x,31,19") == 1068781L)
-//        test(part2("17,x,13,19") == 3417L)
-//        test(part2("67,7,59,61") == 754018L)
-//        test(part2("67,x,7,59,61") == 779210L)
-//        test(part2("67,7,x,59,61") == 1261476L)
-//        test(part2("1789,37,47,1889") == 1202161486L)
+        Util.test(part2("7,13,x,x,59,x,31,19"), 1068781.toBigInteger())
+        Util.test(part2("17,x,13,19"), 3417.toBigInteger())
+        Util.test(part2("67,7,59,61"), 754018.toBigInteger())
+        Util.test(part2("67,x,7,59,61"), 779210.toBigInteger())
+        Util.test(part2("67,7,x,59,61"), 1261476.toBigInteger())
+        Util.test(part2("1789,37,47,1889"), 1202161486.toBigInteger())
         println(part2(input[1]))
     }
 
@@ -32,68 +32,37 @@ object Main {
         }
     }
 
-    private fun part2(input: String): Long {
+    private fun part2(input: String): BigInteger {
         val buses = input.split(",").toList()
-        val busToMinut = mutableMapOf<Long, Int>()
+        val busToMinut = mutableMapOf<BigInteger, BigInteger>()
         buses.forEachIndexed { index, s ->
             if (s != "x") {
-                busToMinut[s.toLong()] = index
+                busToMinut[s.toBigInteger()] = index.toBigInteger()
             }
         }
-        val maxBus = busToMinut.keys.max()!!
-        val maxBusShift = busToMinut[maxBus]!!.toBigInteger()
-        busToMinut.remove(maxBus)
-
-//        val incr = BigInteger.valueOf(maxBus * busToMinut.keys.fold(1L) { acc, l -> acc * l })
-        val incr = BigInteger.valueOf(maxBus)
-        var cur: BigInteger = 100000000000000L.toBigInteger() / BigInteger.valueOf(maxBus)
-        cur *= BigInteger.valueOf(maxBus)
-        cur =  maxBusShift
-        var res = listOf<BigInteger>()
-        while (res.size < 50) {
-            println("Checking $cur: $res")
-            if (busToMinut.filter { it.key in setOf(397L) }.all { entry ->
-                        (cur - maxBusShift + entry.value.toBigInteger()) % entry.key.toBigInteger() == BigInteger.ZERO
-                    }) {
-                res = res + (cur - maxBusShift)
-            }
-            cur += incr
+        val keys = busToMinut.keys
+        var n = 1
+        var res = BigInteger.ZERO
+        while (n <= keys.size) {
+            // IMPORTANT: bus numbers are prime numbers
+            // I look for nums divided by first key
+            // increment is product of previous checked keys
+            res = solve(res, keys.take(n - 1).fold(BigInteger.ONE) { acc, l -> acc * l }, keys.take(n), busToMinut)
+//            println("res: $res")
+            ++n
         }
-        // 937 397 -> [181778, 553767, 925756, 1297745, 1669734, 2041723, 2413712, 2785701, 3157690, 3529679, 3901668, 4273657, 4645646, 5017635, 5389624, 5761613, 6133602, 6505591, 6877580, 7249569, 7621558, 7993547, 8365536, 8737525, 9109514, 9481503, 9853492, 10225481, 10597470, 10969459, 11341448, 11713437, 12085426, 12457415, 12829404, 13201393, 13573382, 13945371, 14317360, 14689349, 15061338, 15433327, 15805316, 16177305, 16549294, 16921283, 17293272, 17665261, 18037250, 18409239]
-        // 937 397 41 -> [3157690, 18409239, 33660788, 48912337, 64163886, 79415435, 94666984, 109918533, 125170082, 140421631, 155673180, 170924729, 186176278, 201427827, 216679376, 231930925, 247182474, 262434023, 277685572, 292937121, 308188670, 323440219, 338691768, 353943317, 369194866, 384446415, 399697964, 414949513, 430201062, 445452611]
-        // 937 397 41 37 -> [323440219, 887747532, 1452054845, 2016362158, 2580669471, 3144976784, 3709284097, 4273591410, 4837898723, 5402206036]
-        // 937 397 41 37 17 -> [4273591410]
-        println(res)
-        throw RuntimeException()
+        return res
     }
 
-    private fun partIterative(input: String): Long {
-        val buses = input.split(",").toList()
-        val busToMinut = mutableMapOf<Long, Int>()
-        buses.forEachIndexed { index, s ->
-            if (s != "x") {
-                busToMinut[s.toLong()] = index
-            }
-        }
-        val maxBus = busToMinut.keys.max()!!
-        val maxBusShift = busToMinut[maxBus]!!
-        busToMinut.remove(maxBus)
-
-        var cur: Long = maxBus
+    private fun solve(base: BigInteger, increment: BigInteger, keys: List<BigInteger>, busToMinut: Map<BigInteger, BigInteger>): BigInteger {
+        var cur: BigInteger = base
         while (true) {
-            println("Checking $cur")
-            if (busToMinut.all { entry ->
-                        (cur - maxBusShift + entry.value) % entry.key == 0L
+            if (busToMinut.filter { it.key in keys }.all { entry ->
+                        (cur + entry.value) % entry.key == BigInteger.ZERO
                     }) {
-                return cur - maxBusShift
+                return cur
             }
-            cur += maxBus
-        }
-    }
-
-    fun test(b: Boolean) {
-        if (!b) {
-            throw RuntimeException("Error")
+            cur += increment
         }
     }
 }
