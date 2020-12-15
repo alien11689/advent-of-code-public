@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.touk.dpr.adventofcode</groupId>
-    <artifactId>2020</artifactId>
+    <artifactId>synacor-challenge</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
