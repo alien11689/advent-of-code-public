@@ -7,7 +7,9 @@ object Util {
 
     fun <A> test(given: A, expected: A) {
         if (given != expected) {
-            throw RuntimeException("Error")
+            throw RuntimeException("$given != $expected")
+        } else {
+            println("Passed $given == $expected")
         }
     }
 }
