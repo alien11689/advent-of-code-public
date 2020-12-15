@@ -1,10 +1,12 @@
-#!/bin/bash
-for x in 0*/src 1*/src 2*/src; do 
-	echo 
-	cd $x
-	for y in *.groovy; do 
-		echo $x/$y
-		time groovy $y
-	done
-	cd -
+#!/bin/sh
+mvn clean package
+
+for x in `seq 1 9`; do
+  echo "Day $x"
+  java -cp target/2018-1.0.0-SNAPSHOT-jar-with-dependencies.jar pl.touk.dpr.aoc2018.day0$x.Main
+done
+
+for x in `seq 10 25`; do
+  echo "Day $x"
+  java -cp target/2018-1.0.0-SNAPSHOT-jar-with-dependencies.jar pl.touk.dpr.aoc2018.day$x.Main
 done

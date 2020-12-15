@@ -6,15 +6,7 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
         val input = Util.getNotEmptyLinesFromFile("/14/input.txt")
-//        println(part1("""mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
-//mem[8] = 11
-//mem[7] = 101
-//mem[8] = 0""".lines()))
         println(part1(input))
-//        println(part2("""mask = 000000000000000000000000000000X1001X
-//mem[42] = 100
-//mask = 00000000000000000000000000000000X0XX
-//mem[26] = 1""".lines()))
         println(part2(input))
     }
 
@@ -51,7 +43,7 @@ object Main {
                 mask = it[1]
             } else {
                 val value = it[2].toLong()
-                val address = it[1].toLong().toString(2).padStart(36, '0').mapIndexed { index, c ->
+                val maskedAddress = it[1].toLong().toString(2).padStart(36, '0').mapIndexed { index, c ->
                     val v = if (mask[index] == '0') {
                         c
                     } else if (mask[index] == '1')
@@ -61,9 +53,9 @@ object Main {
                     }
                     v
                 }
-                var s = setOf(0L)
-                address.forEach { c ->
-                    s = s.flatMap { cur ->
+                var addresses = setOf(0L)
+                maskedAddress.forEach { c ->
+                    addresses = addresses.flatMap { cur ->
                         if (c == 'X') {
                             listOf(cur * 2, cur * 2 + 1)
                         } else {
@@ -71,8 +63,8 @@ object Main {
                         }
                     }.toSet()
                 }
-                s.forEach { address ->
-                    memory[address] = value
+                addresses.forEach {
+                    memory[it] = value
                 }
             }
         }

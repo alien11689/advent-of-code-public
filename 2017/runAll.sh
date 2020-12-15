@@ -1,2 +1,12 @@
-#!/bin/bash
-time for x in 0* 1* 2*; do cd $x; for y in *.groovy; do echo ${x}/${y}; groovy $y ;done ; cd -; done
+#!/bin/sh
+mvn clean package
+
+for x in `seq 1 9`; do
+  echo "Day $x"
+  java -cp target/2017-1.0.0-SNAPSHOT-jar-with-dependencies.jar pl.touk.dpr.aoc2017.day0$x.Main
+done
+
+for x in `seq 10 25`; do
+  echo "Day $x"
+  java -cp target/2017-1.0.0-SNAPSHOT-jar-with-dependencies.jar pl.touk.dpr.aoc2017.day$x.Main
+done

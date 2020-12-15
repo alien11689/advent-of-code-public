@@ -17,8 +17,8 @@ object Main {
             val i = it.index
             nums.withIndex().filter { it.index > i }.forEach {
                 val b = it.value
-                val i = it.index
-                nums.withIndex().filter { it.index > i }.forEach {
+                val ii = it.index
+                nums.withIndex().filter { it.index > ii }.forEach {
                     val c = it.value
                     if (a + b + c == 2020) {
                         println(a * b * c)

@@ -15,7 +15,7 @@ object Main {
     }
 
     private fun part1(input: List<Int>) {
-        val sorted = input.sorted() + (input.max()!! + 3)
+        val sorted = input.sorted() + (input.maxOrNull()!! + 3)
         var current = 0
         var difference1 = 0
         var difference3 = 0
@@ -33,7 +33,7 @@ object Main {
     }
 
     private fun part2(input: List<Int>) {
-        val sorted = input.sorted() + (input.max()!! + 3)
+        val sorted = input.sorted() + (input.maxOrNull()!! + 3)
         var base = 0
         var current = 0
         var set = mutableListOf<Int>()

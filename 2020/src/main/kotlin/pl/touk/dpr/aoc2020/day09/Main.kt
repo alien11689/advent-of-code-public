@@ -48,7 +48,7 @@ object Main {
             val sublist = input.subList(i, j + 1)
             val sum = sublist.sum()
             if (sum == targetValue) {
-                println(sublist.max()!! + sublist.min()!!)
+                println(sublist.maxOrNull()!! + sublist.minOrNull()!!)
                 return
             } else if (sum < targetValue) {
                 ++j

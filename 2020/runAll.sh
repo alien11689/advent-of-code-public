@@ -1,4 +1,4 @@
-#!//bin/sh
+#!/bin/sh
 mvn clean package
 
 for x in `seq 1 9`; do
