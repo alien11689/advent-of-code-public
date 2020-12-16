@@ -143,7 +143,14 @@ object Main {
                 }
                 Opcodes.IN -> {
                     if (debug) System.err.println("IN ${program[instrPointer + 1]} $registers")
-                    registers[program[instrPointer + 1] % BASE] = System.`in`.read()
+                    var read = System.`in`.read() % BASE
+                    if (read == 48) { // 0
+                        debug = true
+                        println("Turn on debug")
+                        read = System.`in`.read() % BASE
+                        registers[7] = 1 // TODO find good value
+                    }
+                    registers[program[instrPointer + 1] % BASE] = read
                     instrPointer += 2
                 }
                 else -> throw RuntimeException("Unkown opcode $opcode: ${program.subList(instrPointer, instrPointer + 10)}")
