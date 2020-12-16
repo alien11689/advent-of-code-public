@@ -34,7 +34,7 @@ object Main {
         (0..7).forEach { registers[it] = 0 }
         var instrPointer = 0
         var debug = false
-        var printOnly = true
+        var printOnly = false
         while (instrPointer < program.size) {
             val opcode = program[instrPointer]
             when (opcode) {
@@ -183,6 +183,14 @@ object Main {
                         continue
                     }
                     if (debug) System.err.println("$instrPointer: CALL ${program[instrPointer + 1]} $registers")
+//                    setting R0 = 6 and skipping instruction does not give valid code...
+//                    if (debug && program[instrPointer + 1] == 6027) {
+//                        println("Solving teleporter")
+//                        debug = false
+//                        instrPointer += 2
+//                        registers[0] = 6
+//                        continue
+//                    }
                     stack.push(instrPointer + 2)
                     instrPointer = valueOrRegister(program[instrPointer + 1], registers)
                 }
