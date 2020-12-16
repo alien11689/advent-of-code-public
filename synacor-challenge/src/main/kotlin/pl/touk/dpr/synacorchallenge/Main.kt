@@ -191,6 +191,7 @@ object Main {
 //                        registers[0] = 6
 //                        continue
 //                    }
+//                    TODO I have to find valid R7
                     stack.push(instrPointer + 2)
                     instrPointer = valueOrRegister(program[instrPointer + 1], registers)
                 }
