@@ -91,22 +91,29 @@ object Main {
                 ++i
             }
         }
-        rules.forEach { println(it) }
-        println()
-        otherValidTickets.forEach {
-            println("$it ${it.minOrNull()} ${it.maxOrNull()}")
-        }
-        println()
         i = 0
+        val columntToRules = mutableMapOf<Int, Set<Rule>>()
         while (i < otherValidTickets.first().size) {
             val column = otherValidTickets.map { it[i] }
             val matchingRules = rules.filter { r -> column.all { r.match(it) } }
-            println("Column $i match $matchingRules")
+            columntToRules[i] = matchingRules.toSet()
             ++i
         }
-        //1184344527599 is too high
-        println(myTicktetValue)
-        return 1L * myTicktetValue[6] * myTicktetValue[1] * myTicktetValue[13] * myTicktetValue[2] * myTicktetValue[14] * myTicktetValue[15]
+        val departureColumns = mutableSetOf<Int>()
+        while (columntToRules.isNotEmpty()) {
+            val found = columntToRules.filter { it.value.size == 1 }
+            found.forEach { k, v ->
+                columntToRules.remove(k)
+                columntToRules.forEach { col, rules ->
+                    columntToRules[col] = rules - v
+                }
+                if (v.count { it.name!!.startsWith("departure") } > 0) {
+                    departureColumns.add(k)
+                }
+            }
+        }
+
+        return departureColumns.fold(1L) {acc, col -> acc * myTicktetValue[col] }
     }
 
     data class Rule(val r1: IntRange, val r2: IntRange, val name: String? = null) {
