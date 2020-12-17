@@ -184,14 +184,13 @@ object Main {
                     }
                     if (debug) System.err.println("$instrPointer: CALL ${program[instrPointer + 1]} $registers")
 //                    setting R0 = 6 and skipping instruction does not give valid code...
-//                    if (debug && program[instrPointer + 1] == 6027) {
-//                        println("Solving teleporter")
-//                        debug = false
-//                        instrPointer += 2
-//                        registers[0] = 6
-//                        continue
-//                    }
-//                    TODO I have to find valid R7
+                    if (debug && program[instrPointer + 1] == 6027) {
+                        println("Solving teleporter")
+                        debug = false
+                        instrPointer += 2
+                        registers[0] = 6
+                        continue
+                    }
                     stack.push(instrPointer + 2)
                     instrPointer = valueOrRegister(program[instrPointer + 1], registers)
                 }
@@ -249,7 +248,7 @@ object Main {
                     if (read == 48) { // 0
                         debug = true
                         println("Turn on debug")
-                        registers[7] = 1 // TODO find good value
+                        registers[7] = 25734
                         read = System.`in`.read() % BASE
                     }
                     registers[program[instrPointer + 1] % BASE] = read

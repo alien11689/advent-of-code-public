@@ -1,15 +1,14 @@
 package pl.touk.dpr.synacorchallenge
 
-import java.lang.RuntimeException
-
 object Teleporter {
     @JvmStatic
     fun main(args: Array<String>) {
         val r0 = 4
         val r1 = 1
-        val x = (1..32767).find {
-            println("Checking $it")
+        val x = (32767 downTo 1).find {
+            print("Checking $it: ")
             val first = solve(r0, r1, it, mutableMapOf()).first
+            println(first)
             first == 6
         }
         println(x)
