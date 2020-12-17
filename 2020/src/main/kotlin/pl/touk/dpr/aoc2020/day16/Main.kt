@@ -16,25 +16,15 @@ object Main {
         var readingRules = true
         var nearbyTickets = false
         var sumNotMatching = 0L
-        var myTicktet = false
-        var myTicktetValue = listOf(0)
-        val otherValidTickets = mutableSetOf<List<Int>>()
         while (i < input.size) {
             if (input[i].isEmpty()) {
                 readingRules = false
                 nearbyTickets = false
-                myTicktet = false
                 ++i
                 continue
             } else if (readingRules) {
                 val parts = input[i].split(":")[1].split(Regex("[ -]+"))
                 rules.add(Rule(IntRange(parts[1].toInt(), parts[2].toInt()), IntRange(parts[4].toInt(), parts[5].toInt())))
-                ++i
-            } else if (input[i] == "your ticket:") {
-                myTicktet = true
-                ++i
-            } else if (myTicktet) {
-                myTicktetValue = input[i].split(",").map { it.toInt() }
                 ++i
             } else if (input[i] == "nearby tickets:") {
                 nearbyTickets = true
@@ -56,7 +46,6 @@ object Main {
         val rules = mutableSetOf<Rule>()
         var readingRules = true
         var nearbyTickets = false
-        var sumNotMatching = 0L
         var myTicktet = false
         var myTicktetValue = listOf(0)
         val otherValidTickets = mutableSetOf<List<Int>>()
@@ -102,9 +91,9 @@ object Main {
         val departureColumns = mutableSetOf<Int>()
         while (columntToRules.isNotEmpty()) {
             val found = columntToRules.filter { it.value.size == 1 }
-            found.forEach { k, v ->
+            found.forEach { (k, v) ->
                 columntToRules.remove(k)
-                columntToRules.forEach { col, rules ->
+                columntToRules.forEach { (col, rules) ->
                     columntToRules[col] = rules - v
                 }
                 if (v.count { it.name!!.startsWith("departure") } > 0) {
@@ -113,7 +102,7 @@ object Main {
             }
         }
 
-        return departureColumns.fold(1L) {acc, col -> acc * myTicktetValue[col] }
+        return departureColumns.fold(1L) { acc, col -> acc * myTicktetValue[col] }
     }
 
     data class Rule(val r1: IntRange, val r2: IntRange, val name: String? = null) {
