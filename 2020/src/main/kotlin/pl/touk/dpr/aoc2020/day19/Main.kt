@@ -82,22 +82,22 @@ object Main {
 
     private fun part2(input: List<String>): Any {
         val (rules, text) = parseInput(input)
-        println("0: ${rules[0]}")
-        println("8: ${rules[8]}")
-        println("11: ${rules[11]}")
+//        println("0: ${rules[0]}")
+//        println("8: ${rules[8]}")
+//        println("11: ${rules[11]}")
         val rule42 = resolveRule(rules[42]!!, rules)
         val rule31 = resolveRule(rules[31]!!, rules)
-        println("42: ${rule42}")
-        println("31: ${rule31}")
-        println("Rule 8 -> rule42+")
-        println("Rule 11 -> rule42 ... rule31")
+//        println("42: ${rule42}")
+//        println("31: ${rule31}")
+//        println("Rule 8 -> rule42+")
+//        println("Rule 11 -> rule42 ... rule31")
         val initRegex = Regex("^($rule42)+($rule31)+$")
         val initSet = text.filter { initRegex.matches(it) }
         val exactRule42 = Regex("^$rule42$")
         val exactRule31 = Regex("^$rule31$")
         var res = 0
         initSet.forEach { s ->
-            println("Checking $s")
+//            println("Checking $s")
             var I = 0
             var i = I + 1
             var J = s.length
@@ -106,7 +106,7 @@ object Main {
             while (0 < j) {
                 val toCheckEnd = s.substring(j, J)
                 if (exactRule31.matches(toCheckEnd)) {
-                    println("Matched end $toCheckEnd")
+//                    println("Matched end $toCheckEnd")
                     J = j
                     ++ends
                 }
@@ -116,13 +116,13 @@ object Main {
             while (i <= J) {
                 val toCheckBegin = s.substring(I, i)
                 if (exactRule42.matches(toCheckBegin)) {
-                    println("Matched begin $toCheckBegin")
+//                    println("Matched begin $toCheckBegin")
                     I = i
                     ++begins
                 }
                 ++i
             }
-            println("$begins $ends")
+//            println("$begins $ends")
             if (begins > ends) {
                 ++res
             }
