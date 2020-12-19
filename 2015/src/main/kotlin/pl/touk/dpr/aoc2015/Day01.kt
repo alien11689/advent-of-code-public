@@ -1,9 +1,8 @@
-package pl.touk.dpr.aoc2015.day01
+package pl.touk.dpr.aoc2015
 
-import pl.touk.dpr.aoc2015.Util
 import java.lang.RuntimeException
 
-object Main {
+object Day01 {
     @JvmStatic
     fun main(args: Array<String>) {
         val input = Util.getFileContent("/01/input.txt").trim()
