@@ -34,7 +34,7 @@ object Main {
         (0..7).forEach { registers[it] = 0 }
         var instrPointer = 0
         var debug = false
-        var printOnly = false
+        val printOnly = false
         while (instrPointer < program.size) {
             val opcode = program[instrPointer]
             when (opcode) {
@@ -250,6 +250,10 @@ object Main {
                         println("Turn on debug")
                         registers[7] = 25734
                         read = System.`in`.read() % BASE
+                    }
+                    if (read == 49) { // 1
+                        println("Goodbye!!!")
+                        System.exit(0)
                     }
                     registers[program[instrPointer + 1] % BASE] = read
                     instrPointer += 2
