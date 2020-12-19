@@ -1,9 +1,8 @@
-package pl.touk.dpr.aoc2020.day13
+package pl.touk.dpr.aoc2020
 
-import pl.touk.dpr.aoc2020.Util
 import java.math.BigInteger
 
-object Main {
+object Day13 {
     @JvmStatic
     fun main(args: Array<String>) {
 //        val input = Util.getNotEmptyLinesFromFile("/12/test.txt")

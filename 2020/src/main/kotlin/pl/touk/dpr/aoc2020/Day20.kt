@@ -1,8 +1,6 @@
-package pl.touk.dpr.aoc2020.day20
+package pl.touk.dpr.aoc2020
 
-import pl.touk.dpr.aoc2020.Util
-
-object Main {
+object Day20 {
     @JvmStatic
     fun main(args: Array<String>) {
         val input = Util.getNotEmptyLinesFromFile("/20/input.txt")

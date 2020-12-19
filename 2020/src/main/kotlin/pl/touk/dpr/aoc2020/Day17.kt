@@ -1,8 +1,6 @@
-package pl.touk.dpr.aoc2020.day17
+package pl.touk.dpr.aoc2020
 
-import pl.touk.dpr.aoc2020.Util
-
-object Main {
+object Day17 {
     @JvmStatic
     fun main(args: Array<String>) {
         val input = Util.getLinesFromFile("/17/input.txt")

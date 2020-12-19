@@ -1,6 +1,6 @@
-package pl.touk.dpr.aoc2020.day15
+package pl.touk.dpr.aoc2020
 
-object Main {
+object Day15 {
     @JvmStatic
     fun main(args: Array<String>) {
 //        Util.test(part1And2("0,3,6"), listOf(436, 175594))

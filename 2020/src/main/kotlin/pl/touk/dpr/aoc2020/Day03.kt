@@ -1,8 +1,6 @@
-package pl.touk.dpr.aoc2020.day03
+package pl.touk.dpr.aoc2020
 
-import pl.touk.dpr.aoc2020.Util
-
-object Main {
+object Day03 {
     @JvmStatic
     fun main(args: Array<String>) {
 //        val input = Util.getFileContent("/03/test1")
