@@ -39,99 +39,77 @@ object Day20 {
 
     private fun part2(input: List<String>): Any {
         val tiles = readTiles(input).toMutableMap()
-        val borders = tiles.values.flatMap { it.borders }.groupBy { it }.mapValues { it.value.size }
-        val uniqueBorders = borders.filter { it.value == 1 }.keys.toSet()
-        val corners = tiles.values.filter { it.borders.count { it in uniqueBorders } > 3 }
-        var cornerFirst = corners.first()
-        val wholeImage: MutableList<MutableList<Tile?>> = IntRange(0, 11).map {
-            IntRange(0, 11).map {
-                null
-            }.toMutableList<Tile?>()
-        }.toMutableList()
+        val whole = buildWholeImage(tiles)
+        return findRoughWaterWithoutDragons(whole)
+    }
+
+    private fun findRoughWaterWithoutDragons(wholeInit: Tile): Int {
+        var whole = wholeInit
         var i = 0
-        while (cornerFirst.row(0) !in uniqueBorders || cornerFirst.column(0) !in uniqueBorders) {
-            if (i % 4 == 3) {
-                cornerFirst = cornerFirst.transpose()
-            } else {
-                cornerFirst = cornerFirst.rotate()
-            }
-            ++i
-        }
-        tiles.remove(cornerFirst.id)
-        wholeImage[0][0] = cornerFirst
-        wholeImage.forEachIndexed { rowIdx, row ->
-            wholeImage.forEachIndexed { colIdx, column ->
-                if (rowIdx != 0 || colIdx != 0) { // omit first calculated before
-                    if (colIdx != 0) {
-                        val left = wholeImage[rowIdx][colIdx - 1]!!
-                        if (rowIdx == 0) {
-                            var matching = tiles.values.find { cur -> left.column(9) in cur.borders && uniqueBorders.any { it in cur.borders } }!!
-                            i = 0
-                            while (matching.row(0) !in uniqueBorders || matching.column(0) != left.column(9)) {
-                                if (i % 5 == 4) {
-                                    matching = matching.transpose()
-                                } else {
-                                    matching = matching.rotate()
-                                }
-                                ++i
-                            }
-//                            print("${matching.id} ")
-                            wholeImage[rowIdx][colIdx] = matching
-                            tiles.remove(matching.id)
-                        } else {
-                            val upper = wholeImage[rowIdx - 1][colIdx]!!
-                            var matching = tiles.values.find { cur -> left.column(9) in cur.borders && upper.row(9) in cur.borders }!!
-                            i = 0
-                            while (matching.row(0) != upper.row(9) || matching.column(0) != left.column(9)) {
-                                if (i % 5 == 4) {
-                                    matching = matching.transpose()
-                                } else {
-                                    matching = matching.rotate()
-                                }
-                                ++i
-                            }
-//                            print("${matching.id} ")
-                            wholeImage[rowIdx][colIdx] = matching
-                            tiles.remove(matching.id)
-                        }
-                    } else {
-                        val upper = wholeImage[rowIdx - 1][colIdx]!!
-                        //                            println("Possible ${possible.size}")
-                        var matching = tiles.values.find { cur -> upper.row(9) in cur.borders && uniqueBorders.any { it in cur.borders } }!!
-                        i = 0
-                        while (matching.column(0) !in uniqueBorders || matching.row(0) != upper.row(9)) {
-                            if (i % 5 == 4) {
-                                matching = matching.transpose()
-                            } else {
-                                matching = matching.rotate()
-                            }
-                            ++i
-                        }
-//                        print("${matching.id} ")
-                        wholeImage[rowIdx][colIdx] = matching
-                        tiles.remove(matching.id)
-                    }
-                } else {
-//                    print("${cornerFirst.id} ")
-                }
-            }
-//            println()
-        }
-        var whole = Tile(-1L, join(wholeImage))
-        i = 0
         while (true) {
             val foundDragons = lookForDragon(whole)
             if (foundDragons > 0) {
                 val all = whole.image.map { it.filter { it == '#' }.count() }.sum()
                 return all - foundDragons * dragonPoints().size
             }
-            if (i % 4 == 3) {
-                whole = whole.transpose()
-            } else {
-                whole = whole.rotate()
-            }
+            whole = if (i % 4 == 3) whole.transpose() else whole.rotate()
             ++i
         }
+    }
+
+    private fun buildWholeImage(tiles: MutableMap<Long, Tile>): Tile {
+        val borders = tiles.values.flatMap { it.borders }.groupBy { it }.mapValues { it.value.size }
+        val uniqueBorders = borders.filter { it.value == 1 }.keys.toSet()
+        val wholeImage: MutableList<MutableList<Tile?>> = IntRange(0, 11).map {
+            IntRange(0, 11).map {
+                null
+            }.toMutableList<Tile?>()
+        }.toMutableList()
+        wholeImage.forEachIndexed { rowIdx, row ->
+            wholeImage.forEachIndexed { colIdx, column ->
+                var matching: Tile
+                if (colIdx != 0) {
+                    val left = wholeImage[rowIdx][colIdx - 1]!!
+                    if (rowIdx == 0) {
+                        matching = tiles.values.find { cur -> left.column(9) in cur.borders && uniqueBorders.any { it in cur.borders } }!!
+                        var i = 0
+                        while (matching.row(0) !in uniqueBorders || matching.column(0) != left.column(9)) {
+                            matching = if (i % 4 == 3) matching.transpose() else matching.rotate()
+                            ++i
+                        }
+                    } else {
+                        val upper = wholeImage[rowIdx - 1][colIdx]!!
+                        matching = tiles.values.find { cur -> left.column(9) in cur.borders && upper.row(9) in cur.borders }!!
+                        var i = 0
+                        while (matching.row(0) != upper.row(9) || matching.column(0) != left.column(9)) {
+                            matching = if (i % 4 == 3) matching.transpose() else matching.rotate()
+                            ++i
+                        }
+                    }
+                } else {
+                    // colIdx == 0
+                    if (rowIdx != 0) {
+                        val upper = wholeImage[rowIdx - 1][colIdx]!!
+                        matching = tiles.values.find { cur -> upper.row(9) in cur.borders && uniqueBorders.any { it in cur.borders } }!!
+                        var i = 0
+                        while (matching.column(0) !in uniqueBorders || matching.row(0) != upper.row(9)) {
+                            matching = if (i % 4 == 3) matching.transpose() else matching.rotate()
+                            ++i
+                        }
+                    } else {
+                        matching = tiles.values.find { cur -> uniqueBorders.count { it in cur.borders } > 3 }!!
+                        var i = 0
+                        while (matching.column(0) !in uniqueBorders || matching.row(0) !in uniqueBorders) {
+                            matching = if (i % 4 == 3) matching.transpose() else matching.rotate()
+                            ++i
+                        }
+                    }
+                }
+                wholeImage[rowIdx][colIdx] = matching
+                tiles.remove(matching.id)
+            }
+        }
+        return Tile(-1L, join(wholeImage))
     }
 
     private fun lookForDragon(whole: Tile): Int {
