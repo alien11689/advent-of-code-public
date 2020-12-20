@@ -113,3 +113,5 @@ def fromLine(String line){
 }
 
 println(main(new File('input.txt').text))
+
+println(15 + 16 + 150)
