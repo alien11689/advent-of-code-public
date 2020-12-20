@@ -65,8 +65,8 @@ object Day20 {
                 null
             }.toMutableList<Tile?>()
         }.toMutableList()
-        wholeImage.forEachIndexed { rowIdx, row ->
-            wholeImage.forEachIndexed { colIdx, column ->
+        wholeImage.forEachIndexed { rowIdx, _ ->
+            wholeImage.forEachIndexed { colIdx, _ ->
                 var matching: Tile
                 if (colIdx != 0) {
                     val left = wholeImage[rowIdx][colIdx - 1]!!
