@@ -1,4 +1,4 @@
 #!/bin/bash
 
-find . -name "*.groovy" | wc -l
+find . -name "*.groovy" | grep -v target| wc -l
 
