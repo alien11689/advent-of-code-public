@@ -53,7 +53,7 @@ object Teleporter {
         var r1 = (R1 + 32767) % BASE
         var res = solve(R0, r1, r7, mem)
         var r0 = res.first
-        r1 = res.second
+//        r1 = res.second
         r1 = r0
         r0 = x
         r0 = (r0 + 32767) % BASE

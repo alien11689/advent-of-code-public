@@ -76,7 +76,7 @@ object Day22 {
             val p2 = player2.poll()
             if (p1 <= player1.size && p2 <= player2.size) {
 //                println("Starting subgame because of $p1 $p2")
-                val (pp1, pp2) = play(LinkedList(player1.take(p1)), LinkedList(player2.take(p2)), level + 1)
+                val (pp1, _) = play(LinkedList(player1.take(p1)), LinkedList(player2.take(p2)), level + 1)
                 if (pp1.isNotEmpty()) {
                     player1.offer(p1)
                     player1.offer(p2)
