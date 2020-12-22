@@ -52,18 +52,13 @@ object Day22 {
 
     private fun part2(input: List<String>): Any {
         val (player1: Queue<Int>, player2: Queue<Int>) = readPlayers(input)
-        val (p1, p2) = play(player1, player2, 1, mutableMapOf())
+        val (p1, p2) = play(player1, player2, 1)
         val winner = if (p1.isEmpty()) p2 else p1
         return winner.reversed().foldIndexed(0L) { index, acc, i -> acc + (index + 1) * i.toLong() }
     }
 
-    private fun play(initPlayer1: Queue<Int>, initPlayer2: Queue<Int>, level: Int, mem: MutableMap<Pair<List<Int>, List<Int>>, Pair<List<Int>, List<Int>>>): Pair<List<Int>, List<Int>> {
-        println("Current level is $level with $initPlayer1 $initPlayer2")
-        val key = Pair(initPlayer1.toList(), initPlayer2.toList())
-        if (mem.containsKey(key)) {
-            println("FROM MEM")
-            return mem[key]!!
-        }
+    private fun play(initPlayer1: Queue<Int>, initPlayer2: Queue<Int>, level: Int): Pair<List<Int>, List<Int>> {
+//        println("Current level is $level with $initPlayer1 $initPlayer2")
         val player1 = LinkedList(initPlayer1)
         val player2 = LinkedList(initPlayer2)
         val prev: MutableSet<Pair<List<Int>, List<Int>>> = mutableSetOf()
@@ -74,16 +69,14 @@ object Day22 {
                 while (player2.isNotEmpty()) {
                     player1.offer(player2.poll())
                 }
-                val res = Pair(player1.toList(), player2.toList())
-                mem[key] = res
-                return res
+                return Pair<List<Int>, List<Int>>(player1.toList(), player2.toList())
             }
             prev.add(curState)
             val p1 = player1.poll()
             val p2 = player2.poll()
             if (p1 <= player1.size && p2 <= player2.size) {
 //                println("Starting subgame because of $p1 $p2")
-                val (pp1, pp2) = play(LinkedList(player1.take(p1)), LinkedList(player2.take(p2)), level + 1, mem)
+                val (pp1, pp2) = play(LinkedList(player1.take(p1)), LinkedList(player2.take(p2)), level + 1)
                 if (pp1.isNotEmpty()) {
                     player1.offer(p1)
                     player1.offer(p2)
@@ -103,8 +96,6 @@ object Day22 {
                 }
             }
         }
-        val res = Pair(player1.toList(), player2.toList())
-        mem[key] = res
-        return res
+        return Pair<List<Int>, List<Int>>(player1.toList(), player2.toList())
     }
 }
