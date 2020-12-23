@@ -11,16 +11,14 @@ object Day23 {
 
     private fun part1(input: String): Any {
         var cups = input.map { it.toString().toInt() }.toList()
-//        println(cups)
         var current = 0
         (1..100).forEach {
             cups = round(cups, current)
-//            println("After round $it: $cups")
         }
 
-        // 197865243 is not right
-        // 978652431 is not right
-        return cups.joinToString("") { it.toString() }
+        val res = cups.subList(cups.indexOf(1) + 1, cups.size) + cups.subList(0, cups.indexOf(1))
+
+        return res.joinToString("") { it.toString() }
     }
 
     private fun round(cups: List<Int>, current: Int): List<Int> {
@@ -31,7 +29,7 @@ object Day23 {
             destination = if (destination == 1) 9 else (destination - 1)
         }
         val cupsNew = cups.filter { it != curVal && it !in pickedUp }
-        val ml = mutableListOf<Int>()
+        val ml = ArrayList<Int>(cups.size)
         cupsNew.forEach {
             ml.add(it)
             if (it == destination) {
@@ -43,13 +41,16 @@ object Day23 {
     }
 
     private fun part2(input: String): Any {
-//        var cups = input.map { it.toString().toInt() }.toList()
-////        println(cups)
-//        var current = 0
-//        (1..10000000).forEach {
-//            cups = round(cups, current)
+        val initCups = input.map { it.toString().toInt() }.toList()
+        var cups = initCups + ((initCups.max()!! + 1)..1000000)
+        val current = 0
+        (1..10000000).forEach {
+//            if (it % 10000 == 0) {
+            println("Move $it")
+//            }
+            cups = round(cups, current)
 ////            println("After round $it: $cups")
-//        }
+        }
 //        return cups.joinToString("") { it.toString() }
         return 0
     }
