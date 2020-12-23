@@ -11,36 +11,38 @@ object Day23 {
 
     private fun part1(input: String): Any {
         var cups = input.map { it.toString().toInt() }.toList()
+        val pair = buildNodes(cups)
+        var current: Node? = pair.first
+        val mem = pair.second
+        val max = mem.keys.max()!!
         (1..100).forEach {
-            cups = round(cups)
+            current = move(current!!, max, mem)
         }
-        val res = cups.subList(cups.indexOf(1) + 1, cups.size) + cups.subList(0, cups.indexOf(1))
-
-        return res.joinToString("") { it.toString() }
-    }
-
-    private fun round(cups: List<Int>): List<Int> {
-        val curVal = cups[0]
-        val pickedUp = (1..3).map { cups[it % cups.size] }
-        var destination = if (curVal == 1) 9 else (curVal - 1)
-        while (destination in pickedUp) {
-            destination = if (destination == 1) 9 else (destination - 1)
+        val node1: Node = mem[1]!!
+        current = node1.next!!
+        val res = StringBuilder()
+        while (current!!.value != 1) {
+            res.append(current!!.value)
+            current = current!!.next
         }
-        val cupsNew = cups.filter { it != curVal && it !in pickedUp }
-        val ml = ArrayList<Int>(cups.size)
-        cupsNew.forEach {
-            ml.add(it)
-            if (it == destination) {
-                ml.addAll(pickedUp)
-            }
-        }
-        ml.add(curVal)
-        return ml.toList()
+        return res.toString()
     }
 
     private fun part2(input: String): Any {
         val initCups = input.map { it.toString().toInt() }.toList()
         val elements = initCups + ((initCups.max()!! + 1)..1000000)
+        val pair = buildNodes(elements)
+        var current: Node? = pair.first
+        val mem = pair.second
+        val max = mem.keys.max()!!
+        (1..10000000).forEach {
+            current = move(current!!, max, mem)
+        }
+        val node1: Node = mem[1]!!
+        return node1.next!!.value.toLong() * node1.next!!.next!!.value.toLong()
+    }
+
+    private fun buildNodes(elements: List<Int>): Pair<Node, Map<Int, Node>> {
         var begin: Node? = null
         var current: Node? = null
         val mem = mutableMapOf<Int, Node>()
@@ -57,12 +59,7 @@ object Day23 {
         }
         current!!.next = begin
         current = begin
-        val max = 1000000
-        (1..10000000).forEach {
-            current = move(current!!, max, mem)
-        }
-        val node1: Node = mem[1]!!
-        return node1.next!!.value.toLong() * node1.next!!.next!!.value.toLong()
+        return Pair(current!!, mem)
     }
 
     private fun move(current: Node, max: Int, mem: Map<Int, Node>): Node {
