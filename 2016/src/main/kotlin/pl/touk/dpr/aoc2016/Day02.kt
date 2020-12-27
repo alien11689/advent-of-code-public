@@ -3,16 +3,73 @@ package pl.touk.dpr.aoc2016
 object Day02 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/01/input.txt").trim()
+        val input = Util.getNotEmptyLinesFromFile("/02/input.txt")
         println(part1(input))
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
-        TODO()
+    private fun part1(input: List<String>): Any {
+        val board: Map<Pos, Char> = mapOf(
+                Pair(Pos(0, 0), '1'),
+                Pair(Pos(1, 0), '2'),
+                Pair(Pos(2, 0), '3'),
+                Pair(Pos(0, 1), '4'),
+                Pair(Pos(1, 1), '5'),
+                Pair(Pos(2, 1), '6'),
+                Pair(Pos(0, 2), '7'),
+                Pair(Pos(1, 2), '8'),
+                Pair(Pos(2, 2), '9'),
+        )
+        val pos = Pos(1, 1)
+        return solve(input, pos, board)
     }
 
-    private fun part2(input: String): Any {
-        TODO()
+    private fun solve(input: List<String>, pos: Pos, board: Map<Pos, Char>): String {
+        val res = mutableListOf<Char>()
+        input.fold(pos) { oldPos, line ->
+            val newPos = traverse(oldPos, line, board)
+            res.add(board[newPos]!!)
+            newPos
+        }
+        return res.joinToString(separator = "")
+    }
+
+    private fun traverse(init: Pos, line: String, board: Map<Pos, Char>): Pos {
+        return line.fold(init) { oldPos, c ->
+            when (c) {
+                'U' -> if (oldPos.up() in board) oldPos.up() else oldPos
+                'L' -> if (oldPos.left() in board) oldPos.left() else oldPos
+                'R' -> if (oldPos.right() in board) oldPos.right() else oldPos
+                'D' -> if (oldPos.down() in board) oldPos.down() else oldPos
+                else -> throw RuntimeException()
+            }
+        }
+    }
+
+    private fun part2(input: List<String>): Any {
+        val board: Map<Pos, Char> = mapOf(
+                Pair(Pos(2, 0), '1'),
+                Pair(Pos(1, 1), '2'),
+                Pair(Pos(2, 1), '3'),
+                Pair(Pos(3, 1), '4'),
+                Pair(Pos(0, 2), '5'),
+                Pair(Pos(1, 2), '6'),
+                Pair(Pos(2, 2), '7'),
+                Pair(Pos(3, 2), '8'),
+                Pair(Pos(4, 2), '9'),
+                Pair(Pos(1, 3), 'A'),
+                Pair(Pos(2, 3), 'B'),
+                Pair(Pos(3, 3), 'C'),
+                Pair(Pos(2, 4), 'D'),
+        )
+        val pos = Pos(0, 2)
+        return solve(input, pos, board)
+    }
+
+    data class Pos(val x: Int, val y: Int) {
+        fun up(): Pos = copy(y = y - 1)
+        fun down(): Pos = copy(y = y + 1)
+        fun left(): Pos = copy(x = x - 1)
+        fun right(): Pos = copy(x = x + 1)
     }
 }
