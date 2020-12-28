@@ -9,10 +9,10 @@ object Day12 {
     }
 
     private fun part1(input: List<String>): Any {
-        return Assembunny(input).run()["a"]!!
+        return Assembunny(input).run().first["a"]!!
     }
 
     private fun part2(input: List<String>): Any {
-        return Assembunny(input).run(mapOf(Pair("c", 1)))["a"]!!
+        return Assembunny(input).run(mapOf(Pair("c", 1))).first["a"]!!
     }
 }
