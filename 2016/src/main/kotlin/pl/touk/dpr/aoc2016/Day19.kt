@@ -9,6 +9,24 @@ object Day19 {
     }
 
     private fun part1(input: Int): Any {
+        val begin = Node(1)
+        var cur = begin
+        (2..input).forEach {
+            val next = Node(it, prev = cur)
+            cur.next = next
+            cur = next
+        }
+        cur.next = begin
+        begin.prev = cur
+        cur = begin
+        while (cur.next != cur) {
+            cur.next = cur.next!!.next
+            cur = cur.next!!
+        }
+        return cur.x
+    }
+
+    private fun part1Iter(input: Int): Any {
         val elvesWithoutPresent = mutableSetOf<Int>()
         var i = 0
         while (elvesWithoutPresent.size < input - 1) {
@@ -31,12 +49,42 @@ object Day19 {
     }
 
     private fun part2(input: Int): Any {
+        val begin = Node(1)
+        var cur = begin
+        var mid = begin
+        (2..input).forEach {
+            val next = Node(it, prev = cur)
+            cur.next = next
+            cur = next
+            if (it == (input + 1) / 2) {
+                mid = next
+            }
+        }
+        cur.next = begin
+        begin.prev = cur
+        var i = 0
+        cur = begin
+        var size = input
+        while (cur.next != cur.prev) {
+//            println("Elves: $i/${size},  Current elf ${cur.x}, Across elf ${mid.x}")
+            mid.delete()
+            mid = mid.next!!
+            cur = cur.next!!
+            ++i
+            if ((input - i) % 2 == 0) {
+                mid = mid.next!!
+            }
+        }
+        return cur.x
+    }
+
+    private fun part2Iterative(input: Int): Any {
         val elves = ArrayList<Int>()
         elves.addAll((1..input))
         var i = 0
         while (elves.size > 1) {
             val across = findAcross(i, elves.size)
-//            println("Elves: ${elves.size},  Current $i: -> elf ${elves[i]}, Across $across: -> elf ${elves[across]}")
+            // println("Elves: ${elves.size},  Current $i: -> elf ${elves[i]}, Across $across: -> elf ${elves[across]}")
             elves.removeAt(across)
             if (across > i) {
                 ++i
@@ -44,6 +92,8 @@ object Day19 {
             i = if (i >= elves.size) 0 else i
         }
         return elves.first()
+
+
     }
 
     private fun findAcross(cur: Int, size: Int): Int {
@@ -51,5 +101,10 @@ object Day19 {
         return (cur + step) % size
     }
 
-    data class Node(val x:Int, val next: Node? = null, val prev: Node? = null)
+    data class Node(val x: Int, var next: Node? = null, var prev: Node? = null) {
+        fun delete() {
+            prev!!.next = next
+            next!!.prev = prev
+        }
+    }
 }
