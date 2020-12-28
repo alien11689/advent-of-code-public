@@ -3,16 +3,45 @@ package pl.touk.dpr.aoc2016
 object Day15 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/01/input.txt").trim()
-        println(part1(input))
-        println(part2(input))
+        println(part1(listOf(
+                Disk(17, 1, 1),
+                Disk(7, 0, 2),
+                Disk(19, 2, 3),
+                Disk(5, 0, 4),
+                Disk(3, 0, 5),
+                Disk(13, 5, 6)
+        )))
+        println(part2(listOf(
+                Disk(17, 1, 1),
+                Disk(7, 0, 2),
+                Disk(19, 2, 3),
+                Disk(5, 0, 4),
+                Disk(3, 0, 5),
+                Disk(13, 5, 6),
+                Disk(11, 0, 7),
+        )))
     }
 
-    private fun part1(input: String): Any {
-        TODO()
+    private fun part1(input: List<Disk>): Any {
+        val biggest = input.maxByOrNull { it.positions }!!
+        var time = biggest.first()
+        val step = biggest.positions
+        while (true) {
+            if (input.all { it.at0(time) }) {
+                return time
+            }
+            time += step
+        }
     }
 
-    private fun part2(input: String): Any {
-        TODO()
+    private fun part2(input: List<Disk>): Any {
+        return part1(input)
+    }
+
+    data class Disk(val positions: Int, val start: Int, val num: Int) {
+        fun first(): Int = positions - (start + num) % positions
+        fun at0(time: Int): Boolean {
+            return (start + time + num) % positions == 0
+        }
     }
 }
