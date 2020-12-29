@@ -9,10 +9,16 @@ object Day01 {
     }
 
     private fun part1(input: String): Any {
-        TODO()
+        return input.mapIndexed { index, s ->
+            val next = input[(index + 1) % input.length]
+            if (next == s) s.toString().toInt() else 0
+        }.sum()
     }
 
     private fun part2(input: String): Any {
-        TODO()
+        return input.mapIndexed { index, s ->
+            val next = input[(index + input.length / 2) % input.length]
+            if (next == s) s.toString().toInt() else 0
+        }.sum()
     }
 }
