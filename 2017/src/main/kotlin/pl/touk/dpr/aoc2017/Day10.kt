@@ -31,6 +31,11 @@ object Day10 {
     }
 
     private fun part2(text: String): Any {
+        return knotHash(text)
+
+    }
+
+    fun knotHash(text: String): String {
         val lengths = text.map { it.toInt() } + listOf(17, 31, 73, 47, 23)
 
         var curPos = 0
@@ -55,6 +60,5 @@ object Day10 {
         return inp.chunked(16)
                 .map { it.reduce() { a, b -> a.xor(b) } }
                 .joinToString("") { String.format("%02x", it) }
-
     }
 }
