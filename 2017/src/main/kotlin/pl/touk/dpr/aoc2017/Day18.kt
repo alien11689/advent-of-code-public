@@ -25,7 +25,7 @@ object Day18 {
         throw RuntimeException()
     }
 
-    private fun parseInput(input: List<String>): List<Action> {
+    fun parseInput(input: List<String>): List<Action> {
         return input.map {
             val parts = it.split(" ")
             if (parts[0] == "snd") {
@@ -34,12 +34,16 @@ object Day18 {
                 Action.Set(parts[1], parts[2])
             } else if (parts[0] == "add") {
                 Action.Add(parts[1], parts[2])
+            } else if (parts[0] == "sub") {
+                Action.Sub(parts[1], parts[2])
             } else if (parts[0] == "mul") {
                 Action.Mul(parts[1], parts[2])
             } else if (parts[0] == "mod") {
                 Action.Mod(parts[1], parts[2])
             } else if (parts[0] == "jgz") {
                 Action.Jgz(parts[1], parts[2])
+            } else if (parts[0] == "jnz") {
+                Action.Jnz(parts[1], parts[2])
             } else if (parts[0] == "rcv") {
                 Action.Rcv(parts[1])
             } else {
@@ -80,98 +84,114 @@ object Day18 {
         return context1.send
     }
 
-    class Register {
-        val reg = mutableMapOf<String, Long>()
+        class Register {
+            val reg = mutableMapOf<String, Long>()
 
-        fun get(key: String): Long {
-            if (key.matches(Regex("[-0-9]+"))) {
-                return key.toLong()
-            }
-            if (key in reg) {
-                return reg[key]!!
-            } else {
-                reg[key] = 0
-                return 0
-            }
-        }
-
-        fun put(x: String, y: Long) {
-            reg[x] = y
-        }
-    }
-
-    sealed class Action {
-        abstract fun apply(c: Context): Pair<Int, String?>
-
-        data class Snd(val x: String) : Action() {
-            override fun apply(c: Context): Pair<Int, String?> {
-                if (c.next == c) {
-                    c.reg.put("lastPlayed", c.reg.get(x))
-                    return Pair(1, null)
+            fun get(key: String): Long {
+                if (key.matches(Regex("[-0-9]+"))) {
+                    return key.toLong()
+                }
+                if (key in reg) {
+                    return reg[key]!!
                 } else {
-                    c.next!!.mes.offer(c.reg.get(x))
-                    c.next!!.waiting = false
-                    c.send++
+                    reg[key] = 0
+                    return 0
+                }
+            }
+
+            fun put(x: String, y: Long) {
+                reg[x] = y
+            }
+        }
+
+        sealed class Action {
+            abstract fun apply(c: Context): Pair<Int, String?>
+
+            data class Snd(val x: String) : Action() {
+                override fun apply(c: Context): Pair<Int, String?> {
+                    if (c.next == c) {
+                        c.reg.put("lastPlayed", c.reg.get(x))
+                        return Pair(1, null)
+                    } else {
+                        c.next!!.mes.offer(c.reg.get(x))
+                        c.next!!.waiting = false
+                        c.send++
+                        return Pair(1, null)
+                    }
+                }
+            }
+
+            data class Set(val x: String, val y: String) : Action() {
+                override fun apply(c: Context): Pair<Int, String?> {
+                    c.reg.put(x, c.reg.get(y))
                     return Pair(1, null)
                 }
             }
-        }
 
-        data class Set(val x: String, val y: String) : Action() {
-            override fun apply(c: Context): Pair<Int, String?> {
-                c.reg.put(x, c.reg.get(y))
-                return Pair(1, null)
+            data class Add(val x: String, val y: String) : Action() {
+                override fun apply(c: Context): Pair<Int, String?> {
+                    c.reg.put(x, c.reg.get(x) + c.reg.get(y))
+                    return Pair(1, null)
+                }
             }
-        }
 
-        data class Add(val x: String, val y: String) : Action() {
-            override fun apply(c: Context): Pair<Int, String?> {
-                c.reg.put(x, c.reg.get(x) + c.reg.get(y))
-                return Pair(1, null)
+            data class Sub(val x: String, val y: String) : Action() {
+                override fun apply(c: Context): Pair<Int, String?> {
+                    c.reg.put(x, c.reg.get(x) - c.reg.get(y))
+                    return Pair(1, null)
+                }
             }
-        }
 
-        data class Mul(val x: String, val y: String) : Action() {
-            override fun apply(c: Context): Pair<Int, String?> {
-                c.reg.put(x, c.reg.get(x) * c.reg.get(y))
-                return Pair(1, null)
+            data class Mul(val x: String, val y: String) : Action() {
+                override fun apply(c: Context): Pair<Int, String?> {
+                    c.reg.put(x, c.reg.get(x) * c.reg.get(y))
+                    return Pair(1, null)
+                }
             }
-        }
 
-        data class Mod(val x: String, val y: String) : Action() {
-            override fun apply(c: Context): Pair<Int, String?> {
-                c.reg.put(x, c.reg.get(x) % c.reg.get(y))
-                return Pair(1, null)
+            data class Mod(val x: String, val y: String) : Action() {
+                override fun apply(c: Context): Pair<Int, String?> {
+                    c.reg.put(x, c.reg.get(x) % c.reg.get(y))
+                    return Pair(1, null)
+                }
             }
-        }
 
-        data class Rcv(val x: String) : Action() {
-            override fun apply(c: Context): Pair<Int, String?> {
-                if (c.next == c) {
+            data class Rcv(val x: String) : Action() {
+                override fun apply(c: Context): Pair<Int, String?> {
+                    if (c.next == c) {
+                        if (c.reg.get(x) != 0L) {
+                            return Pair(1, c.reg.get("lastPlayed").toString())
+                        }
+                        return Pair(1, null)
+                    } else {
+                        if (c.mes.isEmpty()) {
+                            c.waiting = true
+                            return Pair(0, null)
+                        }
+                        c.reg.put(x, c.mes.poll())
+                        return Pair(1, null)
+                    }
+                }
+            }
+
+            data class Jgz(val x: String, val y: String) : Action() {
+                override fun apply(c: Context): Pair<Int, String?> {
+                    if (c.reg.get(x) > 0) {
+                        return Pair(c.reg.get(y).toInt(), null)
+                    }
+                    return Pair(1, null)
+                }
+            }
+
+            data class Jnz(val x: String, val y: String) : Action() {
+                override fun apply(c: Context): Pair<Int, String?> {
                     if (c.reg.get(x) != 0L) {
-                        return Pair(1, c.reg.get("lastPlayed").toString())
+                        return Pair(c.reg.get(y).toInt(), null)
                     }
-                    return Pair(1, null)
-                } else {
-                    if (c.mes.isEmpty()) {
-                        c.waiting = true
-                        return Pair(0, null)
-                    }
-                    c.reg.put(x, c.mes.poll())
                     return Pair(1, null)
                 }
             }
         }
-
-        data class Jgz(val x: String, val y: String) : Action() {
-            override fun apply(c: Context): Pair<Int, String?> {
-                if (c.reg.get(x) > 0) {
-                    return Pair(c.reg.get(y).toInt(), null)
-                }
-                return Pair(1, null)
-            }
-        }
-    }
 
     class Context(val id: Int) {
         val reg = Register()
