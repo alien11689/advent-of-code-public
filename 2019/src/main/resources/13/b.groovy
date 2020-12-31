@@ -134,45 +134,46 @@ State state = new State(
 v[0L] = 2L
 program(state, output)
 
-def createBoard(Map panel, Queue output){
-while(output.size() > 0){
-    int x = output.poll()
-    int y = output.poll()
-    int t = output.poll()
-    panel[[x,y]]=t
+def createBoard(Map panel, Queue output) {
+    while (output.size() > 0) {
+        int x = output.poll()
+        int y = output.poll()
+        int t = output.poll()
+        panel[[x, y]] = t
+    }
+    return panel
 }
-return panel
-}
+
 Map<List<Integer>, Integer> panel = [:]
 createBoard(panel, output)
 
-def printBoard(Map panel){
-for(int i = panel.keySet().collect {it[1]}.min(); i <= panel.keySet().collect {it[1]}.max(); ++i){
-for(int j = panel.keySet().collect {it[0]}.min(); j <= panel.keySet().collect {it[0]}.max(); ++j){
-   if(j == -1){
-       if(i == 0){
-           println('Score: ' + panel[[j,i]])
-       }
-       continue
-   }
-   Integer val = panel[[j,i]]
-   if(val == null){
-       continue
-   }
-   if(val == 0){
-        print('.')
-   }else if(val == 1){
-       print('#')
-   }else if (val == 2){
-       print('B')
-   }else if (val == 3){
-       print('H')
-   }else if (val == 4){
-       print('O')
+def printBoard(Map panel) {
+    for (int i = panel.keySet().collect { it[1] }.min(); i <= panel.keySet().collect { it[1] }.max(); ++i) {
+        for (int j = panel.keySet().collect { it[0] }.min(); j <= panel.keySet().collect { it[0] }.max(); ++j) {
+            if (j == -1) {
+                if (i == 0) {
+                    println('Score: ' + panel[[j, i]])
+                }
+                continue
+            }
+            Integer val = panel[[j, i]]
+            if (val == null) {
+                continue
+            }
+            if (val == 0) {
+                print('.')
+            } else if (val == 1) {
+                print('#')
+            } else if (val == 2) {
+                print('B')
+            } else if (val == 3) {
+                print('H')
+            } else if (val == 4) {
+                print('O')
+            }
+        }
+        println()
     }
-}
-println()    
-}
 }
 
 
@@ -180,32 +181,33 @@ printBoard(panel)
 println()
 inputQ.offer(1)
 
-def findB(Map panel){
-panel.find {it.value == 4}.key    
+def findB(Map panel) {
+    panel.find { it.value == 4 }.key
 }
-def findH(Map panel){
-panel.find {it.value == 3}.key    
+
+def findH(Map panel) {
+    panel.find { it.value == 3 }.key
 }
 
 int i = 0
-while(!state.ended){
+while (!state.ended) {
     ++i
     //println('===============================================')
-    program(state,output)
+    program(state, output)
     createBoard(panel, output)
     //printBoard(panel)
     def curB = findB(panel)
     def curH = findH(panel)
     //println("Ball is on " + curB)
     //println("H is on " + curH)
-    if(curB[0] == curH[0]){
+    if (curB[0] == curH[0]) {
         inputQ.offer(0)
-    }else if(curB[0] < curH[0]){
+    } else if (curB[0] < curH[0]) {
         inputQ.offer(-1)
-    }else{
+    } else {
         inputQ.offer(1)
     }
 }
 //println(state.ended)
 println("Iter: $i")
-println(panel[[-1,0]])
+println(panel[[-1, 0]])

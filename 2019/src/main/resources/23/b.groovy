@@ -163,7 +163,7 @@ class Computer {
 //}
 //==============================================
 
-void runProgram(Map<Long,Long> v) {
+void runProgram(Map<Long, Long> v) {
     Map<Integer, Computer> computers = [:]
 
     for (int i = 0; i < 50; ++i) {

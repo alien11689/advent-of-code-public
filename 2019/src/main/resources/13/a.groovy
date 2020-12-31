@@ -134,12 +134,12 @@ State state = new State(
 Map<List<Integer>, Integer> panel = [:]
 program(state, output)
 int countB = 0
-while(output.size() > 0){
+while (output.size() > 0) {
     int x = output.poll()
     int y = output.poll()
     int t = output.poll()
-    panel[[x,y]]=t
-    if(t == 2){
+    panel[[x, y]] = t
+    if (t == 2) {
         ++countB
     }
 }

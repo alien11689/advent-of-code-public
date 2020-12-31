@@ -128,23 +128,25 @@ State state = new State(
         input: inputQ,
 )
 
-Map<List<Integer>, Integer> panel = [:].withDefault {0}
-List<Integer> curPos = [0,0]
-enum Dir {
-   UP, LEFT, DOWN, RIGHT;
+Map<List<Integer>, Integer> panel = [:].withDefault { 0 }
+List<Integer> curPos = [0, 0]
 
-   def move(List<Integer> pos, long v){
-       switch(this){
-           case UP: return v == 0 ? [LEFT, [pos[0] - 1, pos[1]]] : [RIGHT,[pos[0] + 1, pos[1]]]
-           case DOWN: return v == 0 ? [RIGHT, [pos[0] + 1, pos[1]]] : [LEFT,[pos[0] - 1, pos[1]]]
-           case LEFT: return v == 0 ? [DOWN, [pos[0], pos[1] - 1]] : [UP, [pos[0], pos[1] + 1]]
-           case RIGHT: return v == 0 ? [UP, [pos[0], pos[1] + 1]] : [DOWN, [pos[0], pos[1] - 1]]
-       }
-   }
+enum Dir {
+    UP, LEFT, DOWN, RIGHT;
+
+    def move(List<Integer> pos, long v) {
+        switch (this) {
+            case UP: return v == 0 ? [LEFT, [pos[0] - 1, pos[1]]] : [RIGHT, [pos[0] + 1, pos[1]]]
+            case DOWN: return v == 0 ? [RIGHT, [pos[0] + 1, pos[1]]] : [LEFT, [pos[0] - 1, pos[1]]]
+            case LEFT: return v == 0 ? [DOWN, [pos[0], pos[1] - 1]] : [UP, [pos[0], pos[1] + 1]]
+            case RIGHT: return v == 0 ? [UP, [pos[0], pos[1] + 1]] : [DOWN, [pos[0], pos[1] - 1]]
+        }
+    }
 }
+
 Dir dir = Dir.UP
 
-while(!state.ended){
+while (!state.ended) {
     int color = panel[curPos]
     inputQ.offer(color)
     program(state, output)

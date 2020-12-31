@@ -238,7 +238,7 @@ inputQ.offer(nl)
 program(state, output)
 
 Map<List<Integer>, Integer> m = [:]
-int i =0
+int i = 0
 int j = 0
 int last = -1
 while (!output.empty) {

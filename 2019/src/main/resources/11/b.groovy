@@ -128,24 +128,26 @@ State state = new State(
         input: inputQ,
 )
 
-Map<List<Integer>, Integer> panel = [:].withDefault {0}
-List<Integer> curPos = [0,0]
+Map<List<Integer>, Integer> panel = [:].withDefault { 0 }
+List<Integer> curPos = [0, 0]
 panel[curPos] = 1
-enum Dir {
-   UP, LEFT, DOWN, RIGHT;
 
-   def move(List<Integer> pos, long v){
-       switch(this){
-           case UP: return v == 0 ? [LEFT, [pos[0] - 1, pos[1]]] : [RIGHT,[pos[0] + 1, pos[1]]]
-           case DOWN: return v == 0 ? [RIGHT, [pos[0] + 1, pos[1]]] : [LEFT,[pos[0] - 1, pos[1]]]
-           case LEFT: return v == 0 ? [DOWN, [pos[0], pos[1] - 1]] : [UP, [pos[0], pos[1] + 1]]
-           case RIGHT: return v == 0 ? [UP, [pos[0], pos[1] + 1]] : [DOWN, [pos[0], pos[1] - 1]]
-       }
-   }
+enum Dir {
+    UP, LEFT, DOWN, RIGHT;
+
+    def move(List<Integer> pos, long v) {
+        switch (this) {
+            case UP: return v == 0 ? [LEFT, [pos[0] - 1, pos[1]]] : [RIGHT, [pos[0] + 1, pos[1]]]
+            case DOWN: return v == 0 ? [RIGHT, [pos[0] + 1, pos[1]]] : [LEFT, [pos[0] - 1, pos[1]]]
+            case LEFT: return v == 0 ? [DOWN, [pos[0], pos[1] - 1]] : [UP, [pos[0], pos[1] + 1]]
+            case RIGHT: return v == 0 ? [UP, [pos[0], pos[1] + 1]] : [DOWN, [pos[0], pos[1] - 1]]
+        }
+    }
 }
+
 Dir dir = Dir.UP
 
-while(!state.ended){
+while (!state.ended) {
     int color = panel[curPos]
     inputQ.offer(color)
     program(state, output)
@@ -154,15 +156,15 @@ while(!state.ended){
     dir = res[0]
     curPos = res[1]
 }
-Set<List<Integer>> whites = panel.findAll {it.value == 1}.keySet()
-println(whites.collect {it[0]}.min())
-println(whites.collect {it[0]}.max())
-println(whites.collect {it[1]}.min())
-println(whites.collect {it[1]}.max())
+Set<List<Integer>> whites = panel.findAll { it.value == 1 }.keySet()
+println(whites.collect { it[0] }.min())
+println(whites.collect { it[0] }.max())
+println(whites.collect { it[1] }.min())
+println(whites.collect { it[1] }.max())
 
-for(int i = whites.collect {it[1]}.max(); i >= whites.collect {it[1]}.min(); --i){
-    for(int j = whites.collect {it[0]}.min(); j <= whites.collect {it[0]}.max() + 10; ++j){
-        print([j,i] in whites ? 'X' : ' ')
+for (int i = whites.collect { it[1] }.max(); i >= whites.collect { it[1] }.min(); --i) {
+    for (int j = whites.collect { it[0] }.min(); j <= whites.collect { it[0] }.max() + 10; ++j) {
+        print([j, i] in whites ? 'X' : ' ')
     }
     println()
 }
