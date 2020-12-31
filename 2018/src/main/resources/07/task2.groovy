@@ -3,9 +3,6 @@ import groovy.transform.ToString
 def text = new File('input.txt').text.trim()
 int workersAmount = 5
 
-//def text = new File('input2.txt').text.trim()
-//int workersAmount = 2
-
 def lines = text.split('\n')
 
 
@@ -40,9 +37,7 @@ class Worker {
     static Map<Character, Integer> times = ('A'..'Z').collectEntries {
         [(it): ((it as char) as int) - 64 + 60]
     }
-//    static {
-//        println(times)
-//    }
+
     String cur
     Integer timeout
     int seconds = 0
@@ -78,9 +73,7 @@ def workers = (1..workersAmount).collect { new Worker() }
 
 int ticks = 0
 while (true) {
-//    println(ticks)
-//    println(order)
-//    println(workers)
+
     workers.findAll { it.finished }.collect {
         String letter = it.cur
         order << letter
@@ -112,5 +105,4 @@ while (true) {
         ticks++
     }
 }
-//println(order.join())
 println(ticks)

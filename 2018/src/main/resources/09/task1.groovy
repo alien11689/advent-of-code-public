@@ -67,8 +67,6 @@ def findHighestScore(int playersCount, int maxScore) {
     Node cur = root
 
     while (score <= maxScore) {
-//        printMarbles(root)
-//        println("Cur ${cur}")
         if (score % 23 == 0) {
             players[curPlayer].addScore(score)
             List result = cur.removeBehind(8)
@@ -80,7 +78,6 @@ def findHighestScore(int playersCount, int maxScore) {
         score++
         curPlayer = (curPlayer + 1) % playersCount
     }
-//    printMarbles(root)
     return players.max { it.score }.score
 }
 

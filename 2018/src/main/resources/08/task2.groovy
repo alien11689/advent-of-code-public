@@ -1,7 +1,6 @@
 import groovy.transform.ToString
 
 def text = new File('input.txt').text.trim()
-//text = new File('input2.txt').text.trim()
 
 @ToString(includeNames = true)
 class Node {

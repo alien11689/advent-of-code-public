@@ -25,18 +25,6 @@ def points = lines.collect {
     new Point(x: parts[0] as int, y: parts[1] as int, id: ++counter)
 }
 
-//for (int i = points.min { it.y }.y; i < points.max { it.y }.y; ++i) {
-//    for (int j = points.min { it.x }.x; j < points.max { it.x }.x; ++j) {
-//        def here = points.find { it.isPoint(j, i) }
-//        if (here) {
-//            print(here.id)
-//        } else {
-//            print('.')
-//        }
-//    }
-//    println()
-//}
-
 @ToString
 class Cell {
     Set<Integer> nearestPoints
