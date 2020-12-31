@@ -54,7 +54,7 @@ object IntCodeComputer {
         }
     }
 
-    fun program(s: IntCodeComputerState, output: Queue<Long>) {
+    fun program(s: IntCodeComputerState, output: Queue<Long> = LinkedList()) {
         val v = s.v
         var pos = s.pos
         var rel = s.rel
