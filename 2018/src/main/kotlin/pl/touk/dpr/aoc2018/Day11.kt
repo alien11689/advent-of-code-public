@@ -3,16 +3,101 @@ package pl.touk.dpr.aoc2018
 object Day11 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val input = Util.getFileContent("/01/input.txt").trim()
-        println(part1(input))
-        println(part2(input))
+        println(part1())
+        println(part2())
     }
 
-    private fun part1(input: String): Any {
-        TODO()
+    private fun part1(): Any {
+        val serialNumber = 7165
+
+        val n = 300
+        val m = 300
+
+        val board = buildBoard(n, m, serialNumber)
+        val racks = calculateRacks(board)
+        val rack = findLargestRack(racks)
+        return "${rack.x},${rack.y}"
     }
 
-    private fun part2(input: String): Any {
-        TODO()
+    private fun part2(): Any {
+        val serialNumber = 7165
+
+        val n = 300
+        val m = 300
+        val board = buildBoard(n, m, serialNumber)
+        val rack = calculateRacksMax(board)
+        return "${rack.x},${rack.y},${rack.rackSize}"
+    }
+
+    data class Point(val x: Int, val y: Int, val sum: Int, val rackSize: Int? = null)
+
+    private fun getFuelLevel(x: Int, y: Int, serialNumber: Int): Int {
+        var rackId = x + 10L
+        var powerLevel = (rackId * y + serialNumber) * rackId
+        if (powerLevel > 99) {
+            val plAsString = powerLevel.toString()
+            return (plAsString[plAsString.length - 3].toString().toInt()) - 5
+        } else {
+            return -5
+        }
+    }
+
+    private fun buildBoard(n: Int, m: Int, serialNumber: Int): MutableList<MutableList<Int>> {
+        return (1..n).map { y ->
+            (1..m).map { x ->
+                getFuelLevel(x, y, serialNumber)
+            }.toMutableList()
+        }.toMutableList()
+    }
+
+    fun calculateRacks(board: MutableList<MutableList<Int>>): List<Point> {
+        return (1..(board.size - 2)).map { y ->
+            (1..(board[0].size - 2)).map { x ->
+                val ix = x - 1
+                val iy = y - 1
+                val sum = (iy..(iy + 2)).map { i ->
+                    (ix..(ix + 2)).map { j ->
+                        board[i][j]
+                    }.sum()
+                }.sum()
+                Point(x, y, sum)
+            }
+        }.flatten()
+    }
+
+    fun findLargestRack(racks: List<Point>) =
+        racks.maxByOrNull { it.sum }!!
+
+    fun calculateRacksMax(board: MutableList<MutableList<Int>>): Point {
+        var maxFuel = -1000000
+        var currentMax: Point? = null
+        for (y in 1..board.size) {
+            for (x in 1..board.size) {
+                var rackSize = 0
+                var current = Point(x, y, board[y - 1][x - 1], rackSize + 1)
+                rackSize++
+                while (rackSize + x <= board.size && rackSize + y <= board.size) {
+                    val additionalX = x + rackSize
+                    val additionalY = y + rackSize
+                    var newSize = current.sum
+                    for (i in y..additionalY) {
+                        newSize += board[i - 1][additionalX - 1]
+                    }
+
+                    for (i in x..additionalX) {
+                        newSize += board[additionalY - 1][i - 1]
+                    }
+                    newSize -= board[additionalY - 1][additionalX - 1]
+                    current = Point(x, y, newSize, rackSize + 1)
+//                        println("current $current")
+                    if (current.sum > maxFuel) {
+                        maxFuel = current.sum
+                        currentMax = current
+                    }
+                    rackSize++
+                }
+            }
+        }
+        return currentMax!!
     }
 }
