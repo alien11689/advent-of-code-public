@@ -24,7 +24,8 @@ object IntCodeComputer {
 
     private fun param(v: MutableMap<Long, Long>, pos: Long, mode: Int, rel: Long): Long {
         if (mode == 0) {
-            return v[v[pos]!!]!!
+            val l = v[pos]!!
+            return v.getOrDefault(l, 0L)
         } else if (mode == 1) {
             return v[pos]!!
         } else {
