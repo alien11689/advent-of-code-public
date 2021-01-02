@@ -113,6 +113,7 @@ def goDown(claysSet, filled, x, y, drained) {
             ++i
         }
         --y
+        filled << [x,y]
         boundLeft = fillLeft(x, claysSet, y, filled, drained)
         boundRight = fillRight(x, claysSet, y, filled, drained)
     }
@@ -197,17 +198,7 @@ Set<List<Integer>> drained = [] as Set
 int y = clays.fromY.min() - 1
 goDown(claysSet, filled, 500, y, drained)
 filled.addAll(drained)
-//println("Filling empty slots between water")
-// |.|
-// ~~~
-for (int i = clays.fromX.min(); i <= clays.toX.max(); ++i) {
-    for (int j = clays.fromY.min(); j <= clays.toY.max(); ++j) {
-        if (!isFilled(filled, i, j - 1) && drained.contains([i, j]) && isFilled(filled, i - 1, j - 1) && isFilled(filled, i + 1, j - 1) && !isClay(claysSet, i, j - 1))
-            filled << [i, j - 1]
-    }
-}
-
-//    printClays(clays, claysSet, filled, drained)
+//printClays(clays, claysSet, filled, drained)
 if (filled.size() > maxCount) {
     maxCount = filled.size()
 }
