@@ -9,8 +9,6 @@ static List<String> readInputAsLines(String file) {
 }
 
 List<String> input = readInputAsLines('input.txt')
-//input = readInputAsLines('other.txt')
-//input = readInputAsLines('other2.txt')
 
 @Canonical
 class Drone {

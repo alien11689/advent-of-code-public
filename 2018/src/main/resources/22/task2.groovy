@@ -219,27 +219,4 @@ while (!pq.empty) {
     }
 }
 
-//for (int y = 0; y <= winner.path.max {it.y}.y; ++y) {
-//    for (int x = 0; x <= winner.path.max {it.x}.x; ++x) {
-//        Pos pos = new Pos(x, y)
-//        if (target == pos) {
-//            print('T')
-//        } else if (start == pos) {
-//            print('M')
-//        } else if (pos in winner.path) {
-//            print('X')
-//        } else {
-//            def type = getType(pos)
-//            if (type == Type.N) {
-//                print('|')
-//            } else if (type == Type.W) {
-//                print('=')
-//            } else {
-//                print('.')
-//            }
-//        }
-//    }
-//    println()
-//}
-
 println(winner.minutes)

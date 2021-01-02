@@ -74,39 +74,5 @@ class Operation2 {
     }
 }
 
-//int ip = lines[0].split(/ /)[-1] as int
-//int[] registers = [1, 0, 0, 0, 0, 0, 0]
-//List<Operation2> instructions = []
-//for (int i = 1; i < lines.size(); ++i) {
-//    String[] line = lines[i].split(/ /)
-//    instructions << new Operation2(name: line[0], a: line[1] as int, b: line[2] as int, c: line[3] as int)
-//}
-//
-//while (true) {
-//    int cur = registers[6]
-//    registers[ip] = registers[6]
-//    println("$cur: ${instructions[cur]}")
-//    print("Before $registers || ")
-//    if (cur == 3 && registers[2] * registers[4] < registers[5]) {
-//        while (registers[2] * registers[4] < registers[5]) {
-//            ++registers[4]
-//        }
-//    }
-//    while (cur == 9 && registers[2] * registers[4] > registers[5] && registers[4] < registers[5]) {
-//        registers[4] = registers[5]
-//    }
-////    while (cur == 13 && registers[2] < registers[5]) {
-////        ++registers[2]
-////        registers[4] -= 14
-////    }
-//    instructions[cur].apply(registers)
-//    println(registers)
-//    if (registers[ip] + 1 >= instructions.size()) {
-//        break
-//    }
-//    registers[6] = registers[ip] + 1
-//}
-//println(registers[0])
-
 println("After optimizations and observations:")
 println((1..10551314).collect {10551314 % it == 0 ? (10551314 / it):0}.sum())

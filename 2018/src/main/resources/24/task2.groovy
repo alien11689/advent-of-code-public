@@ -100,10 +100,6 @@ class Result {
 
 Result fight(List<Group> groups) {
     while ((groups.team as Set).size() > 1) {
-//        println('-------------------')
-//        groups.sort { [it.team, it.id] }.each {
-//            println("${it.team} ${it.id} has ${it.units}")
-//        }
         groups = groups.sort()
         groups.each { it.reset() }
         // selection

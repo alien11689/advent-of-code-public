@@ -29,10 +29,6 @@ Set<Reaction> reactions = lines.collect { line ->
     new Reaction(fromRaw.collect { Chemical.create(it) }, Chemical.create(right))
 }
 
-//reactions.each {
-//    println(it)
-//}
-
 long countOre(Set<Reaction> reactions, long fuel) {
     Set<Reaction> usedReactions = []
 

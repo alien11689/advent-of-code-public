@@ -59,10 +59,6 @@ String slashing = 'slashing'
 String fire = 'fire'
 String radiation = 'radiation'
 List<Group> groups = [
-//        new Group(Team.Immune, 1, 17, 5390, ['radiation', 'bludgeoning'], [], 2, 4507, 'fire'),
-//        new Group(Team.Immune, 2, 989, 1274, ['bludgeoning', 'slashing'], ['fire'], 3, 25, 'slashing'),
-//        new Group(Team.Infection, 1, 801, 4706, ['radiation'], [], 1, 116, 'bludgeoning'),
-//        new Group(Team.Infection, 2, 4485, 2961, ['fire', 'cold'], ['radiation'], 4, 12, 'slashing')
 
 new Group(Team.Immune, 1, 1432, 7061, [bludgeoning], [cold], 17, 41, slashing),
 new Group(Team.Immune, 2, 3387, 9488, [bludgeoning], [], 20, 27, slashing),
@@ -88,10 +84,6 @@ new Group(Team.Infection, 10, 1641, 7807, [fire], [slashing, bludgeoning], 3, 7,
 ]
 
 while ((groups.team as Set).size() > 1) {
-//    println('-------------------')
-//    groups.sort { [it.team, it.id] }.each {
-//        println("${it.team} ${it.id} has ${it.units}")
-//    }
     groups = groups.sort()
     groups.each { it.reset() }
     // selection

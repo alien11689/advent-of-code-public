@@ -131,12 +131,6 @@ for (int i = 0; i < 1; ++i) {
         int cur = registers[6]
 //        println("$cur: ${instructions[cur]}")
         registers[ip] = registers[6]
-//        print("Before $registers || ")
-//        if (cur == 20 && registers[2] <= registers[3]) {
-//            while ((registers[5] + 1) * 256 <= registers[3]) {
-//                ++registers[5]
-//            }
-//        }
         instrToCount[cur]++
         instructions[cur].apply(registers)
 //        println(registers)
@@ -157,41 +151,3 @@ for (int i = 0; i < 1; ++i) {
         }
     }
 }
-//
-//println("Checking nums:")
-//List<Integer> nums = r4s.sort()
-//threshold = 100
-//println(nums)
-//for (int i : nums) {
-//    println(i)
-//    int[] registers = [i, 0, 0, 0, 0, 0, 0]
-//    def count
-//    Map<Integer, Integer> instrToCount = [:].withDefault { 0 }
-//    while (true) {
-//        int cur = registers[6]
-//        registers[ip] = registers[6]
-//        if (cur == 28) {
-////            r4s << registers[4]
-////            println(instructions[cur])
-////            print("Before $registers || ")
-//        }
-//        instrToCount[cur]++
-//        instructions[cur].apply(registers)
-//        if (cur == 28) {
-////            println(registers)
-//        }
-//        if (registers[ip] + 1 >= instructions.size()) {
-//            break
-//        }
-//        registers[6] = registers[ip] + 1
-//        count = instrToCount[28] > threshold
-//        if (count) {
-//            println("Break $i: is in loop")
-//            break
-//        }
-//    }
-//    if (!count) {
-//        break
-//    }
-//}
-//println(r4s.min())

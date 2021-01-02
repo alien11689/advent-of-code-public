@@ -144,25 +144,6 @@ class Computer {
     State state
 }
 
-//Long uberProgram(Map v, int x, int y) {
-//    Queue output = new LinkedList<Long>()
-//    Queue inputQ = new LinkedList<Long>()
-//    State state = new State(
-//            v: v.collectEntries { it }.withDefault { 0L },
-//            pos: 0,
-//            input: inputQ,
-//    )
-//    inputQ.offer(x)
-//    inputQ.offer(y)
-//    program(state, output)
-//    if (output.empty) {
-//        return null
-//    } else {
-//        return output.poll()
-//    }
-//}
-//==============================================
-
 void runProgram(Map<Long, Long> v) {
     Map<Integer, Computer> computers = [:]
 

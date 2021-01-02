@@ -1,8 +1,6 @@
 import groovy.transform.Canonical
 
 def text = new File('input.txt').text
-//text = new File('other.txt').text
-//text = new File('other2.txt').text
 
 def lines = text.split('\n')
 
@@ -94,15 +92,6 @@ class Driver {
             case Direction.DOWN: ++y; break
             case Direction.LEFT: --x; break
         }
-
-//        if (cells[y][x] == null) {
-//            println("Left is ${cells[y][x - 1]}")
-//            println("Right is ${cells[y][x + 1]}")
-//            println("Down is ${cells[y + 1][x]}")
-//            println("Driver is on $x, $y with direction $direction")
-//            throw new RuntimeException()
-//        }
-
         if (cells[y][x].type == Type.SLASH) {
             switch (direction) {
                 case Direction.UP:
@@ -219,14 +208,8 @@ def printBoard(Cell[][] cells, List<Driver> drivers) {
 }
 
 int tick = 0
-//printBoard(cells, drivers)
-//return
 
 while (true) {
-//    println(tick)
-//    if(tick == 201 || tick == 202 | tick == 203) {
-//    printBoard(cells, drivers)
-//    }
     ++tick
     def crashes = []
     drivers.sort { [it.y, it.x] }.each {

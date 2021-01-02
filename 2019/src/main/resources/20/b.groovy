@@ -1,7 +1,6 @@
 import groovy.transform.Immutable
 
 List<String> lines = new File('input.txt').text.split('\n')
-//lines = new File('input2.txt').text.split('\n')
 
 @Immutable
 class Point {
@@ -53,9 +52,6 @@ Map<Point, Set<String>> betterWarps = warps.collectEntries {
 
 Set<Point> warpPoints = betterWarps.keySet()
 
-//println(betterWarps.size())
-
-//println(betterWarps)
 
 Point start = betterWarps.find { it.value == ['A'] as Set }.key
 //println(start)
@@ -95,12 +91,6 @@ class Visited {
 
 Set<Point> outerWarps = betterWarps.keySet().findAll { it.x in [2, sizeX - 3] || it.y in [2, sizeY - 3] }
 Set<Point> innerWarps = betterWarps.keySet() - outerWarps
-
-//println("Outer:")
-//outerWarps.sort { [it.x, it.y] }.each { println(it) }
-//
-//println("Inner:")
-//innerWarps.sort { [it.x, it.y] }.each { println(it) }
 
 Set<Point> visited = [] as Set
 

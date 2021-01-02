@@ -82,21 +82,5 @@ for (int i = 1; i < lines.size(); ++i) {
     instructions << new Operation(name: line[0], a: line[1] as int, b: line[2] as int, c: line[3] as int)
 }
 
-/**
-while (true) {
-    int cur = registers[6]
-    registers[ip] = registers[6]
-    println(instructions[cur])
-    print("Before $registers || ")
-    instructions[cur].apply(registers)
-    println(registers)
-    if (registers[ip] + 1 >= instructions.size()) {
-        break
-    }
-    registers[6] = registers[ip] + 1
-}
-println(registers[0])
-*/
-
 println("After optimizations and observations:")
 println((1..914).collect {914 % it == 0 ? (914 / it):0}.sum())

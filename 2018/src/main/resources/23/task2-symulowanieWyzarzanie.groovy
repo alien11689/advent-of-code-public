@@ -12,8 +12,6 @@ static List<String> readInputAsLines(String file) {
 }
 
 List<String> input = readInputAsLines('input.txt')
-//input = readInputAsLines('other.txt')
-//input = readInputAsLines('other2.txt')
 
 @Canonical
 class Drone {
@@ -69,14 +67,6 @@ class Point {
                 new Point(x, y - step, z),
                 new Point(x, y, z + step),
                 new Point(x, y, z - step),
-//new Point(x + changeDist(random, step), y + changeDist(random, step), z + changeDist(random, step)),
-//new Point(x + changeDist(random, step), y + changeDist(random, step), z + changeDist(random, step)),
-//new Point(x + changeDist(random, step), y + changeDist(random, step), z + changeDist(random, step)),
-//new Point(x + changeDist(random, step), y + changeDist(random, step), z + changeDist(random, step)),
-//                new Point(x + changeDist(random, step), y - changeDist(random, step), z + changeDist(random, step)),
-//                new Point(x - changeDist(random, step), y + changeDist(random, step), z - changeDist(random, step)),
-//                new Point(x + changeDist(random, step), y + changeDist(random, step), z - changeDist(random, step)),
-//                new Point(x - changeDist(random, step), y - changeDist(random, step), z + changeDist(random, step)),
         ]
     }
 
@@ -122,12 +112,6 @@ private List<Point> generatePoints(int population, Random random, int minX, int 
         )
     }
 }
-
-//points[0] = new Point(24566437, 51779049, 52088876, 888)
-//points[1] = new Point(24566432, 51779049, 52088876, 888)
-//points[2] = new Point(24647069, 51008921, 52010654, 888)
-//points[3] = new Point(24647057, 51008921, 52010655, 888)
-//points.addAll(drones.collect { it.toPoint() })
 
 int iter = 0
 Point best = new Point(0, 0, 0)

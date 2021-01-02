@@ -105,11 +105,3 @@ while (i < 200) {
         break
     }
 }
-
-//stats2p.keySet().sort().each {
-//    ++i
-//    if (i == 200) {
-//        println(stats2p[it])
-//    }
-//    println(++i + ": " + it + " -> " + stats2p[it])
-//}

@@ -1,26 +1,5 @@
 import groovy.transform.ToString
 
-//def text = new File('other.txt').text.trim()
-//def text = new File('input.txt').text.trim()
-//
-//def lines = text.split('\n')
-
-String exampleInitialState = '#..#.#..##......###...###'
-String exampleRawRules = "...## => #\n" +
-        "..#.. => #\n" +
-        ".#... => #\n" +
-        ".#.#. => #\n" +
-        ".#.## => #\n" +
-        ".##.. => #\n" +
-        ".#### => #\n" +
-        "#.#.# => #\n" +
-        "#.### => #\n" +
-        "##.#. => #\n" +
-        "##.## => #\n" +
-        "###.. => #\n" +
-        "###.# => #\n" +
-        "####. => #"
-
 String myInput = '##.#..#.#..#.####.#########.#...#.#.#......##.#.#...##.....#...#...#.##.#...##...#.####.##..#.#..#.'.trim()
 
 def readRules(String rawRules) {
@@ -66,11 +45,8 @@ String myRawRules = "..#.. => .\n" +
         "#.#.# => .\n" +
         "#..## => #"
 
-String initialState = exampleInitialState
-String rawRules = exampleRawRules
-
-initialState = myInput
-rawRules = myRawRules
+String initialState = myInput
+String rawRules = myRawRules
 
 List<Rule> rules = readRules(rawRules)
 

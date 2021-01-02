@@ -3,9 +3,6 @@ import groovy.transform.Immutable
 
 List<List<Character>> input = new File('input.txt').text.trim().split('\n')
 
-//println(new LocalState(new Point(41,41), 0) == new LocalState(new Point(41,41), 7))
-//return
-
 @Immutable
 @EqualsAndHashCode
 class Point {
@@ -52,16 +49,6 @@ List<Point> curPoses = curPos.diag()
 curPos.neighbours().each {
     map[it] = false
 }
-//
-//for (int j = 0; j < input.size(); j++) {
-//    for (int i = 0; i < input[j].size(); i++) {
-//        char field = input[j][i]
-//        Point point = new Point(i, j)
-//        print("${map[point] ? '.' : '#'}")
-//    }
-//    println()
-//}
-
 
 @Immutable
 class State implements Comparable<State> {

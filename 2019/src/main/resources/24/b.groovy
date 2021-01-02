@@ -98,30 +98,12 @@ Map<Point, Boolean> tick(Map<Point, Boolean> cur) {
     nextBoard
 }
 
-//void printBoard(Map m) {
-//    for (int i = 0; i < 5; ++i) {
-//        for (int j = 0; j < 5; ++j) {
-//            Point point = new Point(j, i)
-//            if (point == Point.CENTER) {
-//                print('?')
-//            } else
-//                print(m[point] ? '#' : '.')
-//        }
-//        println()
-//    }
-//    println('========================')
-//}
-
 String input = 'input.txt'
 int minutes = 200
 List<String> lines = readInput(input)
 
 Map<Point, Boolean> board = createBoard(lines, 0)
 
-//println(new Point(3, 2, 0).neighbours())
-
-//Map<Point, Boolean> boards = createBoard(lines)
-//printBoard(board)
 int iter = 0
 while (iter < minutes) {
     board = tick(board)

@@ -55,8 +55,7 @@ while (tick < 10) {
         }
     }
     board = newBoard
-//    println(tick)
-//    printBoard(board)
+
 }
 
 List<String> flat = board.flatten()

@@ -125,14 +125,6 @@ class State {
     boolean ended = false
     int rel = 0
 }
-//
-//Queue output = new LinkedList<Long>()
-//Queue inputQ = new LinkedList<Long>()
-//State state = new State(
-//        v: v,
-//        pos: 0,
-//        input: inputQ,
-//)
 
 Long uberProgram(Map v, int x, int y) {
     Queue output = new LinkedList<Long>()

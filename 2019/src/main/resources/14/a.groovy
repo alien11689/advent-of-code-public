@@ -29,10 +29,6 @@ Set<Reaction> reactions = lines.collect { line ->
     new Reaction(fromRaw.collect { Chemical.create(it) }, Chemical.create(right))
 }
 
-//reactions.each {
-//    println(it)
-//}
-
 Set<Reaction> usedReactions = []
 
 Map<String, Long> needs = [FUEL: 1L].withDefault { 0L }

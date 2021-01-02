@@ -5,20 +5,6 @@ def xxs = [
     [17,4,-4]
 ]
 
-/*xxs = [
-    [-1,0,2],
-    [2,-10,-7],
-    [4,-8,8],
-    [3,5,-1]
-]
-
-xxs = [
-    [-8,-10,0],
-    [5,5,10],
-    [2,-7,3],
-    [9,-8,-3],
-]
-*/
 def vvs = [
     [0,0,0],
     [0,0,0],
@@ -51,6 +37,5 @@ int sum = 0
 for (int i = 0; i< xxs.size(); ++i){
     sum += xxs[i].collect {it.abs()}.sum() * vvs[i].collect {it.abs()}.sum()
 }
-// 1059922968 is too high
-// 5429 is too low
+
 println sum

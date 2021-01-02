@@ -133,25 +133,6 @@ State state = new State(
         input: inputQ,
 )
 
-//Long uberProgram(Map v, int x, int y) {
-//    Queue output = new LinkedList<Long>()
-//    Queue inputQ = new LinkedList<Long>()
-//    State state = new State(
-//            v: v.collectEntries { it }.withDefault { 0L },
-//            pos: 0,
-//            input: inputQ,
-//    )
-//    inputQ.offer(x)
-//    inputQ.offer(y)
-//    program(state, output)
-//    if (output.empty) {
-//        return null
-//    } else {
-//        return output.poll()
-//    }
-//}
-//==============================================
-
 def instruction(Queue input, String text) {
     text.each {
         input.offer((it as char) as int)

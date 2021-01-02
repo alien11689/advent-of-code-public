@@ -1,7 +1,6 @@
 import groovy.transform.Immutable
 
 List<String> lines = new File('input.txt').text.split('\n')
-//lines = new File('input1.txt').text.split('\n')
 
 @Immutable
 class Point {
@@ -53,10 +52,6 @@ Map<Point, Set<String>> betterWarps = warps.collectEntries {
 
 Set<Point> warpPoints = betterWarps.keySet()
 
-//println(warps.size())
-//println(betterWarps.size())
-
-//println(betterWarps)
 
 Point start = betterWarps.find { it.value == ['A'] as Set }.key
 //println(start)
@@ -105,6 +100,3 @@ while (!pq.empty) {
     }
 
 }
-
-// 666 is wrong
-// 644 is wrong

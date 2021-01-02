@@ -144,6 +144,3 @@ while (!pq.empty) {
     }
 }
 
-// 3426 is too high
-// 3224 is too high
-// 3068 is too high

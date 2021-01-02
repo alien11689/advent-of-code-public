@@ -63,8 +63,6 @@ while (tick < 1000000000) {
         }
     }
     board = newBoard
-//    println(tick)
-//    printBoard(board)
     if (!increased) {
         String b = boardAsString(board)
         if (memory.keySet().contains(b)) {
@@ -83,6 +81,4 @@ while (tick < 1000000000) {
 List<String> flat = board.flatten()
 int woods = flat.count { it == '|' }
 int lumb = flat.count { it == '#' }
-//println("Woods: $woods")
-//println("Lumbs: $lumb")
 println("Multi: ${lumb * woods}")

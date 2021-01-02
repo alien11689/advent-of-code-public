@@ -1,13 +1,5 @@
 import groovy.transform.Canonical
 
-//String text = new File('input.txt').text.trim()
-//text = new File('other1.txt').text.trim()
-//text = new File('other2.txt').text.trim()
-//text = new File('other3.txt').text.trim()
-//text = new File('other4.txt').text.trim()
-//text = new File('other5.txt').text.trim()
-//text = new File('other6.txt').text.trim()
-
 enum PlayerType {
     E,
     G
@@ -239,13 +231,9 @@ int game(List<Player> players, CellType[][] board) {
             }
             players.removeAll { it.dead }
             ++round
-//            println(round)
-//            printBoard(players, board)
-//        Thread.sleep(1000)
         }
     } catch (End end) {
-//        println(round)
-//        printBoard(players, board)
+
         return end.round
     }
 }
@@ -277,8 +265,6 @@ def whole(String file) {
     List<Player> players = buildPlayers(lines)
     int round = game(players, board)
     int sum = players.sum { it.hitPoints }
-//    println("Round: $round, Sum: $sum")
-//    println(round * sum)
     return (round * sum)
 }
 

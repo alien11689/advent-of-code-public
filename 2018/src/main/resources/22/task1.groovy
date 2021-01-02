@@ -78,12 +78,6 @@ boolean isNarrow(Pos pos) {
     erosionLevel(pos) % 3 == 2
 }
 
-//assert isRock(new Pos(0, 0)) == true
-//assert isRock(new Pos(10, 10)) == true
-//assert isWet(new Pos(1, 0)) == true
-//assert isRock(new Pos(0, 1)) == true
-//assert isNarrow(new Pos(1, 1)) == true
-
 int riskLevel = 0
 for (int y = 0; y <= target.y; ++y) {
     for (int x = 0; x <= target.x; ++x) {
