@@ -198,11 +198,14 @@ void check(List<Boolean> input) {
 program(state, output)
 
 int last
+def res = []
 while (!output.empty) {
     int cur = output.poll()
     last = cur
     switch (cur) {
-        case 10: println(); break
-        default: print(cur as char)
+        case 10: println(); res = []; break
+        default: print(cur as char); res << cur
     }
 }
+println()
+println(res[0])
