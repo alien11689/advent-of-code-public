@@ -29,7 +29,8 @@ object IntCodeComputer {
         } else if (mode == 1) {
             return v[pos]!!
         } else {
-            return v[rel + v[pos]!!]!!
+            val l = v[pos]!!
+            return v.getOrDefault(rel + l, 0L)
         }
     }
 
