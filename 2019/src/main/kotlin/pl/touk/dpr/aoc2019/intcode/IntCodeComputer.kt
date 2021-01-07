@@ -5,6 +5,16 @@ import java.util.Queue
 
 object IntCodeComputer {
 
+    fun run(programCode: String, input: Collection<Long>): Queue<Long> {
+        val v = parseInput(programCode)
+        val output = LinkedList<Long>()
+        val inputQ = LinkedList<Long>()
+        val state = IntCodeComputerState(v, input = inputQ)
+        inputQ.addAll(input)
+        program(state, output)
+        return output
+    }
+
     fun parseInput(input: String): MutableMap<Long, Long> = parseInput(input.split(","))
 
     fun parseInput(input: List<String>): MutableMap<Long, Long> {
@@ -69,11 +79,23 @@ object IntCodeComputer {
                     return
                 }
                 1 -> {
-                    assignTo(v, pos + 3, p3Mode(op), param(v, pos + 1, p1Mode(op), rel) + param(v, pos + 2, p2Mode(op), rel), rel)
+                    assignTo(
+                        v,
+                        pos + 3,
+                        p3Mode(op),
+                        param(v, pos + 1, p1Mode(op), rel) + param(v, pos + 2, p2Mode(op), rel),
+                        rel
+                    )
                     pos += 4
                 }
                 2 -> {
-                    assignTo(v, pos + 3, p3Mode(op), param(v, pos + 1, p1Mode(op), rel) * param(v, pos + 2, p2Mode(op), rel), rel)
+                    assignTo(
+                        v,
+                        pos + 3,
+                        p3Mode(op),
+                        param(v, pos + 1, p1Mode(op), rel) * param(v, pos + 2, p2Mode(op), rel),
+                        rel
+                    )
                     pos += 4
                 }
                 5 -> {
@@ -141,9 +163,9 @@ object IntCodeComputer {
 
 
 data class IntCodeComputerState(
-        var v: MutableMap<Long, Long>,
-        var pos: Long = 0,
-        val input: LinkedList<Long> = LinkedList(),
-        var ended: Boolean = false,
-        var rel: Long = 0
+    var v: MutableMap<Long, Long>,
+    var pos: Long = 0,
+    val input: LinkedList<Long> = LinkedList(),
+    var ended: Boolean = false,
+    var rel: Long = 0
 ) 
