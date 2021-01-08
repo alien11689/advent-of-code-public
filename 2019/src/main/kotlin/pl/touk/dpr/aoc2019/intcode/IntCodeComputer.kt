@@ -66,7 +66,7 @@ object IntCodeComputer {
         }
     }
 
-    fun program(s: IntCodeComputerState, output: Queue<Long> = LinkedList()) {
+    fun program(s: IntCodeComputerState, output: Queue<Long> = s.output) {
         val v = s.v
         var pos = s.pos
         var rel = s.rel
@@ -166,6 +166,7 @@ data class IntCodeComputerState(
     var v: MutableMap<Long, Long>,
     var pos: Long = 0,
     val input: LinkedList<Long> = LinkedList(),
+    val output: LinkedList<Long> = LinkedList(),
     var ended: Boolean = false,
     var rel: Long = 0
 ) 
