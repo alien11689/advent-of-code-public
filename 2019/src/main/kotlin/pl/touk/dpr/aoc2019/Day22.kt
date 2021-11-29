@@ -146,8 +146,8 @@ object Day22 {
     }
 
     private fun cut(point: Int, m: MutableMap<Long, Long>): Map<Long, Long> {
-        var minIndex = m.keys.min()!!
-        var maxIndex = m.keys.max()!!
+        var minIndex = m.keys.minOrNull()!!
+        var maxIndex = m.keys.maxOrNull()!!
         if (point > 0) {
             (0 until point).forEach {
                 val v = m[minIndex]!!

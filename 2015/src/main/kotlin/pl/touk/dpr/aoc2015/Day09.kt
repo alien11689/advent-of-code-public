@@ -13,7 +13,7 @@ object Day09 {
             val parts = it.split(Regex("[ =]+"))
             Pair(setOf(parts[0], parts[2]), parts[3].toInt())
         }.toMap()
-        return generateRoutes(paths.keys.flatten().toSet(), paths).map { it.second }.min()!!
+        return generateRoutes(paths.keys.flatten().toSet(), paths).map { it.second }.minOrNull()!!
     }
 
     private fun generateRoutes(toVisit: Set<String>, paths: Map<Set<String>, Int>): Set<Pair<List<String>, Int>> {
@@ -34,7 +34,7 @@ object Day09 {
             val parts = it.split(Regex("[ =]+"))
             Pair(setOf(parts[0], parts[2]), parts[3].toInt())
         }.toMap()
-        return generateRoutes(paths.keys.flatten().toSet(), paths).map { it.second }.max()!!
+        return generateRoutes(paths.keys.flatten().toSet(), paths).map { it.second }.maxOrNull()!!
     }
 
 }

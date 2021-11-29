@@ -12,7 +12,7 @@ object Day21 {
         return itemSets
                 .filter { fight(it) }
                 .map { it.map { it.cost }.sum() }
-                .min()!!
+                .minOrNull()!!
     }
 
     private fun generateItemSets(): MutableList<Set<Item>> {
@@ -66,7 +66,7 @@ object Day21 {
         return itemSets
                 .filter { !fight(it) }
                 .map { it.map { it.cost }.sum() }
-                .max()!!
+                .maxOrNull()!!
     }
 
     private fun weapons(): List<Item> = listOf(

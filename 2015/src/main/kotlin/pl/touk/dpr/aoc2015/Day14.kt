@@ -15,7 +15,7 @@ object Day14 {
             reeinders = reeinders.map { Pair(it.first, it.first.tick(it.second)) }
             ++t
         }
-        return reeinders.map { it.second.dist }.max()!!
+        return reeinders.map { it.second.dist }.maxOrNull()!!
     }
 
     private fun part2(input: List<String>): Any {
@@ -23,7 +23,7 @@ object Day14 {
         var t = 0
         while (t < 2503) {
             reeinders = reeinders.map { Pair(it.first, it.first.tick(it.second)) }
-            val leaderDist = reeinders.map { it.second.dist }.max()!!
+            val leaderDist = reeinders.map { it.second.dist }.maxOrNull()!!
             reeinders = reeinders.map {
                 if (it.second.dist == leaderDist) {
                     it.copy(second = it.second.copy(score = it.second.score + 1))
@@ -33,7 +33,7 @@ object Day14 {
             }
             ++t
         }
-        return reeinders.map { it.second.score }.max()!!
+        return reeinders.map { it.second.score }.maxOrNull()!!
     }
 
     private fun readReeinders(input: List<String>): List<Pair<Reeinder, ReeinderState>> {

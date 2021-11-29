@@ -45,7 +45,7 @@ object Day04 {
                 }
             }
         }
-        return max.key * minutes.maxBy { it.value }!!.key
+        return max.key * minutes.maxByOrNull { it.value }!!.key
     }
 
     private fun part2(input: List<String>): Any {

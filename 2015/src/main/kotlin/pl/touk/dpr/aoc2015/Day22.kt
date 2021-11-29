@@ -100,7 +100,7 @@ object Day22 {
 
         private fun bossTurn(): State {
             if (hp > 0 && boss.hitPoints > 0) {
-                return copy(hp = hp - listOf(1, boss.damage - armor).max()!!)
+                return copy(hp = hp - listOf(1, boss.damage - armor).maxOrNull()!!)
             }
             return this
         }

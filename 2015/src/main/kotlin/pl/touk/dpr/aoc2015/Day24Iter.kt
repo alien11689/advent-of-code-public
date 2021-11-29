@@ -40,7 +40,7 @@ object Day24Iter {
                         }
                     }
                 }
-            } else if (buckets.map { it.size }.min()!! > bestGroupSize || buckets.map { entanglement(it) }.min()!! > bestEntalgement) {
+            } else if (buckets.map { it.size }.minOrNull()!! > bestGroupSize || buckets.map { entanglement(it) }.minOrNull()!! > bestEntalgement) {
                 continue
             } else {
                 val n = nums.first()

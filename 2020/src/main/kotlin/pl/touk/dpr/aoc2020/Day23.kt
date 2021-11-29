@@ -14,7 +14,7 @@ object Day23 {
         val pair = buildNodes(cups)
         var current: Node? = pair.first
         val mem = pair.second
-        val max = mem.keys.max()!!
+        val max = mem.keys.maxOrNull()!!
         (1..100).forEach {
             current = move(current!!, max, mem)
         }
@@ -30,11 +30,11 @@ object Day23 {
 
     private fun part2(input: String): Any {
         val initCups = input.map { it.toString().toInt() }.toList()
-        val elements = initCups + ((initCups.max()!! + 1)..1000000)
+        val elements = initCups + ((initCups.maxOrNull()!! + 1)..1000000)
         val pair = buildNodes(elements)
         var current: Node? = pair.first
         val mem = pair.second
-        val max = mem.keys.max()!!
+        val max = mem.keys.maxOrNull()!!
         (1..10000000).forEach {
             current = move(current!!, max, mem)
         }

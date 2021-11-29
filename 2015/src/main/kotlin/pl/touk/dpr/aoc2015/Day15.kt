@@ -12,7 +12,7 @@ object Day15 {
         val ingredients = parseIngredients(input)
         return calculate(ingredients, 100)
                 .map { score(ingredients, it) }
-                .max()!!
+                .maxOrNull()!!
     }
 
     private fun parseIngredients(input: List<String>): List<Ingredient> {
@@ -49,7 +49,7 @@ object Day15 {
         return calculate(ingredients, 100)
                 .filter { calories(ingredients, it) == 500 }
                 .map { score(ingredients, it) }
-                .max()!!
+                .maxOrNull()!!
     }
 
     private fun calories(ingredients: List<Ingredient>, amount: List<Int>): Int {

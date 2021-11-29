@@ -25,7 +25,7 @@ object Day10 {
             (points.filter { it != center }.map { other ->
                 listOf(calcA(center, other), signum(center.x, other.x), signum(center.y, other.y))
             }.toSet()).size
-        }.max()!!
+        }.maxOrNull()!!
 
         return solution
     }

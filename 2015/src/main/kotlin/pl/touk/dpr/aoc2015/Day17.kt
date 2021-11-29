@@ -31,7 +31,7 @@ object Day17 {
     private fun part2(input: List<String>): Any {
         val containers = input.map { it.toInt() }
         val containerList = listContainers2(containers, 150, listOf())
-        val minContainerListSize = containerList.map { it.size }.min()!!
+        val minContainerListSize = containerList.map { it.size }.minOrNull()!!
         return containerList
                 .count { it.size == minContainerListSize }
     }

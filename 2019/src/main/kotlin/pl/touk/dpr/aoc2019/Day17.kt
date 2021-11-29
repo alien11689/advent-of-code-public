@@ -61,8 +61,8 @@ object Day17 {
         }
 
         var sum = 0L
-        for (j in m.keys.map { it.second }.min()!!..m.keys.map { it.second }.max()!!) {
-            for (i in m.keys.map { it.first }.min()!!..m.keys.map { it.first }.max()!!) {
+        for (j in m.keys.map { it.second }.minOrNull()!!..m.keys.map { it.second }.maxOrNull()!!) {
+            for (i in m.keys.map { it.first }.minOrNull()!!..m.keys.map { it.first }.maxOrNull()!!) {
                 if (m[i to j] == 35L && m[i + 1 to j] == 35L && m[i - 1 to j] == 35L && m[i to j + 1] == 35L && m[i to j - 1] == 35L) {
                     sum += i * j
                 }
