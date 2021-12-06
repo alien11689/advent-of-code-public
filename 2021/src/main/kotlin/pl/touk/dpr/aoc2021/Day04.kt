@@ -61,8 +61,6 @@ object Day04 {
             for (b in extendedBoards) {
                 b.mark(n)
                 if (b.hasLine()) {
-                    println(b)
-//                    println(n)
                     return n * b.result()
                 }
             }
