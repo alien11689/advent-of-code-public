@@ -17,7 +17,7 @@ object Day07 {
             val fuel = positions.map { (it - i).absoluteValue.toLong() }.sum()
             if (fuel < minFuel) {
                 minFuel = fuel
-                println("On $i there is $fuel")
+//                println("On $i there is $fuel")
             }
         }
         return minFuel
@@ -40,7 +40,7 @@ object Day07 {
             }
             if (minFuel == null || fuel < minFuel) {
                 minFuel = fuel
-                println("On $i there is $fuel")
+//                println("On $i there is $fuel")
             }
         }
         return minFuel!!
