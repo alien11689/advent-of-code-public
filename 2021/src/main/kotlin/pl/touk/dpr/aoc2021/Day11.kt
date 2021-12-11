@@ -12,19 +12,10 @@ object Day11 {
 
     private fun part1(lines: List<String>): Any {
         val numbers = lines.map { it.map { it.toString().toInt() }.toMutableList() }.toMutableList()
-//        printBoard(numbers)
         var flashesCount = 0L
         for (i in 1..100) {
             flashesCount += tick1(numbers).size
         }
-//        val flashed = tick1(numbers)
-//        flashesCount += flashed.size
-//        printBoard(numbers)
-//        println(flashesCount)
-//
-//        flashesCount += tick1(numbers).size
-//        printBoard(numbers)
-//        println(flashesCount)
         return flashesCount
     }
 
@@ -57,13 +48,15 @@ object Day11 {
         return flashed
     }
 
-    private fun printBoard(numbers: List<List<Any>>) {
-        println(numbers.map { it.joinToString("") }.joinToString("\n"))
-        println("=======================")
-    }
-
     private fun part2(lines: List<String>): Any {
-        return -1
+        val numbers = lines.map { it.map { it.toString().toInt() }.toMutableList() }.toMutableList()
+        var i = 0
+        while (true) {
+            i += 1
+            if (tick1(numbers).size == 100) {
+                return i
+            }
+        }
     }
 
     data class Point(val x: Int, val y: Int)
