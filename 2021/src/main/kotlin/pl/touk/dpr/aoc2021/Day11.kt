@@ -1,54 +1,55 @@
 package pl.touk.dpr.aoc2021
 
+import java.util.Stack
+
 object Day11 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val lines = Util.getNotEmptyLinesFromFile("/11/input3.txt")
+        val lines = Util.getNotEmptyLinesFromFile("/11/input.txt")
         println(part1(lines))
         println(part2(lines))
     }
 
     private fun part1(lines: List<String>): Any {
         val numbers = lines.map { it.map { it.toString().toInt() }.toMutableList() }.toMutableList()
-        printBoard(numbers)
+//        printBoard(numbers)
         var flashesCount = 0L
-        val flashed = tick1(numbers)
-        flashesCount += flashed.size
-        printBoard(numbers)
-        println(flashesCount)
-
-        flashesCount += tick1(numbers).size
-        printBoard(numbers)
-        println(flashesCount)
-        return -1
+        for (i in 1..100) {
+            flashesCount += tick1(numbers).size
+        }
+//        val flashed = tick1(numbers)
+//        flashesCount += flashed.size
+//        printBoard(numbers)
+//        println(flashesCount)
+//
+//        flashesCount += tick1(numbers).size
+//        printBoard(numbers)
+//        println(flashesCount)
+        return flashesCount
     }
 
     private fun tick1(numbers: MutableList<MutableList<Int>>): MutableSet<Point> {
-        val flashed = mutableSetOf<Point>()
+        val stack = Stack<Point>()
         for (y in numbers.indices) {
             for (x in numbers[y].indices) {
                 numbers[y][x] += 1
                 if (numbers[y][x] > 9) {
-                    flashed += Point(x, y)
+                    val cur = Point(x, y)
+                    stack.add(cur)
                 }
             }
         }
-        if (flashed.isNotEmpty()) {
-            var prevFlashed = setOf<Point>()
-            while (flashed.size > prevFlashed.size) {
-                println("while...")
-                println("flash: ${flashed - prevFlashed}")
-                printBoard(numbers.map { it.map { if (it > 9) 'X' else it.toString() } })
-                (flashed - prevFlashed).flatMap { neigh(it) }
-                    .forEach { numbers[it.y][it.x] += 1 }
-                prevFlashed = flashed.toSet()
-                for (y in numbers.indices) {
-                    for (x in numbers[y].indices) {
-                        val cur = Point(x, y)
-                        if (numbers[y][x] > 9 && cur !in flashed) {
-                            flashed += cur
-                        }
-                    }
+        val flashed = mutableSetOf<Point>()
+        while (!stack.isEmpty()) {
+            val cur = stack.pop()
+            if (cur in flashed) {
+                continue
+            }
+            if (numbers[cur.y][cur.x] > 9) {
+                flashed.add(cur)
+                neigh(cur).forEach {
+                    numbers[it.y][it.x] += 1
+                    stack.add(it)
                 }
             }
         }
@@ -67,16 +68,16 @@ object Day11 {
 
     data class Point(val x: Int, val y: Int)
 
-    private fun neigh(p: Point): Set<Day09.Point> {
+    private fun neigh(p: Point): Set<Point> {
         return setOf(
-            Day09.Point(p.x, p.y + 1),
-            Day09.Point(p.x, p.y - 1),
-            Day09.Point(p.x + 1, p.y - 1),
-            Day09.Point(p.x + 1, p.y),
-            Day09.Point(p.x + 1, p.y + 1),
-            Day09.Point(p.x - 1, p.y + 1),
-            Day09.Point(p.x - 1, p.y - 1),
-            Day09.Point(p.x - 1, p.y),
+            Point(p.x, p.y + 1),
+            Point(p.x, p.y - 1),
+            Point(p.x + 1, p.y - 1),
+            Point(p.x + 1, p.y),
+            Point(p.x + 1, p.y + 1),
+            Point(p.x - 1, p.y + 1),
+            Point(p.x - 1, p.y - 1),
+            Point(p.x - 1, p.y),
         )
             .filter { it.x >= 0 && it.x < 10 && it.y >= 0 && it.y < 10 }
             .toSet()
