@@ -49,8 +49,7 @@ object Day15 {
 
     data class Path(val pos: Pos, val risk: Int = 0, val dest: Pos) : Comparable<Path> {
         override fun compareTo(other: Path): Int {
-            val riskCompare = risk.compareTo(other.risk)
-            return if (riskCompare != 0) riskCompare else pos.manhattan(dest).compareTo(other.pos.manhattan(dest))
+            return (risk + pos.manhattan(dest)).compareTo((other.risk + other.pos.manhattan(dest)))
         }
     }
 
@@ -81,7 +80,7 @@ object Day15 {
             visited.add(cur.pos)
             if (cur.risk > maxRisk) {
                 maxRisk = cur.risk
-                println("Current risk is ${cur.risk}")
+//                println("Current risk is ${cur.risk}")
             }
             neigh(cur.pos.x, cur.pos.y)
                 .filter { it.x in (0..maxX) && it.y in (0..maxY) }
@@ -104,4 +103,5 @@ object Day15 {
         }
     }
 }
+
 
