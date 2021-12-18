@@ -23,7 +23,7 @@ object Day18 {
         return magnitude(result.toMutableList())
     }
 
-    private fun add(first: MutableList<Snumber>, second: MutableList<Snumber>): MutableList<Snumber> {
+    private fun add(first: List<Snumber>, second: List<Snumber>): MutableList<Snumber> {
         val mm = mutableListOf<Snumber>()
         mm.add(Snumber.LeftParent)
         mm.addAll(first)
@@ -78,6 +78,11 @@ object Day18 {
         return snumbers
     }
 
+    fun <T> List<T>.mutableCopyOf(): MutableList<T> {
+        val original = this
+        return mutableListOf<T>().apply { addAll(original) }
+    }
+
     private fun part2(lines: List<String>): Any {
         val nums = lines.map { line -> readSnumber(line).toList() }
 
@@ -86,12 +91,9 @@ object Day18 {
         for (i in nums.indices) {
             for (j in nums.indices) {
                 if (i != j) {
-                    println("Checking $i $j ")
-                    val numbers = lines.map { line -> readSnumber(line).toList() }
-                    val mm = add(numbers[i].toMutableList(), numbers[j].toMutableList())
-                    println(mm)
+//                    println("Checking $i $j ")
+                    val mm = add(nums[i].map { it.cloned() }, nums[j].map { it.cloned() })
                     fullReduce(mm)
-                    println(mm)
                     val m = magnitude(mm)
                     if (m > maxMagnitude) {
                         maxMagnitude = m
@@ -104,19 +106,27 @@ object Day18 {
     }
 
     sealed interface Snumber {
+        fun cloned(): Snumber
+
         object LeftParent : Snumber {
+            override fun cloned() = this
+
             override fun toString(): String {
                 return "["
             }
         }
 
         object RightParent : Snumber {
+            override fun cloned() = this
+
             override fun toString(): String {
                 return "]"
             }
         }
 
         data class Num(var n: Int) : Snumber {
+            override fun cloned() = Num(n)
+
             override fun toString(): String {
                 return n.toString()
             }
