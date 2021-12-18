@@ -100,32 +100,37 @@ object Day18 {
                     snumbers.removeAt(i)
                     snumbers.addAll(i, listOf(Snumber.LeftParent, Snumber.Num(cur.n / 2), Snumber.Num((cur.n + 1) / 2), Snumber.RightParent))
                     return
-                } else {
-                    if (parenCount > 4) {
-                        val rawNext = snumbers[i + 1]
-                        if (rawNext !is Snumber.Num) {
-                            ++i
-                            continue
-                        }
-                        val next = snumbers[i + 1] as Snumber.Num
-                        println("Explode on parentLevel $parenCount: [$cur,$next]")
-                        val firstNumLeft = snumbers.take(i - 1).filter { it is Snumber.Num }.lastOrNull() as Snumber.Num?
-                        if (firstNumLeft != null) {
-                            firstNumLeft.n += cur.n
-                        }
-                        val firstNumRight = snumbers.drop(i + 3).filter { it is Snumber.Num }.firstOrNull() as Snumber.Num?
-                        if (firstNumRight != null) {
-                            firstNumRight.n += next.n
-                        }
-                        snumbers.removeAt(i + 2)
-                        snumbers.removeAt(i + 1)
-                        snumbers.removeAt(i)
-                        snumbers.removeAt(i - 1)
-                        snumbers.add(i - 1, Snumber.Num(0))
-                        return
-                    } else {
+                } else if (parenCount > 4) {
+                    val rawNext = snumbers[i + 1]
+                    if (rawNext !is Snumber.Num) {
                         ++i
+                        continue
                     }
+                    val next = snumbers[i + 1] as Snumber.Num
+                    if (next.n >= 10) {
+                        i++
+                        println("Split next $next")
+                        snumbers.removeAt(i)
+                        snumbers.addAll(i, listOf(Snumber.LeftParent, Snumber.Num(next.n / 2), Snumber.Num((next.n + 1) / 2), Snumber.RightParent))
+                        return
+                    }
+                    println("Explode on parentLevel $parenCount: [$cur,$next]")
+                    val firstNumLeft = snumbers.take(i - 1).filter { it is Snumber.Num }.lastOrNull() as Snumber.Num?
+                    if (firstNumLeft != null) {
+                        firstNumLeft.n += cur.n
+                    }
+                    val firstNumRight = snumbers.drop(i + 3).filter { it is Snumber.Num }.firstOrNull() as Snumber.Num?
+                    if (firstNumRight != null) {
+                        firstNumRight.n += next.n
+                    }
+                    snumbers.removeAt(i + 2)
+                    snumbers.removeAt(i + 1)
+                    snumbers.removeAt(i)
+                    snumbers.removeAt(i - 1)
+                    snumbers.add(i - 1, Snumber.Num(0))
+                    return
+                } else {
+                    ++i
                 }
             }
         }
