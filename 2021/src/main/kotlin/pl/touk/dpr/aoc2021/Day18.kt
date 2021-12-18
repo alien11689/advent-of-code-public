@@ -12,22 +12,24 @@ object Day18 {
 
     private fun part1(lines: List<String>): Any {
         val result = lines.map { line -> readSnumber(line) }
-            .map { snumbers ->
-                fullReduce(snumbers)
-            }
             .reduce { first, second ->
-                val mm = mutableListOf<Snumber>()
-                mm.add(Snumber.LeftParent)
-                mm.addAll(first)
-                mm.addAll(second)
-                mm.add(Snumber.RightParent)
+                val mm = add(first.toMutableList(), second.toMutableList())
                 val res = fullReduce(mm)
-                printExpr(res)
+//                printExpr(res)
                 res
             }
 //            .forEach(::println)
 
-        return magnitude(result)
+        return magnitude(result.toMutableList())
+    }
+
+    private fun add(first: MutableList<Snumber>, second: MutableList<Snumber>): MutableList<Snumber> {
+        val mm = mutableListOf<Snumber>()
+        mm.add(Snumber.LeftParent)
+        mm.addAll(first)
+        mm.addAll(second)
+        mm.add(Snumber.RightParent)
+        return mm
     }
 
     private fun magnitude(result: MutableList<Snumber>): Long {
@@ -77,7 +79,28 @@ object Day18 {
     }
 
     private fun part2(lines: List<String>): Any {
-        return -1
+        val nums = lines.map { line -> readSnumber(line).toList() }
+
+        var maxMagnitude = 0L
+
+        for (i in nums.indices) {
+            for (j in nums.indices) {
+                if (i != j) {
+                    println("Checking $i $j ")
+                    val numbers = lines.map { line -> readSnumber(line).toList() }
+                    val mm = add(numbers[i].toMutableList(), numbers[j].toMutableList())
+                    println(mm)
+                    fullReduce(mm)
+                    println(mm)
+                    val m = magnitude(mm)
+                    if (m > maxMagnitude) {
+                        maxMagnitude = m
+                    }
+                }
+            }
+        }
+
+        return maxMagnitude
     }
 
     sealed interface Snumber {
@@ -100,7 +123,7 @@ object Day18 {
         }
     }
 
-    private fun readSnumber(line: String): MutableList<Snumber> {
+    private fun readSnumber(line: String): List<Snumber> {
         return line.mapNotNull { c ->
             when (c) {
                 '[' -> Snumber.LeftParent
@@ -108,7 +131,7 @@ object Day18 {
                 ',' -> null
                 else -> Snumber.Num(c.toString().toInt())
             }
-        }.toMutableList()
+        }.toList()
     }
 
     private fun reduceExplode(snumbers: MutableList<Snumber>) {
