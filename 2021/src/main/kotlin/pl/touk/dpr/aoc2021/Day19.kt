@@ -7,7 +7,7 @@ object Day19 {
     @JvmStatic
     fun main(args: Array<String>) {
         val lines = Util.getNotEmptyLinesFromFile("/19/input2.txt")
-        println(part1(lines))
+        part1(lines)
         println(part2(lines))
     }
 
@@ -16,13 +16,7 @@ object Day19 {
 
         val distancesMaps = scanners.map { it.mapDistance() }
 
-//        val hasDistUsedMoreThanOne = distancesMaps.filter { it.second.values.count { it.size > 1 } > 0 }.count()
-//        println("hasDistUsedMoreThanOne: $hasDistUsedMoreThanOne")
-
         val beaconMappings = mutableMapOf<Pair<Int, Beacon>, Set<Pair<Int, Beacon>>>()
-//        scanners[0].beacons.forEach {
-//            resultBeacons.add(mutableSetOf(Pair(0, it)))
-//        }
 
         for (i in distancesMaps.indices) {
             val m1 = distancesMaps[i]
@@ -57,8 +51,6 @@ object Day19 {
             }
         }
 
-//        println(beaconMappings)
-
         val checkedFullBeacons = mutableSetOf<Pair<Int, Beacon>>()
         val res = mutableSetOf<Set<Pair<Int, Beacon>>>()
 
@@ -81,8 +73,6 @@ object Day19 {
             }
         }
 
-//        res.forEach(::println)
-
         val commonBeacons = res.flatten().toSet()
 //        println(commonBeacons)
         val allBeacons = scanners.flatMapIndexed { idx, scanner -> scanner.beacons.map { Pair(idx, it) } }.toSet()
@@ -90,7 +80,39 @@ object Day19 {
         val part1Result = res.size + allBeacons.count { it !in commonBeacons }
         println("Part1: $part1Result")
 
-        
+        val i = 0
+        val j = 3
+        val zeroAndOne = res.filter { theSame -> theSame.count { it.first in listOf(i, j) } == 2 }
+            .map { it.filter { it.first in listOf(i, j) } }
+            .take(2)
+        val onlyFrom0 = zeroAndOne.map { it.filter { it.first == i } }.flatten()
+        val onlyFrom1 = zeroAndOne.map { it.filter { it.first == j } }.flatten()
+        println(zeroAndOne)
+        val zeroExpectedVector = onlyFrom0.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
+        println("$onlyFrom0 has dist $zeroExpectedVector")
+        println("$onlyFrom1 has dist ${onlyFrom1.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }}")
+        val rotations1 = onlyFrom1.get(0).second.allRotations()
+        val rotations2 = onlyFrom1.get(1).second.allRotations()
+        for (rotationId in rotations1.indices) {
+            val vector = listOf(rotations1[rotationId], rotations2[rotationId]).reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
+            if (vector == zeroExpectedVector) {
+                println("Rotation $rotationId matches")
+                println("${rotations1[rotationId]}")
+                println("Center is ${onlyFrom0.first().second - rotations1[rotationId]}")
+                break
+            }
+        }
+
+//        res.forEach(::println)
+
+//        [(0, Beacon(x=423, y=-701, z=434)),//(2, Beacon(x=682, y=-795, z=504)),
+//        [(0, Beacon(x=459, y=-707, z=401)),//(2, Beacon(x=646, y=-828, z=498)),
+
+//        val b = Beacon(1, 2, 3)
+//        println(b.allRotations())
+//        println(b.allRotations().size)
+//        println(b.allRotations().toSet().size)
+
         return part1Result
     }
 
@@ -114,7 +136,41 @@ object Day19 {
         return scanners
     }
 
-    data class Beacon(val x: Int, val y: Int, val z: Int)
+    data class Beacon(val x: Int, val y: Int, val z: Int) {
+        fun allRotations(): List<Beacon> {
+            val all = mutableListOf<Beacon>()
+            listOf(0, 90, 180, 270).forEach { rx ->
+                listOf(0, 90, 180, 270).forEach { ry ->
+                    listOf(0, 90, 180, 270).forEach { rz ->
+                        all.add(this.rotateX(rx).rotateY(ry).rotateZ(rz))
+                    }
+                }
+            }
+            return all
+        }
+
+        fun rotateZ(degree: Int): Beacon {
+            var sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0;
+            var cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0;
+            return Beacon(x * cosTheta - y * sinTheta, y * cosTheta + x * sinTheta, z)
+        }
+
+        fun rotateX(degree: Int): Beacon {
+            var sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0;
+            var cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0;
+            return Beacon(x, y * cosTheta - z * sinTheta, z * cosTheta + y * sinTheta)
+        }
+
+        fun rotateY(degree: Int): Beacon {
+            var sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0;
+            var cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0;
+            return Beacon(x * cosTheta + z * sinTheta, y, z * cosTheta - x * sinTheta)
+        }
+
+        operator fun minus(beacon: Beacon): Beacon {
+            return Beacon(x - beacon.x, y - beacon.y, z - beacon.z)
+        }
+    }
 
     data class Scanner(val id: String, val beacons: List<Beacon>) {
         fun mapDistance(): Map<Set<Int>, Set<Set<Beacon>>> {
