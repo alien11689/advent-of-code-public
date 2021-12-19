@@ -6,12 +6,13 @@ import kotlin.math.absoluteValue
 object Day19 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val lines = Util.getNotEmptyLinesFromFile("/19/input2.txt")
-        part1(lines)
-        println(part2(lines))
+        val lines = Util.getNotEmptyLinesFromFile("/19/input.txt")
+        part1And2(lines).forEach(::println)
     }
 
-    private fun part1(lines: List<String>): Any {
+    private fun part1And2(lines: List<String>): List<Int> {
+        val fullResult = mutableListOf<Int>()
+
         val scanners = readScanners(lines)
 
         val distancesMaps = scanners.map { it.mapDistance() }
@@ -78,29 +79,23 @@ object Day19 {
         val allBeacons = scanners.flatMapIndexed { idx, scanner -> scanner.beacons.map { Pair(idx, it) } }.toSet()
 
         val part1Result = res.size + allBeacons.count { it !in commonBeacons }
-        println("Part1: $part1Result")
 
-        findCenters(scanners, res)
+        fullResult.add(part1Result)
+        fullResult.add(findCenters(scanners, res))
 
-//        res.forEach(::println)
-
-//        [(0, Beacon(x=423, y=-701, z=434)),//(2, Beacon(x=682, y=-795, z=504)),
-//        [(0, Beacon(x=459, y=-707, z=401)),//(2, Beacon(x=646, y=-828, z=498)),
-
-//        val b = Beacon(1, 2, 3)
-//        println(b.allRotations())
-//        println(b.allRotations().size)
-//        println(b.allRotations().toSet().size)
-
-        return part1Result
+        return fullResult
     }
 
-    private fun findCenters(scanners: MutableList<Scanner>, res: MutableSet<Set<Pair<Int, Beacon>>>) {
-        val beaconsMatching = res.map { it }
+    private fun findCenters(scanners: MutableList<Scanner>, res: MutableSet<Set<Pair<Int, Beacon>>>): Int {
+        var beaconsMatching = res.map { it }
         val centers = mutableMapOf<Int, Beacon>()
+        val rotations = mutableMapOf<Int, Int>()
         centers[0] = Beacon(0, 0, 0)
+        rotations[0] = 0
 
-        while (centers.size < scanners.size) {
+        var oldSize = -1
+        while (centers.size != oldSize) {
+            oldSize = centers.size
             for (j in scanners.indices) {
                 if (j in centers.keys) {
                     continue
@@ -124,35 +119,29 @@ object Day19 {
                         val center = onlyFrom0.first().second - rotations1[rotationId]
 //                        println("Center is $center")
                         centers[j] = center
+                        rotations[j] = rotationId
                         break
                     }
                 }
+                beaconsMatching = beaconsMatching.filter { it.filter { it.first !in centers.keys }.count() > 0 }
+                beaconsMatching = beaconsMatching.map { it.map { if (it.first in rotations.keys) Pair(0, it.second.allRotations()[rotations[it.first]!!] + centers[it.first]!!) else it }.toSet() }
             }
-            break
         }
-        println(centers)
-//        val i = 0
-//        val j = 3
-//        val zeroAndOne = res.filter { theSame -> theSame.count { it.first in listOf(i, j) } == 2 }
-//            .map { it.filter { it.first in listOf(i, j) } }
-//            .take(2)
-//        val onlyFrom0 = zeroAndOne.map { it.filter { it.first == i } }.flatten()
-//        val onlyFrom1 = zeroAndOne.map { it.filter { it.first == j } }.flatten()
-//        println(zeroAndOne)
-//        val zeroExpectedVector = onlyFrom0.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
-//        println("$onlyFrom0 has dist $zeroExpectedVector")
-//        println("$onlyFrom1 has dist ${onlyFrom1.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }}")
-//        val rotations1 = onlyFrom1.get(0).second.allRotations()
-//        val rotations2 = onlyFrom1.get(1).second.allRotations()
-//        for (rotationId in rotations1.indices) {
-//            val vector = listOf(rotations1[rotationId], rotations2[rotationId]).reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
-//            if (vector == zeroExpectedVector) {
-//                println("Rotation $rotationId matches")
-//                println("${rotations1[rotationId]}")
-//                println("Center is ${onlyFrom0.first().second - rotations1[rotationId]}")
-//                break
-//            }
-//        }
+//        println(centers)
+//        println(beaconsMatching)
+        val sensorsCenters = centers.values.toList()
+        var maxManhattan = -1
+        for (i in sensorsCenters.indices) {
+            for (j in sensorsCenters.indices) {
+                if (i < j) {
+                    val manh = manhattan(sensorsCenters[i], sensorsCenters[j])
+                    if(manh > maxManhattan){
+                        maxManhattan = manh
+                    }
+                }
+            }
+        }
+        return maxManhattan
     }
 
     private fun readScanners(lines: List<String>): MutableList<Scanner> {
@@ -209,6 +198,10 @@ object Day19 {
         operator fun minus(beacon: Beacon): Beacon {
             return Beacon(x - beacon.x, y - beacon.y, z - beacon.z)
         }
+
+        operator fun plus(beacon: Beacon): Beacon {
+            return Beacon(x + beacon.x, y + beacon.y, z + beacon.z)
+        }
     }
 
     data class Scanner(val id: String, val beacons: List<Beacon>) {
@@ -236,10 +229,6 @@ object Day19 {
 
     fun distance(a: Beacon, b: Beacon): Set<Int> {
         return setOf((a.x - b.x).absoluteValue, (a.y - b.y).absoluteValue, (a.z - b.z).absoluteValue)
-    }
-
-    private fun part2(lines: List<String>): Any {
-        return -1
     }
 }
 
