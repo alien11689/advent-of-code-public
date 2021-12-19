@@ -80,28 +80,7 @@ object Day19 {
         val part1Result = res.size + allBeacons.count { it !in commonBeacons }
         println("Part1: $part1Result")
 
-        val i = 0
-        val j = 3
-        val zeroAndOne = res.filter { theSame -> theSame.count { it.first in listOf(i, j) } == 2 }
-            .map { it.filter { it.first in listOf(i, j) } }
-            .take(2)
-        val onlyFrom0 = zeroAndOne.map { it.filter { it.first == i } }.flatten()
-        val onlyFrom1 = zeroAndOne.map { it.filter { it.first == j } }.flatten()
-        println(zeroAndOne)
-        val zeroExpectedVector = onlyFrom0.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
-        println("$onlyFrom0 has dist $zeroExpectedVector")
-        println("$onlyFrom1 has dist ${onlyFrom1.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }}")
-        val rotations1 = onlyFrom1.get(0).second.allRotations()
-        val rotations2 = onlyFrom1.get(1).second.allRotations()
-        for (rotationId in rotations1.indices) {
-            val vector = listOf(rotations1[rotationId], rotations2[rotationId]).reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
-            if (vector == zeroExpectedVector) {
-                println("Rotation $rotationId matches")
-                println("${rotations1[rotationId]}")
-                println("Center is ${onlyFrom0.first().second - rotations1[rotationId]}")
-                break
-            }
-        }
+        findCenters(scanners, res)
 
 //        res.forEach(::println)
 
@@ -114,6 +93,66 @@ object Day19 {
 //        println(b.allRotations().toSet().size)
 
         return part1Result
+    }
+
+    private fun findCenters(scanners: MutableList<Scanner>, res: MutableSet<Set<Pair<Int, Beacon>>>) {
+        val beaconsMatching = res.map { it }
+        val centers = mutableMapOf<Int, Beacon>()
+        centers[0] = Beacon(0, 0, 0)
+
+        while (centers.size < scanners.size) {
+            for (j in scanners.indices) {
+                if (j in centers.keys) {
+                    continue
+                }
+                val zeroAndOne = beaconsMatching.filter { theSame -> theSame.count { it.first in listOf(0, j) } == 2 }
+                    .map { it.filter { it.first in listOf(0, j) } }
+                    .take(2)
+                val onlyFrom0 = zeroAndOne.map { it.filter { it.first == 0 } }.flatten()
+                val onlyFromJ = zeroAndOne.map { it.filter { it.first == j } }.flatten()
+                if (onlyFromJ.size != 2) {
+                    continue
+                }
+                val zeroExpectedVector = onlyFrom0.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
+                val rotations1 = onlyFromJ.get(0).second.allRotations()
+                val rotations2 = onlyFromJ.get(1).second.allRotations()
+                for (rotationId in rotations1.indices) {
+                    val vector = listOf(rotations1[rotationId], rotations2[rotationId]).reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
+                    if (vector == zeroExpectedVector) {
+//                        println("Rotation $rotationId matches")
+//                        println("${rotations1[rotationId]}")
+                        val center = onlyFrom0.first().second - rotations1[rotationId]
+//                        println("Center is $center")
+                        centers[j] = center
+                        break
+                    }
+                }
+            }
+            break
+        }
+        println(centers)
+//        val i = 0
+//        val j = 3
+//        val zeroAndOne = res.filter { theSame -> theSame.count { it.first in listOf(i, j) } == 2 }
+//            .map { it.filter { it.first in listOf(i, j) } }
+//            .take(2)
+//        val onlyFrom0 = zeroAndOne.map { it.filter { it.first == i } }.flatten()
+//        val onlyFrom1 = zeroAndOne.map { it.filter { it.first == j } }.flatten()
+//        println(zeroAndOne)
+//        val zeroExpectedVector = onlyFrom0.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
+//        println("$onlyFrom0 has dist $zeroExpectedVector")
+//        println("$onlyFrom1 has dist ${onlyFrom1.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }}")
+//        val rotations1 = onlyFrom1.get(0).second.allRotations()
+//        val rotations2 = onlyFrom1.get(1).second.allRotations()
+//        for (rotationId in rotations1.indices) {
+//            val vector = listOf(rotations1[rotationId], rotations2[rotationId]).reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
+//            if (vector == zeroExpectedVector) {
+//                println("Rotation $rotationId matches")
+//                println("${rotations1[rotationId]}")
+//                println("Center is ${onlyFrom0.first().second - rotations1[rotationId]}")
+//                break
+//            }
+//        }
     }
 
     private fun readScanners(lines: List<String>): MutableList<Scanner> {
