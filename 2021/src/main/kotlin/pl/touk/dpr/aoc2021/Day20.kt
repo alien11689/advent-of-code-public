@@ -11,13 +11,13 @@ object Day20 {
     private fun part1(lines: List<String>): Any {
         val imageAlgoritm = lines.first()
         val image = lines.drop(1).map { it.toList() }
-        println(image.map { it.joinToString("") }.joinToString("\n"))
-        println("next")
+//        println(image.map { it.joinToString("") }.joinToString("\n"))
+//        println("next")
         var newImage = enhance(imageAlgoritm, image)
-        println(newImage.map { it.joinToString("") }.joinToString("\n"))
-        println("next")
+//        println(newImage.map { it.joinToString("") }.joinToString("\n"))
+//        println("next")
         newImage = enhance(imageAlgoritm, newImage, '#')
-        println(newImage.map { it.joinToString("") }.joinToString("\n"))
+//        println(newImage.map { it.joinToString("") }.joinToString("\n"))
 
         // 5686 is wrong
         // 5631 is wrong
@@ -47,7 +47,16 @@ object Day20 {
     }
 
     private fun part2(lines: List<String>): Any {
-        return -1
+        val imageAlgoritm = lines.first()
+        val image = lines.drop(1).map { it.toList() }
+        var newImage = image
+        var defFill = '.'
+        for (i in 1..50) {
+            newImage = enhance(imageAlgoritm, newImage, defFill)
+            defFill = if (defFill == '#') '.' else '#'
+        }
+        return newImage.map { it.count { it == '#' } }.sum()
+
     }
 }
 
