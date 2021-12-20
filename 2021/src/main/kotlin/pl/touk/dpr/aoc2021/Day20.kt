@@ -4,24 +4,26 @@ object Day20 {
     @JvmStatic
     fun main(args: Array<String>) {
         val lines = Util.getNotEmptyLinesFromFile("/20/input.txt")
-        println(part1(lines))
-        println(part2(lines))
+        println(part1And2(lines, 2))
+        println(part1And2(lines, 50))
     }
 
-    private fun part1(lines: List<String>): Any {
+    private fun part1And2(lines: List<String>, iterations: Int): Any {
         val imageAlgoritm = lines.first()
         val image = lines.drop(1).map { it.toList() }
-//        println(image.map { it.joinToString("") }.joinToString("\n"))
-//        println("next")
-        var newImage = enhance(imageAlgoritm, image)
-//        println(newImage.map { it.joinToString("") }.joinToString("\n"))
-//        println("next")
-        newImage = enhance(imageAlgoritm, newImage, '#')
-//        println(newImage.map { it.joinToString("") }.joinToString("\n"))
-
-        // 5686 is wrong
-        // 5631 is wrong
+        var newImage = image
+        var defFill = '.'
+        for (i in 1..iterations) {
+            newImage = enhance(imageAlgoritm, newImage, defFill)
+            // if first char in algorithm is hash and last is dot than infinite background constantly changes
+            defFill = if (imageAlgoritm[0] == '#' && imageAlgoritm.last() == '.')
+                if (defFill == '#') '.' else '#'
+            else defFill
+//            println("Iter $i")
+//            println(image.map { it.joinToString("") }.joinToString("\n"))
+        }
         return newImage.map { it.count { it == '#' } }.sum()
+
     }
 
     private fun enhance(imageAlgoritm: String, image: List<List<Char>>, defFill: Char = '.'): List<List<Char>> {
@@ -44,19 +46,6 @@ object Day20 {
             res.add(line)
         }
         return res
-    }
-
-    private fun part2(lines: List<String>): Any {
-        val imageAlgoritm = lines.first()
-        val image = lines.drop(1).map { it.toList() }
-        var newImage = image
-        var defFill = '.'
-        for (i in 1..50) {
-            newImage = enhance(imageAlgoritm, newImage, defFill)
-            defFill = if (defFill == '#') '.' else '#'
-        }
-        return newImage.map { it.count { it == '#' } }.sum()
-
     }
 }
 
