@@ -16,7 +16,7 @@ object Day20 {
         var newImage = enhance(imageAlgoritm, image)
         println(newImage.map { it.joinToString("") }.joinToString("\n"))
         println("next")
-        newImage = enhance(imageAlgoritm, newImage)
+        newImage = enhance(imageAlgoritm, newImage, '#')
         println(newImage.map { it.joinToString("") }.joinToString("\n"))
 
         // 5686 is wrong
@@ -24,7 +24,7 @@ object Day20 {
         return newImage.map { it.count { it == '#' } }.sum()
     }
 
-    private fun enhance(imageAlgoritm: String, image: List<List<Char>>): List<List<Char>> {
+    private fun enhance(imageAlgoritm: String, image: List<List<Char>>, defFill: Char = '.'): List<List<Char>> {
         val res = mutableListOf<MutableList<Char>>()
         val indicesI = image.indices
         val indicesJ = image[0].indices
@@ -36,7 +36,7 @@ object Day20 {
                     Pair(i, j - 1), Pair(i, j), Pair(i, j + 1),
                     Pair(i + 1, j - 1), Pair(i + 1, j), Pair(i + 1, j + 1),
                 )
-                val num = m.map { p -> if (p.first in indicesI && p.second in indicesJ) image[p.first][p.second] else '.' }
+                val num = m.map { p -> if (p.first in indicesI && p.second in indicesJ) image[p.first][p.second] else defFill }
                     .map { if (it == '#') 1 else 0 }
                 val idx = Integer.parseInt(num.joinToString(""), 2)
                 line.add(imageAlgoritm[idx])
