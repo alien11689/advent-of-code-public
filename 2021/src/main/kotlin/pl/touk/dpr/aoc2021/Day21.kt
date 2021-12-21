@@ -64,28 +64,25 @@ object Day21 {
 
         val wins = mutableMapOf(1 to 0L, 2 to 0L)
         val finalScore = 21
-        val stack = Stack<Game>()
-        stack.push(Game(listOf(player1, player2)))
+        val stack = Stack<Pair<PlayerV2, PlayerV2>>()
+        stack.push(Pair(player1, player2))
+        val rollsToUniverses = mapOf(
+            3 to 1,
+            4 to 3,
+            5 to 6,
+            6 to 7,
+            7 to 6,
+            8 to 3,
+            9 to 1
+        )
         while (!stack.isEmpty()) {
-            val game = stack.pop()
-            val player1 = game.players.first()
-            val player2 = game.players.last()
-            val rollsToUniverses = mapOf(
-                3 to 1,
-                4 to 3,
-                5 to 6,
-                6 to 7,
-                7 to 6,
-                8 to 3,
-                9 to 1
-            )
-
+            val (p1, p2) = stack.pop()
             for (rolls in rollsToUniverses) {
-                val newP1 = player1.addRolls(rolls.key, rolls.value)
+                val newP1 = p1.addRolls(rolls.key, rolls.value)
                 if (newP1.score >= finalScore) {
-                    wins[newP1.id] = wins[newP1.id]!! + newP1.universes * player2.universes
+                    wins[newP1.id] = wins[newP1.id]!! + newP1.universes * p2.universes
                 } else {
-                    stack.push(Game(listOf(player2, newP1)))
+                    stack.push(p2 to newP1)
                 }
             }
         }
@@ -93,8 +90,6 @@ object Day21 {
         //157134537817 is wrong
         return wins.values.maxOrNull()!!
     }
-
-    data class Game(val players: List<PlayerV2>)
 
     data class PlayerV2(val id: Int, val pos: Int, val score: Int, val universes: Long = 1) {
         fun addRolls(rolls: Int, inUniverses: Int): PlayerV2 {
