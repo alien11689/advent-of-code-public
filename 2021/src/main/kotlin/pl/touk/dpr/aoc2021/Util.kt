@@ -23,6 +23,6 @@ object Util {
         if (res != null) {
             println(res)
         }
-        print("Finished in ${Duration.ofMillis(end - start)}")
+        println("Finished in ${Duration.ofMillis(end - start)}")
     }
 }
