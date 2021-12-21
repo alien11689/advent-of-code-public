@@ -1,6 +1,7 @@
 package pl.touk.dpr.aoc2021
 
 import java.util.PriorityQueue
+import java.util.Stack
 
 object Day21 {
     @JvmStatic
@@ -64,10 +65,10 @@ object Day21 {
 
         val wins = mutableMapOf(1 to 0L, 2 to 0L)
         val finalScore = 21
-        val pq = PriorityQueue<Game>()
-        pq.offer(Game(listOf(player1, player2)))
-        while (!pq.isEmpty()) {
-            val game = pq.poll()
+        val stack = Stack<Game>()
+        stack.push(Game(listOf(player1, player2)))
+        while (!stack.isEmpty()) {
+            val game = stack.pop()
             val player1 = game.players.first()
             val player2 = game.players.last()
             val rollsToUniverses = mapOf(
@@ -84,9 +85,8 @@ object Day21 {
                 val newP1 = player1.addRolls(rolls.key, rolls.value)
                 if (newP1.score >= finalScore) {
                     wins[newP1.id] = wins[newP1.id]!! + newP1.universes * player2.universes
-//                    println(wins)
                 } else {
-                    pq.offer(Game(listOf(player2, newP1)))
+                    stack.push(Game(listOf(player2, newP1)))
                 }
             }
         }
@@ -95,14 +95,7 @@ object Day21 {
         return wins.values.maxOrNull()!!
     }
 
-    data class Game(val players: List<PlayerV2>) : Comparable<Game> {
-        val fullScore = players.sumOf { it.score }
-
-        override fun compareTo(other: Game): Int {
-            return -1 * (fullScore.compareTo(other.fullScore))
-        }
-
-    }
+    data class Game(val players: List<PlayerV2>)
 
     data class PlayerV2(val id: Int, val pos: Int, val score: Int, val universes: Long = 1) {
         fun addRolls(rolls: Int, inUniverses: Int): PlayerV2 {
