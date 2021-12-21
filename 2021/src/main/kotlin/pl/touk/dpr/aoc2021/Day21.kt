@@ -83,14 +83,15 @@ object Day21 {
             for (rolls in rollsToUniverses) {
                 val newP1 = player1.addRolls(rolls.key, rolls.value)
                 if (newP1.score >= finalScore) {
-                    wins[newP1.id] = wins[newP1.id]!! + newP1.universes
-                    println(wins)
+                    wins[newP1.id] = wins[newP1.id]!! + newP1.universes * player2.universes
+//                    println(wins)
                 } else {
                     pq.offer(Game(listOf(player2, newP1)))
                 }
             }
         }
 
+        //157134537817 is wrong
         return wins.values.maxOrNull()!!
     }
 
