@@ -11,32 +11,24 @@ object Day22 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val initPoints = setOf<Triple<Int, Int, Int>>()
         val instructions = readInstructions(lines)
-        val cubes = instructions
             .filter { it.isInit() }
-            .fold(initPoints) { acc, instr ->
-                val newS = if (instr.oper == Oper.off) {
-                    acc.filterNot { it.first in instr.xRange && it.second in instr.yRange && it.third in instr.zRange }.toSet()
-                } else {
-                    acc + instr.generateTriples()
-                }
-                println("Volume is ${newS.size}")
-                newS
-            }
-        return cubes.size
+        return applyOnEmptySurface(instructions)
     }
 
     private fun part2(lines: List<String>): Any {
-        var cubicles = setOf<Cubicle>()
         val instructions = readInstructions(lines)
+        return applyOnEmptySurface(instructions)
+    }
+
+    private fun applyOnEmptySurface(instructions: List<Instr>): Long {
+        var cubicles = setOf<Cubicle>()
         instructions
-//            .filter { it.isInit() }
             .forEachIndexed { idx, instr ->
                 if (idx == 0) {
-                    cubicles = setOf(instr.cubicle())
+                    cubicles = setOf(instr.cubicle)
                 } else {
-                    val curCub = instr.cubicle()
+                    val curCub = instr.cubicle
                     cubicles = cubicles.flatMap { oldCubicle ->
                         fullSplit(oldCubicle, curCub)
                     }.toSet()
@@ -46,55 +38,32 @@ object Day22 {
                         cubicles = cubicles.filter { !contains(curCub, it) }.toSet()
                     }
                 }
-                println("Cubicles size is ${cubicles.size} and volume is ${cubicles.sumOf { volume(it) }}")
+//                println("Cubicles size is ${cubicles.size} and volume is ${cubicles.sumOf { volume(it) }}")
             }
         return cubicles.sumOf { volume(it) }
     }
 
     private fun readInstructions(lines: List<String>) = lines.map { it.split(" ", ",", ".", "=") }
-        .mapIndexed { idx, it ->
+        .map {
             Instr(
                 if (it[0] == "on") Oper.on else Oper.off,
-                it[2].toInt()..it[4].toInt(),
-                it[6].toInt()..it[8].toInt(),
-                it[10].toInt()..it[12].toInt(),
-                idx
+                Triple(
+                    it[2].toInt()..it[4].toInt(),
+                    it[6].toInt()..it[8].toInt(),
+                    it[10].toInt()..it[12].toInt()
+                )
             )
         }
 
     enum class Oper { on, off }
 
-    data class Instr(val oper: Oper, val xRange: IntRange, val yRange: IntRange, val zRange: IntRange, val id: Int = 0) {
-        fun generateTriples(): Set<Triple<Int, Int, Int>> {
-            val points = mutableSetOf<Triple<Int, Int, Int>>()
-            for (x in xRange) {
-                for (y in yRange) {
-                    for (z in zRange) {
-                        points.add(Triple(x, y, z))
-                    }
-                }
-            }
-            return points
-        }
+    data class Instr(val oper: Oper, val cubicle: Cubicle) {
+        fun isInit(): Boolean = contains(initCubicle, cubicle)
 
-        fun size(): Long {
-            return (xRange.last - xRange.first + 1).toLong() * (yRange.last - yRange.first + 1).toLong() * (zRange.last - zRange.first + 1).toLong()
+        companion object {
+            val initCubicle = Cubicle(-50..50, -50..50, -50..50)
         }
-
-        fun isInit(): Boolean {
-            return xRange.first >= -50 && xRange.last <= 50
-                    && yRange.first >= -50 && yRange.last <= 50
-                    && zRange.first >= -50 && zRange.last <= 50
-        }
-
-        fun cubicle(): Cubicle = Cubicle(xRange, yRange, zRange)
     }
-
-//    fun overlap(c1: Cubicle, other: Cubicle): Boolean {
-//        return c1.xRange.contains(other.xRange.first) && xRange.contains(other.xRange.last)
-//                || yRange.contains(other.yRange.first) && yRange.contains(other.yRange.last)
-//                || zRange.contains(other.zRange.first) && zRange.contains(other.zRange.last)
-//    }
 
     fun splitX(cubicle: Cubicle, x: Int): Set<Cubicle> {
         return if (cubicle.first.contains(x)) {
