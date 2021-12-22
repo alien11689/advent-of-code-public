@@ -39,8 +39,17 @@ object Day22 {
                 } else {
                     val curCub = instr.cubicle()
                     val curAsSubs = cubicles.flatMap { fullSplit(curCub, it) }
+                    curAsSubs.forEach { c1 ->
+                        curAsSubs.forEach { c2 ->
+                            if (c1 != c2) {
+                                if (overLap(c1, c2)) {
+                                    println("For new one $c1 overlap $c2")
+                                }
+                            }
+                        }
+                    }
 //                    println("Intersecting $cubicles by $curCub")
-//                    println(curAsSubs)
+                    println(curAsSubs)
                     cubicles = cubicles.flatMap { oldCubicle ->
                         fullSplit(oldCubicle, curCub)
                     }.toSet()
@@ -54,8 +63,19 @@ object Day22 {
                     }
 //                    println("Result in $cubicles")
                 }
+                cubicles.forEach { c1 ->
+                    cubicles.forEach { c2 ->
+                        if (c1 != c2) {
+                            if (overLap(c1, c2)) {
+                                println("$c1 overlap $c2")
+                            }
+                        }
+                    }
+                }
                 println("Cubicles size is ${cubicles.size} and volume is ${cubicles.sumOf { volume(it) }}")
-//                return -1
+                if (idx > 0) {
+                    return -1
+                }
             }
 
         // all instructions overlap
