@@ -37,80 +37,17 @@ object Day22 {
                     cubicles = setOf(instr.cubicle())
                 } else {
                     val curCub = instr.cubicle()
-                    val curAsSubs = cubicles.flatMap { fullSplit(curCub, it) }
-//                    curAsSubs.forEach { c1 ->
-//                        curAsSubs.forEach { c2 ->
-//                            if (c1 != c2) {
-//                                if (overLap(c1, c2)) {
-//                                    println("For new one $c1 overlap $c2")
-//                                }
-//                            }
-//                        }
-//                    }
-//                    println("Intersecting $cubicles by $curCub")
-//                    println(curAsSubs)
                     cubicles = cubicles.flatMap { oldCubicle ->
                         fullSplit(oldCubicle, curCub)
                     }.toSet()
-//                    cubicles.forEach { c1 ->
-//                        cubicles.forEach { c2 ->
-//                            if (c1 != c2) {
-//                                if (overLap(c1, c2)) {
-//                                    println("After first split $c1 overlap $c2")
-//                                }
-//                            }
-//                        }
-//                    }
-//                    println("Cubicles before operation $cubicles")
                     if (instr.oper == Oper.on) {
-//                        print("Cubicles now is ${cubicles.size} and adding ${curAsSubs.size} ")
                         cubicles = cubicles.filter { !contains(curCub, it) }.toSet() + curCub
-//                        println("results in size ${cubicles.size}")
                     } else {
                         cubicles = cubicles.filter { !contains(curCub, it) }.toSet()
                     }
-//                    println("Result in $cubicles")
                 }
-//                cubicles.forEach { c1 ->
-//                    cubicles.forEach { c2 ->
-//                        if (c1 != c2) {
-//                            if (overLap(c1, c2)) {
-//                                println("$c1 overlap $c2")
-//                            }
-//                        }
-//                    }
-//                }
                 println("Cubicles size is ${cubicles.size} and volume is ${cubicles.sumOf { volume(it) }}")
-//                if (idx > 2) {
-//                    return -1
-//                }
             }
-
-        // all instructions overlap
-//        val s = mutableSetOf<Pair<Instr, Instr>>()
-//        for (i1 in instructions) {
-//            for (i2 in instructions) {
-//                if (i1 != i2) {
-//                    if (i1.overlap(i2) || i2.overlap(i1)) {
-//                        println("$i1 overlap $i2")
-//                        s.add(i1 to i2)
-//                    }
-//                }
-//            }
-//        }
-//        val allOverllapping = s.flatMap { setOf(it.first, it.second) }.toSet()
-//        for (i1 in instructions) {
-//            if (i1 !in allOverllapping) {
-//                println("   $i1 is alone")
-//            }
-//        }
-//        for(i in instructions){
-//            println("${i.size()} is size of $i")
-//        }
-
-//        cubicles.forEach {
-//            println("volume of $it is ${volume(it)}")
-//        }
         return cubicles.sumOf { volume(it) }
     }
 
