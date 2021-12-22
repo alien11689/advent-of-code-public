@@ -45,7 +45,9 @@ object Day22 {
                         .flatMap { splitZ(it, curCub.third.first) }
                         .flatMap { splitZ(it, curCub.third.last) }
                     cubicles = cubicles.flatMap { oldCubicle ->
-                        curAsSubs.flatMap { fullSplit(oldCubicle, it) }
+                        fullSplit(curCub, oldCubicle).flatMap {
+                            fullSplit(oldCubicle, curCub)
+                        }
                     }.toSet()
                     if (instr.oper == Oper.on) {
                         cubicles = cubicles + curAsSubs
@@ -53,7 +55,7 @@ object Day22 {
                         cubicles = cubicles - curAsSubs
                     }
                 }
-                println("Cubicles size is ${cubicles.size}")
+                println("Cubicles size is ${cubicles.size} and volume is ${cubicles.sumOf { volume(it) }}")
             }
 
         // all instructions overlap
@@ -78,9 +80,9 @@ object Day22 {
 //            println("${i.size()} is size of $i")
 //        }
 
-        cubicles.forEach {
-            println("volume of $it is ${volume(it)}")
-        }
+//        cubicles.forEach {
+//            println("volume of $it is ${volume(it)}")
+//        }
         return cubicles.sumOf { volume(it) }
     }
 
@@ -121,12 +123,6 @@ object Day22 {
         }
 
         fun cubicle(): Cubicle = Cubicle(xRange, yRange, zRange)
-
-        fun overlap(other: Instr): Boolean {
-            return xRange.contains(other.xRange.first) && xRange.contains(other.xRange.last)
-                    || yRange.contains(other.yRange.first) && yRange.contains(other.yRange.last)
-                    || zRange.contains(other.zRange.first) && zRange.contains(other.zRange.last)
-        }
     }
 
 //    fun overlap(c1: Cubicle, other: Cubicle): Boolean {
@@ -192,9 +188,9 @@ object Day22 {
     }
 
     private fun overLap(c1: Cubicle, c2: Cubicle): Boolean {
-        return c1.first.contains(c2.first.first) || c1.first.contains(c2.first.last) || c2.first.contains(c1.first.first) || c2.first.contains(c1.first.last)
-                || c1.second.contains(c2.second.first) || c1.second.contains(c2.second.last) || c2.second.contains(c1.second.first) || c2.second.contains(c1.second.last)
-                || c1.third.contains(c2.third.first) || c1.third.contains(c2.third.last) || c2.third.contains(c1.third.first) || c2.third.contains(c1.third.last)
+        return (c1.first.contains(c2.first.first) || c1.first.contains(c2.first.last) || c2.first.contains(c1.first.first) || c2.first.contains(c1.first.last))
+                && (c1.second.contains(c2.second.first) || c1.second.contains(c2.second.last) || c2.second.contains(c1.second.first) || c2.second.contains(c1.second.last))
+                && (c1.third.contains(c2.third.first) || c1.third.contains(c2.third.last) || c2.third.contains(c1.third.first) || c2.third.contains(c1.third.last))
     }
 
     fun volume(cubicle: Cubicle): Long =
