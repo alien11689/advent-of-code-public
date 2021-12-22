@@ -1,5 +1,7 @@
 package pl.touk.dpr.aoc2021
 
+typealias Cubicle = Triple<IntRange, IntRange, IntRange>
+
 object Day22 {
     @JvmStatic
     fun main(args: Array<String>) {
@@ -36,7 +38,7 @@ object Day22 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val initPoints = setOf<Triple<Int, Int, Int>>()
+        var cubicles = setOf<Cubicle>()
         var step = 1
         val instructions = lines.map { it.split(" ", ",", ".", "=") }
             .mapIndexed { idx, it ->
@@ -48,6 +50,32 @@ object Day22 {
                     idx
                 )
             }
+        instructions
+            .filter { it.isInit() }
+            .forEachIndexed { idx, instr ->
+                if (idx == 0) {
+                    cubicles = setOf(instr.cubicle())
+                } else {
+                    val curCub = instr.cubicle()
+                    val curAsSubs = setOf(curCub)
+                        .flatMap { splitX(it, curCub.first.first) }
+                        .flatMap { splitX(it, curCub.first.last) }
+                        .flatMap { splitY(it, curCub.second.first) }
+                        .flatMap { splitY(it, curCub.second.last) }
+                        .flatMap { splitZ(it, curCub.third.first) }
+                        .flatMap { splitZ(it, curCub.third.last) }
+                    cubicles = cubicles.flatMap { oldCubicle ->
+                        curAsSubs.flatMap { fullSplit(oldCubicle, it) }
+                    }.toSet()
+                    if (instr.oper == Oper.on) {
+                        cubicles = cubicles + curAsSubs
+                    } else {
+                        cubicles = cubicles - curAsSubs
+                    }
+                    println("Cubicles are ${cubicles.size}")
+                }
+            }
+
         // all instructions overlap
 //        val s = mutableSetOf<Pair<Instr, Instr>>()
 //        for (i1 in instructions) {
@@ -98,12 +126,79 @@ object Day22 {
                     && zRange.first >= -50 && zRange.last <= 50
         }
 
+        fun cubicle(): Cubicle = Cubicle(xRange, yRange, zRange)
+
         fun overlap(other: Instr): Boolean {
             return xRange.contains(other.xRange.first) && xRange.contains(other.xRange.last)
                     || yRange.contains(other.yRange.first) && yRange.contains(other.yRange.last)
                     || zRange.contains(other.zRange.first) && zRange.contains(other.zRange.last)
         }
     }
+
+//    fun overlap(c1: Cubicle, other: Cubicle): Boolean {
+//        return c1.xRange.contains(other.xRange.first) && xRange.contains(other.xRange.last)
+//                || yRange.contains(other.yRange.first) && yRange.contains(other.yRange.last)
+//                || zRange.contains(other.zRange.first) && zRange.contains(other.zRange.last)
+//    }
+
+    fun splitX(cubicle: Cubicle, x: Int): Set<Cubicle> {
+        return if (cubicle.first.contains(x)) {
+            setOf(
+                cubicle.copy(first = cubicle.first.first..(x - 1)),
+                cubicle.copy(first = x..x),
+                cubicle.copy(first = (x + 1)..cubicle.first.last),
+            )
+                .filterNot { it.first.isEmpty() }
+                .toSet()
+        } else {
+            setOf(cubicle)
+        }
+    }
+
+    fun splitY(cubicle: Cubicle, y: Int): Set<Cubicle> {
+        return if (cubicle.second.contains(y)) {
+            setOf(
+                cubicle.copy(second = cubicle.second.first..(y - 1)),
+                cubicle.copy(second = y..y),
+                cubicle.copy(second = (y + 1)..cubicle.second.last),
+            )
+                .filterNot { it.second.isEmpty() }
+                .toSet()
+        } else {
+            setOf(cubicle)
+        }
+    }
+
+    fun splitZ(cubicle: Cubicle, z: Int): Set<Cubicle> {
+        return if (cubicle.third.contains(z)) {
+            setOf(
+                cubicle.copy(third = cubicle.third.first..(z - 1)),
+                cubicle.copy(third = z..z),
+                cubicle.copy(third = (z + 1)..cubicle.third.last),
+            )
+                .filterNot { it.third.isEmpty() }
+                .toSet()
+        } else {
+            setOf(cubicle)
+        }
+    }
+
+    fun fullSplit(cubicle: Cubicle, forCubicle: Cubicle): Set<Cubicle> {
+        return setOf(cubicle)
+            .flatMap { splitX(it, forCubicle.first.first) }
+            .flatMap { splitX(it, forCubicle.first.last) }
+            .flatMap { splitY(it, forCubicle.second.first) }
+            .flatMap { splitY(it, forCubicle.second.last) }
+            .flatMap { splitZ(it, forCubicle.third.first) }
+            .flatMap { splitZ(it, forCubicle.third.last) }
+            .toSet()
+    }
+
+    fun volume(cubicle: Cubicle): Long =
+        1L * (cubicle.first.last - cubicle.first.first + 1) *
+                (cubicle.second.last - cubicle.second.first + 1) *
+                (cubicle.third.last - cubicle.third.first + 1)
+
 }
 
 
