@@ -37,17 +37,9 @@ object Day22 {
                     cubicles = setOf(instr.cubicle())
                 } else {
                     val curCub = instr.cubicle()
-                    val curAsSubs = setOf(curCub)
-                        .flatMap { splitX(it, curCub.first.first) }
-                        .flatMap { splitX(it, curCub.first.last) }
-                        .flatMap { splitY(it, curCub.second.first) }
-                        .flatMap { splitY(it, curCub.second.last) }
-                        .flatMap { splitZ(it, curCub.third.first) }
-                        .flatMap { splitZ(it, curCub.third.last) }
+                    val curAsSubs = cubicles.flatMap { fullSplit(curCub, it) }
                     cubicles = cubicles.flatMap { oldCubicle ->
-                        fullSplit(curCub, oldCubicle).flatMap {
-                            fullSplit(oldCubicle, curCub)
-                        }
+                        fullSplit(oldCubicle, curCub)
                     }.toSet()
                     if (instr.oper == Oper.on) {
                         cubicles = cubicles + curAsSubs
