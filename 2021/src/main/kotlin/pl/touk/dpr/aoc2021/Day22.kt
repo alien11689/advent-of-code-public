@@ -6,7 +6,7 @@ object Day22 {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val lines = Util.getNotEmptyLinesFromFile("/22/input2.txt")
+        val lines = Util.getNotEmptyLinesFromFile("/22/input3.txt")
         println(part1(lines))
         println(part2(lines))
     }
@@ -39,43 +39,52 @@ object Day22 {
                 } else {
                     val curCub = instr.cubicle()
                     val curAsSubs = cubicles.flatMap { fullSplit(curCub, it) }
-                    curAsSubs.forEach { c1 ->
-                        curAsSubs.forEach { c2 ->
-                            if (c1 != c2) {
-                                if (overLap(c1, c2)) {
-                                    println("For new one $c1 overlap $c2")
-                                }
-                            }
-                        }
-                    }
+//                    curAsSubs.forEach { c1 ->
+//                        curAsSubs.forEach { c2 ->
+//                            if (c1 != c2) {
+//                                if (overLap(c1, c2)) {
+//                                    println("For new one $c1 overlap $c2")
+//                                }
+//                            }
+//                        }
+//                    }
 //                    println("Intersecting $cubicles by $curCub")
-                    println(curAsSubs)
+//                    println(curAsSubs)
                     cubicles = cubicles.flatMap { oldCubicle ->
                         fullSplit(oldCubicle, curCub)
                     }.toSet()
+//                    cubicles.forEach { c1 ->
+//                        cubicles.forEach { c2 ->
+//                            if (c1 != c2) {
+//                                if (overLap(c1, c2)) {
+//                                    println("After first split $c1 overlap $c2")
+//                                }
+//                            }
+//                        }
+//                    }
 //                    println("Cubicles before operation $cubicles")
                     if (instr.oper == Oper.on) {
 //                        print("Cubicles now is ${cubicles.size} and adding ${curAsSubs.size} ")
-                        cubicles = cubicles + curAsSubs
+                        cubicles = cubicles.filter { !contains(curCub, it) }.toSet() + curCub
 //                        println("results in size ${cubicles.size}")
                     } else {
-                        cubicles = cubicles - curAsSubs
+                        cubicles = cubicles.filter { !contains(curCub, it) }.toSet()
                     }
 //                    println("Result in $cubicles")
                 }
-                cubicles.forEach { c1 ->
-                    cubicles.forEach { c2 ->
-                        if (c1 != c2) {
-                            if (overLap(c1, c2)) {
-                                println("$c1 overlap $c2")
-                            }
-                        }
-                    }
-                }
+//                cubicles.forEach { c1 ->
+//                    cubicles.forEach { c2 ->
+//                        if (c1 != c2) {
+//                            if (overLap(c1, c2)) {
+//                                println("$c1 overlap $c2")
+//                            }
+//                        }
+//                    }
+//                }
                 println("Cubicles size is ${cubicles.size} and volume is ${cubicles.sumOf { volume(it) }}")
-                if (idx > 0) {
-                    return -1
-                }
+//                if (idx > 2) {
+//                    return -1
+//                }
             }
 
         // all instructions overlap
@@ -217,6 +226,12 @@ object Day22 {
         1L * (cubicle.first.last - cubicle.first.first + 1) *
                 (cubicle.second.last - cubicle.second.first + 1) *
                 (cubicle.third.last - cubicle.third.first + 1)
+
+    fun contains(c1: Cubicle, c2: Cubicle): Boolean {
+        return c1.first.contains(c2.first.first) && c1.first.contains(c2.first.last)
+                && c1.second.contains(c2.second.first) && c1.second.contains(c2.second.last)
+                && c1.third.contains(c2.third.first) && c1.third.contains(c2.third.last)
+    }
 
 }
 
