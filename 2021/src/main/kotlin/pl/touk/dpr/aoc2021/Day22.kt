@@ -22,6 +22,7 @@ object Day22 {
                 } else {
                     acc + instr.generateTriples()
                 }
+                println("Volume is ${newS.size}")
                 newS
             }
         return cubes.size
@@ -38,16 +39,23 @@ object Day22 {
                 } else {
                     val curCub = instr.cubicle()
                     val curAsSubs = cubicles.flatMap { fullSplit(curCub, it) }
+//                    println("Intersecting $cubicles by $curCub")
+//                    println(curAsSubs)
                     cubicles = cubicles.flatMap { oldCubicle ->
                         fullSplit(oldCubicle, curCub)
                     }.toSet()
+//                    println("Cubicles before operation $cubicles")
                     if (instr.oper == Oper.on) {
+//                        print("Cubicles now is ${cubicles.size} and adding ${curAsSubs.size} ")
                         cubicles = cubicles + curAsSubs
+//                        println("results in size ${cubicles.size}")
                     } else {
                         cubicles = cubicles - curAsSubs
                     }
+//                    println("Result in $cubicles")
                 }
                 println("Cubicles size is ${cubicles.size} and volume is ${cubicles.sumOf { volume(it) }}")
+//                return -1
             }
 
         // all instructions overlap
