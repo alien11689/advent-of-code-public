@@ -9,7 +9,7 @@ object Day22 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val init = setOf<Triple<Int, Int, Int>>()
+        val initPoints = setOf<Triple<Int, Int, Int>>()
         var step = 1
         val cubes = lines.map { it.split(" ", ",", ".", "=") }
             .map {
@@ -20,7 +20,8 @@ object Day22 {
                     it[10].toInt()..it[12].toInt(),
                 )
             }
-            .fold(init) { acc, instr ->
+            .filter { it.isInit() }
+            .fold(initPoints) { acc, instr ->
                 val newS = if (instr.oper == Oper.off) {
                     acc.filterNot { it.first in instr.xRange && it.second in instr.yRange && it.third in instr.zRange }.toSet()
                 } else {
@@ -35,8 +36,30 @@ object Day22 {
     }
 
     private fun part2(lines: List<String>): Any {
+        val initPoints = setOf<Triple<Int, Int, Int>>()
+        var step = 1
+        val cubes = lines.map { it.split(" ", ",", ".", "=") }
+            .map {
+                Instr(
+                    if (it[0] == "on") Oper.on else Oper.off,
+                    it[2].toInt()..it[4].toInt(),
+                    it[6].toInt()..it[8].toInt(),
+                    it[10].toInt()..it[12].toInt(),
+                )
+            }
+            .filter { it.isInit() }
+            .fold(initPoints) { acc, instr ->
+                val newS = if (instr.oper == Oper.off) {
+                    acc.filterNot { it.first in instr.xRange && it.second in instr.yRange && it.third in instr.zRange }.toSet()
+                } else {
+                    acc + instr.generateTriples()
+                }
+//                println(newS)
+                println("On is ${newS.size} on ${++step}")
 
-        return -1
+                newS
+            }
+        return cubes.size
     }
 
     enum class Oper { on, off }
@@ -53,6 +76,13 @@ object Day22 {
             }
             return points
         }
+
+        fun isInit(): Boolean {
+            return xRange.first >= -50 && xRange.last <= 50
+                    && yRange.first >= -50 && yRange.last <= 50
+                    && zRange.first >= -50 && zRange.last <= 50
+        }
+
     }
 }
 
