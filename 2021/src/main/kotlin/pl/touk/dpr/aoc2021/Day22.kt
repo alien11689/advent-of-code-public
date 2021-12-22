@@ -3,10 +3,9 @@ package pl.touk.dpr.aoc2021
 typealias Cubicle = Triple<IntRange, IntRange, IntRange>
 
 object Day22 {
-
     @JvmStatic
     fun main(args: Array<String>) {
-        val lines = Util.getNotEmptyLinesFromFile("/22/input3.txt")
+        val lines = Util.getNotEmptyLinesFromFile("/22/input.txt")
         println(part1(lines))
         println(part2(lines))
     }
@@ -32,7 +31,7 @@ object Day22 {
         var cubicles = setOf<Cubicle>()
         val instructions = readInstructions(lines)
         instructions
-            .filter { it.isInit() }
+//            .filter { it.isInit() }
             .forEachIndexed { idx, instr ->
                 if (idx == 0) {
                     cubicles = setOf(instr.cubicle())
