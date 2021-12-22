@@ -3,25 +3,18 @@ package pl.touk.dpr.aoc2021
 typealias Cubicle = Triple<IntRange, IntRange, IntRange>
 
 object Day22 {
+
     @JvmStatic
     fun main(args: Array<String>) {
-        val lines = Util.getNotEmptyLinesFromFile("/22/input3.txt")
+        val lines = Util.getNotEmptyLinesFromFile("/22/input2.txt")
         println(part1(lines))
         println(part2(lines))
     }
 
     private fun part1(lines: List<String>): Any {
         val initPoints = setOf<Triple<Int, Int, Int>>()
-        var step = 1
-        val cubes = lines.map { it.split(" ", ",", ".", "=") }
-            .map {
-                Instr(
-                    if (it[0] == "on") Oper.on else Oper.off,
-                    it[2].toInt()..it[4].toInt(),
-                    it[6].toInt()..it[8].toInt(),
-                    it[10].toInt()..it[12].toInt(),
-                )
-            }
+        val instructions = readInstructions(lines)
+        val cubes = instructions
             .filter { it.isInit() }
             .fold(initPoints) { acc, instr ->
                 val newS = if (instr.oper == Oper.off) {
@@ -29,9 +22,6 @@ object Day22 {
                 } else {
                     acc + instr.generateTriples()
                 }
-//                println(newS)
-//                println("On is ${newS.size} on ${++step}")
-
                 newS
             }
         return cubes.size
@@ -39,17 +29,7 @@ object Day22 {
 
     private fun part2(lines: List<String>): Any {
         var cubicles = setOf<Cubicle>()
-        var step = 1
-        val instructions = lines.map { it.split(" ", ",", ".", "=") }
-            .mapIndexed { idx, it ->
-                Instr(
-                    if (it[0] == "on") Oper.on else Oper.off,
-                    it[2].toInt()..it[4].toInt(),
-                    it[6].toInt()..it[8].toInt(),
-                    it[10].toInt()..it[12].toInt(),
-                    idx
-                )
-            }
+        val instructions = readInstructions(lines)
         instructions
             .filter { it.isInit() }
             .forEachIndexed { idx, instr ->
@@ -72,8 +52,8 @@ object Day22 {
                     } else {
                         cubicles = cubicles - curAsSubs
                     }
-                    println("Cubicles are ${cubicles.size}")
                 }
+                println("Cubicles size is ${cubicles.size}")
             }
 
         // all instructions overlap
@@ -98,8 +78,22 @@ object Day22 {
 //            println("${i.size()} is size of $i")
 //        }
 
-        return -1
+        cubicles.forEach {
+            println("volume of $it is ${volume(it)}")
+        }
+        return cubicles.sumOf { volume(it) }
     }
+
+    private fun readInstructions(lines: List<String>) = lines.map { it.split(" ", ",", ".", "=") }
+        .mapIndexed { idx, it ->
+            Instr(
+                if (it[0] == "on") Oper.on else Oper.off,
+                it[2].toInt()..it[4].toInt(),
+                it[6].toInt()..it[8].toInt(),
+                it[10].toInt()..it[12].toInt(),
+                idx
+            )
+        }
 
     enum class Oper { on, off }
 
@@ -184,6 +178,9 @@ object Day22 {
     }
 
     fun fullSplit(cubicle: Cubicle, forCubicle: Cubicle): Set<Cubicle> {
+        if (!overLap(cubicle, forCubicle)) {
+            return setOf(cubicle)
+        }
         return setOf(cubicle)
             .flatMap { splitX(it, forCubicle.first.first) }
             .flatMap { splitX(it, forCubicle.first.last) }
@@ -192,6 +189,12 @@ object Day22 {
             .flatMap { splitZ(it, forCubicle.third.first) }
             .flatMap { splitZ(it, forCubicle.third.last) }
             .toSet()
+    }
+
+    private fun overLap(c1: Cubicle, c2: Cubicle): Boolean {
+        return c1.first.contains(c2.first.first) || c1.first.contains(c2.first.last) || c2.first.contains(c1.first.first) || c2.first.contains(c1.first.last)
+                || c1.second.contains(c2.second.first) || c1.second.contains(c2.second.last) || c2.second.contains(c1.second.first) || c2.second.contains(c1.second.last)
+                || c1.third.contains(c2.third.first) || c1.third.contains(c2.third.last) || c2.third.contains(c1.third.first) || c2.third.contains(c1.third.last)
     }
 
     fun volume(cubicle: Cubicle): Long =
