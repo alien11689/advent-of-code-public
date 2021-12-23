@@ -61,11 +61,11 @@ object Day23 {
                         ++moves
                         val down2 = down1.down()
                         if (down2 !in takenPos) {
-                            val newAmipod = amipod.copy(pos = down2, score = amipod.score + scoreFor(amipod.name, moves + 1))
-                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.path + newAmipod))
+                            val newAmipod = amipod.copy(pos = down2)
+                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, moves + 1), cur.path + newAmipod))
                         } else if (takenPos[down2]!! == amipod.name) {
-                            val newAmipod = amipod.copy(pos = down1, score = amipod.score + scoreFor(amipod.name, moves))
-                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.path + newAmipod))
+                            val newAmipod = amipod.copy(pos = down1)
+                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, moves), cur.path + newAmipod))
                         }
                     }
                 } else if (amipod.pos.y == 2) {
@@ -85,8 +85,8 @@ object Day23 {
                     var moves = 2
                     while (left in openSpace && left !in takenPos) {
                         if (left.down() !in openSpace) {
-                            val newAmipod = amipod.copy(moved = true, pos = left, score = amipod.score + scoreFor(amipod.name, moves))
-                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.path + newAmipod))
+                            val newAmipod = amipod.copy(moved = true, pos = left)
+                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, moves), cur.path + newAmipod))
                         }
                         left = left.left()
                         moves += 1
@@ -96,8 +96,8 @@ object Day23 {
                     moves = 2
                     while (right in openSpace && right !in takenPos) {
                         if (right.down() !in openSpace) {
-                            val newAmipod = amipod.copy(moved = true, pos = right, score = amipod.score + scoreFor(amipod.name, moves))
-                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.path + newAmipod))
+                            val newAmipod = amipod.copy(moved = true, pos = right)
+                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, moves), cur.path + newAmipod))
                         }
                         right = right.right()
                         moves += 1
@@ -108,8 +108,8 @@ object Day23 {
                     } else if (amipod.pos in State.DESTS[amipod.name]!!) {
 //                        println("$amipod is in good place")
                     } else if (amipod.pos.up() !in takenPos) {
-                        val newAmipod = amipod.copy(pos = amipod.pos.up(), score = amipod.score + scoreFor(amipod.name, 1))
-                        pq.offer(State(cur.amipods - amipod + newAmipod, cur.path + newAmipod))
+                        val newAmipod = amipod.copy(pos = amipod.pos.up())
+                        pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, 1), cur.path + newAmipod))
                     }
                 }
             }
@@ -143,7 +143,7 @@ object Day23 {
                 }
             }
         }
-        return Pair(State(amipods), openSpace.toSet())
+        return Pair(State(amipods, 0), openSpace.toSet())
     }
 
     private fun part2(lines: List<String>): Any {
@@ -151,9 +151,7 @@ object Day23 {
         return -1
     }
 
-    data class State(val amipods: Set<Amipod>, val path: List<Amipod> = emptyList()) : Comparable<State> {
-        val score = amipods.sumOf { it.score }
-
+    data class State(val amipods: Set<Amipod>, val score: Int, val path: List<Amipod> = emptyList()) : Comparable<State> {
         override fun compareTo(other: State): Int {
             return score.compareTo(other.score)
         }
@@ -202,7 +200,7 @@ object Day23 {
         fun right(): Pos = copy(x = x + 1)
     }
 
-    data class Amipod(val name: Char, val moved: Boolean, val pos: Pos, val score: Int = 0)
+    data class Amipod(val name: Char, val moved: Boolean, val pos: Pos)
 
 }
 
