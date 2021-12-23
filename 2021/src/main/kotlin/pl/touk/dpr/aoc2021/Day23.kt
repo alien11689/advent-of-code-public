@@ -6,8 +6,9 @@ object Day23 {
     @JvmStatic
     fun main(args: Array<String>) {
         val inputFile = "/23/input"
+        Util.measureTimeAndPrint { part1(Util.getNotEmptyLinesFromFile(inputFile + "1.txt")) }
         Util.measureTimeAndPrint { part1(Util.getNotEmptyLinesFromFile(inputFile + ".txt")) }
-        Util.measureTimeAndPrint { part2(Util.getNotEmptyLinesFromFile(inputFile + "_2.txt")) }
+        Util.measureTimeAndPrint { part2(Util.getNotEmptyLinesFromFile(inputFile + "1_2.txt")) }
     }
 
     private fun part1(lines: List<String>): Any {
@@ -47,6 +48,7 @@ object Day23 {
                         }
                     }
                     if (curPos.x == destX) {
+                        // Change for part 2
                         val down1 = curPos.down()
                         if (down1 in takenPos) {
                             continue
@@ -61,13 +63,14 @@ object Day23 {
                             pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, moves), cur.path + newAmipod))
                         }
                     }
-                } else if (amipod.pos.y == 2) {
+                } else {
                     if (amipod.moved) {
                         continue
                     }
                     if (cur.amipods.filter { it.pos.x == amipod.pos.x }.map { it.name }.toSet() == State.FULL_DEST[amipod.name]!!) {
                         continue
                     }
+                    if (amipod.pos.y == 2) {
 //                    if (amipod.pos.x in State.FULL_DEST[amipod.name]!!) {
 //                        val downChar = takenPos[amipod.pos.down()]
 //                        if (downChar == amipod.name) {
@@ -76,36 +79,37 @@ object Day23 {
 //                            continue
 //                        }
 //                    }
-                    val up = amipod.pos.up()
-                    var left = up.left()
-                    var moves = 2
-                    while (left in openSpace && left !in takenPos) {
-                        if (left.down() !in openSpace) {
-                            val newAmipod = amipod.copy(moved = true, pos = left)
-                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, moves), cur.path + newAmipod))
+                        val up = amipod.pos.up()
+                        var left = up.left()
+                        var moves = 2
+                        while (left in openSpace && left !in takenPos) {
+                            if (left.down() !in openSpace) {
+                                val newAmipod = amipod.copy(moved = true, pos = left)
+                                pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, moves), cur.path + newAmipod))
+                            }
+                            left = left.left()
+                            moves += 1
                         }
-                        left = left.left()
-                        moves += 1
-                    }
 
-                    var right = up.right()
-                    moves = 2
-                    while (right in openSpace && right !in takenPos) {
-                        if (right.down() !in openSpace) {
-                            val newAmipod = amipod.copy(moved = true, pos = right)
-                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, moves), cur.path + newAmipod))
+                        var right = up.right()
+                        moves = 2
+                        while (right in openSpace && right !in takenPos) {
+                            if (right.down() !in openSpace) {
+                                val newAmipod = amipod.copy(moved = true, pos = right)
+                                pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, moves), cur.path + newAmipod))
+                            }
+                            right = right.right()
+                            moves += 1
                         }
-                        right = right.right()
-                        moves += 1
-                    }
-                } else if (amipod.pos.y == 3) {
-                    if (amipod.moved) {
+                    } else if (amipod.pos.y == 3) {
+                        if (amipod.moved) {
 //                        continue
-                    } else if (amipod.pos.x in State.FULL_DEST[amipod.name]!!) {
+                        } else if (amipod.pos.x in State.FULL_DEST[amipod.name]!!) {
 //                        println("$amipod is in good place")
-                    } else if (amipod.pos.up() !in takenPos) {
-                        val newAmipod = amipod.copy(pos = amipod.pos.up())
-                        pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, 1), cur.path + newAmipod))
+                        } else if (amipod.pos.up() !in takenPos) {
+                            val newAmipod = amipod.copy(pos = amipod.pos.up())
+                            pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, 1), cur.path + newAmipod))
+                        }
                     }
                 }
             }
