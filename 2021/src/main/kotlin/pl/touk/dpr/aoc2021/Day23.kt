@@ -5,9 +5,9 @@ import java.util.PriorityQueue
 object Day23 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val inputFile = "/23/input1"
-        Util.measureTimeAndPrint { part1(Util.getNotEmptyLinesFromFile(inputFile+".txt")) }
-        Util.measureTimeAndPrint { part2(Util.getNotEmptyLinesFromFile(inputFile+"_2.txt")) }
+        val inputFile = "/23/input"
+        Util.measureTimeAndPrint { part1(Util.getNotEmptyLinesFromFile(inputFile + ".txt")) }
+        Util.measureTimeAndPrint { part2(Util.getNotEmptyLinesFromFile(inputFile + "_2.txt")) }
     }
 
     private fun part1(lines: List<String>): Any {
@@ -25,13 +25,6 @@ object Day23 {
 //                println(cur)
                 return cur.score
             }
-//            if (cur.path.map { it.name } == listOf('B', 'C', 'C', 'D') && cur.path.map { it.score } == listOf(40, 200, 400, 1000)) {
-//                // błąd w y == 2 - D nie wyskakuje po przeniesieniu wyżej
-//                println("Possible ${cur.path}")
-//                println("Score ${cur.score}")
-////                throw RuntimeException("Break")
-//            }
-//            println("And score is ${cur.score} ")
             mem.add(cur)
             val takenPos = cur.amipods.map { Pair(it.pos, it.name) }.toMap()
             for (amipod in cur.amipods) {
@@ -72,14 +65,17 @@ object Day23 {
                     if (amipod.moved) {
                         continue
                     }
-                    if (amipod.pos.x in State.FULL_DEST[amipod.name]!!) {
-                        val downChar = takenPos[amipod.pos.down()]
-                        if (downChar == amipod.name) {
-                            println("Continue")
-                            // in right place
-                            continue
-                        }
+                    if (cur.amipods.filter { it.pos.x == amipod.pos.x }.map { it.name }.toSet() == State.FULL_DEST[amipod.name]!!) {
+                        continue
                     }
+//                    if (amipod.pos.x in State.FULL_DEST[amipod.name]!!) {
+//                        val downChar = takenPos[amipod.pos.down()]
+//                        if (downChar == amipod.name) {
+//                            println("Continue")
+//                            // in right place
+//                            continue
+//                        }
+//                    }
                     val up = amipod.pos.up()
                     var left = up.left()
                     var moves = 2
@@ -150,6 +146,7 @@ object Day23 {
         override fun compareTo(other: State): Int {
             return score.compareTo(other.score)
         }
+
         fun isDone(): Boolean {
             if (amipods.any { it.pos.y == 1 }) {
                 return false
