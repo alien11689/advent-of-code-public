@@ -5,14 +5,13 @@ import java.util.PriorityQueue
 object Day23 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val lines = Util.getNotEmptyLinesFromFile("/23/input.txt")
-        Util.measureTimeAndPrint { part1(lines) }
-        Util.measureTimeAndPrint { part2(lines) }
-        println(part2(lines))
+        val inputFile = "/23/input1"
+        Util.measureTimeAndPrint { part1(Util.getNotEmptyLinesFromFile(inputFile+".txt")) }
+        Util.measureTimeAndPrint { part2(Util.getNotEmptyLinesFromFile(inputFile+"_2.txt")) }
     }
 
     private fun part1(lines: List<String>): Any {
-        val (state, openSpace) = readInput1(lines)
+        val (state, openSpace) = readInput(lines)
         val pq = PriorityQueue<State>()
         pq.offer(state)
         val mem = mutableSetOf<State>()
@@ -129,7 +128,7 @@ object Day23 {
         return moves * moveCost
     }
 
-    private fun readInput1(lines: List<String>): Pair<State, Set<Pos>> {
+    private fun readInput(lines: List<String>): Pair<State, Set<Pos>> {
         val openSpace = mutableSetOf<Pos>()
         val amipods = mutableSetOf<Amipod>()
         lines.forEachIndexed { i, line ->
@@ -147,16 +146,10 @@ object Day23 {
         return Pair(State(amipods, 0), openSpace.toSet())
     }
 
-    private fun part2(lines: List<String>): Any {
-
-        return -1
-    }
-
     data class State(val amipods: Set<Amipod>, val score: Int, val path: List<Amipod> = emptyList()) : Comparable<State> {
         override fun compareTo(other: State): Int {
             return score.compareTo(other.score)
         }
-
         fun isDone(): Boolean {
             if (amipods.any { it.pos.y == 1 }) {
                 return false
@@ -202,6 +195,12 @@ object Day23 {
 
     data class Amipod(val name: Char, val moved: Boolean, val pos: Pos)
 
+    private fun part2(lines: List<String>): Any {
+        val (state, openSpace) = readInput(lines)
+        println(state)
+        println(openSpace)
+        return -1
+    }
 }
 
 
