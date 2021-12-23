@@ -37,7 +37,7 @@ object Day23 {
             val takenPos = cur.amipods.map { Pair(it.pos, it.name) }.toMap()
             for (amipod in cur.amipods) {
                 if (amipod.pos.y == 1) {
-                    val destX = State.DESTS[amipod.name]!!.map { it.x }.first()
+                    val destX = State.FULL_DEST[amipod.name]!!.first()
                     var moves = 0
                     var curPos = amipod.pos
                     while (destX < curPos.x) {
@@ -73,7 +73,7 @@ object Day23 {
                     if (amipod.moved) {
                         continue
                     }
-                    if (amipod.pos in State.DESTS[amipod.name]!!) {
+                    if (amipod.pos.x in State.FULL_DEST[amipod.name]!!) {
                         val downChar = takenPos[amipod.pos.down()]
                         if (downChar == amipod.name) {
                             println("Continue")
@@ -106,7 +106,7 @@ object Day23 {
                 } else if (amipod.pos.y == 3) {
                     if (amipod.moved) {
 //                        continue
-                    } else if (amipod.pos in State.DESTS[amipod.name]!!) {
+                    } else if (amipod.pos.x in State.FULL_DEST[amipod.name]!!) {
 //                        println("$amipod is in good place")
                     } else if (amipod.pos.up() !in takenPos) {
                         val newAmipod = amipod.copy(pos = amipod.pos.up())
@@ -161,12 +161,16 @@ object Day23 {
             if (amipods.any { it.pos.y == 1 }) {
                 return false
             }
-//            amipods.groupBy { it.name }.mapValues { it.value. }
-            val aa = amipods.filter { it.name == 'A' }.map { it.pos }.toSet()
-            val bb = amipods.filter { it.name == 'B' }.map { it.pos }.toSet()
-            val cc = amipods.filter { it.name == 'C' }.map { it.pos }.toSet()
-            val dd = amipods.filter { it.name == 'D' }.map { it.pos }.toSet()
-            return A_DEST == aa && B_DEST == bb && C_DEST == cc && D_DEST == dd
+
+            val doneValues = amipods.groupBy({ it.name }) { it.pos.x }.mapValues { it.value.toSet() }
+//            println("Done values $doneValues expected to be $FULL_DEST")
+            return doneValues == FULL_DEST
+//////            amipods.groupBy { it.name }.mapValues { it.value. }
+//            val aa = amipods.filter { it.name == 'A' }.map { it.pos }.toSet()
+//            val bb = amipods.filter { it.name == 'B' }.map { it.pos }.toSet()
+//            val cc = amipods.filter { it.name == 'C' }.map { it.pos }.toSet()
+//            val dd = amipods.filter { it.name == 'D' }.map { it.pos }.toSet()
+//            return A_DEST == aa && B_DEST == bb && C_DEST == cc && D_DEST == dd
         }
 
         override fun equals(other: Any?): Boolean {
@@ -185,16 +189,7 @@ object Day23 {
         }
 
         companion object {
-            val A_DEST = setOf(Pos(3, 2), Pos(3, 3))
-            val B_DEST = setOf(Pos(5, 2), Pos(5, 3))
-            val C_DEST = setOf(Pos(7, 2), Pos(7, 3))
-            val D_DEST = setOf(Pos(9, 2), Pos(9, 3))
-            val DESTS = mapOf(
-                'A' to A_DEST,
-                'B' to B_DEST,
-                'C' to C_DEST,
-                'D' to D_DEST,
-            )
+            val FULL_DEST = mapOf('A' to setOf(3), 'B' to setOf(5), 'C' to setOf(7), 'D' to setOf(9))
         }
     }
 
