@@ -5,9 +5,8 @@ import java.util.PriorityQueue
 object Day23 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val lines = Util.getNotEmptyLinesFromFile("/23/input1.txt")
-        // 18251 is wrong
-        println(part1(lines))
+        val lines = Util.getNotEmptyLinesFromFile("/23/input.txt")
+        Util.measureTimeAndPrint { part1(lines) }
         println(part2(lines))
     }
 
@@ -17,15 +16,21 @@ object Day23 {
         pq.offer(state)
         val mem = mutableSetOf<State>()
         while (!pq.isEmpty()) {
-            println("Pq size is ${pq.size}")
             val cur = pq.poll()
+            if (cur in mem) {
+                continue
+            }
+//            println("Pq size is ${pq.size} and score is ${cur.score}")
             if (cur.isDone()) {
                 println(cur)
                 return cur.score
             }
-            if (cur in mem) {
-                continue
-            }
+//            if (cur.path.map { it.name } == listOf('B', 'C', 'C', 'D') && cur.path.map { it.score } == listOf(40, 200, 400, 1000)) {
+//                // błąd w y == 2 - D nie wyskakuje po przeniesieniu wyżej
+//                println("Possible ${cur.path}")
+//                println("Score ${cur.score}")
+////                throw RuntimeException("Break")
+//            }
 //            println("And score is ${cur.score} ")
             mem.add(cur)
             val takenPos = cur.amipods.map { Pair(it.pos, it.name) }.toMap()
@@ -51,7 +56,7 @@ object Day23 {
                     if (curPos.x == destX) {
                         val down1 = curPos.down()
                         if (down1 in takenPos) {
-                            break
+                            continue
                         }
                         ++moves
                         val down2 = down1.down()
@@ -68,8 +73,9 @@ object Day23 {
                         continue
                     }
                     if (amipod.pos in State.DESTS[amipod.name]!!) {
-                        val downChar = takenPos[amipod.pos.down()]!!
+                        val downChar = takenPos[amipod.pos.down()]
                         if (downChar == amipod.name) {
+                            println("Continue")
                             // in right place
                             continue
                         }
