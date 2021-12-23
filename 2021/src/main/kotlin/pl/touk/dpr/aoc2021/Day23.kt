@@ -7,6 +7,7 @@ object Day23 {
     fun main(args: Array<String>) {
         val lines = Util.getNotEmptyLinesFromFile("/23/input.txt")
         Util.measureTimeAndPrint { part1(lines) }
+        Util.measureTimeAndPrint { part2(lines) }
         println(part2(lines))
     }
 
@@ -22,7 +23,7 @@ object Day23 {
             }
 //            println("Pq size is ${pq.size} and score is ${cur.score}")
             if (cur.isDone()) {
-                println(cur)
+//                println(cur)
                 return cur.score
             }
 //            if (cur.path.map { it.name } == listOf('B', 'C', 'C', 'D') && cur.path.map { it.score } == listOf(40, 200, 400, 1000)) {
