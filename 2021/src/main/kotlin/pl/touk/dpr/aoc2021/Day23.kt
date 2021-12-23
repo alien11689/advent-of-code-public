@@ -158,6 +158,10 @@ object Day23 {
         }
 
         fun isDone(): Boolean {
+            if (amipods.any { it.pos.y == 1 }) {
+                return false
+            }
+//            amipods.groupBy { it.name }.mapValues { it.value. }
             val aa = amipods.filter { it.name == 'A' }.map { it.pos }.toSet()
             val bb = amipods.filter { it.name == 'B' }.map { it.pos }.toSet()
             val cc = amipods.filter { it.name == 'C' }.map { it.pos }.toSet()
