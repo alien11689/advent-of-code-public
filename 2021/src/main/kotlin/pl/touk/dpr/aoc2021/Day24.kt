@@ -60,6 +60,24 @@ object Day24 {
         }
     }
 
+    fun iter(w: Long, prevZ: Long, a: Int, b: Int, c: Int): Long {
+        var z = prevZ
+        var x = z % 26
+        z = z / a
+        x = x + b
+        x = if (x == w) 1 else 0
+        x = if (x == 0L) 1 else 0
+        var y = 25L
+        y = y * x
+        y = y + 1
+        z = z * y
+        y = w
+        y = y + 8
+        y = y * x
+        z = z + y
+        return z
+    }
+
     private fun part2(lines: List<String>): Any {
 
         return -1
