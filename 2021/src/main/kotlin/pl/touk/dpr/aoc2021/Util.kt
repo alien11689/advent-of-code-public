@@ -25,4 +25,11 @@ object Util {
         }
         println("Finished in ${Duration.ofMillis(end - start)}")
     }
+
+    fun measureTime(r: Runnable) {
+        val start = System.currentTimeMillis();
+        r.run()
+        val end = System.currentTimeMillis();
+        println("Finished in ${Duration.ofMillis(end - start)}")
+    }
 }
