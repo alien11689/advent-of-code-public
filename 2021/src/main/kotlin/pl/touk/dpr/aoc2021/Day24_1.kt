@@ -3,27 +3,22 @@ package pl.touk.dpr.aoc2021
 import java.util.LinkedList
 import java.util.Queue
 
-object Day24 {
+object Day24_1 {
     @JvmStatic
     fun main(args: Array<String>) {
-        val lines = Util.getNotEmptyLinesFromFile("/24/input.txt")
+        val lines = Util.getNotEmptyLinesFromFile("/24/input_three.txt")
         println(part1(lines))
         println(part2(lines))
     }
 
     private fun part1(lines: List<String>): Any {
         val instructions = lines.map { Instruction(it.split(' ')) }
-        var n = 99999999999999L
-        while (n > 10000000000000) {
-            val res = runProgram(n.toString(), instructions)
-            val z = res['z']!!
-            if (z == 0L) {
-                return n
-            }
-//            println("For $n z is $z")
-            --n
-            while (n.toString().contains('0')) {
-                --n
+        for (i in 1..9) {
+            for (j in 1..9) {
+                for (k in 1..9) {
+                    val res = runProgram("$i$j$k", instructions)
+                    println("For $i$j$k: $res")
+                }
             }
         }
         return -1
