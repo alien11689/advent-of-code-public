@@ -2,18 +2,26 @@ package pl.touk.dpr.aoc2021
 
 import java.util.LinkedList
 import java.util.Queue
-import java.util.Stack
 
 object Day24 {
     @JvmStatic
     fun main(args: Array<String>) {
         val lines = Util.getNotEmptyLinesFromFile("/24/input.txt")
-//        println(part1(lines))
+        println(part1(lines))
         println(part2(lines))
     }
 
     private fun part1(lines: List<String>): Any {
-        val instructions = lines.map { Instruction(it.split(' ')) }
+//        val instructions = lines.map { Instruction(it.split(' ')) }
+        val res = (1..14).map { 0 }.toMutableList()
+        val usedInstructions = mutableSetOf<Int>()
+        val digitPrecedence = 9 downTo 1
+        stackPars.forEach { p ->
+            usedInstructions.addAll(p.toList())
+            val instructionList = vars.filterIndexed { index, _ -> index in usedInstructions }
+            findMatching(res, p, instructionList, digitPrecedence)
+        }
+        return res.joinToString("")
 //        val inp = "29998199999999"
 //        val inp = "5979" // two first and two last are ok
 //        val inp = "59        7979" // two first and four last are ok
@@ -22,25 +30,39 @@ object Day24 {
 //        val inp = "599  426997979" // two first and four last are ok
 //        val inp = "59998426997979" // two first and four last are ok
 
-        for (i in 9 downTo 1) {
-            for (j in 9 downTo 1) {
-                val inp = "599${i}  ${j}426997979"
-                if (iterProgram(inp) == 0L) {
-                    println("match for $i $j")
-                }
-            }
-        }
+//        for (i in 9 downTo 1) {
+//            for (j in 9 downTo 1) {
+//                val inp = "599${i}  ${j}426997979"
+//                if (iterProgram(inp) == 0L) {
+//                    println("match for $i $j")
+//                }
+//            }
+//        }
 //        val program = runProgram(inp, instructions)
 //        val iterRes = iterProgram(inp)
 //        println("program ${program['z']} and iterRes $iterRes")
-        return -1
+//        return -1
     }
 
-    fun iterProgram(inp: String): Long {
+    private fun findMatching(res: MutableList<Int>, p: Pair<Int, Int>, instructionList: List<List<Int>>, digitPrecedence: IntProgression) {
+        for (i in digitPrecedence) {
+            for (j in digitPrecedence) {
+                res[p.first] = i
+                res[p.second] = j
+                val inp = res.filter { it > 0 }.map { it.toLong() }.joinToString("")
+                if (iterProgram(inp, instructionList) == 0L) {
+                    return
+                }
+            }
+        }
+        return
+    }
+
+    fun iterProgram(inp: String, instr: List<List<Int>>): Long {
         val inputQueue = LinkedList<Int>()
         inp.filter { it.isDigit() }.forEach { inputQueue.offer(it.toString().toInt()) }
 //        println("z[0] = 0")
-        return vars.fold(0L) { prevZ, cur ->
+        return instr.fold(0L) { prevZ, cur ->
             val z = iter(inputQueue.poll().toLong(), prevZ, cur[0], cur[1], cur[2])
 //            println("z[${14 - inputQueue.size}] = $z (after negating = ${cur[0] == 26})")
             z
@@ -48,32 +70,8 @@ object Day24 {
     }
 
     fun iterProgram2(): Long {
+        // this function shows relation between digits when printing once
         val inp = "59999999999999".map { it.toString().toLong() }.toMutableList()
-        var i = 0
-        val stack = Stack<Long>()
-        stack.push(0L)
-        while (true) {
-            println(stack)
-            val oper = vars[i]
-            val newZ = iter(inp[i], stack.peek(), oper[0], oper[1], oper[2])
-            if (oper[0] == 1) {
-                stack.push(newZ)
-                ++i
-            } else {
-                stack.pop()
-                if (stack.peek() == newZ) {
-                    ++i
-                } else {
-
-                }
-            }
-            if (i == inp.size) {
-                break
-            }
-
-        }
-
-
         val inputQueue = LinkedList<Int>()
         inp.forEach { inputQueue.offer(it.toString().toInt()) }
         println("z[0] = 0")
@@ -148,19 +146,15 @@ object Day24 {
     )
 
     private fun part2(lines: List<String>): Any {
-        val inp1 = ""
-        val inp2 = "1            5"
-        val inp3 = "13          15"
-        val inp4 = "13621111481315"
-        for (i in 1..9) {
-            for (j in 1..9) {
-                val inp = "136${i}${j}111481315"
-                if (iterProgram(inp) == 0L) {
-                    println("match for $i $j")
-                }
-            }
+        val res = (1..14).map { 0 }.toMutableList()
+        val usedInstructions = mutableSetOf<Int>()
+        val digitPrecedence = 1..9
+        stackPars.forEach { p ->
+            usedInstructions.addAll(p.toList())
+            val instructionList = vars.filterIndexed { index, _ -> index in usedInstructions }
+            findMatching(res, p, instructionList, digitPrecedence)
         }
-        return -1
+        return res.joinToString("")
     }
 
     fun fullIter(w: Long, prevZ: Long, a: Int, b: Int, c: Int): Long {
