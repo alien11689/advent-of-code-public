@@ -2,6 +2,7 @@ package pl.touk.dpr.aoc2021
 
 import java.util.LinkedList
 import java.util.Queue
+import java.util.Stack
 
 object Day24 {
     @JvmStatic
@@ -16,6 +17,7 @@ object Day24 {
         val res = (1..14).map { 0 }.toMutableList()
         val usedInstructions = mutableSetOf<Int>()
         val digitPrecedence = 9 downTo 1
+        val stackPars = buildStackPairs(vars)
         stackPars.forEach { p ->
             usedInstructions.addAll(p.toList())
             val instructionList = vars.filterIndexed { index, _ -> index in usedInstructions }
@@ -135,20 +137,25 @@ object Day24 {
         listOf(26, -4, 7),
     )
 
-    val stackPars = listOf(
-        0 to 13,
-        1 to 12,
-        10 to 11,
-        6 to 9,
-        7 to 8,
-        2 to 5,
-        3 to 4
-    )
+    fun buildStackPairs(instructions: List<List<Int>>): List<Pair<Int, Int>> {
+        val res = mutableListOf<Pair<Int, Int>>()
+        val s = Stack<Int>()
+        instructions.forEachIndexed { idx, instr ->
+            if (instr[0] == 1) {
+                s.push(idx)
+            } else {
+                val matching = s.pop()
+                res.add(matching to idx)
+            }
+        }
+        return res.reversed()
+    }
 
     private fun part2(lines: List<String>): Any {
         val res = (1..14).map { 0 }.toMutableList()
         val usedInstructions = mutableSetOf<Int>()
         val digitPrecedence = 1..9
+        val stackPars = buildStackPairs(vars)
         stackPars.forEach { p ->
             usedInstructions.addAll(p.toList())
             val instructionList = vars.filterIndexed { index, _ -> index in usedInstructions }
