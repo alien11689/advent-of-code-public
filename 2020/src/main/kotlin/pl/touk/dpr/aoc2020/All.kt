@@ -3,6 +3,7 @@ package pl.touk.dpr.aoc2020
 object All {
     @JvmStatic
     fun main(args: Array<String>) {
+        Util.measureTime {
         Util.measureTime { Day01.main(args) }
         Util.measureTime { Day02.main(args) }
         Util.measureTime { Day03.main(args) }
@@ -28,5 +29,6 @@ object All {
         Util.measureTime { Day23.main(args) }
         Util.measureTime { Day24.main(args) }
         Util.measureTime { Day25.main(args) }
+        }
     }
 }
