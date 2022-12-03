@@ -14,16 +14,19 @@ object Day03 {
 
     private fun part1(lines: List<String>): Any {
         return lines.map {
-            val left = it.substring(0, it.length / 2)
-            val right = it.substring(it.length / 2)
-            val char = left.toSet().intersect(right.toSet()).first()
+            val char = it.chunked(it.length/2)
+                .map { it.toSet() }
+                .reduce{ a, b -> a.intersect(b) }
+                .first()
             priorities.indexOf(char) + 1L
         }.sum()
     }
 
     private fun part2(lines: List<String>): Any {
         return lines.chunked(3).map {
-            val char = it.map { it.toSet() }.reduce { a, b -> a.intersect(b) }.first()
+            val char = it.map { it.toSet() }
+                .reduce { a, b -> a.intersect(b) }
+                .first()
             priorities.indexOf(char) + 1L
         }.sum()
     }
