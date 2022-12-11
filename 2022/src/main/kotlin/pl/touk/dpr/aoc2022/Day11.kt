@@ -22,13 +22,17 @@ object Day11 {
         return monkeys.values.map { it.inspected }.sortedDescending().take(2).reduce { acc, i -> acc * i }
     }
 
+    data class Item(val id: Int, val value: Long)
+
     private fun readMonkeys(lines: List<String>): MutableMap<Int, Monkey> {
         var i = 0
+        var itemId = 0
         val monkeys = mutableMapOf<Int, Monkey>()
         while (i < lines.size) {
             val id = lines[i].split(" ").last().split(":")[0].toInt()
             i++
             val items = lines[i].split(":")[1].split(",").map { it.trim().toLong() }
+                .map { Item(itemId++, it) }
             i++
             val operationParts = lines[i].split("= old ")[1].split(" ")
             val operation = when (operationParts[0]) {
@@ -75,10 +79,16 @@ object Day11 {
 
     private fun part2(lines: List<String>): Any {
         val monkeys = readMonkeys(lines).toMap()
+        val mem = mutableMapOf<Map<Int, List<Int>>, Int>()
         (1..10000).forEach {
             monkeys.values.sortedBy { it.id }.forEach { monkey ->
                 monkey.play2(monkeys)
             }
+            val key = monkeys.map { it.key to it.value.items.map { it.id }.toList() }.toMap()
+            if (key in mem) {
+                println("Cycle detected for round $it seen in ${mem[key]}")
+            }
+            mem.put(key, it)
             if (it == 1 || it == 20 || it % 1000 == 0) {
                 println("Round $it has monkeys ${monkeys.values.map { it.inspected }}")
             }
@@ -88,7 +98,7 @@ object Day11 {
 
     data class Monkey(
         val id: Int,
-        val items: MutableList<Long>,
+        val items: MutableList<Item>,
         val operation: (a: Long) -> Long,
         val test: Int,
         val left: Int,
@@ -98,11 +108,12 @@ object Day11 {
         fun play(monkeys: Map<Int, Monkey>) {
             inspected += items.size
             items.forEach { item ->
-                val newItem = operation(item) / 3
+                val newItem = operation(item.value) / 3
+                val itemAfterOperation = item.copy(value = newItem)
                 if (newItem % test == 0L) {
-                    monkeys[left]!!.items.add(newItem)
+                    monkeys[left]!!.items.add(itemAfterOperation)
                 } else {
-                    monkeys[right]!!.items.add(newItem)
+                    monkeys[right]!!.items.add(itemAfterOperation)
                 }
             }
             items.clear()
@@ -111,11 +122,12 @@ object Day11 {
         fun play2(monkeys: Map<Int, Monkey>) {
             inspected += items.size
             items.forEach { item ->
-                val newItem = operation(item)
+                val newItem = operation(item.value)
+                val itemAfterOperation = item.copy(value = newItem)
                 if (newItem % test == 0L) {
-                    monkeys[left]!!.items.add(newItem)
+                    monkeys[left]!!.items.add(itemAfterOperation)
                 } else {
-                    monkeys[right]!!.items.add(newItem)
+                    monkeys[right]!!.items.add(itemAfterOperation)
                 }
             }
             items.clear()
