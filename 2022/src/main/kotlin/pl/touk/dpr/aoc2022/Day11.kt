@@ -11,7 +11,7 @@ object Day11 {
         println(part1(lines))
         println("Part 2:")
         println(part2(Util.getNotEmptyLinesFromFile("/11/test1.txt")))
-//        println(part2(lines))
+        println(part2(lines))
     }
 
     private fun part1(lines: List<String>): Any {
@@ -81,16 +81,19 @@ object Day11 {
 
     private fun part2(lines: List<String>): Any {
         val monkeys = readMonkeys(lines).toMap()
-        val mem = mutableMapOf<Map<Int, List<Int>>, Int>()
+        val base = monkeys.values.map { it.test }.reduce{ acc, cur -> acc.multiply(cur)}
+        println("Base is $base")
+//        val mem = mutableMapOf<Map<Int, List<Int>>, Int>()
         (1..10000).forEach {
             monkeys.values.sortedBy { it.id }.forEach { monkey ->
-                monkey.play2(monkeys)
+                monkey.play2(monkeys, base)
             }
-            val key = monkeys.map { it.key to it.value.items.map { it.id }.toList() }.toMap()
-            if (key in mem) {
-                println("Cycle detected for round $it seen in ${mem[key]}")
-            }
-            mem.put(key, it)
+//            val key = monkeys.map { it.key to it.value.items.map { it.id }.toList() }.toMap()
+//            if (key in mem) {
+//                println("Cycle detected for round $it seen in ${mem[key]}")
+//                println("  Values: ${monkeys.map { it.key to it.value.items.map { it.value }.toList() }.toMap()}")
+//            }
+//            mem.put(key, it)
             if (it == 1 || it == 20 || it % 1000 == 0) {
                 println("Round $it has monkeys ${monkeys.values.map { it.inspected }}")
             }
@@ -121,10 +124,10 @@ object Day11 {
             items.clear()
         }
 
-        fun play2(monkeys: Map<Int, Monkey>) {
+        fun play2(monkeys: Map<Int, Monkey>, base: BigInteger) {
             inspected += items.size
             items.forEach { item ->
-                val newItem = operation(item.value)
+                val newItem = operation(item.value).mod(base)
                 val itemAfterOperation = item.copy(value = newItem)
                 if (newItem.mod(test) == BigInteger.ZERO) {
                     monkeys[left]!!.items.add(itemAfterOperation)
