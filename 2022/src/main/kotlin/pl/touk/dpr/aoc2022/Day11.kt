@@ -8,7 +8,8 @@ object Day11 {
         println(part1(Util.getNotEmptyLinesFromFile("/11/test1.txt")))
         println(part1(lines))
         println("Part 2:")
-        println(part2(lines))
+        println(part2(Util.getNotEmptyLinesFromFile("/11/test1.txt")))
+//        println(part2(lines))
     }
 
     private fun part1(lines: List<String>): Any {
@@ -27,32 +28,32 @@ object Day11 {
         while (i < lines.size) {
             val id = lines[i].split(" ").last().split(":")[0].toInt()
             i++
-            val items = lines[i].split(":")[1].split(",").map { it.trim().toInt() }
+            val items = lines[i].split(":")[1].split(",").map { it.trim().toLong() }
             i++
             val operationParts = lines[i].split("= old ")[1].split(" ")
             val operation = when (operationParts[0]) {
                 "+" -> when (operationParts[1]) {
                     "old" -> {
-                        val f = { a: Int -> a + a }
+                        val f = { a: Long -> a + a }
                         f
                     }
 
                     else -> {
-                        val v = operationParts[1].toInt()
-                        val f = { a: Int -> a + v }
+                        val v = operationParts[1].toLong()
+                        val f = { a: Long -> a + v }
                         f
                     }
                 }
 
                 "*" -> when (operationParts[1]) {
                     "old" -> {
-                        val f = { a: Int -> a * a }
+                        val f = { a: Long -> a * a }
                         f
                     }
 
                     else -> {
                         val v = operationParts[1].toInt()
-                        val f = { a: Int -> a * v }
+                        val f = { a: Long -> a * v }
                         f
                     }
                 }
@@ -73,23 +74,45 @@ object Day11 {
     }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        val monkeys = readMonkeys(lines).toMap()
+        (1..10000).forEach {
+            monkeys.values.sortedBy { it.id }.forEach { monkey ->
+                monkey.play2(monkeys)
+            }
+            if (it == 1 || it == 20 || it % 1000 == 0) {
+                println("Round $it has monkeys ${monkeys.values.map { it.inspected }}")
+            }
+        }
+        return monkeys.values.map { it.inspected }.sortedDescending().take(2).reduce { acc, i -> acc * i }
     }
 
     data class Monkey(
         val id: Int,
-        val items: MutableList<Int>,
-        val operation: (a: Int) -> Int,
+        val items: MutableList<Long>,
+        val operation: (a: Long) -> Long,
         val test: Int,
         val left: Int,
         val right: Int,
-        var inspected: Int = 0,
+        var inspected: Long = 0L,
     ) {
         fun play(monkeys: Map<Int, Monkey>) {
+            inspected += items.size
             items.forEach { item ->
-                inspected++
                 val newItem = operation(item) / 3
-                if (newItem % test == 0) {
+                if (newItem % test == 0L) {
+                    monkeys[left]!!.items.add(newItem)
+                } else {
+                    monkeys[right]!!.items.add(newItem)
+                }
+            }
+            items.clear()
+        }
+
+        fun play2(monkeys: Map<Int, Monkey>) {
+            inspected += items.size
+            items.forEach { item ->
+                val newItem = operation(item)
+                if (newItem % test == 0L) {
                     monkeys[left]!!.items.add(newItem)
                 } else {
                     monkeys[right]!!.items.add(newItem)
