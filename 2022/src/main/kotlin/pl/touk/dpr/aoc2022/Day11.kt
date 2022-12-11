@@ -1,5 +1,7 @@
 package pl.touk.dpr.aoc2022
 
+import java.math.BigInteger
+
 object Day11 {
     @JvmStatic
     fun main(args: Array<String>) {
@@ -22,7 +24,7 @@ object Day11 {
         return monkeys.values.map { it.inspected }.sortedDescending().take(2).reduce { acc, i -> acc * i }
     }
 
-    data class Item(val id: Int, val value: Long)
+    data class Item(val id: Int, val value: BigInteger)
 
     private fun readMonkeys(lines: List<String>): MutableMap<Int, Monkey> {
         var i = 0
@@ -31,33 +33,33 @@ object Day11 {
         while (i < lines.size) {
             val id = lines[i].split(" ").last().split(":")[0].toInt()
             i++
-            val items = lines[i].split(":")[1].split(",").map { it.trim().toLong() }
+            val items = lines[i].split(":")[1].split(",").map { it.trim().toBigInteger() }
                 .map { Item(itemId++, it) }
             i++
             val operationParts = lines[i].split("= old ")[1].split(" ")
             val operation = when (operationParts[0]) {
                 "+" -> when (operationParts[1]) {
                     "old" -> {
-                        val f = { a: Long -> a + a }
+                        val f = { a: BigInteger -> a + a }
                         f
                     }
 
                     else -> {
-                        val v = operationParts[1].toLong()
-                        val f = { a: Long -> a + v }
+                        val v = operationParts[1].toBigInteger()
+                        val f = { a: BigInteger -> a + v }
                         f
                     }
                 }
 
                 "*" -> when (operationParts[1]) {
                     "old" -> {
-                        val f = { a: Long -> a * a }
+                        val f = { a: BigInteger -> a * a }
                         f
                     }
 
                     else -> {
-                        val v = operationParts[1].toInt()
-                        val f = { a: Long -> a * v }
+                        val v = operationParts[1].toBigInteger()
+                        val f = { a: BigInteger -> a * v }
                         f
                     }
                 }
@@ -65,7 +67,7 @@ object Day11 {
                 else -> throw RuntimeException("unknown $operationParts")
             }
             i++
-            val test = lines[i].split(" ").last().toInt()
+            val test = lines[i].split(" ").last().toBigInteger()
             i++
             val ok = lines[i].split(" ").last().toInt()
             i++
@@ -99,8 +101,8 @@ object Day11 {
     data class Monkey(
         val id: Int,
         val items: MutableList<Item>,
-        val operation: (a: Long) -> Long,
-        val test: Int,
+        val operation: (a: BigInteger) -> BigInteger,
+        val test: BigInteger,
         val left: Int,
         val right: Int,
         var inspected: Long = 0L,
@@ -108,9 +110,9 @@ object Day11 {
         fun play(monkeys: Map<Int, Monkey>) {
             inspected += items.size
             items.forEach { item ->
-                val newItem = operation(item.value) / 3
+                val newItem = operation(item.value).div(3.toBigInteger())
                 val itemAfterOperation = item.copy(value = newItem)
-                if (newItem % test == 0L) {
+                if (newItem.mod(test) == BigInteger.ZERO) {
                     monkeys[left]!!.items.add(itemAfterOperation)
                 } else {
                     monkeys[right]!!.items.add(itemAfterOperation)
@@ -124,7 +126,7 @@ object Day11 {
             items.forEach { item ->
                 val newItem = operation(item.value)
                 val itemAfterOperation = item.copy(value = newItem)
-                if (newItem % test == 0L) {
+                if (newItem.mod(test) == BigInteger.ZERO) {
                     monkeys[left]!!.items.add(itemAfterOperation)
                 } else {
                     monkeys[right]!!.items.add(itemAfterOperation)
