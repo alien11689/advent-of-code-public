@@ -14,9 +14,7 @@ object Day12 {
     }
 
     private fun part1(lines: List<String>): Any {
-//        ('a'..'z').forEach{ print(it) }
-//        println()
-        val points2 = lines.flatMapIndexed { y, line -> line.mapIndexed { x, c -> Point(x, y) to c } }.toMap()
+        val points2 = readPoints(lines)
         val start = points2.filter { it.value == 'S' }.keys.first()
         val target = points2.filter { it.value == 'E' }.keys.first()
         val points = normalizePoints(points2)
@@ -29,7 +27,7 @@ object Day12 {
         val mem = mutableSetOf<Point>()
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
-            cur.neghbours(points)
+            cur.neighbours(points)
                 .forEach {
                     if (it.p == target) {
                         return it.steps
@@ -45,7 +43,7 @@ object Day12 {
 
     data class State(val p: Point, val height: Char, val steps: Int) : Comparable<State> {
         override fun compareTo(other: State): Int = steps - other.steps
-        fun neghbours(points: Map<Point, Char>): Set<State> {
+        fun neighbours(points: Map<Point, Char>): Set<State> {
             return p.neighbours()
                 .filter { it in points }
                 .filter {
@@ -70,7 +68,7 @@ object Day12 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val points2 = lines.flatMapIndexed { y, line -> line.mapIndexed { x, c -> Point(x, y) to c } }.toMap()
+        val points2 = readPoints(lines)
         val target = points2.filter { it.value == 'E' }.keys.first()
         val points = normalizePoints(points2)
         return points.filter { it.value == 'a' }
@@ -78,15 +76,16 @@ object Day12 {
             .min()
     }
 
+    private fun readPoints(lines: List<String>): Map<Point, Char> = lines.flatMapIndexed { y, line -> line.mapIndexed { x, c -> Point(x, y) to c } }.toMap()
+
     private fun normalizePoints(points2: Map<Point, Char>): Map<Point, Char> {
-        val points = points2.map {
+        return points2.map {
             when (it.value) {
                 'S' -> it.key to 'a'
                 'E' -> it.key to 'z'
                 else -> it.key to it.value
             }
         }.toMap()
-        return points
     }
 }
 
