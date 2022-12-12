@@ -7,7 +7,7 @@ object Day12 {
     fun main(args: Array<String>) {
         val lines = Util.getNotEmptyLinesFromFile("/12/input.txt")
         println("Part 1:")
-        println(part1(Util.getNotEmptyLinesFromFile("/12/test1.txt")))
+//        println(part1(Util.getNotEmptyLinesFromFile("/12/test1.txt")))
         println(part1(lines))
         println("Part 2:")
         println(part2(lines))
@@ -19,23 +19,19 @@ object Day12 {
         val points2 = lines.flatMapIndexed { y, line -> line.mapIndexed { x, c -> Point(x, y) to c } }.toMap()
         val start = points2.filter { it.value == 'S' }.keys.first()
         val target = points2.filter { it.value == 'E' }.keys.first()
-        val points = points2.map {
-            when (it.value) {
-                'S' -> it.key to 'a'
-                'E' -> it.key to 'z'
-                else -> it.key to it.value
-            }
-        }.toMap()
+        val points = normalizePoints(points2)
+        return shortestPath(start, points, target)
+    }
+
+    private fun shortestPath(start: Point, points: Map<Point, Char>, target: Point): Int {
         val pq = PriorityQueue<State>()
-        pq.offer(State(start, 'a', 0, listOf('S')))
+        pq.offer(State(start, 'a', 0))
         val mem = mutableSetOf<Point>()
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
-            println("Checking $cur")
             cur.neghbours(points)
                 .forEach {
                     if (it.p == target) {
-                        println("Checking $it")
                         return it.steps
                     }
                     if (it.p !in mem) {
@@ -44,10 +40,10 @@ object Day12 {
                     }
                 }
         }
-        throw RuntimeException()
+        return Int.MAX_VALUE
     }
 
-    data class State(val p: Point, val height: Char, val steps: Int, val path: List<Char>) : Comparable<State> {
+    data class State(val p: Point, val height: Char, val steps: Int) : Comparable<State> {
         override fun compareTo(other: State): Int = steps - other.steps
         fun neghbours(points: Map<Point, Char>): Set<State> {
             return p.neighbours()
@@ -58,7 +54,7 @@ object Day12 {
                         else -> nextHeight == height + 1 || nextHeight <= height
                     }
                 }
-                .map { State(it, points[it]!!, steps + 1, path + points[it]!!) }
+                .map { State(it, points[it]!!, steps + 1) }
                 .toSet()
         }
 
@@ -74,7 +70,23 @@ object Day12 {
     }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        val points2 = lines.flatMapIndexed { y, line -> line.mapIndexed { x, c -> Point(x, y) to c } }.toMap()
+        val target = points2.filter { it.value == 'E' }.keys.first()
+        val points = normalizePoints(points2)
+        return points.filter { it.value == 'a' }
+            .map { shortestPath(it.key, points, target) }
+            .min()
+    }
+
+    private fun normalizePoints(points2: Map<Point, Char>): Map<Point, Char> {
+        val points = points2.map {
+            when (it.value) {
+                'S' -> it.key to 'a'
+                'E' -> it.key to 'z'
+                else -> it.key to it.value
+            }
+        }.toMap()
+        return points
     }
 }
 
