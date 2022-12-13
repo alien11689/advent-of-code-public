@@ -7,9 +7,10 @@ object Day13 {
     fun main(args: Array<String>) {
         val lines = Util.getNotEmptyLinesFromFile("/13/input.txt")
         println("Part 1:")
-        println(part1(Util.getNotEmptyLinesFromFile("/13/test1.txt")))
+//        println(part1(Util.getNotEmptyLinesFromFile("/13/test1.txt")))
         println(part1(lines))
         println("Part 2:")
+//        println(part2(Util.getNotEmptyLinesFromFile("/13/test1.txt")))
         println(part2(lines))
     }
 
@@ -17,7 +18,6 @@ object Day13 {
         val pairs = parseExpressions(lines).chunked(2)
 
         return pairs.mapIndexed { i, pair ->
-//            println("Comparing pair $pair")
             if (pair.first().compareTo(pair.last()) < 1) {
                 i + 1
             } else 0
@@ -29,25 +29,19 @@ object Day13 {
             if (this is V && second is V) {
                 return i.compareTo(second.i)
             } else if (this is L && second is L) {
-                if (l.isEmpty() && second.l.isNotEmpty()) {
-                    return -1
-                } else if (l.isNotEmpty() && second.l.isEmpty()) {
-                    return 1
-                }
                 this.l.indices.map { i ->
                     if (i >= second.l.size) {
                         return 1
                     }
-                    val comparedItem = l[i].compareTo(second.l[i])
-                    when (comparedItem) {
+                    when (val comparedItem = l[i].compareTo(second.l[i])) {
                         -1, 1 -> return comparedItem
                         else -> {}
                     }
                 }
-                if (l.size == second.l.size) {
-                    return 0
+                return if (l.size == second.l.size) {
+                    0
                 } else if (l.size < second.l.size) {
-                    return -1
+                    -1
                 } else {
                     throw RuntimeException("Here")
                 }
@@ -85,8 +79,7 @@ object Day13 {
     private fun readContainer(tokens: StringTokenizer): Expr {
         val parts = mutableListOf<Expr>()
         while (tokens.hasMoreTokens()) {
-            val token = tokens.nextToken()
-            when (token) {
+            when (val token = tokens.nextToken()) {
                 "," -> continue
                 "]" -> return Expr.L(parts.toList())
                 else -> parts.add(parseExpression(token, tokens))
@@ -96,7 +89,11 @@ object Day13 {
     }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        val firstPivot = Expr.L(listOf(Expr.L(listOf(Expr.V(2)))))
+        val secondPivot = Expr.L(listOf(Expr.L(listOf(Expr.V(6)))))
+        val expressions = parseExpressions(lines) + listOf(firstPivot, secondPivot)
+        val sorted = expressions.sorted()
+        return (sorted.indexOf(firstPivot) + 1) * (sorted.indexOf(secondPivot) + 1)
     }
 }
 
