@@ -19,37 +19,9 @@ object Day14 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val points = mutableSetOf<Point>()
-        lines.forEach { line ->
-            val parts = line.split(" -> ")
-            var (curX, curY) = parts[0].split(",").map { it.toInt() }
-//            println("Filling $curX, $curY")
-            points.add(Point(curX, curY))
-            var i = 1
-            while (i < parts.size) {
-                val (destX, destY) = parts[i].split(",").map { it.toInt() }
-                val dx = if (curX == destX) 0 else if (curX < destX) 1 else -1
-                val dy = if (curY == destY) 0 else if (curY < destY) 1 else -1
-//                println("Moving from $curX, $curY to $destX, $destY and moving $dx, $dy")
-                while (curX != destX || curY != destY) {
-                    curX += dx
-                    curY += dy
-//                    println("Filling $curX, $curY")
-                    points.add(Point(curX, curY))
-                }
-                ++i
-            }
-        }
-        val minX = points.map { it.x }.min()
-        val maxX = points.map { it.x }.max()
-        val minY = points.map { it.y }.min()
+        val points = readPoints(lines)
+        //printlnBoard(points)
         val maxY = points.maxOfOrNull { it.y }!!
-//        for (y in minY..maxY) {
-//            for (x in minX..maxX) {
-//                print(if (Point(x, y) in points) "#" else ".")
-//            }
-//            println()
-//        }
         var curSand = Point(500, 0)
         var seen = 0
         while (true) {
@@ -79,42 +51,11 @@ object Day14 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val points = mutableSetOf<Point>()
-        lines.forEach { line ->
-            val parts = line.split(" -> ")
-            var (curX, curY) = parts[0].split(",").map { it.toInt() }
-//            println("Filling $curX, $curY")
-            points.add(Point(curX, curY))
-            var i = 1
-            while (i < parts.size) {
-                val (destX, destY) = parts[i].split(",").map { it.toInt() }
-                val dx = if (curX == destX) 0 else if (curX < destX) 1 else -1
-                val dy = if (curY == destY) 0 else if (curY < destY) 1 else -1
-//                println("Moving from $curX, $curY to $destX, $destY and moving $dx, $dy")
-                while (curX != destX || curY != destY) {
-                    curX += dx
-                    curY += dy
-//                    println("Filling $curX, $curY")
-                    points.add(Point(curX, curY))
-                }
-                ++i
-            }
-        }
-        val minX = points.map { it.x }.min()
-        val maxX = points.map { it.x }.max()
-        val minY = points.map { it.y }.min()
-        val maxY = points.maxOfOrNull { it.y }!!
-        for (x in -3000..3000) {
-            points.add(Point(x, maxY + 2))
-        }
-//        for (y in minY..maxY) {
-//            for (x in minX..maxX) {
-//                print(if (Point(x, y) in points) "#" else ".")
-//            }
-//            println()
-//        }
+        val points = readPoints(lines)
+//        printlnBoard(points)
+        val maxY = points.map { it.y }.max() + 2
+        extendPoints(maxY, points)
         var curSand = Point(500, 0)
-
         var seen = 0
         while (true) {
 //            println("Checking $curSand")
@@ -140,6 +81,57 @@ object Day14 {
             }
         }
         return seen
+    }
+
+    private fun extendPoints(maxY: Int, points: MutableSet<Point>) {
+        val startX = 500
+        var l = startX
+        var r = startX
+        var h = 0
+        while (h != maxY) {
+            h += 1
+            l--
+            r++
+        }
+        println("Expected border x is $l to $r")
+        for (x in (l..r)) {
+            points.add(Point(x, maxY))
+        }
+    }
+
+    private fun printlnBoard(points: MutableSet<Point>) {
+        val minX = points.map { it.x }.min()
+        val maxX = points.map { it.x }.max()
+        val minY = points.map { it.y }.min()
+        val maxY = points.map { it.y }.max()
+        for (y in minY..maxY) {
+            for (x in minX..maxX) {
+                print(if (Point(x, y) in points) "#" else ".")
+            }
+            println()
+        }
+    }
+
+    private fun readPoints(lines: List<String>): MutableSet<Point> {
+        val points = mutableSetOf<Point>()
+        lines.forEach { line ->
+            val parts = line.split(" -> ")
+            var (curX, curY) = parts[0].split(",").map { it.toInt() }
+            points.add(Point(curX, curY))
+            var i = 1
+            while (i < parts.size) {
+                val (destX, destY) = parts[i].split(",").map { it.toInt() }
+                val dx = if (curX == destX) 0 else if (curX < destX) 1 else -1
+                val dy = if (curY == destY) 0 else if (curY < destY) 1 else -1
+                while (curX != destX || curY != destY) {
+                    curX += dx
+                    curY += dy
+                    points.add(Point(curX, curY))
+                }
+                ++i
+            }
+        }
+        return points
     }
 }
 
