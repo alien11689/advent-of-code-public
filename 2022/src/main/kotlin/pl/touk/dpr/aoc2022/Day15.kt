@@ -5,8 +5,10 @@ object Day15 {
     fun main(args: Array<String>) {
         val lines = Util.getNotEmptyLinesFromFile("/15/input.txt")
         println("Part 1:")
+        println(part1(Util.getNotEmptyLinesFromFile("/15/test1.txt")))
         println(part1(lines))
         println("Part 2:")
+        println(part2(Util.getNotEmptyLinesFromFile("/15/test1.txt")))
         println(part2(lines))
     }
 

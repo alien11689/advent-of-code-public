@@ -5,10 +5,10 @@ object Day14 {
     fun main(args: Array<String>) {
         val lines = Util.getNotEmptyLinesFromFile("/14/input.txt")
         println("Part 1:")
-        println(part1(Util.getNotEmptyLinesFromFile("/14/test1.txt")))
+//        println(part1(Util.getNotEmptyLinesFromFile("/14/test1.txt")))
         println(part1(lines))
         println("Part 2:")
-        println(part2(Util.getNotEmptyLinesFromFile("/14/test1.txt")))
+//        println(part2(Util.getNotEmptyLinesFromFile("/14/test1.txt")))
         println(part2(lines))
     }
 
@@ -29,19 +29,17 @@ object Day14 {
             val down = curSand.down()
             val left = curSand.left()
             val right = curSand.right()
-            if (down in points && left in points && right in points) {
-                points.add(curSand)
-                ++seen
-                curSand = Point(500, 0)
-                continue
-            } else if (down !in points) {
+            if (down !in points) {
                 curSand = down
             } else if (left !in points) {
                 curSand = left
             } else if (right !in points) {
                 curSand = right
             } else {
-                throw RuntimeException()
+                points.add(curSand)
+                ++seen
+                curSand = Point(500, 0)
+                continue
             }
             if (curSand.y == maxY) {
                 break
@@ -62,7 +60,13 @@ object Day14 {
             val down = curSand.down()
             val left = curSand.left()
             val right = curSand.right()
-            if (down in points && left in points && right in points) {
+            if (down !in points) {
+                curSand = down
+            } else if (left !in points) {
+                curSand = left
+            } else if (right !in points) {
+                curSand = right
+            } else {
                 points.add(curSand)
                 ++seen
                 curSand = Point(500, 0)
@@ -70,14 +74,6 @@ object Day14 {
                     break
                 }
                 continue
-            } else if (down !in points) {
-                curSand = down
-            } else if (left !in points) {
-                curSand = left
-            } else if (right !in points) {
-                curSand = right
-            } else {
-                throw RuntimeException()
             }
         }
         return seen
@@ -93,7 +89,7 @@ object Day14 {
             l--
             r++
         }
-        println("Expected border x is $l to $r")
+//        println("Expected border x is $l to $r")
         for (x in (l..r)) {
             points.add(Point(x, maxY))
         }
