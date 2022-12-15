@@ -10,7 +10,7 @@ object Day15 {
 //        println(part1(Util.getNotEmptyLinesFromFile("/15/test1.txt"), 10))
         println(part1(lines, 2000000))
         println("Part 2:")
-        println(part2(Util.getNotEmptyLinesFromFile("/15/test1.txt"), 20))
+//        println(part2(Util.getNotEmptyLinesFromFile("/15/test1.txt"), 20))
         println(part2(lines, 4000000))
     }
 
@@ -18,7 +18,17 @@ object Day15 {
         fun manhattan(other: Point): Int = (other.x - x).absoluteValue + (other.y - y).absoluteValue
     }
 
-    data class SensorBeacon(val sensor: Point, val beacon: Point, val dist: Int)
+    data class SensorBeacon(val sensor: Point, val beacon: Point, val dist: Int) {
+        fun farrestXSawFor(possibleBeacon: Point): Int {
+            // dist = abs(x - sx) + abs(y-sy)
+            // abs(x - sx) = dist - abs(y-sy)
+            // x - sx = dist - abs(y-sy) or x - sx = - dist + abs(y-sy)
+            // x = x + dist - abs(y-sy) or x - sx = x - dist + abs(y-sy)
+            val y = possibleBeacon.y
+            val dx = dist - (y - sensor.y).absoluteValue
+            return listOf(-dx + sensor.x, dx + sensor.x).max()
+        }
+    }
 
     private fun part1(lines: List<String>, interestingRow: Int): Any {
         val sensors2Beacon = readInput(lines)
@@ -58,49 +68,30 @@ object Day15 {
 
     private fun part2(lines: List<String>, maxCoord: Int): Any {
         val sensors2Beacon = readInput(lines)
-        val sensors = sensors2Beacon.map { it.sensor }
-        val beacons = sensors2Beacon.map { it.beacon }
-//        println("Max dist: ${sensors2Beacon.maxOfOrNull { it.dist }}")
-//        println("X beacon range is ${sensors.minOfOrNull { it.x }}..${sensors.maxOfOrNull { it.x }}")
-//        println("Y beacon range is ${sensors.minOfOrNull { it.y }}..${sensors.maxOfOrNull { it.y }}")
-//        println("X sensor range is ${beacons.minOfOrNull { it.x }}..${beacons.maxOfOrNull { it.x }}")
-//        println("Y sensor range is ${beacons.minOfOrNull { it.y }}..${beacons.maxOfOrNull { it.y }}")
         val minX = 0
         val maxX = maxCoord
         val minY = 0
         val maxY = maxCoord
-        val points = mutableSetOf<Point>()
-
-//        sensors2Beacon.forEach {
-//            println("Distance ${it.dist}")
-//        }
-
-//        for (y in minY..maxY) {
-//            println("Adding row $y")
-//            points.addAll((minX..maxX).map { Point(it, y) })
-//        }
 
         var y = minY
-
         while (y <= maxY) {
-            println("Checking row $y")
+//            println("Checking row $y")
             var x = minX
             while (x <= maxX) {
                 val possibleBeacon = Point(x, y)
-                val sensorsSeeing = sensors2Beacon.filter {
+                val sensorsSeeing = sensors2Beacon.find {
                     val localDist = possibleBeacon.manhattan(it.sensor)
                     localDist <= it.dist
                 }
-                if (sensorsSeeing.isEmpty()) {
+                if (sensorsSeeing == null) {
                     return possibleBeacon.x.toLong() * 4000000 + possibleBeacon.y
+                }else {
+                    x = sensorsSeeing.farrestXSawFor(possibleBeacon) + 1
                 }
-                ++x
             }
             ++y
         }
         throw RuntimeException()
-//        val res = Point(0, 0)// result
-//        return res.x.toLong() * 4000000 + res.y
     }
 }
 
