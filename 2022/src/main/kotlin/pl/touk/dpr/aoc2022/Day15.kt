@@ -69,7 +69,7 @@ object Day15 {
     }
 
     private fun part2(lines: List<String>, maxCoord: Int): Any {
-        val sensors2Beacon = readInput(lines)
+        val sensors2Beacon = readInput(lines).sortedByDescending { it.dist }
         val minX = 0
         val maxX = maxCoord
         val minY = 0
