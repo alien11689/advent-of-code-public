@@ -4,7 +4,7 @@ import java.util.StringTokenizer
 
 object Day13 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/13/input.txt")
         println("Part 1:")
 //        println(part1(Util.getNotEmptyLinesFromFile("/13/test1.txt")))

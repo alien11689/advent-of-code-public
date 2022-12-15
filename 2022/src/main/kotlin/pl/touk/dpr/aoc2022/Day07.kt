@@ -4,7 +4,7 @@ import java.util.Stack
 
 object Day07 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/07/input.txt")
         println("Part 1:")
         println(part1(lines))
@@ -115,7 +115,7 @@ object Day07 {
             }
         }
 
-        return sizes.sorted().reversed().last { totalCapability - weHave + it > necessary}
+        return sizes.sorted().reversed().last { totalCapability - weHave + it > necessary }
     }
 }
 

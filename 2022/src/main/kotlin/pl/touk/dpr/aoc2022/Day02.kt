@@ -2,7 +2,7 @@ package pl.touk.dpr.aoc2022
 
 object Day02 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/02/input.txt")
         println("Part 1:")
         println(part1(lines))
@@ -71,6 +71,7 @@ object Day02 {
                         Option.PAPER -> Option.SCISSORS
                         Option.SCISSORS -> Option.ROCK
                     }
+
                     else -> throw RuntimeException()
                 }
                 result(enemy, me)

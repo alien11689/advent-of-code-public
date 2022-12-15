@@ -2,7 +2,7 @@ package pl.touk.dpr.aoc2022
 
 object Day03 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/03/input.txt")
         println("Part 1:")
         println(part1(lines))
@@ -14,9 +14,9 @@ object Day03 {
 
     private fun part1(lines: List<String>): Any {
         return lines.map {
-            val char = it.chunked(it.length/2)
+            val char = it.chunked(it.length / 2)
                 .map { it.toSet() }
-                .reduce{ a, b -> a.intersect(b) }
+                .reduce { a, b -> a.intersect(b) }
                 .first()
             priorities.indexOf(char) + 1L
         }.sum()
