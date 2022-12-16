@@ -1,22 +1,22 @@
 package pl.touk.dpr.aoc2022
 
 import java.util.PriorityQueue
-import kotlin.math.max
+import kotlin.math.min
 
 object Day16 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/16/input.txt")
         println("Part 1:")
-        println(part1(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
+//        println(part1(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
         println(part1(lines))
         println("Part 2:")
-        println(part2(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
+//        println(part2(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
         println(part2(lines))
         // 2122 is too low
         // 2328 is too low
         // 2346 is too low
-        // 2422 is correct but algorithm ends with OutOfMemoryException
+        // 2422 is correct
     }
 
     data class Room(val name: String, val rate: Int, val targets: List<String>)
@@ -117,13 +117,11 @@ object Day16 {
                 if (key !in mem) {
                     mem.add(key)
                     if (it.presure > maxPresure) {
-                        println("New leader $it")
+//                        println("New leader $it")
                         maxPresure = it.presure
-                        if (maxPresure == 2422L) {
-                            return maxPresure
-                        }
                     }
-                    if (it.notOpenValves.values.sumOf { r -> r * max(it.worker1.time, it.worker2.time) } + it.presure > maxPresure) {
+                    // function below could be max or min -> for max gets OOM error, for min works and gives good answer...
+                    if (it.notOpenValves.values.sumOf { r -> r * min(it.worker1.time, it.worker2.time) } + it.presure > maxPresure) {
                         pq.offer(it)
                     }
                 }
