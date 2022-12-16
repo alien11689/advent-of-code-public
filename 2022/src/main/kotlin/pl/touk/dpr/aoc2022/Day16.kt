@@ -8,8 +8,6 @@ object Day16 {
         val lines = Util.getNotEmptyLinesFromFile("/16/input.txt")
         println("Part 1:")
         println(part1(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
-        // 1234 is wrong
-        // 1691 is wrong
         println(part1(lines))
         println("Part 2:")
         println(part2(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
@@ -18,10 +16,7 @@ object Day16 {
 
     data class Room(val name: String, val rate: Int, val targets: List<String>)
 
-    data class Mem(val room: String, val notOpenValves: Map<String, Int>)
-    data class GlobalMem(val room: String, val notOpenValves: Map<String, Int>, val presure: Long)
-
-    data class State(val room: String, val time: Int, val notOpenValves: Map<String, Int>, val presure: Long = 0, val memory: Set<Mem> = emptySet()) : Comparable<State> {
+    data class State(val room: String, val time: Int, val notOpenValves: Map<String, Int>, val presure: Long = 0) : Comparable<State> {
         override fun compareTo(other: State): Int = time - other.time
         fun nexts(transitions: Map<String, List<String>>): List<State> {
             if (time == 0 || notOpenValves.isEmpty()) {
@@ -32,13 +27,10 @@ object Day16 {
                 val rate = notOpenValves[room]!!.toLong()
                 val newTime = time - 1
                 val newNotOpenValves = notOpenValves - room
-                options.add(this.copy(time = newTime, notOpenValves = newNotOpenValves, presure = presure + newTime * rate, memory = memory + Mem(room, newNotOpenValves)))
+                options.add(this.copy(time = newTime, notOpenValves = newNotOpenValves, presure = presure + newTime * rate))
             }
             transitions[room]!!.forEach { newRoom ->
-                val key = Mem(newRoom, notOpenValves)
-                if (key !in memory) {
-                    options.add(copy(room = newRoom, time = time - 1, memory = memory + key))
-                }
+                options.add(copy(room = newRoom, time = time - 1))
             }
             return options
         }
