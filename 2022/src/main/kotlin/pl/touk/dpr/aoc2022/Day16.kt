@@ -12,7 +12,9 @@ object Day16 {
         println("Part 2:")
         println(part2(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
         println(part2(lines))
-        // 2122 is to low
+        // 2122 is too low
+        // 2328 is too low
+        // 2346 is too low
     }
 
     data class Room(val name: String, val rate: Int, val targets: List<String>)
@@ -83,118 +85,117 @@ object Day16 {
         Room(name, rate, targets)
     }
 
+
     private fun part2(lines: List<String>): Any {
         val rooms = readRooms(lines)
         val valves = rooms.filter { it.rate > 0 }.associate { it.name to it.rate }
         val transitions = rooms.associate { it.name to it.targets }
+        val startRoom = "AA"
+        val realTransitions = findRealTransitions(startRoom, valves, transitions)
+        return findMaxPresure(startRoom, valves, realTransitions)
+    }
+
+    private fun findMaxPresure(
+        startRoom: String,
+        valves: Map<String, Int>,
+        realTransitions: MutableMap<Set<String>, Int>,
+    ): Long {
         var maxPresure = 0L
-        val pq = PriorityQueue<State2>()
-        pq.offer(State2("AA", "AA", 26, valves))
+        val pq = PriorityQueue<State3>()
+        pq.offer(State3(Worker(listOf(startRoom), 26), Worker(listOf(startRoom), 26), valves))
+        val mem = mutableSetOf<Set<Worker>>()
         var generation = 0
-        val theBest = mutableMapOf<Triple<Set<String>, Map<String, Int>, Long>, Int>()
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
             if (++generation % 100000 == 0) {
-                println("     PQ size is ${pq.size} and max presure $maxPresure, the best size ${theBest.size} with time: ${cur.time}")
+                println(
+                    "     (Gen $generation) PQ size is ${pq.size}, max presure $maxPresure, mem size                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ${mem.size}"
+                )
             }
-            val localKey = Triple(setOf(cur.room1, cur.room2), cur.notOpenValves, cur.presure)
-            val prev = theBest[localKey] ?: -1
-            if (prev >= cur.time) {
-                continue
-            } else {
-                theBest[localKey] = cur.time
+            if (cur.presure > maxPresure) {
+                println("New leader $cur")
+                maxPresure = cur.presure
             }
-            if (cur.maxScore < maxPresure) {
-                continue
-            }
-            cur.nexts(transitions)
-                .forEach {
-                    if (it.presure > maxPresure) {
-                        println("New leader ${it.presure}: ${it.room1},${it.room2} on time ${it.time} with notOpenValves ${it.notOpenValves}")
-                        maxPresure = it.presure
-                    }
-                    val key = Triple(setOf(it.room1, it.room2), it.notOpenValves, it.presure)
-                    val prev = theBest[key] ?: -1
-                    if (prev < it.time) {
-                        if (it.maxScore >= maxPresure) {
-                            pq.offer(it)
-                        }
-                    }
+            cur.nexts(realTransitions).forEach {
+                val key = setOf(it.worker1, it.worker2)
+                if (key !in mem) {
+                    mem.add(key)
+                    pq.offer(it)
                 }
+            }
         }
         return maxPresure
     }
 
-    data class State2(
-        val room1: String, val room2: String, val time: Int, val notOpenValves: Map<String, Int>, val presure: Long = 0,
-        val maxScore: Long = presure + notOpenValves.map { it.value * (time - 1) }.sum(),
-    ) :
-        Comparable<State2> {
-//        override fun compareTo(other: State2): Int = if (other.time == time) {
-//            other.presure.compareTo(presure)
-//        } else other.time.compareTo(time)
+    data class Worker(val path: List<String>, val time: Int) {
+        fun pos(): String = path.last()
+    }
 
-        override fun compareTo(other: State2): Int = if (other.time == time) {
-            if (other.presure == presure) {
-                -other.notOpenValves.size.compareTo(notOpenValves.size)
-            } else other.presure.compareTo(presure)
-        } else other.time.compareTo(time)
-
-
-        fun nexts(transitions: Map<String, List<String>>): Set<State2> {
-            if (time == 0 || notOpenValves.isEmpty()) {
-                return emptySet()
-            }
-            val options = mutableSetOf<State2>()
-            if (room1 in notOpenValves && room2 in notOpenValves && room1 != room2) {
-                val newTime = time - 1
-                val rate1 = notOpenValves[room1]!!.toLong()
-                val rate2 = notOpenValves[room2]!!.toLong()
-                val newNotOpenValves = notOpenValves - room1 - room2
-                val newPresure = presure + newTime * rate1 + newTime * rate2
-                options.add(this.copy(time = newTime, notOpenValves = newNotOpenValves, presure = newPresure))
-            }
-            if (room1 in notOpenValves) {
-                val newTime = time - 1
-                val rate1 = notOpenValves[room1]!!.toLong()
-                val newNotOpenValves = notOpenValves - room1
-                val newPresure = presure + newTime * rate1
-                transitions[room2]!!.forEach { newRoom2 ->
-                    options.add(
-                        this.copy(
-                            room2 = newRoom2,
-                            time = newTime,
-                            notOpenValves = newNotOpenValves,
-                            presure = newPresure,
-                        )
-                    )
+    data class State3(val worker1: Worker, val worker2: Worker, val notOpenValves: Map<String, Int>, val presure: Long = 0) : Comparable<State3> {
+        fun nexts(transitions: Map<Set<String>, Int>): Set<State3> {
+            val options = mutableSetOf<State3>()
+            notOpenValves.forEach {
+                val target = it.key
+                val rate = it.value
+                val price1 = transitions[setOf(worker1.pos(), target)]!!
+                val newWorker1 = worker1.copy(path = worker1.path + target, time = worker1.time - price1 - 1)
+                if (newWorker1.time >= 0) {
+                    options.add(copy(worker1 = newWorker1, notOpenValves = notOpenValves - target, presure = presure + newWorker1.time * rate))
                 }
-            }
-            if (room2 in notOpenValves) {
-                val newTime = time - 1
-                val rate2 = notOpenValves[room2]!!.toLong()
-                val newNotOpenValves = notOpenValves - room2
-                val newPresure = presure + newTime * rate2
-                transitions[room1]!!.forEach { newRoom1 ->
-                    options.add(
-                        this.copy(
-                            room1 = newRoom1,
-                            time = newTime,
-                            notOpenValves = newNotOpenValves,
-                            presure = newPresure,
-                        )
-                    )
-                }
-            }
-            transitions[room1]!!.forEach { newRoom1 ->
-                transitions[room2]!!.forEach { newRoom2 ->
-                    options.add(copy(room1 = newRoom1, room2 = newRoom2, time = time - 1))
+                val price2 = transitions[setOf(worker2.pos(), target)]!!
+                val newWorker2 = worker2.copy(path = worker2.path + target, time = worker2.time - price2 - 1)
+                if (newWorker2.time >= 0) {
+                    options.add(copy(worker2 = newWorker2, notOpenValves = notOpenValves - target, presure = presure + newWorker2.time * rate))
                 }
             }
             return options
         }
 
+        override fun compareTo(other: State3): Int =
+//            (other.worker1.time + other.worker2.time).compareTo(worker1.time + worker2.time)
+            other.presure.compareTo(presure)
     }
 
+    private fun findRealTransitions(
+        startRoom: String,
+        valves: Map<String, Int>,
+        transitions: Map<String, List<String>>,
+    ): MutableMap<Set<String>, Int> {
+        val keys = (listOf(startRoom) + valves.keys).sorted()
+        val realTransitions = mutableMapOf<Set<String>, Int>()
+        keys.forEachIndexed { i, left ->
+            val interesting = keys.drop(i + 1).toSet()
+            //            println("$left is interesting about $interesting")
+            val found = findShortestTransistionsToAll(left, interesting, transitions)
+            //            println("$left -> $found")
+            found.forEach {
+                realTransitions[setOf(left, it.key)] = it.value
+            }
+        }
+        return realTransitions
+    }
+
+    private fun findShortestTransistionsToAll(origin: String, interesting: Set<String>, transitions: Map<String, List<String>>): Map<String, Int> {
+        val pq = PriorityQueue<List<String>> { o1, o2 ->
+            o1.size.compareTo(o2.size)
+        }
+        pq.offer(listOf(origin))
+        val search = interesting.toMutableSet()
+        val found = mutableMapOf<String, Int>()
+        while (pq.isNotEmpty()) {
+            val cur = pq.poll()
+            val last = cur.last()
+            if (last in search) {
+                found[last] = cur.size - 1
+                search.remove(last)
+            }
+            transitions[last]!!.forEach { next ->
+                if (next !in cur) {
+                    pq.offer(cur + next)
+                }
+            }
+        }
+        return found
+    }
 }
 
