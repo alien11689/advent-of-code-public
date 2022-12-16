@@ -12,6 +12,7 @@ object Day16 {
         println("Part 2:")
         println(part2(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
         println(part2(lines))
+        // 2122 is to low
     }
 
     data class Room(val name: String, val rate: Int, val targets: List<String>)
@@ -27,7 +28,7 @@ object Day16 {
                 val rate = notOpenValves[room]!!.toLong()
                 val newTime = time - 1
                 val newNotOpenValves = notOpenValves - room
-                options.add(this.copy(time = newTime, notOpenValves = newNotOpenValves, presure = presure + newTime * rate))
+                options.add(copy(time = newTime, notOpenValves = newNotOpenValves, presure = presure + newTime * rate))
             }
             transitions[room]!!.forEach { newRoom ->
                 options.add(copy(room = newRoom, time = time - 1))
@@ -94,7 +95,7 @@ object Day16 {
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
             if (++generation % 100000 == 0) {
-                println("PQ size is ${pq.size} and max presure $maxPresure, the best size ${theBest.size} with time: ${cur.time}")
+                println("     PQ size is ${pq.size} and max presure $maxPresure, the best size ${theBest.size} with time: ${cur.time}")
             }
             val localKey = Triple(setOf(cur.room1, cur.room2), cur.notOpenValves, cur.presure)
             val prev = theBest[localKey] ?: -1
@@ -103,7 +104,7 @@ object Day16 {
             } else {
                 theBest[localKey] = cur.time
             }
-            if (cur.notOpenValves.values.sumOf { r -> r * (cur.time - 1) } + cur.presure < maxPresure) {
+            if (cur.maxScore < maxPresure) {
                 continue
             }
             cur.nexts(transitions)
@@ -115,7 +116,7 @@ object Day16 {
                     val key = Triple(setOf(it.room1, it.room2), it.notOpenValves, it.presure)
                     val prev = theBest[key] ?: -1
                     if (prev < it.time) {
-                        if (it.notOpenValves.values.sumOf { r -> r * (it.time - 1) } + it.presure >= maxPresure) {
+                        if (it.maxScore >= maxPresure) {
                             pq.offer(it)
                         }
                     }
@@ -124,11 +125,21 @@ object Day16 {
         return maxPresure
     }
 
-    data class State2(val room1: String, val room2: String, val time: Int, val notOpenValves: Map<String, Int>, val presure: Long = 0) :
+    data class State2(
+        val room1: String, val room2: String, val time: Int, val notOpenValves: Map<String, Int>, val presure: Long = 0,
+        val maxScore: Long = presure + notOpenValves.map { it.value * (time - 1) }.sum(),
+    ) :
         Comparable<State2> {
+//        override fun compareTo(other: State2): Int = if (other.time == time) {
+//            other.presure.compareTo(presure)
+//        } else other.time.compareTo(time)
+
         override fun compareTo(other: State2): Int = if (other.time == time) {
-            other.presure.compareTo(presure)
+            if (other.presure == presure) {
+                -other.notOpenValves.size.compareTo(notOpenValves.size)
+            } else other.presure.compareTo(presure)
         } else other.time.compareTo(time)
+
 
         fun nexts(transitions: Map<String, List<String>>): Set<State2> {
             if (time == 0 || notOpenValves.isEmpty()) {
