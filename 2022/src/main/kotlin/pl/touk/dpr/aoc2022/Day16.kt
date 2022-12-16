@@ -23,19 +23,16 @@ object Day16 {
 
     data class State(val room: String, val time: Int, val notOpenValves: Map<String, Int>, val presure: Long = 0) : Comparable<State> {
         override fun compareTo(other: State): Int = time - other.time
-        fun nexts(transitions: Map<String, List<String>>): List<State> {
-            if (time == 0 || notOpenValves.isEmpty()) {
-                return emptyList()
-            }
-            val options = mutableListOf<State>()
-            if (room in notOpenValves) {
-                val rate = notOpenValves[room]!!.toLong()
-                val newTime = time - 1
-                val newNotOpenValves = notOpenValves - room
-                options.add(copy(time = newTime, notOpenValves = newNotOpenValves, presure = presure + newTime * rate))
-            }
-            transitions[room]!!.forEach { newRoom ->
-                options.add(copy(room = newRoom, time = time - 1))
+        fun nexts(transitions: MutableMap<Set<String>, Int>): Set<State> {
+            val options = mutableSetOf<State>()
+            notOpenValves.forEach {
+                val target = it.key
+                val rate = it.value
+                val price1 = transitions[setOf(room, target)]!!
+                val newTime = time - price1
+                if (newTime >= 0) {
+                    options.add(copy(room = target, notOpenValves = notOpenValves - target, presure = presure + newTime * rate, time = newTime))
+                }
             }
             return options
         }
@@ -46,6 +43,7 @@ object Day16 {
         val rooms = readRooms(lines)
         val valves = rooms.filter { it.rate > 0 }.associate { it.name to it.rate }
         val transitions = rooms.associate { it.name to it.targets }
+        val realTransitions = findRealTransitions("AA", valves, transitions)
         var maxPresure = 0L
         val pq = PriorityQueue<State>()
         pq.offer(State("AA", 30, valves))
@@ -60,20 +58,14 @@ object Day16 {
                 theBest[localKey] = cur.time
             }
 //            println("Checking ${cur.presure}: ${cur.room} on time ${cur.time} with notOpenValves ${cur.notOpenValves}")
-            cur.nexts(transitions)
+            cur.nexts(realTransitions)
                 .forEach {
                     if (it.presure > maxPresure) {
-//                        println("New leader ${it.presure}: ${it.room} on time ${it.time} with notOpenValves ${it.notOpenValves}")
                         maxPresure = it.presure
                     }
-                    if (it.notOpenValves.values.map { r -> r * (it.time - 1) }.sum() + it.presure >= maxPresure) {
+                    if (it.notOpenValves.values.sumOf { r -> r * it.time } + it.presure > maxPresure) {
                         pq.offer(it)
                     }
-//                    val globalKey = GlobalMem(it.room, it.notOpenValves, it.presure)
-//                    if (globalKey !in globalMemory) {
-//                        globalMemory.add(globalKey)
-
-//                    }
                 }
         }
         return maxPresure
@@ -106,7 +98,7 @@ object Day16 {
         val pq = PriorityQueue<State3>()
         pq.offer(State3(Worker(listOf(startRoom), 26), Worker(listOf(startRoom), 26), valves))
         val mem = mutableSetOf<Set<Worker>>()
-        var generation = 0
+//        var generation = 0
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
 //            if (++generation % 100000 == 0) {
@@ -141,12 +133,12 @@ object Day16 {
                 val target = it.key
                 val rate = it.value
                 val price1 = transitions[setOf(worker1.pos(), target)]!!
-                val newWorker1 = worker1.copy(path = worker1.path + target, time = worker1.time - price1 - 1)
+                val newWorker1 = worker1.copy(path = worker1.path + target, time = worker1.time - price1)
                 if (newWorker1.time >= 0) {
                     options.add(copy(worker1 = newWorker1, notOpenValves = notOpenValves - target, presure = presure + newWorker1.time * rate))
                 }
                 val price2 = transitions[setOf(worker2.pos(), target)]!!
-                val newWorker2 = worker2.copy(path = worker2.path + target, time = worker2.time - price2 - 1)
+                val newWorker2 = worker2.copy(path = worker2.path + target, time = worker2.time - price2)
                 if (newWorker2.time >= 0) {
                     options.add(copy(worker2 = newWorker2, notOpenValves = notOpenValves - target, presure = presure + newWorker2.time * rate))
                 }
@@ -189,7 +181,7 @@ object Day16 {
             val cur = pq.poll()
             val last = cur.last()
             if (last in search) {
-                found[last] = cur.size - 1
+                found[last] = cur.size
                 search.remove(last)
             }
             transitions[last]!!.forEach { next ->
