@@ -92,6 +92,7 @@ object Day16 {
         pq.offer(State2("AA", "AA", 26, valves))
         val globalMemory = mutableSetOf<GlobalMem2>()
         var generation = 0
+        val theBest = mutableMapOf<Pair<Set<String>, Map<String, Int>>, Long>()
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
 //            val globalKey = GlobalMem2(setOf(cur.room1, cur.room2), cur.notOpenValves, cur.presure, cur.time)
@@ -129,11 +130,11 @@ object Day16 {
             other.presure.compareTo(presure)
         } else other.time - time
 
-        fun nexts(transitions: Map<String, List<String>>): List<State2> {
+        fun nexts(transitions: Map<String, List<String>>): Set<State2> {
             if (time == 0 || notOpenValves.isEmpty()) {
-                return emptyList()
+                return emptySet()
             }
-            val options = mutableListOf<State2>()
+            val options = mutableSetOf<State2>()
             if (room1 in notOpenValves && room2 in notOpenValves && room1 != room2) {
                 val newTime = time - 1
                 val rate1 = notOpenValves[room1]!!.toLong()
