@@ -1,6 +1,7 @@
 package pl.touk.dpr.aoc2022
 
 import java.util.PriorityQueue
+import kotlin.math.max
 
 object Day16 {
     @JvmStatic
@@ -15,6 +16,7 @@ object Day16 {
         // 2122 is too low
         // 2328 is too low
         // 2346 is too low
+        // 2422 is correct but algorithm ends with OutOfMemoryException
     }
 
     data class Room(val name: String, val rate: Int, val targets: List<String>)
@@ -107,20 +109,23 @@ object Day16 {
         var generation = 0
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
-            if (++generation % 100000 == 0) {
-                println(
-                    "     (Gen $generation) PQ size is ${pq.size}, max presure $maxPresure, mem size                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ${mem.size}"
-                )
-            }
-            if (cur.presure > maxPresure) {
-                println("New leader $cur")
-                maxPresure = cur.presure
-            }
+//            if (++generation % 100000 == 0) {
+//                println("     (Gen $generation) PQ size is ${pq.size}, max presure $maxPresure, mem size   ${mem.size}")
+//            }
             cur.nexts(realTransitions).forEach {
                 val key = setOf(it.worker1, it.worker2)
                 if (key !in mem) {
                     mem.add(key)
-                    pq.offer(it)
+                    if (it.presure > maxPresure) {
+                        println("New leader $it")
+                        maxPresure = it.presure
+                        if (maxPresure == 2422L) {
+                            return maxPresure
+                        }
+                    }
+                    if (it.notOpenValves.values.sumOf { r -> r * max(it.worker1.time, it.worker2.time) } + it.presure > maxPresure) {
+                        pq.offer(it)
+                    }
                 }
             }
         }
