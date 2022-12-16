@@ -97,16 +97,12 @@ object Day16 {
         var maxPresure = 0L
         val pq = PriorityQueue<State2>()
         pq.offer(State2("AA", "AA", 26, valves))
-        val globalMemory = mutableSetOf<GlobalMem2>()
         var generation = 0
         val theBest = mutableMapOf<Triple<Set<String>, Map<String, Int>, Long>, Int>()
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
             if (++generation % 100000 == 0) {
-                println("PQ size is ${pq.size} and max presure $maxPresure, global memory ${globalMemory.size}, the best size ${theBest.size} with time: ${cur.time}")
-            }
-            if (cur.notOpenValves.values.sumOf { r -> r * (cur.time - 1) } + cur.presure < maxPresure) {
-                continue
+                println("PQ size is ${pq.size} and max presure $maxPresure, the best size ${theBest.size} with time: ${cur.time}")
             }
             val localKey = Triple(setOf(cur.room1, cur.room2), cur.notOpenValves, cur.presure)
             val prev = theBest[localKey] ?: -1
@@ -115,17 +111,15 @@ object Day16 {
             } else {
                 theBest[localKey] = cur.time
             }
-//            val globalKey = GlobalMem2(setOf(cur.room1, cur.room2), cur.notOpenValves, cur.presure, cur.time)
-//            if (globalKey in globalMemory) {
-//                continue
-//            }
+            if (cur.notOpenValves.values.sumOf { r -> r * (cur.time - 1) } + cur.presure < maxPresure) {
+                continue
+            }
             cur.nexts(transitions)
                 .forEach {
                     if (it.presure > maxPresure) {
                         println("New leader ${it.presure}: ${it.room1},${it.room2} on time ${it.time} with notOpenValves ${it.notOpenValves}")
                         maxPresure = it.presure
                     }
-//                    pq.offer(it)
                     val key = Triple(setOf(it.room1, it.room2), it.notOpenValves, it.presure)
                     val prev = theBest[key] ?: -1
                     if (prev < it.time) {
@@ -133,21 +127,10 @@ object Day16 {
                             pq.offer(it)
                         }
                     }
-//                    val globalKey = GlobalMem2(setOf(it.room1, it.room2), it.notOpenValves, it.presure, it.time)
-//                    if (globalKey !in globalMemory) {
-//                        globalMemory.add(globalKey)
-//                        if (it.notOpenValves.values.sumOf { r -> r * (it.time - 1) } + it.presure >= maxPresure) {
-//                            pq.offer(it)
-//                        }
-//                    }
                 }
         }
         return maxPresure
     }
-
-    data class GlobalMem2(val room: Set<String>, val notOpenValves: Map<String, Int>, val presure: Long, val time: Int)
-
-    data class Mem2(val rooms: Set<String>, val notOpenValves: Map<String, Int>)
 
     data class State2(val room1: String, val room2: String, val time: Int, val notOpenValves: Map<String, Int>, val presure: Long = 0) :
         Comparable<State2> {
