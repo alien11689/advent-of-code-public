@@ -7,13 +7,13 @@ object Day16 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/16/input.txt")
         println("Part 1:")
-        println(part1(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
+//        println(part1(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
         // 1234 is wrong
         // 1691 is wrong
-        println(part1(lines))
+//        println(part1(lines))
         println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
-//        println(part2(lines))
+        println(part2(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
+        println(part2(lines))
     }
 
     data class Room(val name: String, val rate: Int, val targets: List<String>)
@@ -84,7 +84,83 @@ object Day16 {
     }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        val rooms = readRooms(lines)
+        val valves = rooms.filter { it.rate > 0 }.associate { it.name to it.rate }
+        val transitions = rooms.associate { it.name to it.targets }
+        var maxPresure = 0L
+        val pq = PriorityQueue<State2>()
+        pq.offer(State2("AA", "AA", 26, valves))
+//        var globalMemory = mutableSetOf<GlobalMem>()
+        while (pq.isNotEmpty()) {
+            val cur = pq.poll()
+//            println("Checking ${cur.presure}: ${cur.room} on time ${cur.time} with notOpenValves ${cur.notOpenValves}")
+            cur.nexts(transitions)
+                .forEach {
+                    if (it.presure > maxPresure) {
+//                        println("New leader ${it.presure}: ${it.room1},${it.room2} on time ${it.time} with notOpenValves ${it.notOpenValves}, pq size is ${pq.size}")
+                        maxPresure = it.presure
+                    }
+                    if (it.notOpenValves.values.sumOf { r -> r * (it.time - 1) } + it.presure >= maxPresure) {
+                        pq.offer(it)
+                    }
+//                    val globalKey = GlobalMem(it.room, it.notOpenValves, it.presure)
+//                    if (globalKey !in globalMemory) {
+//                        globalMemory.add(globalKey)
+
+//                    }
+                }
+        }
+        return maxPresure
     }
+
+    data class Mem2(val room: String, val room2: String, val notOpenValves: Map<String, Int>)
+
+    data class State2(val room1: String, val room2: String, val time: Int, val notOpenValves: Map<String, Int>, val presure: Long = 0, val memory: Set<Mem2> = emptySet()) :
+        Comparable<State2> {
+        override fun compareTo(other: State2): Int = time - other.time
+        fun nexts(transitions: Map<String, List<String>>): List<State2> {
+            if (time == 0 || notOpenValves.isEmpty()) {
+                return emptyList()
+            }
+            val options = mutableListOf<State2>()
+            if (room1 in notOpenValves && room2 in notOpenValves && room1 != room2) {
+                val newTime = time - 1
+                val rate1 = notOpenValves[room1]!!.toLong()
+                val rate2 = notOpenValves[room2]!!.toLong()
+                val newNotOpenValves = notOpenValves - room1 - room2
+                val newPresure = presure + newTime * rate1 + newTime * rate2
+                options.add(this.copy(time = newTime, notOpenValves = newNotOpenValves, presure = newPresure, memory = memory + Mem2(room1, room2, newNotOpenValves)))
+            }
+            if (room1 in notOpenValves) {
+                val newTime = time - 1
+                val rate1 = notOpenValves[room1]!!.toLong()
+                val newNotOpenValves = notOpenValves - room1
+                val newPresure = presure + newTime * rate1
+                transitions[room2]!!.forEach { newRoom2 ->
+                    options.add(this.copy(room2 = newRoom2, time = newTime, notOpenValves = newNotOpenValves, presure = newPresure, memory = memory + Mem2(room1, newRoom2, newNotOpenValves)))
+                }
+            }
+            if (room2 in notOpenValves) {
+                val newTime = time - 1
+                val rate2 = notOpenValves[room2]!!.toLong()
+                val newNotOpenValves = notOpenValves - room2
+                val newPresure = presure + newTime * rate2
+                transitions[room1]!!.forEach { newRoom1 ->
+                    options.add(this.copy(room1 = newRoom1, time = newTime, notOpenValves = newNotOpenValves, presure = newPresure, memory = memory + Mem2(newRoom1, room2, newNotOpenValves)))
+                }
+            }
+            transitions[room1]!!.forEach { newRoom1 ->
+                transitions[room2]!!.forEach { newRoom2 ->
+                    val key = Mem2(newRoom1, newRoom2, notOpenValves)
+                    if (key !in memory) {
+                        options.add(copy(room1 = newRoom1, room2 = newRoom2, time = time - 1, memory = memory + key))
+                    }
+                }
+            }
+            return options
+        }
+
+    }
+
 }
 
