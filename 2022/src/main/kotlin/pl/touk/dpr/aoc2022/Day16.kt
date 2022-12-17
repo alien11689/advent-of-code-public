@@ -9,10 +9,13 @@ object Day16 {
         val lines = Util.getNotEmptyLinesFromFile("/16/input.txt")
         println("Part 1:")
 //        println(part1(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
-        println(part1(lines))
+//        println(part1(lines))
+        println(part1Alt(lines))
         println("Part 2:")
 //        println(part2(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
-        println(part2(lines))
+//        println(part2(lines))
+//        println(part2Alt(Util.getNotEmptyLinesFromFile("/16/test1.txt")))
+        println(part2Alt(lines))
         // 2122 is too low
         // 2328 is too low
         // 2346 is too low
@@ -192,5 +195,82 @@ object Day16 {
         }
         return found
     }
+
+    private fun part1Alt(lines: List<String>): Any {
+        val rooms = readRooms(lines)
+        val valves = rooms.filter { it.rate > 0 }.associate { it.name to it.rate }
+        val transitions = rooms.associate { it.name to it.targets }
+        val startRoom = "AA"
+        val realTransitions = findRealTransitions(startRoom, valves, transitions)
+        val options = findPaths(startRoom, 30, valves, realTransitions)
+        return options.values.max()
+        //return findMaxPresure(startRoom, valves, realTransitions)
+    }
+
+    private fun part2Alt(lines: List<String>): Any {
+        val rooms = readRooms(lines)
+        val valves = rooms.filter { it.rate > 0 }.associate { it.name to it.rate }
+        val transitions = rooms.associate { it.name to it.targets }
+        val startRoom = "AA"
+        val realTransitions = findRealTransitions(startRoom, valves, transitions)
+        val options = findPaths(startRoom, 26, valves, realTransitions)
+        val interestingPaths = mutableMapOf<Set<String>, Int>()
+        options.forEach {
+            val k = it.key.toSet() - "AA"
+            if (k !in interestingPaths || k in interestingPaths && interestingPaths[k]!! < it.value) {
+                interestingPaths[k] = it.value
+            }
+        }
+        val results = interestingPaths.toList().sortedByDescending { it.second }
+        var maxPresureSum = 0
+        for (i in results.indices) {
+            val cur = results[i]
+            if (cur.second * 2 < maxPresureSum) {
+                break
+            }
+            val opposite = results.drop(i + 1).find { it.first.intersect(cur.first).isEmpty() }
+            if (opposite != null) {
+                val presure = cur.second + opposite.second
+                if (presure > maxPresureSum) {
+                    maxPresureSum = presure
+//                    println("Found new leader $maxPresureSum")
+                }
+            }
+        }
+        return maxPresureSum
+    }
+
+    private fun findPaths(startRoom: String, time: Int, valves: Map<String, Int>, realTransitions: MutableMap<Set<String>, Int>): Map<List<String>, Int> {
+        val options = mutableMapOf<List<String>, Int>()
+        val pq = PriorityQueue<AltState>()
+        pq.offer(AltState(listOf(startRoom), time, valves))
+        while (pq.isNotEmpty()) {
+            val cur = pq.poll()
+            cur.nexts(realTransitions).forEach {
+                options[it.path] = it.presure
+                pq.offer(it)
+            }
+        }
+        return options
+    }
+
+    data class AltState(val path: List<String>, val time: Int, val notOpenValves: Map<String, Int>, val presure: Int = 0) : Comparable<AltState> {
+        fun nexts(transitions: Map<Set<String>, Int>): List<AltState> {
+            val options = mutableListOf<AltState>()
+            notOpenValves.forEach {
+                val target = it.key
+                val rate = it.value
+                val price = transitions[setOf(path.last(), target)]!!
+                if (price < time) {
+                    val newTime = time - price
+                    options.add(copy(path = path + target, time = newTime, presure = presure + newTime * rate, notOpenValves = notOpenValves - target))
+                }
+            }
+            return options
+        }
+
+        override fun compareTo(other: AltState): Int = other.presure - presure
+    }
+
 }
 
