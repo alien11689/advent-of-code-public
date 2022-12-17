@@ -6,11 +6,11 @@ object Day17 {
         val lines = Util.getNotEmptyLinesFromFile("/17/input.txt")
         println("Part 1:")
         val part1TurnLimit = 2022L
-        println(part1And2(Util.getNotEmptyLinesFromFile("/17/test1.txt"), part1TurnLimit, false))
+//        println(part1And2(Util.getNotEmptyLinesFromFile("/17/test1.txt"), part1TurnLimit, false))
         println(part1And2(lines, part1TurnLimit, false))
         println("Part 2:")
         val part2TurnLimit = 1000000000000L
-        println(part1And2(Util.getNotEmptyLinesFromFile("/17/test1.txt"), part2TurnLimit, false))
+//        println(part1And2(Util.getNotEmptyLinesFromFile("/17/test1.txt"), part2TurnLimit, false))
         println(part1And2(lines, part2TurnLimit, print = false))
     }
 
@@ -18,12 +18,8 @@ object Day17 {
 
     data class Brick(val elems: List<Point>) {
         fun lift(tallest: Long): Brick = copy(elems = elems.map { it.copy(y = it.y + tallest) })
-        fun move(side: Char): Brick {
-            val dx = when (side) {
-                '<' -> -1
-                '>' -> 1
-                else -> throw RuntimeException()
-            }
+
+        fun move(dx: Int): Brick {
             return copy(elems = elems.map { it.copy(x = it.x + dx) })
         }
 
@@ -35,27 +31,20 @@ object Day17 {
     }
 
     private fun part1And2(lines: List<String>, limit: Long, print: Boolean = false): Any {
-        val moves = lines[0].toCharArray()
-//        println("ALl moves: ${moves.size}")
-        val board = mutableMapOf<Point, Pair<Int, Long>>()
+        val moves = parseMoves(lines)
+        val board = mutableMapOf<Point, Pair<Int, Long>>() // point to (brickIdx to turn)
         (0 until 7).forEach { board[Point(it, 0)] = 9 to -1 }
-        val bricks = mapOf<Int, Brick>(
-            0 to Brick(listOf(Point(2, 0), Point(3, 0), Point(4, 0), Point(5, 0))),
-            1 to Brick(listOf(Point(3, 0), Point(2, 1), Point(3, 1), Point(4, 1), Point(3, 2))),
-            2 to Brick(listOf(Point(2, 0), Point(3, 0), Point(4, 0), Point(4, 1), Point(4, 2))),
-            3 to Brick(listOf(Point(2, 0), Point(2, 1), Point(2, 2), Point(2, 3))),
-            4 to Brick(listOf(Point(2, 0), Point(3, 0), Point(2, 1), Point(3, 1))),
-        )
+        val bricks = defineBricks()
         var moveIdx = 0
         var turn = 0L
         val turns = mutableMapOf<Long, Pair<Long, Int>>() // turn to (tall to move)
-        var tallBoost: Long = 0
+        var maskBoost: Long = 0
         val possibleMasks = mutableMapOf<Map<Point, Int>, Pair<Long, Long>>() // mask to (firstSeenMask, tallAtFirstSeenMask)
         var maskUsed = false
         while (turn < limit) {
-//            println("Running turn $turn")
             val brickIdx = (turn % bricks.size).toInt()
             val tallest = board.keys.maxOf { it.y }
+            // finding possible mask
             if (!maskUsed && brickIdx == 0 && turn > 20) {
                 // Mask can be found by printing the result after some big number of rounds but not so big for sequential calculations e.g. 10000
                 // and finding two turns where only items from those two rounds are used
@@ -72,24 +61,26 @@ object Day17 {
 //                    println("Found possible mask: $possibleMask being in $firstSeenMask")
                 }
             }
+            // trying to apply possible mask
             if (!maskUsed && possibleMasks.isNotEmpty() && brickIdx == 0) {
                 for ((mask, res) in possibleMasks) {
                     val instantMask = mask.mapKeys { it.key.copy(y = tallest + it.key.y) }
 //                println(instantMask)
                     if (instantMask.all { maskElem -> board[maskElem.key]?.first == maskElem.value }) {
+                        // possible mask can be used
 //                        println("Mask repeated at $turn - $mask")
-//                    println("Found mask at $turn, cur $moveIdx tallest is $tallest")
                         val step = turn - res.first
                         val dy = tallest - res.second
                         val occurencesTillLimit = (limit - turn) / step
                         turn += occurencesTillLimit * step
-                        tallBoost += occurencesTillLimit * dy
+                        maskBoost += occurencesTillLimit * dy
                         maskUsed = true
 //                        println("Moving to turn $turn with $tallBoost")
                         break
                     }
                 }
             }
+            // normal loop
             var brick = bricks[brickIdx]!!.lift(tallest + 4)
             while (true) {
                 val side = moves[moveIdx % moves.size]
@@ -109,6 +100,27 @@ object Day17 {
                 }
             }
         }
+        printBoard(print, board)
+        return board.keys.maxOf { it.y } + maskBoost
+    }
+
+    private fun parseMoves(lines: List<String>) = lines[0].map {
+        when (it) {
+            '<' -> -1
+            '>' -> 1
+            else -> throw RuntimeException()
+        }
+    }
+
+    private fun defineBricks() = mapOf<Int, Brick>(
+        0 to Brick(listOf(Point(2, 0), Point(3, 0), Point(4, 0), Point(5, 0))),
+        1 to Brick(listOf(Point(3, 0), Point(2, 1), Point(3, 1), Point(4, 1), Point(3, 2))),
+        2 to Brick(listOf(Point(2, 0), Point(3, 0), Point(4, 0), Point(4, 1), Point(4, 2))),
+        3 to Brick(listOf(Point(2, 0), Point(2, 1), Point(2, 2), Point(2, 3))),
+        4 to Brick(listOf(Point(2, 0), Point(3, 0), Point(2, 1), Point(3, 1))),
+    )
+
+    private fun printBoard(print: Boolean, board: MutableMap<Point, Pair<Int, Long>>) {
         if (print) {
             for (y in board.keys.maxOf { it.y } downTo 0) {
                 for (x in 0 until 7) {
@@ -117,7 +129,6 @@ object Day17 {
                 println()
             }
         }
-        return board.keys.maxOf { it.y } + tallBoost
     }
 
 }
