@@ -25,28 +25,28 @@ object Day13 {
     }
 
     sealed interface Expr : Comparable<Expr> {
-        override fun compareTo(second: Expr): Int {
-            if (this is V && second is V) {
-                return i.compareTo(second.i)
-            } else if (this is L && second is L) {
+        override fun compareTo(other: Expr): Int {
+            if (this is V && other is V) {
+                return i.compareTo(other.i)
+            } else if (this is L && other is L) {
                 this.l.indices.map { i ->
-                    if (i >= second.l.size) {
+                    if (i >= other.l.size) {
                         return 1
                     }
-                    when (val comparedItem = l[i].compareTo(second.l[i])) {
+                    when (val comparedItem = l[i].compareTo(other.l[i])) {
                         -1, 1 -> return comparedItem
                         else -> {}
                     }
                 }
-                return if (l.size == second.l.size) {
+                return if (l.size == other.l.size) {
                     0
-                } else if (l.size < second.l.size) {
+                } else if (l.size < other.l.size) {
                     -1
                 } else {
                     throw RuntimeException("Here")
                 }
             } else {
-                return this.lift().compareTo(second.lift())
+                return this.lift().compareTo(other.lift())
             }
         }
 
