@@ -7,11 +7,11 @@ object Day18 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/18/input.txt")
         println("Part 1:")
-        println(part1(Util.getNotEmptyLinesFromFile("/18/test0.txt")))
-        println(part1(Util.getNotEmptyLinesFromFile("/18/test1.txt")))
+//        println(part1(Util.getNotEmptyLinesFromFile("/18/test0.txt")))
+//        println(part1(Util.getNotEmptyLinesFromFile("/18/test1.txt")))
         println(part1(lines))
         println("Part 2:")
-        println(part2(Util.getNotEmptyLinesFromFile("/18/test1.txt")))
+//        println(part2(Util.getNotEmptyLinesFromFile("/18/test1.txt")))
         println(part2(lines))
     }
 
@@ -49,31 +49,19 @@ object Day18 {
         externalSurface.add(origin)
         while (stack.isNotEmpty()) {
             val cur = stack.pop()
-//            println("Stack size is ${stack.size}")
             if (cur in checkedPoints) {
                 continue
             }
             checkedPoints.add(cur)
-            if (cur in surfacePoints) {
-                cur.neighbours().forEach { neighbour ->
-                    if (neighbour in surfacePoints) {
-                        externalSurface.add(neighbour)
-                        if (neighbour !in checkedPoints) {
-                            stack.push(neighbour)
-                        }
-                    } else if (neighbour !in points) {
-                        if (neighbour !in checkedPoints) {
-                            stack.push(neighbour)
-                        }
+            cur.neighbours().forEach { neighbour ->
+                if (neighbour in surfacePoints) {
+                    externalSurface.add(neighbour)
+                    if (neighbour !in checkedPoints) {
+                        stack.push(neighbour)
                     }
-                }
-            } else {
-                cur.neighbours().forEach { neighbour ->
-                    if (neighbour in surfacePoints) {
-                        externalSurface.add(neighbour)
-                        if (neighbour !in checkedPoints) {
-                            stack.push(neighbour)
-                        }
+                } else if (cur in surfacePoints && neighbour !in points) {
+                    if (neighbour !in checkedPoints) {
+                        stack.push(neighbour)
                     }
                 }
             }
