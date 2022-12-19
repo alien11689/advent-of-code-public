@@ -15,27 +15,34 @@ object Day19 {
     }
 
     data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
-        val geodes = robots[Material.GEODE] ?: 0
-
         val materialScore =
             (materials[Material.ORE] ?: 0) + 1000L * ((materials[Material.CLAY] ?: 0) + 1000L * ((materials[Material.OBSIDIAN] ?: 0) + 1000L * (materials[Material.GEODE] ?: 0)))
 
         val robotsScore =
             (robots[Material.ORE] ?: 0) + 1000L * ((robots[Material.CLAY] ?: 0) + 1000L * ((robots[Material.OBSIDIAN] ?: 0) + 1000L * (robots[Material.GEODE] ?: 0)))
 
-        override fun compareTo(other: State): Int =
-            if (other.robotsScore == robotsScore) {
-                if (time == other.time) {
-                    other.materialScore.compareTo(materialScore)
-                } else other.time.compareTo(time)
-            } else other.robotsScore compareTo robotsScore
+//        override fun compareTo(other: State): Int =
+//            if (other.robotsScore == robotsScore) {
+//                if (time == other.time) {
+//                    other.materialScore.compareTo(materialScore)
+//                } else other.time.compareTo(time)
+//            } else other.robotsScore compareTo robotsScore
+
+//        override fun compareTo(other: State): Int =
+//            if (other.materialScore == materialScore) {
+//                if (time == other.time) {
+//                    other.robotsScore.compareTo(robotsScore)
+//                } else other.time.compareTo(time)
+//            } else other.materialScore compareTo materialScore
+
+        override fun compareTo(other: State): Int = other.possibleGeodes.compareTo(possibleGeodes)
 
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>, geodeMax: Int): List<State> {
             val options = mutableListOf<State>()
-            if (time < 5 && (robots[Material.CLAY] ?: 0) == 0 || time < 4 && (robots[Material.OBSIDIAN] ?: 0) == 0 || time < 3 && geodes == 0) {
+            if (time < 5 && (robots[Material.CLAY] ?: 0) == 0 || time < 4 && (robots[Material.OBSIDIAN] ?: 0) == 0 || time < 3 && (robots[Material.GEODE] ?: 0) == 0) {
                 return options
             }
-            if ((robots[Material.GEODE] ?: 0) > 0) {
+            if (Material.values().all { (robots[it] ?: 0) > 0 }) {
                 options.add(copy(time = 0, materials = merge(materials, times(robots, time))))
             }
             robotCosts.forEach { e ->
@@ -58,7 +65,7 @@ object Day19 {
             return options
         }
 
-        fun possibleGeodes(): Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { geodes + it + 1 }
+        val possibleGeodes: Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it + 1 }
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
@@ -80,7 +87,7 @@ object Day19 {
             while (pq.isNotEmpty()) {
                 val cur = pq.poll()
 //                println("Analyzing $cur, pq size: ${pq.size}, max geode: $geodeMax, possible: ${cur.possibleGeodes()}")
-                if (cur.possibleGeodes() <= geodeMax) {
+                if (cur.possibleGeodes <= geodeMax) {
                     continue
                 }
                 cur.nexts(robotCosts, geodeMax).forEach {
