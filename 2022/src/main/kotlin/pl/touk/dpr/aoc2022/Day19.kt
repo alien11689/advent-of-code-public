@@ -8,7 +8,7 @@ object Day19 {
         val lines = Util.getNotEmptyLinesFromFile("/19/input.txt")
         println("Part 1:")
         println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
-//        println(part1(lines))
+        println(part1(lines))
         // 1237 is too low
 
 
@@ -18,10 +18,10 @@ object Day19 {
     }
 
     data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
-        val geodes = robots[Material.OBSIDIAN] ?: 0
+        val geodes = robots[Material.GEODE] ?: 0
         val obsidians = robots[Material.OBSIDIAN] ?: 0
-        val clays = robots[Material.OBSIDIAN] ?: 0
-        val ores = robots[Material.OBSIDIAN] ?: 0
+        val clays = robots[Material.CLAY] ?: 0
+        val ores = robots[Material.ORE] ?: 0
 
         val materialScore =
             (materials[Material.ORE] ?: 0) + 1000L * ((materials[Material.CLAY] ?: 0) + 1000L * ((materials[Material.OBSIDIAN] ?: 0) + 1000L * (materials[Material.GEODE] ?: 0)))
@@ -41,7 +41,7 @@ object Day19 {
             if (time < 4 && clays == 0 || time < 3 && obsidians == 0 || time < 2 && geodes == 0) {
                 return options
             }
-            if (Material.values().all { (robots[it] ?: 0) > 0 }) {
+            if ((robots[Material.GEODE] ?: 0) > 0) {
                 options.add(copy(time = 0, materials = merge(materials, times(robots, time))))
             }
             robotCosts.forEach { e ->
