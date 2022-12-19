@@ -18,7 +18,9 @@ object Day19 {
 
     data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
         override fun compareTo(other: State): Int = if (other.possibleGeodes == possibleGeodes)
-            if (other.possibleObsidians == possibleObsidians) other.possibleClays.compareTo(possibleClays)
+            if (other.possibleObsidians == possibleObsidians)
+                if (other.possibleClays == possibleClays) other.possibleOres.compareTo(possibleOres)
+                else other.possibleClays.compareTo(possibleClays)
             else other.possibleObsidians.compareTo(possibleObsidians)
         else other.possibleGeodes.compareTo(possibleGeodes)
 
@@ -54,6 +56,7 @@ object Day19 {
         val possibleGeodes: Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it + 1 }
         val possibleObsidians: Int = (materials[Material.OBSIDIAN] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.OBSIDIAN] ?: 0) + it + 1 }
         val possibleClays: Int = (materials[Material.CLAY] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.CLAY] ?: 0) + it + 1 }
+        val possibleOres: Int = (materials[Material.ORE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.ORE] ?: 0) + it + 1 }
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
