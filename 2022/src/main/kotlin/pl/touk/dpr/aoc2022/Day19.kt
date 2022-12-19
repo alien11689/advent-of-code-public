@@ -7,11 +7,13 @@ object Day19 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/19/input.txt")
         println("Part 1:")
-        println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
-        println(part1(lines))
+//        println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
+//        println(part1(lines))
         println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
-//        println(part2(lines))
+        println(part2(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
+        // now second example is 61 but should 62
+        println(part2(lines))
+        //29480 is too low
     }
 
     data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
@@ -68,9 +70,9 @@ object Day19 {
             return options
         }
 
-        val possibleGeodes: Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it / 2 + 1 }
-        val possibleObsidians: Int = (materials[Material.OBSIDIAN] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.OBSIDIAN] ?: 0) + it / 2 + 1 }
-        val possibleClays: Int = (materials[Material.CLAY] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.CLAY] ?: 0) + it / 2 + 1 }
+        val possibleGeodes: Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it + 1 }
+        val possibleObsidians: Int = (materials[Material.OBSIDIAN] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.OBSIDIAN] ?: 0) + it + 1 }
+        val possibleClays: Int = (materials[Material.CLAY] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.CLAY] ?: 0) + it + 1 }
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
