@@ -22,7 +22,7 @@ object Day19 {
             else other.possibleObsidians.compareTo(possibleObsidians)
         else other.possibleGeodes.compareTo(possibleGeodes)
 
-        fun nexts(robotCosts: Map<Material, Map<Material, Int>>, geodeMax: Int): List<State> {
+        fun nexts(robotCosts: Map<Material, Map<Material, Int>>): List<State> {
             val options = mutableListOf<State>()
             if (time < 7 && (robots[Material.CLAY] ?: 0) == 0 || time < 5 && (robots[Material.OBSIDIAN] ?: 0) == 0 || time < 3 && (robots[Material.GEODE] ?: 0) == 0) {
                 return options
@@ -50,7 +50,6 @@ object Day19 {
             return options
         }
 
-        // i can divide it/2 and it works really good for part 1 but miss some cases for part 2...
         val possibleGeodes: Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it + 1 }
         val possibleObsidians: Int = (materials[Material.OBSIDIAN] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.OBSIDIAN] ?: 0) + it + 1 }
         val possibleClays: Int = (materials[Material.CLAY] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.CLAY] ?: 0) + it + 1 }
@@ -75,18 +74,18 @@ object Day19 {
             pq.add(State(turns, emptyMap(), mapOf(Material.ORE to 1)))
             while (pq.isNotEmpty()) {
                 val cur = pq.poll()
-//                println("Analyzing $cur, pq size: ${pq.size}, max geode: $geodeMax, possible: ${cur.possibleGeodes()}")
+//                println("Analyzing $cur, pq size: ${pq.size}, max geode: $geodeMax, possible: ${cur.possibleGeodes}")
                 if (cur.possibleGeodes <= geodeMax) {
                     continue
                 }
-                cur.nexts(robotCosts, geodeMax).forEach {
-                    if ((it.robots[Material.ORE] ?: 0) > 5 || (it.robots[Material.CLAY] ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8) {
+                cur.nexts(robotCosts).forEach {
+                    if ((it.robots[Material.ORE] ?: 0) > 4 || (it.robots[Material.CLAY] ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8) {
                         // it's ugly hack but works
                     } else if (it.time == 0) {
                         val geodeCount = it.materials[Material.GEODE] ?: 0
                         if (geodeMax < geodeCount) {
                             geodeMax = geodeCount
-                            println("New Max geode $geodeMax -> $it")
+//                            println("New Max geode $geodeMax -> $it")
                         }
                     } else {
                         if (it !in memory) {
@@ -106,7 +105,7 @@ object Day19 {
                     }
                 }
             }
-            println("Calculated for $id -> $geodeMax")
+//            println("Calculated for $id -> $geodeMax")
             return geodeMax.toLong()
         }
     }
