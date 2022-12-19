@@ -11,9 +11,7 @@ object Day19 {
         println(part1(lines))
         println("Part 2:")
         println(part2(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
-        // now second example is 61 but should 62
         println(part2(lines))
-        //29480 is too low
     }
 
     data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
@@ -82,7 +80,9 @@ object Day19 {
                     continue
                 }
                 cur.nexts(robotCosts, geodeMax).forEach {
-                    if (it.time == 0) {
+                    if ((it.robots[Material.ORE] ?: 0) > 5 || (it.robots[Material.CLAY] ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8) {
+                        // it's ugly hack but works
+                    } else if (it.time == 0) {
                         val geodeCount = it.materials[Material.GEODE] ?: 0
                         if (geodeMax < geodeCount) {
                             geodeMax = geodeCount
