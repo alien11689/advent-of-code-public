@@ -19,9 +19,6 @@ object Day19 {
 
     data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
         val geodes = robots[Material.GEODE] ?: 0
-        val obsidians = robots[Material.OBSIDIAN] ?: 0
-        val clays = robots[Material.CLAY] ?: 0
-        val ores = robots[Material.ORE] ?: 0
 
         val materialScore =
             (materials[Material.ORE] ?: 0) + 1000L * ((materials[Material.CLAY] ?: 0) + 1000L * ((materials[Material.OBSIDIAN] ?: 0) + 1000L * (materials[Material.GEODE] ?: 0)))
@@ -38,9 +35,9 @@ object Day19 {
 
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>, geodeMax: Int): List<State> {
             val options = mutableListOf<State>()
-            if (time < 4 && clays == 0 || time < 3 && obsidians == 0 || time < 2 && geodes == 0) {
-                return options
-            }
+//            if (time < 4 && clays == 0 || time < 3 && obsidians == 0 || time < 2 && geodes == 0) {
+//                return options
+//            }
             if ((robots[Material.GEODE] ?: 0) > 0) {
                 options.add(copy(time = 0, materials = merge(materials, times(robots, time))))
             }
@@ -64,7 +61,7 @@ object Day19 {
             return options
         }
 
-        fun possibleGeodes(): Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 1).sumOf { geodes + it }
+        fun possibleGeodes(): Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { geodes + it + 1 }
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
