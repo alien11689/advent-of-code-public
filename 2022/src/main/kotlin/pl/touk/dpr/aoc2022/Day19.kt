@@ -15,28 +15,28 @@ object Day19 {
     }
 
     data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
-        override fun compareTo(other: State): Int = other.time.compareTo(time)
+        override fun compareTo(other: State): Int = -other.time.compareTo(time)
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>): List<State> {
             val options = mutableListOf<State>()
-            val harvestedMaterials = merge(materials, robots)
-            options.add(copy(time - 1, materials = harvestedMaterials))
-            canAfford(robotCosts).forEach { robotToBuild ->
-                val (material, cost) = robotToBuild
-//                println("I can by $robotToBuild")
-                options.add(copy(time - 1, materials = minus(harvestedMaterials, cost), merge(robots, mapOf(material to 1))))
-            }
-            return options
-        }
-
-        private fun canAfford(robotCosts: Map<Material, Map<Material, Int>>): List<Pair<Material, Map<Material, Int>>> {
-            return robotCosts.mapNotNull { e ->
-//                println("Can I buy $e having $materials?")
+            options.add(copy(time = 0, materials = merge(materials, times(robots, time))))
+            robotCosts.forEach { e ->
+                val factory = e.key
                 val cost = e.value
-                if (cost.all { materials[it.key]!! >= it.value }) {
-//                    println("Yes")
-                    e.toPair()
-                } else null
+                var curMaterials = materials
+                var nextTime = time - 1
+                while (nextTime >= 0) {
+//                    println(" Checking if I can afford $e with $curMaterials on $nextTime")
+                    if (cost.all { (curMaterials[it.key] ?: 0) >= it.value }) {
+                        options.add(copy(time = nextTime, materials = merge(minus(curMaterials, cost), robots), robots = merge(robots, mapOf(factory to 1))))
+                        break
+                    } else {
+                        nextTime--
+                        curMaterials = merge(curMaterials, robots)
+                    }
+                }
             }
+//            println(options)
+            return options
         }
     }
 
@@ -46,38 +46,34 @@ object Day19 {
     private fun minus(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
         Material.values().associateWith { (first[it] ?: 0) - (second[it] ?: 0) }
 
+    private fun times(first: Map<Material, Int>, repeat: Int): Map<Material, Int> =
+        Material.values().associateWith { (first[it] ?: 0) * repeat }
+
     data class Blueprint(val id: Int, val robotCosts: Map<Material, Map<Material, Int>>) {
         fun findMostGeode(turns: Int): Long {
             val memory = mutableSetOf<State>()
-            var minTurns = turns
             var geodeMax = 0
             val pq = PriorityQueue<State>()
-            pq.add(State(turns, Material.values().associateWith { 0 }, mapOf(Material.ORE to 1, Material.CLAY to 0, Material.OBSIDIAN to 0, Material.GEODE to 0)))
+            pq.add(State(turns, emptyMap(), mapOf(Material.ORE to 1)))
             while (pq.isNotEmpty()) {
                 val cur = pq.poll()
-                if (cur.time < minTurns) {
-                    minTurns = cur.time
-                    println("Anylizing $minTurns, pq size: ${pq.size}")
-//                    println("Cur $cur")
-//                    println("PQ:")
-//                    while (pq.isNotEmpty()) {
-//                        println(" ${pq.poll()}")
-//                    }
-//                    return -1
-                }
+//                println("Anylizing $cur, pq size: ${pq.size}, max geode: $geodeMax")
                 cur.nexts(robotCosts).forEach {
                     if (it.time == 0) {
                         val geodeCount = it.materials[Material.GEODE] ?: 0
                         if (geodeMax < geodeCount) {
                             geodeMax = geodeCount
+                            println("New Max geode $geodeMax")
                         }
                     } else {
-                        if(it !in memory){
+                        if (it !in memory) {
+//                            println("Added state $it")
                             memory.add(it)
                             pq.offer(it)
                         }
                     }
                 }
+//                Thread.sleep(1000)
             }
             return geodeMax.toLong()
         }
