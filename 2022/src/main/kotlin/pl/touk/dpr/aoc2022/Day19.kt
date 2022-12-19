@@ -7,8 +7,8 @@ object Day19 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/19/input.txt")
         println("Part 1:")
-        println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
-//        println(part1(lines))
+//        println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
+        println(part1(lines))
 //        println("Part 2:")
 //        println(part2(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
 //        println(part2(lines))
@@ -33,7 +33,7 @@ object Day19 {
                 } else other.time.compareTo(time)
             } else other.robotsScore compareTo robotsScore
 
-        fun nexts(robotCosts: Map<Material, Map<Material, Int>>): List<State> {
+        fun nexts(robotCosts: Map<Material, Map<Material, Int>>, geodeMax: Int): List<State> {
             val options = mutableListOf<State>()
             if (time < 4 && clays == 0 || time < 3 && obsidians == 0 || time < 2 && geodes == 0) {
                 return options
@@ -60,6 +60,8 @@ object Day19 {
             }
             return options
         }
+
+        fun possibleGeodes(): Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 1).sumOf { geodes + it }
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
@@ -80,8 +82,11 @@ object Day19 {
             pq.add(State(turns, emptyMap(), mapOf(Material.ORE to 1)))
             while (pq.isNotEmpty()) {
                 val cur = pq.poll()
-//                println("Anylizing $cur, pq size: ${pq.size}, max geode: $geodeMax")
-                cur.nexts(robotCosts).forEach {
+//                println("Analyzing $cur, pq size: ${pq.size}, max geode: $geodeMax, possible: ${cur.possibleGeodes()}")
+                if (cur.possibleGeodes() <= geodeMax) {
+                    continue
+                }
+                cur.nexts(robotCosts, geodeMax).forEach {
                     if (it.time == 0) {
                         val geodeCount = it.materials[Material.GEODE] ?: 0
                         if (geodeMax < geodeCount) {
@@ -106,6 +111,7 @@ object Day19 {
                     }
                 }
             }
+            println("Calculated for $id -> $geodeMax")
             return geodeMax.toLong()
         }
     }
@@ -123,7 +129,7 @@ object Day19 {
     }
 
     private fun parseBlueprints(lines: List<String>): List<Blueprint> {
-        val blueprints = lines.map { line ->
+        return lines.map { line ->
             val parts = line.split(" ", ":")
             val costs = mapOf(
                 Material.ORE to mapOf(Material.ORE to parts[7].toInt()),
@@ -133,7 +139,6 @@ object Day19 {
             )
             Blueprint(parts[1].toInt(), costs)
         }
-        return blueprints
     }
 
     private fun part2(lines: List<String>): Any {
