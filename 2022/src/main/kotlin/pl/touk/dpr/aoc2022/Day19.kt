@@ -7,8 +7,8 @@ object Day19 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/19/input.txt")
         println("Part 1:")
-//        println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
-//        println(part1(lines))
+        println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
+        println(part1(lines))
         println("Part 2:")
         println(part2(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
         // now second example is 61 but should 62
@@ -17,26 +17,6 @@ object Day19 {
     }
 
     data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
-        val materialScore =
-            (materials[Material.ORE] ?: 0) + 1000L * ((materials[Material.CLAY] ?: 0) + 1000L * ((materials[Material.OBSIDIAN] ?: 0) + 1000L * (materials[Material.GEODE] ?: 0)))
-
-        val robotsScore =
-            (robots[Material.ORE] ?: 0) + 1000L * ((robots[Material.CLAY] ?: 0) + 1000L * ((robots[Material.OBSIDIAN] ?: 0) + 1000L * (robots[Material.GEODE] ?: 0)))
-
-//        override fun compareTo(other: State): Int =
-//            if (other.robotsScore == robotsScore) {
-//                if (time == other.time) {
-//                    other.materialScore.compareTo(materialScore)
-//                } else other.time.compareTo(time)
-//            } else other.robotsScore compareTo robotsScore
-
-//        override fun compareTo(other: State): Int =
-//            if (other.materialScore == materialScore) {
-//                if (time == other.time) {
-//                    other.robotsScore.compareTo(robotsScore)
-//                } else other.time.compareTo(time)
-//            } else other.materialScore compareTo materialScore
-
         override fun compareTo(other: State): Int = if (other.possibleGeodes == possibleGeodes)
             if (other.possibleObsidians == possibleObsidians) other.possibleClays.compareTo(possibleClays)
             else other.possibleObsidians.compareTo(possibleObsidians)
@@ -44,7 +24,7 @@ object Day19 {
 
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>, geodeMax: Int): List<State> {
             val options = mutableListOf<State>()
-            if (time < 5 && (robots[Material.CLAY] ?: 0) == 0 || time < 4 && (robots[Material.OBSIDIAN] ?: 0) == 0 || time < 3 && (robots[Material.GEODE] ?: 0) == 0) {
+            if (time < 7 && (robots[Material.CLAY] ?: 0) == 0 || time < 5 && (robots[Material.OBSIDIAN] ?: 0) == 0 || time < 3 && (robots[Material.GEODE] ?: 0) == 0) {
                 return options
             }
             if (Material.values().all { (robots[it] ?: 0) > 0 }) {
@@ -70,6 +50,7 @@ object Day19 {
             return options
         }
 
+        // i can divide it/2 and it works really good for part 1 but miss some cases for part 2...
         val possibleGeodes: Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it + 1 }
         val possibleObsidians: Int = (materials[Material.OBSIDIAN] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.OBSIDIAN] ?: 0) + it + 1 }
         val possibleClays: Int = (materials[Material.CLAY] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.CLAY] ?: 0) + it + 1 }
