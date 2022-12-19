@@ -7,8 +7,11 @@ object Day19 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/19/input.txt")
         println("Part 1:")
-//        println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
-        println(part1(lines))
+        println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
+//        println(part1(lines))
+        // 1237 is too low
+
+
 //        println("Part 2:")
 //        println(part2(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
 //        println(part2(lines))
@@ -125,7 +128,7 @@ object Day19 {
 
     private fun part1(lines: List<String>): Any {
         val blueprints = parseBlueprints(lines)
-        return blueprints.map { it.id * it.findMostGeode(24) }.sum()
+        return blueprints.sumOf { it.id * it.findMostGeode(24) }
     }
 
     private fun parseBlueprints(lines: List<String>): List<Blueprint> {
