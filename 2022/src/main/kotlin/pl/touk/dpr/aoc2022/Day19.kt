@@ -9,10 +9,7 @@ object Day19 {
         println("Part 1:")
         println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
         println(part1(lines))
-        // 1237 is too low
-
-
-//        println("Part 2:")
+        println("Part 2:")
 //        println(part2(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
 //        println(part2(lines))
     }
@@ -35,9 +32,9 @@ object Day19 {
 
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>, geodeMax: Int): List<State> {
             val options = mutableListOf<State>()
-//            if (time < 4 && clays == 0 || time < 3 && obsidians == 0 || time < 2 && geodes == 0) {
-//                return options
-//            }
+            if (time < 5 && (robots[Material.CLAY] ?: 0) == 0 || time < 4 && (robots[Material.OBSIDIAN] ?: 0) == 0 || time < 3 && geodes == 0) {
+                return options
+            }
             if ((robots[Material.GEODE] ?: 0) > 0) {
                 options.add(copy(time = 0, materials = merge(materials, times(robots, time))))
             }
@@ -142,7 +139,8 @@ object Day19 {
     }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        val blueprints = parseBlueprints(lines).take(3)
+        return blueprints.map { it.findMostGeode(32) }.reduce { acc, cur -> acc * cur }
     }
 }
 
