@@ -35,7 +35,10 @@ object Day19 {
 //                } else other.time.compareTo(time)
 //            } else other.materialScore compareTo materialScore
 
-        override fun compareTo(other: State): Int = other.possibleGeodes.compareTo(possibleGeodes)
+        override fun compareTo(other: State): Int = if (other.possibleGeodes == possibleGeodes)
+            if (other.possibleObsidians == possibleObsidians) other.possibleClays.compareTo(possibleClays)
+            else other.possibleObsidians.compareTo(possibleObsidians)
+        else other.possibleGeodes.compareTo(possibleGeodes)
 
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>, geodeMax: Int): List<State> {
             val options = mutableListOf<State>()
@@ -65,7 +68,9 @@ object Day19 {
             return options
         }
 
-        val possibleGeodes: Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it + 1 }
+        val possibleGeodes: Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it / 2 + 1 }
+        val possibleObsidians: Int = (materials[Material.OBSIDIAN] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.OBSIDIAN] ?: 0) + it / 2 + 1 }
+        val possibleClays: Int = (materials[Material.CLAY] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.CLAY] ?: 0) + it / 2 + 1 }
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
