@@ -19,19 +19,25 @@ object Day19 {
         val obsidians = robots[Material.OBSIDIAN] ?: 0
         val clays = robots[Material.OBSIDIAN] ?: 0
         val ores = robots[Material.OBSIDIAN] ?: 0
+
+        val materialScore =
+            (materials[Material.ORE] ?: 0) + 1000L * ((materials[Material.CLAY] ?: 0) + 1000L * ((materials[Material.OBSIDIAN] ?: 0) + 1000L * (materials[Material.GEODE] ?: 0)))
+
+        val robotsScore =
+            (robots[Material.ORE] ?: 0) + 1000L * ((robots[Material.CLAY] ?: 0) + 1000L * ((robots[Material.OBSIDIAN] ?: 0) + 1000L * (robots[Material.GEODE] ?: 0)))
+
         override fun compareTo(other: State): Int =
-            if (geodes != other.geodes) {
-                other.geodes.compareTo(geodes)
-            } else if (obsidians != other.obsidians) {
-                other.obsidians.compareTo(obsidians)
-            } else if (clays != other.clays) {
-                other.clays.compareTo(clays)
-            } else if (ores != other.ores) {
-                other.ores.compareTo(ores)
-            } else other.time.compareTo(time)
+            if (other.robotsScore == robotsScore) {
+                if (time == other.time) {
+                    other.materialScore.compareTo(materialScore)
+                } else other.time.compareTo(time)
+            } else other.robotsScore compareTo robotsScore
 
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>): List<State> {
             val options = mutableListOf<State>()
+            if (time < 4 && clays == 0 || time < 3 && obsidians == 0 || time < 2 && geodes == 0) {
+                return options
+            }
             if (Material.values().all { (robots[it] ?: 0) > 0 }) {
                 options.add(copy(time = 0, materials = merge(materials, times(robots, time))))
             }
@@ -42,7 +48,6 @@ object Day19 {
                     var curMaterials = materials
                     var nextTime = time - 1
                     while (nextTime >= 1) {
-//                    println(" Checking if I can afford $e with $curMaterials on $nextTime")
                         if (cost.all { (curMaterials[it.key] ?: 0) >= it.value }) {
                             options.add(copy(time = nextTime, materials = merge(minus(curMaterials, cost), robots), robots = merge(robots, mapOf(factory to 1))))
                             break
@@ -68,6 +73,7 @@ object Day19 {
 
     data class Blueprint(val id: Int, val robotCosts: Map<Material, Map<Material, Int>>) {
         fun findMostGeode(turns: Int): Long {
+            val best = mutableMapOf<Pair<Map<Material, Int>, Map<Material, Int>>, Int>()
             val memory = mutableSetOf<State>()
             var geodeMax = 0
             val pq = PriorityQueue<State>()
@@ -80,17 +86,25 @@ object Day19 {
                         val geodeCount = it.materials[Material.GEODE] ?: 0
                         if (geodeMax < geodeCount) {
                             geodeMax = geodeCount
-                            println("New Max geode $geodeMax")
+                            println("New Max geode $geodeMax -> $it")
                         }
                     } else {
                         if (it !in memory) {
-//                            println("Added state $it")
                             memory.add(it)
-                            pq.offer(it)
+                            val key = it.materials to it.robots
+                            if (key !in best) {
+                                best[key] = it.time
+                                pq.offer(it)
+                            } else {
+                                val bestTime = best[key]!!
+                                if (bestTime < it.time) {
+                                    pq.offer(it)
+                                    best[key] = it.time
+                                }
+                            }
                         }
                     }
                 }
-//                Thread.sleep(1000)
             }
             return geodeMax.toLong()
         }
