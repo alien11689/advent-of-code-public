@@ -15,10 +15,26 @@ object Day19 {
     }
 
     data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
-        override fun compareTo(other: State): Int = -other.time.compareTo(time)
+        val geodes = materials[Material.OBSIDIAN] ?: 0
+        val obsidians = materials[Material.OBSIDIAN] ?: 0
+        val clays = materials[Material.OBSIDIAN] ?: 0
+        val ores = materials[Material.OBSIDIAN] ?: 0
+        override fun compareTo(other: State): Int =
+            if (geodes != other.geodes) {
+                other.geodes.compareTo(geodes)
+            } else if (obsidians != other.obsidians) {
+                other.obsidians.compareTo(obsidians)
+            } else if (clays != other.clays) {
+                other.clays.compareTo(clays)
+            } else if (ores != other.ores) {
+                other.ores.compareTo(ores)
+            } else other.time.compareTo(time)
+
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>): List<State> {
             val options = mutableListOf<State>()
-            options.add(copy(time = 0, materials = merge(materials, times(robots, time))))
+            if (geodes != 0) {
+                options.add(copy(time = 0, materials = merge(materials, times(robots, time))))
+            }
             robotCosts.forEach { e ->
                 val factory = e.key
                 val cost = e.value
@@ -37,7 +53,6 @@ object Day19 {
                     }
                 }
             }
-//            println(options)
             return options
         }
     }
