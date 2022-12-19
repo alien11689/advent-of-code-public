@@ -22,16 +22,18 @@ object Day19 {
             robotCosts.forEach { e ->
                 val factory = e.key
                 val cost = e.value
-                var curMaterials = materials
-                var nextTime = time - 1
-                while (nextTime >= 0) {
+                if (robotCosts.keys.containsAll(cost.keys)) {
+                    var curMaterials = materials
+                    var nextTime = time - 1
+                    while (nextTime >= 0) {
 //                    println(" Checking if I can afford $e with $curMaterials on $nextTime")
-                    if (cost.all { (curMaterials[it.key] ?: 0) >= it.value }) {
-                        options.add(copy(time = nextTime, materials = merge(minus(curMaterials, cost), robots), robots = merge(robots, mapOf(factory to 1))))
-                        break
-                    } else {
-                        nextTime--
-                        curMaterials = merge(curMaterials, robots)
+                        if (cost.all { (curMaterials[it.key] ?: 0) >= it.value }) {
+                            options.add(copy(time = nextTime, materials = merge(minus(curMaterials, cost), robots), robots = merge(robots, mapOf(factory to 1))))
+                            break
+                        } else {
+                            nextTime--
+                            curMaterials = merge(curMaterials, robots)
+                        }
                     }
                 }
             }
