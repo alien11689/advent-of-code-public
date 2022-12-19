@@ -79,7 +79,7 @@ object Day19 {
                     continue
                 }
                 cur.nexts(robotCosts).forEach {
-                    if ((it.robots[Material.ORE] ?: 0) > 4 || (it.robots[Material.CLAY] ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8) {
+                    if (it.possibleGeodes <= geodeMax || (it.robots[Material.ORE] ?: 0) > 4 || (it.robots[Material.CLAY] ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8) {
                         // it's ugly hack but works
                     } else if (it.time == 0) {
                         val geodeCount = it.materials[Material.GEODE] ?: 0
