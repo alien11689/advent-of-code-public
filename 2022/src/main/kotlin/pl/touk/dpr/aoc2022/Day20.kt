@@ -23,7 +23,6 @@ object Day20 {
             val curPos = curElem.key
             val value = curElem.value
             val shift = value.v
-//            println("Applying $curElem")
             val targetPos = if (shift > 0) {
                 if (curPos + shift <= maxIdx) {
                     curPos + shift
@@ -36,10 +35,11 @@ object Day20 {
                 } else if (curPos + shift == 0) {
                     maxIdx
                 } else {
-                    (maxIdx + curPos + shift) % maxIdx
+                    (maxIdx * 2 + curPos + shift) % maxIdx
                 }
             } else curPos
-//            println("Target pos is $targetPos and curPos is $curPos")
+            println("Applying $curElem: target pos is $targetPos and curPos is $curPos")
+            require(targetPos in elements.keys)
             elements = if (curPos < targetPos) {
                 elements.map {
                     val x = when {
