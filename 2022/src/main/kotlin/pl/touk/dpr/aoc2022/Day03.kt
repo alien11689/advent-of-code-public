@@ -10,25 +10,25 @@ object Day03 {
         println(part2(lines))
     }
 
-    val priorities = ('a'..'z') + ('A'..'Z')
+    private val priorities = ('a'..'z') + ('A'..'Z')
 
     private fun part1(lines: List<String>): Any {
-        return lines.map {
-            val char = it.chunked(it.length / 2)
+        return lines.sumOf { line ->
+            val char = line.chunked(line.length / 2)
                 .map { it.toSet() }
                 .reduce { a, b -> a.intersect(b) }
-                .first()
+                .single()
             priorities.indexOf(char) + 1L
-        }.sum()
+        }
     }
 
     private fun part2(lines: List<String>): Any {
-        return lines.chunked(3).map {
-            val char = it.map { it.toSet() }
+        return lines.chunked(3).sumOf { line ->
+            val char = line.map { it.toSet() }
                 .reduce { a, b -> a.intersect(b) }
-                .first()
+                .single()
             priorities.indexOf(char) + 1L
-        }.sum()
+        }
     }
 }
 
