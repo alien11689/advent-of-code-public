@@ -10,8 +10,14 @@ object Day07 {
     }
 
     private fun part1(input: List<String>): Int {
-        var inputs = mapOf<String, Int>()
-        var operations = readOperations(input)
+        val inputs = mapOf<String, Int>()
+        val operations = readOperations(input)
+        return process(operations, inputs)
+    }
+
+    private fun process(initialOperations: Set<Operation>, initialInputs: Map<String, Int>): Int {
+        var operations = initialOperations
+        var inputs = initialInputs
         while (operations.isNotEmpty()) {
             operations.forEach {
                 val inp = it.result(inputs)
@@ -53,21 +59,9 @@ object Day07 {
     }
 
     private fun part2(input: List<String>, a: Int): Any {
-        var inputs = mapOf<String, Int>()
-        var operations = readOperations(input, mapOf(Pair("b", a)))
-        while (operations.isNotEmpty()) {
-            operations.forEach {
-                val inp = it.result(inputs)
-                if (inp != inputs) {
-                    operations = operations - it
-                }
-                inputs = inp
-            }
-            if (inputs.containsKey("a")) {
-                return inputs["a"]!!
-            }
-        }
-        return -1
+        val inputs = mapOf<String, Int>()
+        val operations = readOperations(input, mapOf(Pair("b", a)))
+        return process(operations, inputs)
     }
 
     sealed class Operation {

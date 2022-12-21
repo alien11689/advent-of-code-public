@@ -10,7 +10,7 @@ object Day05 {
 
     private fun part1(input: List<String>): Any {
         return input
-                .filter { it.filter { it in setOf('a', 'e', 'i', 'o', 'u') }.count() >= 3 }
+                .filter { line -> line.count { it in setOf('a', 'e', 'i', 'o', 'u') } >= 3 }
                 .filter { inp -> setOf("ab", "cd", "pq", "xy").none { inp.contains(it) } }
                 .filter {
                     var i = 0

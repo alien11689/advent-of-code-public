@@ -15,7 +15,7 @@ object Day14 {
             reeinders = reeinders.map { Pair(it.first, it.first.tick(it.second)) }
             ++t
         }
-        return reeinders.map { it.second.dist }.maxOrNull()!!
+        return reeinders.maxOf { it.second.dist }
     }
 
     private fun part2(input: List<String>): Any {
@@ -23,7 +23,7 @@ object Day14 {
         var t = 0
         while (t < 2503) {
             reeinders = reeinders.map { Pair(it.first, it.first.tick(it.second)) }
-            val leaderDist = reeinders.map { it.second.dist }.maxOrNull()!!
+            val leaderDist = reeinders.maxOf { it.second.dist }
             reeinders = reeinders.map {
                 if (it.second.dist == leaderDist) {
                     it.copy(second = it.second.copy(score = it.second.score + 1))
@@ -33,7 +33,7 @@ object Day14 {
             }
             ++t
         }
-        return reeinders.map { it.second.score }.maxOrNull()!!
+        return reeinders.maxOf { it.second.score }
     }
 
     private fun readReeinders(input: List<String>): List<Pair<Reeinder, ReeinderState>> {
@@ -56,17 +56,17 @@ object Day14 {
             if (state.isRunning) {
                 val dist = state.dist + speed
                 val running = state.running + 1
-                if (running == run) {
-                    return state.copy(dist = dist, running = 0, isRunning = false)
+                return if (running == run) {
+                    state.copy(dist = dist, running = 0, isRunning = false)
                 } else {
-                    return state.copy(dist = dist, running = running)
+                    state.copy(dist = dist, running = running)
                 }
             } else {
                 val resting = state.resting + 1
-                if (resting == rest) {
-                    return state.copy(resting = 0, isRunning = true)
+                return if (resting == rest) {
+                    state.copy(resting = 0, isRunning = true)
                 } else {
-                    return state.copy(resting = resting)
+                    state.copy(resting = resting)
                 }
             }
         }

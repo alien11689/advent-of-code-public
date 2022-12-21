@@ -14,7 +14,7 @@ object Day24Iter {
     private fun part1(input: List<String>): Pair<Int, Long> {
         val numbers = input.map { it.toInt() }.sortedBy { -it }
         val perBucket = numbers.sum() / 3
-        return findEntaglement(numbers, perBucket, listOf<Set<Int>>(setOf(), setOf(), setOf()), numbers.size)
+        return findEntaglement(numbers, perBucket, listOf(setOf(), setOf(), setOf()), numbers.size)
     }
 
     private fun findEntaglement(numbers: List<Int>, perBucket: Int, initBucket: List<Set<Int>>, initBestGroupSize: Int = numbers.size, initBestEntaglement: Long = Long.MAX_VALUE - 1): Pair<Int, Long> {
@@ -31,16 +31,16 @@ object Day24Iter {
                         val ent = entanglement(b)
                         bestGroupSize = b.size
                         bestEntalgement = ent
-                        println("Current: $bestEntalgement $b")
+//                        println("Current: $bestEntalgement $b")
                     } else if (b.size == bestGroupSize) {
                         val ent = entanglement(b)
                         if (ent < bestEntalgement) {
                             bestEntalgement = ent
-                            println("Current: $bestEntalgement $b")
+//                            println("Current: $bestEntalgement $b")
                         }
                     }
                 }
-            } else if (buckets.map { it.size }.minOrNull()!! > bestGroupSize || buckets.map { entanglement(it) }.minOrNull()!! > bestEntalgement) {
+            } else if (buckets.minOf { it.size } > bestGroupSize || buckets.minOf { entanglement(it) } > bestEntalgement) {
                 continue
             } else {
                 val n = nums.first()
@@ -64,7 +64,7 @@ object Day24Iter {
         return Pair(bestGroupSize, bestEntalgement)
     }
 
-    fun entanglement(s: Set<Int>): Long = s.fold(1L) { acc, i -> acc * i.toLong() }
+    private fun entanglement(s: Set<Int>): Long = s.fold(1L) { acc, i -> acc * i.toLong() }
 
     data class State(val numbers: List<Int>, val buckets: List<Set<Int>>)
 

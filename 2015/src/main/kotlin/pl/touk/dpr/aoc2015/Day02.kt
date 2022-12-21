@@ -10,16 +10,14 @@ object Day02 {
 
     private fun part1(input: List<String>): Any {
         return input
-                .map { Box(it.split("x").map { it.toInt() }) }
-                .map { it.area() + it.smallestSideArea() }
-                .sum()
+                .map { line -> Box(line.split("x").map { it.toInt() }) }
+                .sumOf { it.area() + it.smallestSideArea() }
     }
 
     private fun part2(input: List<String>): Any {
         return input
-                .map { Box(it.split("x").map { it.toInt() }) }
-                .map { it.volume() + it.dimensionsToWrap() }
-                .sum()
+                .map { line -> Box(line.split("x").map { it.toInt() }) }
+                .sumOf { it.volume() + it.dimensionsToWrap() }
     }
 
     data class Box(val sides: List<Int>) {

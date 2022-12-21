@@ -12,7 +12,7 @@ object Day18 {
         var points = input.map { line ->
             line.map { it == '#' }
         }
-        (1..100).forEach {
+        repeat(100) {
             points = points.mapIndexed { y, line ->
                 line.mapIndexed { x, on ->
                     val onNeighbours = neighbours(x, y).count { points[it.second][it.first] }
@@ -23,7 +23,7 @@ object Day18 {
         return points.flatten().count { it }
     }
 
-    fun neighbours(x: Int, y: Int): Set<Pair<Int, Int>> =
+    private fun neighbours(x: Int, y: Int): Set<Pair<Int, Int>> =
             listOf(
                     Pair(x + 1, y),
                     Pair(x + 1, y + 1),
@@ -34,14 +34,14 @@ object Day18 {
                     Pair(x, y - 1),
                     Pair(x, y + 1),
             )
-                    .filter { it.first >= 0 && it.first < 100 && it.second >= 0 && it.second < 100 }
+                    .filter { it.first in 0..99 && it.second in 0..99 }
                     .toSet()
 
     private fun part2(input: List<String>): Any {
         var points = input.mapIndexed { y, line ->
             line.mapIndexed { x, c -> c == '#' || x in setOf(0, 99) && y in setOf(0, 99) }
         }
-        (1..100).forEach {
+        repeat(100) {
             points = points.mapIndexed { y, line ->
                 line.mapIndexed { x, on ->
                     val onNeighbours = neighbours(x, y).count { points[it.second][it.first] }

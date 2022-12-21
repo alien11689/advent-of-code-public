@@ -10,7 +10,7 @@ object Day13 {
 
     private fun part1(input: List<String>): Int {
         val paths = readPaths(input)
-        return generateRoutes(paths.keys.flatten().toSet(), paths).map { it.second + paths[setOf(it.first.first(), it.first.last())]!! }.maxOrNull()!!
+        return generateRoutes(paths.keys.flatten().toSet(), paths).maxOf { it.second + paths[setOf(it.first.first(), it.first.last())]!! }
     }
 
     private fun readPaths(input: List<String>): MutableMap<Set<String>, Int> {
@@ -46,7 +46,7 @@ object Day13 {
         paths.keys.flatten().toSet().forEach {
             paths[setOf("me", it)] = 0
         }
-        return generateRoutes(paths.keys.flatten().toSet(), paths).map { it.second + paths[setOf(it.first.first(), it.first.last())]!! }.maxOrNull()!!
+        return generateRoutes(paths.keys.flatten().toSet(), paths).maxOf { it.second + paths[setOf(it.first.first(), it.first.last())]!! }
     }
 
 }

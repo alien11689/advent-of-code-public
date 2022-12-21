@@ -11,12 +11,11 @@ object Day21 {
         val itemSets: MutableList<Set<Item>> = generateItemSets()
         return itemSets
                 .filter { fight(it) }
-                .map { it.map { it.cost }.sum() }
-                .minOrNull()!!
+                .minOf { item -> item.sumOf { it.cost } }
     }
 
     private fun generateItemSets(): MutableList<Set<Item>> {
-        val itemSets: MutableList<Set<Item>> = mutableListOf<Set<Item>>()
+        val itemSets = mutableListOf<Set<Item>>()
         weapons().forEach { weapon ->
             armors().forEach { armor ->
                 generateRingsSet(rings()).forEach { rings ->
@@ -35,7 +34,7 @@ object Day21 {
         ml.add(setOf())
         for (i in rings.indices) {
             ml.add(setOf(rings[i]))
-            for (j in ((i + 1)..rings.size - 1)) {
+            for (j in ((i + 1) until rings.size)) {
                 ml.add(setOf(rings[i], rings[j]))
             }
         }
@@ -43,8 +42,8 @@ object Day21 {
     }
 
     private fun fight(items: Collection<Item>): Boolean {
-        val damage = items.map { it.damage }.sum()
-        val armor = items.map { it.armor }.sum()
+        val damage = items.sumOf { it.damage }
+        val armor = items.sumOf { it.armor }
         var boss = Boss()
         var hitPoints = 100
         while (true) {
@@ -65,8 +64,7 @@ object Day21 {
         val itemSets: MutableList<Set<Item>> = generateItemSets()
         return itemSets
                 .filter { !fight(it) }
-                .map { it.map { it.cost }.sum() }
-                .maxOrNull()!!
+                .maxOf { item -> item.sumOf { it.cost } }
     }
 
     private fun weapons(): List<Item> = listOf(

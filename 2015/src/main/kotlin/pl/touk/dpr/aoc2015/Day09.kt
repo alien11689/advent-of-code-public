@@ -9,11 +9,11 @@ object Day09 {
     }
 
     private fun part1(input: List<String>): Int {
-        val paths = input.map {
+        val paths = input.associate {
             val parts = it.split(Regex("[ =]+"))
             Pair(setOf(parts[0], parts[2]), parts[3].toInt())
-        }.toMap()
-        return generateRoutes(paths.keys.flatten().toSet(), paths).map { it.second }.minOrNull()!!
+        }
+        return generateRoutes(paths.keys.flatten().toSet(), paths).minOf { it.second }
     }
 
     private fun generateRoutes(toVisit: Set<String>, paths: Map<Set<String>, Int>): Set<Pair<List<String>, Int>> {
@@ -30,11 +30,11 @@ object Day09 {
     }
 
     private fun part2(input: List<String>): Any {
-        val paths = input.map {
+        val paths = input.associate {
             val parts = it.split(Regex("[ =]+"))
             Pair(setOf(parts[0], parts[2]), parts[3].toInt())
-        }.toMap()
-        return generateRoutes(paths.keys.flatten().toSet(), paths).map { it.second }.maxOrNull()!!
+        }
+        return generateRoutes(paths.keys.flatten().toSet(), paths).maxOf { it.second }
     }
 
 }

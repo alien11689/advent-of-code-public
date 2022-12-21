@@ -10,15 +10,7 @@ object Day03 {
 
     private fun part1(input: String): Any {
         return input.fold(listOf(Pair(0, 0))) { acc, s ->
-            val cur = acc.last()
-            val next = when (s) {
-                '>' -> Pair(cur.first + 1, cur.second)
-                '<' -> Pair(cur.first - 1, cur.second)
-                '^' -> Pair(cur.first, cur.second - 1)
-                'v' -> Pair(cur.first, cur.second + 1)
-                else -> throw RuntimeException()
-            }
-            acc + next
+            acc + nextPos(s, acc.last())
         }.toSet().count()
     }
 
@@ -28,17 +20,17 @@ object Day03 {
                 if (i % 2 == santa) {
                     acc
                 } else {
-                    val cur = acc.last()
-                    val next = when (s) {
-                        '>' -> Pair(cur.first + 1, cur.second)
-                        '<' -> Pair(cur.first - 1, cur.second)
-                        '^' -> Pair(cur.first, cur.second - 1)
-                        'v' -> Pair(cur.first, cur.second + 1)
-                        else -> throw RuntimeException()
-                    }
-                    acc + next
+                    acc + nextPos(s, acc.last())
                 }
             }
         }.toSet().size
+    }
+
+    private fun nextPos(s: Char, cur: Pair<Int, Int>) = when (s) {
+        '>' -> Pair(cur.first + 1, cur.second)
+        '<' -> Pair(cur.first - 1, cur.second)
+        '^' -> Pair(cur.first, cur.second - 1)
+        'v' -> Pair(cur.first, cur.second + 1)
+        else -> throw RuntimeException()
     }
 }

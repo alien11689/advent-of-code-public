@@ -27,12 +27,12 @@ object Day25 {
     }
 
     private fun nextIdx(i: Int, j: Int): Pair<Int, Int> {
-        if (i == 1 && j == 1) {
-            return Pair(i + 1, j)
+        return if (i == 1 && j == 1) {
+            Pair(i + 1, j)
         } else if (i == 1) {
-            return Pair(j + 1, 1)
+            Pair(j + 1, 1)
         } else {
-            return Pair(i - 1, j + 1)
+            Pair(i - 1, j + 1)
         }
     }
 }

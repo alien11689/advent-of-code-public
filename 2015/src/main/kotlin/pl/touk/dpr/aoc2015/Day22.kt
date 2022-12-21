@@ -108,14 +108,14 @@ object Day22 {
         private fun applyEffects(): State {
             var cur = this
             cur.currentEffects.forEach { entry ->
-                if (cur.hp > 0 && cur.boss.hitPoints > 0) {
-                    cur = cur.applyEffect(entry.key)
+                cur = if (cur.hp > 0 && cur.boss.hitPoints > 0) {
+                    cur.applyEffect(entry.key)
                 } else {
-                    cur = this
+                    this
                 }
             }
             cur = cur.copy(currentEffects = cur.currentEffects.mapValues { it.value - 1 })
-            if (cur.currentEffects[Action.Shield] ?: 0 == 0) {
+            if ((cur.currentEffects[Action.Shield] ?: 0) == 0) {
                 cur = cur.copy(armor = 0)
             }
             return cur.copy(currentEffects = cur.currentEffects.filter { it.value > 0 })

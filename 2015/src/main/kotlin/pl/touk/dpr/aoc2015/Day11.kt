@@ -21,7 +21,7 @@ object Day11 {
                 }
                 .filter {
                     var i = it.size - 1
-                    var pairs = mutableSetOf<Char>()
+                    val pairs = mutableSetOf<Char>()
                     while (i > 0) {
                         if (it[i] == it[i - 1]) {
                             pairs.add(it[i])
@@ -35,15 +35,15 @@ object Day11 {
     }
 
     private fun generateNext(prev: MutableList<Char>): MutableList<Char> {
-        var i = prev.size - 3
-        if (prev[i] == prev[i - 1] || prev[i - 1] == prev[i - 2] || prev[i - 2] == prev[i - 3] || prev[i - 3] == prev[i - 4] || prev[i - 4] == prev[i - 5]) {
+        val i = prev.size - 3
+        return if (prev[i] == prev[i - 1] || prev[i - 1] == prev[i - 2] || prev[i - 2] == prev[i - 3] || prev[i - 3] == prev[i - 4] || prev[i - 4] == prev[i - 5]) {
             //has pair in first part
-            return incrementBy1(prev, prev.size - 1)
+            incrementBy1(prev, prev.size - 1)
         } else {
             val next = incrementBy1(prev, prev.size - 3)
             next[i + 1] = 'a'
             next[i + 2] = 'a'
-            return next
+            next
         }
     }
 

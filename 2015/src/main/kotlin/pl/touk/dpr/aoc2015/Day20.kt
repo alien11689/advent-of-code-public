@@ -1,5 +1,7 @@
 package pl.touk.dpr.aoc2015
 
+import kotlin.math.sqrt
+
 object Day20 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -11,7 +13,7 @@ object Day20 {
     private fun part1(input: Int): Any {
         var cur = 1
         while (true) {
-            val res = divisors(cur).map { it * 10 }.sum()
+            val res = divisors(cur).sumOf { it * 10 }
             if (res >= input) {
                 return cur
             }
@@ -22,7 +24,7 @@ object Day20 {
     private fun divisors(n: Int): Set<Int> {
         val ms = mutableSetOf(1, n)
         var i = 2
-        val limit = Math.sqrt(n.toDouble())
+        val limit = sqrt(n.toDouble())
         while (i < limit) {
             if (n % i == 0) {
                 ms.add(i)
@@ -36,7 +38,7 @@ object Day20 {
     private fun part2(input: Int): Any {
         var cur = 1
         while (true) {
-            val res = divisors(cur).filter { it * 50 >= cur }.map { it * 11 }.sum()
+            val res = divisors(cur).filter { it * 50 >= cur }.sumOf { it * 11 }
             if (res >= input) {
                 return cur
             }

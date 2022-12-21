@@ -52,7 +52,7 @@ object Day19 {
                     ++replaceCount
                 }
             }
-            if (prev == cur && cur != "e") {
+            if (prev == cur) {
                 cur = molecule
                 formulas = formulas.shuffled()
                 replaceCount = 0

@@ -12,12 +12,10 @@ object Day01 {
 
     private fun part1(input: String): Any {
         return input.fold(0) { acc, c ->
-            if (c == '(') {
-                acc + 1
-            } else if (c == ')') {
-                acc - 1
-            } else {
-                acc
+            when (c) {
+                '(' -> acc + 1
+                ')' -> acc - 1
+                else -> acc
             }
         }
     }

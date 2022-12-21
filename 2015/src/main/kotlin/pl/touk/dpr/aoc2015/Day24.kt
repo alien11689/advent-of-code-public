@@ -18,7 +18,7 @@ object Day24 {
         var bestSize = numbers.size
         var bestQuantum = Long.MAX_VALUE
         val mem = mutableSetOf<List<Set<Int>>>()
-        (1..5000).forEach {
+        repeat(5000) {
             val buckets = createNextBuckets(numbers, perBucket, mem)
             val firstSize = buckets[0].size
             val firstQuantumEntaglement = buckets[0].fold(1L) { acc, i -> acc * i }
@@ -35,7 +35,7 @@ object Day24 {
     }
 
     private fun createNextBuckets(numbers: List<Int>, perBucket: Int, mem: MutableSet<List<Set<Int>>>): List<Set<Int>> {
-        var nums = numbers.toMutableList()
+        val nums = numbers.toMutableList()
         while (true) {
             nums.shuffle()
             val first = pack(nums, perBucket)

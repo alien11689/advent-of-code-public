@@ -9,7 +9,7 @@ object Day08 {
     }
 
     private fun part1(input: List<String>): Int {
-        return input.map { it.length - countStringChars(it) }.sum()
+        return input.sumOf { it.length - countStringChars(it) }
     }
 
     private fun countStringChars(s: String): Int {
@@ -18,11 +18,11 @@ object Day08 {
         var escaped = false
         while (i < s.length - 1) {
             if (s[i] == '\\') {
-                if (escaped) {
+                escaped = if (escaped) {
                     ++count
-                    escaped = false
+                    false
                 } else {
-                    escaped = true
+                    true
                 }
                 ++i
             } else if (escaped) {
@@ -42,7 +42,7 @@ object Day08 {
     }
 
     private fun part2(input: List<String>): Any {
-        return input.map { escapedStringLength(it) - it.length }.sum()
+        return input.sumOf { escapedStringLength(it) - it.length }
     }
 
     private fun escapedStringLength(s: String): Int {

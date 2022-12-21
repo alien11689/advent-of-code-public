@@ -11,8 +11,7 @@ object Day15 {
     private fun part1(input: List<String>): Any {
         val ingredients = parseIngredients(input)
         return calculate(ingredients, 100)
-                .map { score(ingredients, it) }
-                .maxOrNull()!!
+                .maxOf { score(ingredients, it) }
     }
 
     private fun parseIngredients(input: List<String>): List<Ingredient> {
@@ -32,10 +31,10 @@ object Day15 {
     }
 
     private fun calculate(ingredients: List<Ingredient>, toUse: Int): Set<List<Int>> {
-        if (ingredients.size == 1) {
-            return setOf(listOf(toUse))
+        return if (ingredients.size == 1) {
+            setOf(listOf(toUse))
         } else {
-            return (0..toUse).flatMap { use ->
+            (0..toUse).flatMap { use ->
                 val toCheck = ingredients.drop(1)
                 calculate(toCheck, toUse - use).map {
                     listOf(use) + it
@@ -48,8 +47,7 @@ object Day15 {
         val ingredients = parseIngredients(input)
         return calculate(ingredients, 100)
                 .filter { calories(ingredients, it) == 500 }
-                .map { score(ingredients, it) }
-                .maxOrNull()!!
+                .maxOf { score(ingredients, it) }
     }
 
     private fun calories(ingredients: List<Ingredient>, amount: List<Int>): Int {

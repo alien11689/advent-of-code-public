@@ -16,8 +16,8 @@ object Day12 {
     private fun sumNumbers(json: Json): Int {
         return when (json) {
             is Json.JsonNum -> json.v
-            is Json.JsonArray -> json.elems.map { sumNumbers(it) }.sum()
-            is Json.JsonObject -> json.elems.values.map { sumNumbers(it) }.sum()
+            is Json.JsonArray -> json.elems.sumOf { sumNumbers(it) }
+            is Json.JsonObject -> json.elems.values.sumOf { sumNumbers(it) }
             else -> 0
         }
     }
@@ -57,16 +57,16 @@ object Day12 {
         var i = pos
         val ml = mutableListOf<Json>()
         while (true) {
-            if (input[i] == ']') {
+            i = if (input[i] == ']') {
                 return Pair(Json.JsonArray(ml.toList()), i + 1)
             } else if (input[i] == ',') {
                 val (json, nextPos) = parseJson(input, i + 1)
                 ml.add(json)
-                i = nextPos
+                nextPos
             } else {
                 val (json, nextPos) = parseJson(input, i)
                 ml.add(json)
-                i = nextPos
+                nextPos
             }
         }
     }
@@ -113,11 +113,11 @@ object Day12 {
     private fun sumNumbersFilteringRed(json: Json): Int {
         return when (json) {
             is Json.JsonNum -> json.v
-            is Json.JsonArray -> json.elems.map { sumNumbersFilteringRed(it) }.sum()
+            is Json.JsonArray -> json.elems.sumOf { sumNumbersFilteringRed(it) }
             is Json.JsonObject -> if (json.elems.values.contains(Json.JsonString("red"))) {
                 0
             } else {
-                json.elems.values.map { sumNumbersFilteringRed(it) }.sum()
+                json.elems.values.sumOf { sumNumbersFilteringRed(it) }
             }
             else -> 0
         }
