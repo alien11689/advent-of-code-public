@@ -11,21 +11,24 @@ object Day04 {
     }
 
     private fun part1(lines: List<String>): Any {
-        return lines.count {
-            val (l1, r1, l2, r2) = it.split("-", ",").map { it.toInt() }
-            val range1 = (l1..r1).toSet()
-            val range2 = (l2..r2).toSet()
-            range1.containsAll(range2) || range2.containsAll(range1)
+        return lines.count { line ->
+            val (range1, range2) = readRanges(line)
+            if (range1.size > range2.size) range1.containsAll(range2) else range2.containsAll(range1)
         }
     }
 
     private fun part2(lines: List<String>): Any {
-        return lines.count {
-            val (l1, r1, l2, r2) = it.split("-", ",").map { it.toInt() }
-            val range1 = (l1..r1).toSet()
-            val range2 = (l2..r2).toSet()
+        return lines.count { line ->
+            val (range1, range2) = readRanges(line)
             range1.intersect(range2).isNotEmpty()
         }
+    }
+
+    private fun readRanges(line: String): Pair<Set<Int>, Set<Int>> {
+        val (l1, r1, l2, r2) = line.split("-", ",").map { it.toInt() }
+        val range1 = (l1..r1).toSet()
+        val range2 = (l2..r2).toSet()
+        return Pair(range1, range2)
     }
 }
 
