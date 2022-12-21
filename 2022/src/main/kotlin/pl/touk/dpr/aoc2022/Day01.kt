@@ -11,8 +11,7 @@ object Day01 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val elvesCaloriesDescending = elvesCaloriesDescending(lines)
-        return elvesCaloriesDescending.first()
+        return elvesCaloriesDescending(lines).first()
     }
 
     private fun part2(lines: List<String>): Any {
@@ -31,8 +30,7 @@ object Day01 {
             }
         }
         elves.add(current)
-        val elvesCaloriesDescending = elves.sortedBy { -it }
-        return elvesCaloriesDescending
+        return elves.sortedBy { -it }
     }
 }
 
