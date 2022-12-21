@@ -4,7 +4,7 @@ import java.math.BigDecimal
 
 object Day11 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getFileContent("/11/input.txt").trim()
         println(part1(input))
         println(part2(input))

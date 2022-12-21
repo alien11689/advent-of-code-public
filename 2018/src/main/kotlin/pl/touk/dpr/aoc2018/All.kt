@@ -2,33 +2,56 @@ package pl.touk.dpr.aoc2018
 
 object All {
     @JvmStatic
-    fun main(args: Array<String>) {
-        Util.measureTime {
-        Util.measureTime { Day01.main(args) }
-        Util.measureTime { Day02.main(args) }
-        Util.measureTime { Day03.main(args) }
-        Util.measureTime { Day04.main(args) }
-        Util.measureTime { Day05.main(args) }
-        Util.measureTime { Day06.main(args) }
-        Util.measureTime { Day07.main(args) }
-        Util.measureTime { Day08.main(args) }
-        Util.measureTime { Day09.main(args) }
-        Util.measureTime { Day10.main(args) }
-        Util.measureTime { Day11.main(args) }
-        Util.measureTime { Day12.main(args) }
-        Util.measureTime { Day13.main(args) }
-        Util.measureTime { Day14.main(args) }
-        Util.measureTime { Day15.main(args) }
-        Util.measureTime { Day16.main(args) }
-        Util.measureTime { Day17.main(args) }
-        Util.measureTime { Day18.main(args) }
-        Util.measureTime { Day19.main(args) }
-        Util.measureTime { Day20.main(args) }
-        Util.measureTime { Day21.main(args) }
-        Util.measureTime { Day22.main(args) }
-        Util.measureTime { Day23.main(args) }
-        Util.measureTime { Day24.main(args) }
-        Util.measureTime { Day25.main(args) }
-        }
+    fun main(args: Array<String>) = Util.measureTime {
+        println("Day01")
+        Day01.main(args)
+        println("Day02")
+        Day02.main(args)
+        println("Day03")
+        Day03.main(args)
+        println("Day04")
+        Day04.main(args)
+        println("Day05")
+        Day05.main(args)
+        println("Day06")
+        Day06.main(args)
+        println("Day07")
+        Day07.main(args)
+        println("Day08")
+        Day08.main(args)
+        println("Day09")
+        Day09.main(args)
+        println("Day10")
+        Day10.main(args)
+        println("Day11")
+        Day11.main(args)
+        println("Day12")
+        Day12.main(args)
+        println("Day13")
+        Day13.main(args)
+        println("Day14")
+        Day14.main(args)
+        println("Day15")
+        Day15.main(args)
+        println("Day16")
+        Day16.main(args)
+        println("Day17")
+        Day17.main(args)
+        println("Day18")
+        Day18.main(args)
+        println("Day19")
+        Day19.main(args)
+        println("Day20")
+        Day20.main(args)
+        println("Day21")
+        Day21.main(args)
+        println("Day22")
+        Day22.main(args)
+        println("Day23")
+        Day23.main(args)
+        println("Day24")
+        Day24.main(args)
+        println("Day25")
+        Day25.main(args)
     }
 }

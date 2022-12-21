@@ -5,7 +5,7 @@ import java.util.Stack
 
 object Day14 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = "ugkiagan"
         println(part1(input))
         println(part2(input))

@@ -5,7 +5,7 @@ import kotlin.math.absoluteValue
 
 object Day19 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/19/input.txt")
         part1And2(lines).forEach(::println)
     }

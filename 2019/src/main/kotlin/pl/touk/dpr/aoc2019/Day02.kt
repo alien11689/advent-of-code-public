@@ -6,7 +6,7 @@ import java.lang.RuntimeException
 
 object Day02 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getFileContent("/02/input.txt").trim()
         println(part1(input))
         println(part2(input))

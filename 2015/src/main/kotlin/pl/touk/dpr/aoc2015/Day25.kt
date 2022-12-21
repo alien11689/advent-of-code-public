@@ -2,7 +2,7 @@ package pl.touk.dpr.aoc2015
 
 object Day25 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         println(part1())
     }
 

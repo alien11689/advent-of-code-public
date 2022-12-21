@@ -2,7 +2,7 @@ package pl.touk.dpr.aoc2021
 
 object Day17 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val target1 = Target(20..30, -10..-5)
         val target = Target(124..174, -123..-86)
         part1And2(target).forEach(::println)

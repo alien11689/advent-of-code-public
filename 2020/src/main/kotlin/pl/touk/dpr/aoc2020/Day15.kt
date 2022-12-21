@@ -2,7 +2,7 @@ package pl.touk.dpr.aoc2020
 
 object Day15 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
 //        Util.test(part1And2("0,3,6"), listOf(436, 175594))
 //        Util.test(part1And2("1,3,2"), listOf(1, 2578))
 //        Util.test(part1And2("2,1,3"), listOf(10, 3544142))

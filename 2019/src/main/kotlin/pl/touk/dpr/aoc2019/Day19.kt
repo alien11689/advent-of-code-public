@@ -5,7 +5,7 @@ import kotlin.time.measureTime
 
 object Day19 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getFileContent("/19/input.txt").trim()
         println(part1(input))
         println(part2(input))

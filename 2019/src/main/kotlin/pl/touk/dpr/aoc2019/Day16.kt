@@ -4,7 +4,7 @@ import kotlin.math.absoluteValue
 
 object Day16 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getFileContent("/16/input.txt").trim()
         println(part1(input))
         println(part2(input))

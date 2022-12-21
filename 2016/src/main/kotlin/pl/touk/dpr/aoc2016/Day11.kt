@@ -5,7 +5,7 @@ import java.util.Queue
 
 object Day11 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         println(solve(listOf(
                 setOf(1, 2, -2, 3, 4, -4, 5, -5),
                 setOf(-1, -3),

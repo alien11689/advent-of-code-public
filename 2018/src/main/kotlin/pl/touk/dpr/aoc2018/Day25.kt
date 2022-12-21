@@ -5,7 +5,7 @@ import kotlin.math.abs
 
 object Day25 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/25/input.txt")
         println(part1(input))
     }

@@ -4,7 +4,7 @@ import java.math.BigInteger
 
 object Day13 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
 //        val input = Util.getNotEmptyLinesFromFile("/12/test.txt")
         val input = Util.getNotEmptyLinesFromFile("/13/input.txt")
         println(part1(input))

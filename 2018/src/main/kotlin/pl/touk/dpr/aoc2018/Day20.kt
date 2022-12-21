@@ -4,7 +4,7 @@ import java.util.Stack
 
 object Day20 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getFileContent("/20/input.txt").trim()
         part1And2(input).forEach { println(it) }
     }

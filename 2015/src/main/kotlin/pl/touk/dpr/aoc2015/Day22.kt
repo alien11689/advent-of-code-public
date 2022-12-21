@@ -4,7 +4,7 @@ import java.util.PriorityQueue
 
 object Day22 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         println(part1())
         println(part2())
     }

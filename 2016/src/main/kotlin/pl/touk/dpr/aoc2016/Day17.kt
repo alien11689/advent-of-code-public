@@ -6,7 +6,7 @@ import java.util.LinkedList
 
 object Day17 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = "mmsxrhfx"
         println(part1(input))
         println(part2(input))

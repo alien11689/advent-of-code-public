@@ -5,7 +5,7 @@ import kotlin.math.max
 
 object Day05 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/05/input.txt")
         println(part1(lines))
         println(part2(lines))

@@ -6,7 +6,7 @@ import java.security.MessageDigest
 
 object Day04 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = "iwrupvqb"
         println(part1And2(input, "00000"))
         println(part1And2(input, "000000"))

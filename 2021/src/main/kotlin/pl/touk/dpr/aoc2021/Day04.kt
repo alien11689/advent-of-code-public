@@ -2,7 +2,7 @@ package pl.touk.dpr.aoc2021
 
 object Day04 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getLinesFromFile("/04/input.txt")
         val input = readInput(lines)
         println(part1(input))

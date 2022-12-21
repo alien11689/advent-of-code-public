@@ -7,7 +7,7 @@ import java.time.LocalTime
 
 object Day04 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/04/input.txt").sorted()
         println(part1(input))
         println(part2(input))

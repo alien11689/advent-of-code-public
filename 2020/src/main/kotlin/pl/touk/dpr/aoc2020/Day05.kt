@@ -2,7 +2,7 @@ package pl.touk.dpr.aoc2020
 
 object Day05 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/05/input.txt")
         val seats = input.map { Seat.from(it) }
         part1(seats)

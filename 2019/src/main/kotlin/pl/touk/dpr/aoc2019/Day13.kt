@@ -7,7 +7,7 @@ import java.util.LinkedList
 
 object Day13 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getFileContent("/13/input.txt").trim()
         println(part1(input))
         println(part2(input))

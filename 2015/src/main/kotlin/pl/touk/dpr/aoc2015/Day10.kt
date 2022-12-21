@@ -2,7 +2,7 @@ package pl.touk.dpr.aoc2015
 
 object Day10 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = "1321131112"
         part1And2(input)
     }

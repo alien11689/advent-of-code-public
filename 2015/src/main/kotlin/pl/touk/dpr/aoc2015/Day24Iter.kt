@@ -4,11 +4,11 @@ import java.util.Stack
 
 object Day24Iter {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/24/input.txt")
-        val (size, entalgement) = part1(input)
+        val (_, entalgement) = part1(input)
         println(entalgement)
-        println(part2(input, size, entalgement).second)
+        println(part2(input, entalgement).second)
     }
 
     private fun part1(input: List<String>): Pair<Int, Long> {
@@ -68,7 +68,7 @@ object Day24Iter {
 
     data class State(val numbers: List<Int>, val buckets: List<Set<Int>>)
 
-    private fun part2(input: List<String>, initBestGroupSize: Int, initBestEntalgement: Long): Pair<Int, Long> {
+    private fun part2(input: List<String>, initBestEntalgement: Long): Pair<Int, Long> {
         val numbers = input.map { it.toInt() }.sortedBy { -it }
         val perBucket = numbers.sum() / 4
         return findEntaglement(numbers, perBucket, listOf(setOf(), setOf(), setOf(), setOf()), numbers.size / 4, initBestEntalgement)

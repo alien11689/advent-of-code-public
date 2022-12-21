@@ -4,7 +4,7 @@ import java.util.Stack
 
 object Day10 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
 //        val input = Util.getFileContent("/10/test.txt")
 //        val input = Util.getFileContent("/10/test2.txt")
         val input = Util.getNotEmptyLinesFromFile("/10/input.txt")

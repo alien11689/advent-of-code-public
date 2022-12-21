@@ -5,7 +5,7 @@ import java.security.MessageDigest
 
 object Day14 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val input = "yjdafjpo"
         println(part1(input))
         println(part2(input))

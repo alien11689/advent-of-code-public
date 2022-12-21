@@ -5,7 +5,7 @@ import java.util.LinkedList
 
 object Day14 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/14/input.txt")
         println(part1(lines))
         println(part2b(lines))

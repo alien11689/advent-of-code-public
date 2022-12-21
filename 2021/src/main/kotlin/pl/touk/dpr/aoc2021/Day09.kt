@@ -4,7 +4,7 @@ import java.util.PriorityQueue
 
 object Day09 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/09/input.txt")
         println(part1(lines))
         println(part2(lines))

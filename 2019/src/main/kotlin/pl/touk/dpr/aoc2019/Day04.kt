@@ -2,7 +2,7 @@ package pl.touk.dpr.aoc2019
 
 object Day04 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         println(part1())
         println(part2())
     }

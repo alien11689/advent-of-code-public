@@ -5,7 +5,7 @@ import java.util.Queue
 
 object Day22 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
 //        val input = Util.getNotEmptyLinesFromFile("/22/sample.txt")
 //        val input = Util.getNotEmptyLinesFromFile("/22/sample2.txt")
         val input = Util.getNotEmptyLinesFromFile("/22/input.txt")

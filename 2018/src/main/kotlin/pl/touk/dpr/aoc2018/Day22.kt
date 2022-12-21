@@ -5,7 +5,7 @@ import kotlin.math.abs
 
 object Day22 {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         println(part1())
         println(part2())
     }
