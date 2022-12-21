@@ -34,10 +34,9 @@ object Day15 {
         val sensors2Beacon = readInput(lines)
         val sensors = sensors2Beacon.map { it.sensor }
         val beacons = sensors2Beacon.map { it.beacon }
-        val maxDist = sensors2Beacon.map { it.dist }.max()
-        val minX = sensors.map { it.x }.min() - maxDist
-        val maxX = sensors.map { it.x }.max() + maxDist
-
+        val maxDist = sensors2Beacon.maxOf { it.dist }
+        val minX = sensors.minOf { it.x } - maxDist
+        val maxX = sensors.maxOf { it.x } + maxDist
 
         var positions = 0
         for (x in minX..maxX) {
@@ -51,9 +50,6 @@ object Day15 {
             }
             if (sensorCloserExist) {
                 ++positions
-//                println("Checked $possibleBeacon - in scope")
-            } else {
-//                println("Checked $possibleBeacon - outside")
             }
         }
         return positions
@@ -68,28 +64,21 @@ object Day15 {
 
     private fun part2(lines: List<String>, maxCoord: Int): Any {
         val sensors2Beacon = readInput(lines).sortedByDescending { it.dist }
-        val minX = 0
-        val maxX = maxCoord
-        val minY = 0
-        val maxY = maxCoord
-
-        var y = minY
-        while (y <= maxY) {
+        repeat(maxCoord) { y ->
 //            println("Checking row $y")
-            var x = minX
-            while (x <= maxX) {
+            var x = 0
+            while (x <= maxCoord) {
                 val possibleBeacon = Point(x, y)
                 val sensorsSeeing = sensors2Beacon.find {
                     val localDist = possibleBeacon.manhattan(it.sensor)
                     localDist <= it.dist
                 }
                 if (sensorsSeeing == null) {
-                    return possibleBeacon.x.toLong() * 4000000 + possibleBeacon.y
+                    return possibleBeacon.x.toLong() * maxCoord + possibleBeacon.y
                 } else {
                     x = sensorsSeeing.farrestXSawFor(possibleBeacon) + 1
                 }
             }
-            ++y
         }
         throw RuntimeException()
     }
