@@ -14,8 +14,8 @@ object Day14 {
 
     data class Point(val x: Int, val y: Int) {
         fun down(): Point = copy(y = y + 1)
-        fun left(): Point = copy(x = x - 1, y = y + 1)
-        fun right(): Point = copy(x = x + 1, y = y + 1)
+        fun leftDown(): Point = copy(x = x - 1, y = y + 1)
+        fun rightDown(): Point = copy(x = x + 1, y = y + 1)
     }
 
     private fun part1(lines: List<String>): Any {
@@ -27,14 +27,14 @@ object Day14 {
         while (true) {
 //            println("Checking $curSand")
             val down = curSand.down()
-            val left = curSand.left()
-            val right = curSand.right()
+            val leftDown = curSand.leftDown()
+            val rightDown = curSand.rightDown()
             if (down !in points) {
                 curSand = down
-            } else if (left !in points) {
-                curSand = left
-            } else if (right !in points) {
-                curSand = right
+            } else if (leftDown !in points) {
+                curSand = leftDown
+            } else if (rightDown !in points) {
+                curSand = rightDown
             } else {
                 points.add(curSand)
                 ++seen
@@ -58,14 +58,14 @@ object Day14 {
         while (true) {
 //            println("Checking $curSand")
             val down = curSand.down()
-            val left = curSand.left()
-            val right = curSand.right()
+            val leftDown = curSand.leftDown()
+            val rightDown = curSand.rightDown()
             if (down !in points) {
                 curSand = down
-            } else if (left !in points) {
-                curSand = left
-            } else if (right !in points) {
-                curSand = right
+            } else if (leftDown !in points) {
+                curSand = leftDown
+            } else if (rightDown !in points) {
+                curSand = rightDown
             } else {
                 points.add(curSand)
                 ++seen
@@ -73,7 +73,6 @@ object Day14 {
                 if (curSand in points) {
                     break
                 }
-                continue
             }
         }
         return seen
@@ -81,25 +80,19 @@ object Day14 {
 
     private fun extendPoints(maxY: Int, points: MutableSet<Point>) {
         val startX = 500
-        var l = startX
-        var r = startX
-        var h = 0
-        while (h != maxY) {
-            h += 1
-            l--
-            r++
-        }
+        val l = startX - maxY
+        val r = startX + maxY
 //        println("Expected border x is $l to $r")
-        for (x in (l..r)) {
+        (l..r).forEach { x ->
             points.add(Point(x, maxY))
         }
     }
 
     private fun printlnBoard(points: MutableSet<Point>) {
-        val minX = points.map { it.x }.min()
-        val maxX = points.map { it.x }.max()
-        val minY = points.map { it.y }.min()
-        val maxY = points.map { it.y }.max()
+        val minX = points.minOf { it.x }
+        val maxX = points.maxOf { it.x }
+        val minY = points.minOf { it.y }
+        val maxY = points.maxOf { it.y }
         for (y in minY..maxY) {
             for (x in minX..maxX) {
                 print(if (Point(x, y) in points) "#" else ".")
@@ -114,8 +107,7 @@ object Day14 {
             val parts = line.split(" -> ")
             var (curX, curY) = parts[0].split(",").map { it.toInt() }
             points.add(Point(curX, curY))
-            var i = 1
-            while (i < parts.size) {
+            (1 until parts.size).forEach { i ->
                 val (destX, destY) = parts[i].split(",").map { it.toInt() }
                 val dx = if (curX == destX) 0 else if (curX < destX) 1 else -1
                 val dy = if (curY == destY) 0 else if (curY < destY) 1 else -1
@@ -124,7 +116,6 @@ object Day14 {
                     curY += dy
                     points.add(Point(curX, curY))
                 }
-                ++i
             }
         }
         return points
