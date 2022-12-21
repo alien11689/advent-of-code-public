@@ -5,13 +5,12 @@ import java.util.Stack
 object Day21 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        val lines = emptyList<String>()// Util.getNotEmptyLinesFromFile("/21/input.txt")
-        println(part1(lines))
-        println(part2(lines))
+        println(part1())
+        println(part2())
     }
 
-    private fun part1(lines: List<String>): Any {
-        // test
+    private fun part1(): Any {
+        // example
 //        val player1 = Player(1, 3, 0) // one less pos
 //        val player2 = Player(2, 7, 0) // one less pos
         // my
@@ -54,8 +53,8 @@ object Day21 {
         }
     }
 
-    private fun part2(lines: List<String>): Any {
-// test
+    private fun part2(): Any {
+// example
 //        val player1 = PlayerV2(1, 3, 0) // one less pos
 //        val player2 = PlayerV2(2, 7, 0) // one less pos
         // my

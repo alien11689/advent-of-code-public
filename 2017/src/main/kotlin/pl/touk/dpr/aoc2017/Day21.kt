@@ -12,7 +12,7 @@ object Day21 {
         val result = mutableListOf<Int>()
 
         val rules = lines.map { line ->
-            var (ins, out) = line.split(" => ")
+            val (ins, out) = line.split(" => ")
             val input = ins.split('/').map { it.toList() }
             val output = out.split('/').map { it.toMutableList() }.toMutableList()
             val inputs = listOf(
@@ -43,8 +43,7 @@ object Day21 {
                         image[it].subList(j, j + split)
                     }
                     val rule = rules.find { it.match(part) }!!
-                    val result = rule.output
-                    parts.add(result)
+                    parts.add(rule.output)
                     j += split
                 }
                 newImage.addAll(parts.fold(if(parts[0].size == 3) mutableListOf(mutableListOf<Char>(),mutableListOf<Char>(),mutableListOf<Char>()) else mutableListOf(mutableListOf<Char>(),mutableListOf<Char>(),mutableListOf<Char>(), mutableListOf<Char>())) { acc, cur ->

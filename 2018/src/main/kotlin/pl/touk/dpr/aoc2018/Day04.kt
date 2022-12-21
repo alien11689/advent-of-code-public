@@ -33,7 +33,7 @@ object Day04 {
             }
         }
 
-        val max = m.maxByOrNull { it.value.sumBy { it.dur } }!!
+        val max = m.maxByOrNull { it.value.sumOf { it.dur } }!!
         val minutes = mutableMapOf<Int, Int>()
 
         max.value.forEach { s ->

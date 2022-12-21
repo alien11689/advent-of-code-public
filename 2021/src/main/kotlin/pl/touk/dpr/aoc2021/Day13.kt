@@ -18,18 +18,18 @@ object Day13 {
         val result = mutableSetOf<Point>()
         if (instr.axis == "x") {
             paper.forEach { p ->
-                if (p.x < instr.idx) {
-                    result += p
+                result += if (p.x < instr.idx) {
+                    p
                 } else {
-                    result += Point(instr.idx - (p.x - instr.idx), p.y)
+                    Point(instr.idx - (p.x - instr.idx), p.y)
                 }
             }
         } else {
             paper.forEach { p ->
-                if (p.y < instr.idx) {
-                    result += p
+                result += if (p.y < instr.idx) {
+                    p
                 } else {
-                    result += Point(p.x, instr.idx - (p.y - instr.idx))
+                    Point(p.x, instr.idx - (p.y - instr.idx))
                 }
             }
         }

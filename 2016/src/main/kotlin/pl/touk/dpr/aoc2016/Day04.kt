@@ -11,7 +11,7 @@ object Day04 {
     private fun part1(input: List<String>): Any {
         return input.map { Line.from(it.split(Regex("[-\\[\\]]+")).filter { it.isNotEmpty() }) }
                 .filter { it.isValid() }
-                .sumBy { it.id }
+                .sumOf { it.id }
     }
 
     private fun part2(input: List<String>): Any {
@@ -45,7 +45,7 @@ object Day04 {
 
         fun decrypt(): String {
             return words.joinToString("").map {
-                ((it.toInt() - 97 + id ) % 26 + 97).toChar()
+                ((it.code - 97 + id) % 26 + 97).toChar()
             }.joinToString("")
         }
     }

@@ -121,10 +121,10 @@ object Day21 {
         val C = input[2]
         val D = input[3]
         val E = input[4]
-        val F = input[5]
-        val G = input[6]
+//        val F = input[5]
+//        val G = input[6]
         val H = input[7]
-        val I = input[8]
+//        val I = input[8]
         val EXPECTED = input[9]
 //    if ((!A || ((D && !C) && (E || H) || (!B && !E))) != EXPECTED) { //działa
         if ((!A || ((D && !C) && (E || H) || !(B || !(!E)))) != EXPECTED) {

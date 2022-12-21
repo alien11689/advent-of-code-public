@@ -5,7 +5,7 @@ object Day19 {
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/19/input.txt")
         println(part1(input))
-        println(part2(input))
+        println(part2())
     }
 
     private fun part1(lines: List<String>): Any {
@@ -30,9 +30,9 @@ object Day19 {
         return registers[0]
     }
 
-    private fun part2(lines: List<String>): Any {
+    private fun part2(): Any {
 //        println("After optimizations and observations:")
-        return (1..10551314).sumBy { if (10551314 % it == 0) 10551314 / it else 0 }
+        return (1..10551314).sumOf { if (10551314 % it == 0) 10551314 / it else 0 }
     }
 
     data class Operation(val name: String, val a: Int, val b: Int, val c: Int) {

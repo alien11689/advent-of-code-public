@@ -114,11 +114,11 @@ object Day22 {
             }
         }
 
-        override fun compareTo(o: Pos): Int {
-            if (y == o.y) {
-                return x.compareTo(o.x)
+        override fun compareTo(other: Pos): Int {
+            if (y == other.y) {
+                return x.compareTo(other.x)
             }
-            return y.compareTo(o.y)
+            return y.compareTo(other.y)
         }
 
         fun dist(o: Pos) = abs(x - o.x) + abs(y - o.y)
@@ -218,12 +218,12 @@ object Day22 {
 
     data class Here(val pos: Pos, val minutes: Int, val distToTarget: Int, val equip: Equip, val path: List<Pos>) :
         Comparable<Here> {
-        override fun compareTo(o: Here): Int {
-            if (minutes != o.minutes) {
-                return minutes.compareTo(o.minutes)
+        override fun compareTo(other: Here): Int {
+            if (minutes != other.minutes) {
+                return minutes.compareTo(other.minutes)
             }
-            if (distToTarget != o.distToTarget) {
-                return distToTarget.compareTo(o.distToTarget)
+            if (distToTarget != other.distToTarget) {
+                return distToTarget.compareTo(other.distToTarget)
             }
             return 0
         }

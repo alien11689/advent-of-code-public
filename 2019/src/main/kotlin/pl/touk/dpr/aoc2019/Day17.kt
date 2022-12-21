@@ -61,10 +61,10 @@ object Day17 {
         }
 
         var sum = 0L
-        for (j in m.keys.map { it.second }.minOrNull()!!..m.keys.map { it.second }.maxOrNull()!!) {
-            for (i in m.keys.map { it.first }.minOrNull()!!..m.keys.map { it.first }.maxOrNull()!!) {
-                if (m[i to j] == 35L && m[i + 1 to j] == 35L && m[i - 1 to j] == 35L && m[i to j + 1] == 35L && m[i to j - 1] == 35L) {
-                    sum += i * j
+        for (jj in m.keys.map { it.second }.minOrNull()!!..m.keys.map { it.second }.maxOrNull()!!) {
+            for (ii in m.keys.map { it.first }.minOrNull()!!..m.keys.map { it.first }.maxOrNull()!!) {
+                if (m[ii to jj] == 35L && m[ii + 1 to jj] == 35L && m[ii - 1 to jj] == 35L && m[ii to jj + 1] == 35L && m[ii to jj - 1] == 35L) {
+                    sum += ii * jj
                 }
             }
         }
@@ -92,7 +92,7 @@ object Day17 {
         val _0 = 48L
         val nl = 10L
         val n = 110L
-        val y = 79L
+//        val y = 79L
 
         //  R6L8R8R6L8R8R4R6R6R4R4L8R6L10L10R4R6R6R4R4L8R6L10L10R4R6R6R4R4L8R6LL10L10R6L8R8L8R6L10L10
         // A => L8R6L10L10

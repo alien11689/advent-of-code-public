@@ -123,17 +123,17 @@ object Day10 {
     }
 
     data class Stats(val ord: Ord, val a: Double) : Comparable<Stats> {
-        override fun compareTo(o: Stats): Int {
-            if (ord == o.ord) {
+        override fun compareTo(other: Stats): Int {
+            if (ord == other.ord) {
                 return when (ord) {
-                    Ord.LEFT_UP -> a.compareTo(o.a)
-                    Ord.LEFT_DOWN -> a.compareTo(o.a)
-                    Ord.RIGHT_DOWN -> a.compareTo(o.a)
-                    Ord.RIGHT_UP -> a.compareTo(o.a)
+                    Ord.LEFT_UP -> a.compareTo(other.a)
+                    Ord.LEFT_DOWN -> a.compareTo(other.a)
+                    Ord.RIGHT_DOWN -> a.compareTo(other.a)
+                    Ord.RIGHT_UP -> a.compareTo(other.a)
                     else -> throw RuntimeException()
                 }
             }
-            return ord.ordinal.compareTo(o.ord.ordinal)
+            return ord.ordinal.compareTo(other.ord.ordinal)
         }
     }
 }

@@ -113,8 +113,8 @@ object Day24 {
 
     private fun findNumbers(maze: List<String>): Int {
         var num = 0
-        maze.forEachIndexed { yi, row ->
-            row.forEachIndexed { xi, cell ->
+        maze.forEach { row ->
+            row.forEach { cell ->
                 if (cell != '#' && cell != '.') {
                     ++num
                 }

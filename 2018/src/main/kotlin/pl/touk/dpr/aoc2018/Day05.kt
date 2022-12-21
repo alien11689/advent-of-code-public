@@ -9,7 +9,7 @@ object Day05 {
     }
 
     private fun part1(input: String): Any {
-        val changes = ('a'..'z').flatMap { listOf(Regex("$it${it.toUpperCase()}"), Regex("${it.toUpperCase()}$it")) }
+        val changes = ('a'..'z').flatMap { listOf(Regex("$it${it.uppercaseChar()}"), Regex("${it.uppercaseChar()}$it")) }
 
         return reduce(input, changes).length
     }
@@ -29,8 +29,8 @@ object Day05 {
     }
 
     private fun part2(input: String): Any {
-        val changes = ('a'..'z').flatMap { listOf(Regex("$it${it.toUpperCase()}"), Regex("${it.toUpperCase()}$it")) }
-        val reducting = ('a'..'z').flatMap { listOf(Regex("[$it${it.toUpperCase()}]")) }
+        val changes = ('a'..'z').flatMap { listOf(Regex("$it${it.uppercaseChar()}"), Regex("${it.uppercaseChar()}$it")) }
+        val reducting = ('a'..'z').flatMap { listOf(Regex("[$it${it.uppercaseChar()}]")) }
 
         val res = reduce(input, changes)
 

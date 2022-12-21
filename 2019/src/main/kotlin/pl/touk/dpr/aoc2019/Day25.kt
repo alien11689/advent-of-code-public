@@ -22,7 +22,7 @@ object Day25 {
                 val cur = output.poll()
                 when (cur) {
                     10L -> println()
-                    else -> print(cur.toChar())
+                    else -> print(cur.toInt().toChar())
                 }
             }
             var command = readLine()!!
@@ -76,7 +76,7 @@ object Day25 {
             if (writing) {
                 when (cur) {
                     10L -> println()
-                    else -> print(cur.toChar())
+                    else -> print(cur.toInt().toChar())
                 }
             } else {
                 when (cur) {
@@ -84,7 +84,7 @@ object Day25 {
                         out.add(line.joinToString(""))
                         line.clear()
                     }
-                    else -> line.add(cur.toChar())
+                    else -> line.add(cur.toInt().toChar())
                 }
             }
         }

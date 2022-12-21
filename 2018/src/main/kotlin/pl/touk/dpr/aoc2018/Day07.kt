@@ -110,7 +110,7 @@ object Day07 {
     data class Worker(var cur: Char? = null, var timeout: Int? = null, var seconds: Int = 0) {
         companion object {
             val times = ('A'..'Z').map {
-                it to (it.toInt() - 64 + 60)
+                it to (it.code - 64 + 60)
             }.toMap()
         }
 

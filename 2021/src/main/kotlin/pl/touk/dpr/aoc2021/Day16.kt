@@ -30,8 +30,7 @@ object Day16 {
     private fun part1(lines: List<String>): Any {
         val message = lines.first().map { mapping[it]!! }.joinToString("")
 //        println("Message: $message")
-        var cur = 0
-        val result = readPackage(message, cur).second
+        val result = readPackage(message, 0).second
         return result.sumVersions()
     }
 
@@ -85,7 +84,6 @@ object Day16 {
                 return Pair(cur, Package(version, type, null, subPackages))
             }
         }
-        throw RuntimeException()
     }
 
     data class Package(val version: Int, val type: Int, val literal: Long? = null, val subPackages: List<Package> = emptyList()) {

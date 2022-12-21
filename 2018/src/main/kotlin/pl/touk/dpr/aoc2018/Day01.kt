@@ -9,7 +9,7 @@ object Day01 {
     }
 
     private fun part1(input: List<String>): Any {
-        return input.sumBy { it.toInt() }
+        return input.sumOf { it.toInt() }
     }
 
     private fun part2(input: List<String>): Any {

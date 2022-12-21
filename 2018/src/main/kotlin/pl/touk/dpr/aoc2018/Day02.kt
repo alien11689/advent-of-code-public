@@ -31,17 +31,16 @@ object Day02 {
             ((i + 1) until (lines.size)).forEach { j ->
                 val b = lines[j]
                 var diff = 0
-                (0 until a.length).forEach { k ->
+                for(k in a.indices){
                     if (a[k] != b[k]) {
                         ++diff
                         if (diff > 1) {
-                            return@forEach
+                            break
                         }
                     }
-
                 }
                 if (diff == 1) {
-                    val c = (0 until a.length).map { if (a[it] == b[it]) a[it] else "" }.joinToString("")
+                    val c = a.indices.map { if (a[it] == b[it]) a[it] else "" }.joinToString("")
                     return c
                 }
             }

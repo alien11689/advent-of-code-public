@@ -40,13 +40,9 @@ object Day15 {
 
         var i = 0
         var judge = 0
-        val selectedA = mutableListOf<Long>()
-        val selectedB = mutableListOf<Long>()
 
         val divA = 4
         val divB = 8
-
-        val div = 2147483647
 
         while (i < 5000000) {
             genA = nextAccept(genA, factorA, divA)

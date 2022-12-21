@@ -82,7 +82,7 @@ object Day18 {
 //        println("Key $key")
                 val moves = e.value
                 val nextPos = keysAndDoors.filter { it.value == key }.keys.first()
-                val newKeysAndDoors = s.toVisit.filter { it.value != key && it.value != key.toUpperCase() }
+                val newKeysAndDoors = s.toVisit.filter { it.value != key && it.value != key.uppercaseChar() }
                 val newState = State1(nextPos, newKeysAndDoors, s.length + moves, s.path + key)
 //        println("Adding new state " + newState)
                 pq.offer(newState)
@@ -161,7 +161,7 @@ object Day18 {
 //    println("Checking $s")
 //    println(s.localStates.sum { it.length })
             if (s.ended()) {
-                return s.localStates.sumBy { it.length }
+                return s.localStates.sumOf { it.length }
             }
             s.localStates.forEach { ls ->
 //        println("Checking local state $ls")
@@ -170,7 +170,7 @@ object Day18 {
                     val key = e.key
                     val moves = e.value
                     val nextPos = keysAndDoors.filter { it.value == key }.keys.first()
-                    val newKeysAndDoors = s.toVisit.filter { it.value != key && it.value != key.toUpperCase() }
+                    val newKeysAndDoors = s.toVisit.filter { it.value != key && it.value != key.uppercaseChar() }
                     val newLocalState = LocalState(nextPos, ls.length + moves)
 //            println("current local states " + s.localStates)
                     val newLocalStates = s.localStates.filter { local -> local != ls } + newLocalState
@@ -205,8 +205,8 @@ object Day18 {
     }
 
     data class LocalState(val cur: Point, val length: Int) : Comparable<LocalState> {
-        override fun compareTo(o: LocalState): Int {
-            return length.compareTo(o.length)
+        override fun compareTo(other: LocalState): Int {
+            return length.compareTo(other.length)
         }
     }
 
@@ -218,11 +218,11 @@ object Day18 {
     ) : Comparable<State1> {
         fun ended() = toVisit.isEmpty()
 
-        override fun compareTo(o: State1): Int {
-            if (length == o.length) {
-                return toVisit.size.compareTo(o.toVisit.size)
+        override fun compareTo(other: State1): Int {
+            if (length == other.length) {
+                return toVisit.size.compareTo(other.toVisit.size)
             }
-            return length.compareTo(o.length)
+            return length.compareTo(other.length)
         }
     }
 
@@ -232,17 +232,17 @@ object Day18 {
     ) : Comparable<State2> {
         fun ended() = toVisit.isEmpty()
 
-        override fun compareTo(o: State2): Int {
-            val lengthCompare = localStates.sumBy { it.length }.compareTo(o.localStates.sumBy { it.length })
+        override fun compareTo(other: State2): Int {
+            val lengthCompare = localStates.sumOf { it.length }.compareTo(other.localStates.sumOf { it.length })
             if (lengthCompare == 0) {
-                return toVisit.size.compareTo(o.toVisit.size)
+                return toVisit.size.compareTo(other.toVisit.size)
             }
             return lengthCompare
         }
     }
 
     fun findReachable1(start: Point, map: Map<Point, Boolean>, keysAndDoors: Map<Point, Char>): Map<Char, Int> {
-        val max = keysAndDoors.map { it.value.toLowerCase() }.toSet()
+        val max = keysAndDoors.map { it.value.lowercaseChar() }.toSet()
         val visited = mutableSetOf<Point>()
         val pq = PriorityQueue<LocalState>()
         pq.offer(LocalState(start, 0))
@@ -258,7 +258,7 @@ object Day18 {
                 val newLocalState = LocalState(it, localState.length + 1)
                 if (newLocalState.cur in keysAndDoors) {
                     val keyOrDoor = keysAndDoors[newLocalState.cur]!!
-                    if (keyOrDoor.toUpperCase() != keyOrDoor) {
+                    if (keyOrDoor.uppercaseChar() != keyOrDoor) {
                         result[keyOrDoor] = newLocalState.length
                     }
                 } else {
@@ -282,7 +282,7 @@ object Day18 {
                 val newLocalState = LocalState(it, localState.length + 1)
                 if (newLocalState.cur in keysAndDoors) {
                     val keyOrDoor = keysAndDoors[newLocalState.cur]!!
-                    if (keyOrDoor.toUpperCase() != keyOrDoor) {
+                    if (keyOrDoor.uppercaseChar() != keyOrDoor) {
                         result[keyOrDoor] = newLocalState.length
                     }
                 } else {

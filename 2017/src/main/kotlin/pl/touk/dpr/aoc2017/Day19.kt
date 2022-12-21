@@ -23,7 +23,7 @@ object Day19 {
                 letters.add(sign)
             }
             if (sign == '+') {
-                dir = changeDir(grid, dir, oldCur, cur)
+                dir = changeDir(grid, oldCur, cur)
             }
             if (sign == ' ') {
                 return listOf(letters.joinToString(""), steps)
@@ -31,7 +31,7 @@ object Day19 {
         }
     }
 
-    private fun changeDir(grid: List<String>, dir: Pair<Int, Int>, oldCur: Pair<Int, Int>, cur: Pair<Int, Int>): Pair<Int, Int> {
+    private fun changeDir(grid: List<String>, oldCur: Pair<Int, Int>, cur: Pair<Int, Int>): Pair<Int, Int> {
         return listOf(
                 Pair(cur.first + 1, cur.second),
                 Pair(cur.first - 1, cur.second),

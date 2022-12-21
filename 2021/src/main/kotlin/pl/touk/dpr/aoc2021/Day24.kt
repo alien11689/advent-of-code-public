@@ -7,12 +7,11 @@ import java.util.Stack
 object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        val lines = Util.getNotEmptyLinesFromFile("/24/input.txt")
-        println(part1(lines))
-        println(part2(lines))
+        println(part1())
+        println(part2())
     }
 
-    private fun part1(lines: List<String>): Any {
+    private fun part1(): Any {
 //        val instructions = lines.map { Instruction(it.split(' ')) }
         val res = (1..14).map { 0 }.toMutableList()
         val usedInstructions = mutableSetOf<Int>()
@@ -151,7 +150,7 @@ object Day24 {
         return res.reversed()
     }
 
-    private fun part2(lines: List<String>): Any {
+    private fun part2(): Any {
         val res = (1..14).map { 0 }.toMutableList()
         val usedInstructions = mutableSetOf<Int>()
         val digitPrecedence = 1..9
@@ -164,7 +163,7 @@ object Day24 {
         return res.joinToString("")
     }
 
-    fun fullIter(w: Long, prevZ: Long, a: Int, b: Int, c: Int): Long {
+    fun fullIter(w: Long, prevZ: Long, a: Int, b: Int): Long {
         var z = prevZ
         var x = z % 26
         z = z / a

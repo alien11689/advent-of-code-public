@@ -1,6 +1,6 @@
 package pl.touk.dpr.aoc2021
 
-import java.util.Stack
+import java.util.*
 import kotlin.math.absoluteValue
 
 object Day19 {
@@ -29,14 +29,14 @@ object Day19 {
                     if (countOverlappingKeys > 0) {
 //                        println("Scanner ${i} and ${j} have $countOverlappingKeys overlapping distances")
                         val commonBeacons1 = m1.filter { it.key in commonDistances }.map { it.value }.flatten().flatten().toSet()
-                        val commonBeacons2 = m1.filter { it.key in commonDistances }.map { it.value }.flatten().flatten().toSet()
+//                        val commonBeacons2 = m1.filter { it.key in commonDistances }.map { it.value }.flatten().flatten().toSet()
 //                        println("Common beacons count is ${commonBeacons1.size}")
 //                        println("Common beacons is ${commonBeacons1}")
                         for (cb in commonBeacons1) {
                             val x = m1.filter { it.key in commonDistances }.filter { it.value.count { it.contains(cb) } > 0 }
                             val two = x.toList().take(2).toMap()
                             val matchingInSecond = m2.filter { it.key in two.keys }.map { it.value }.flatten().flatten()
-                                .groupBy { it }.maxByOrNull { it.value.count() }!!.key
+                                    .groupBy { it }.maxByOrNull { it.value.count() }!!.key
 //                            println("$cb is second set ${matchingInSecond}")
                             val fullBeacon1 = Pair(i, cb)
                             val fullBeacon2 = Pair(j, matchingInSecond)
@@ -55,7 +55,7 @@ object Day19 {
         val checkedFullBeacons = mutableSetOf<Pair<Int, Beacon>>()
         val res = mutableSetOf<Set<Pair<Int, Beacon>>>()
 
-        beaconMappings.forEach { key, value ->
+        beaconMappings.keys.forEach { key ->
             if (key !in checkedFullBeacons) {
                 val ms = mutableSetOf<Pair<Int, Beacon>>()
                 val s = Stack<Pair<Int, Beacon>>()
@@ -101,8 +101,8 @@ object Day19 {
                     continue
                 }
                 val zeroAndOne = beaconsMatching.filter { theSame -> theSame.count { it.first in listOf(0, j) } == 2 }
-                    .map { it.filter { it.first in listOf(0, j) } }
-                    .take(2)
+                        .map { it.filter { it.first in listOf(0, j) } }
+                        .take(2)
                 val onlyFrom0 = zeroAndOne.map { it.filter { it.first == 0 } }.flatten()
                 val onlyFromJ = zeroAndOne.map { it.filter { it.first == j } }.flatten()
                 if (onlyFromJ.size != 2) {
@@ -135,7 +135,7 @@ object Day19 {
             for (j in sensorsCenters.indices) {
                 if (i < j) {
                     val manh = manhattan(sensorsCenters[i], sensorsCenters[j])
-                    if(manh > maxManhattan){
+                    if (manh > maxManhattan) {
                         maxManhattan = manh
                     }
                 }
@@ -178,20 +178,20 @@ object Day19 {
         }
 
         fun rotateZ(degree: Int): Beacon {
-            var sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0;
-            var cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0;
+            val sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0
+            val cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0
             return Beacon(x * cosTheta - y * sinTheta, y * cosTheta + x * sinTheta, z)
         }
 
         fun rotateX(degree: Int): Beacon {
-            var sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0;
-            var cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0;
+            val sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0
+            val cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0
             return Beacon(x, y * cosTheta - z * sinTheta, z * cosTheta + y * sinTheta)
         }
 
         fun rotateY(degree: Int): Beacon {
-            var sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0;
-            var cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0;
+            val sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0
+            val cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0
             return Beacon(x * cosTheta + z * sinTheta, y, z * cosTheta - x * sinTheta)
         }
 

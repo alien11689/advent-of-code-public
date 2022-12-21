@@ -10,8 +10,8 @@ object Day22 {
 
     private fun part1(lines: List<String>): Any {
         val grid = mutableMapOf<Pair<Int, Int>, Boolean>()
-        var curX = (lines[0].length) / 2
-        var curY = (lines.size) / 2
+        val curX = (lines[0].length) / 2
+        val curY = (lines.size) / 2
 
         var j = 0
         lines.forEach { row ->
@@ -37,8 +37,8 @@ object Day22 {
 
     private fun part2(lines: List<String>): Any {
         val grid = mutableMapOf<Pair<Int, Int>, Status>()
-        var curX = (lines[0].length) / 2
-        var curY = (lines.size) / 2
+        val curX = (lines[0].length) / 2
+        val curY = (lines.size) / 2
 
         var j = 0
         lines.forEach { row ->

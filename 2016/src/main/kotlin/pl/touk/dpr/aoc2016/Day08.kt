@@ -15,7 +15,7 @@ object Day08 {
             val parts = command.split(Regex("[ xy=]+"))
             when (parts[0]) {
                 "rect" -> {
-                    acc.mapIndexed { y, row ->
+                    acc.mapIndexed { y, _ ->
                         acc[y].mapIndexed { x, cell ->
                             if (x < parts[1].toInt() && y < parts[2].toInt()) {
                                 true
@@ -30,7 +30,7 @@ object Day08 {
                     val by = parts[4].toInt()
                     when (parts[1]) {
                         "column" -> {
-                            acc.mapIndexed { y, row ->
+                            acc.mapIndexed { y, _ ->
                                 acc[y].mapIndexed { x, cell ->
                                     if (x == which) {
                                         acc[(acc.size + y - by) % acc.size][x]
@@ -41,7 +41,7 @@ object Day08 {
                             }
                         }
                         "row" -> {
-                            acc.mapIndexed { y, row ->
+                            acc.mapIndexed { y, _ ->
                                 acc[y].mapIndexed { x, cell ->
                                     if (y == which) {
                                         acc[y][(acc[y].size + x - by) % acc[y].size]

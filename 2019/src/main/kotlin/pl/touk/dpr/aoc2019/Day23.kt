@@ -3,7 +3,6 @@ package pl.touk.dpr.aoc2019
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputer
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputer.program
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputerState
-import java.util.LinkedList
 
 object Day23 {
     @JvmStatic
@@ -22,7 +21,7 @@ object Day23 {
         }
 
         while (true) {
-            computers.forEachIndexed { idx, state ->
+            computers.forEach { state ->
 //            println("Running comp ${comp.key}")
                 while (true) {
                     if (state.input.isEmpty()) {
@@ -62,7 +61,7 @@ object Day23 {
         var natValue = Pair(-1L, -1L)
 
         while (true) {
-            if (computers.all { it.input.isEmpty() && it.output.isEmpty()}) {
+            if (computers.all { it.input.isEmpty() && it.output.isEmpty() }) {
                 if (natValue.second == prevNatValue.second) {
                     return natValue.second
                 }
@@ -71,7 +70,7 @@ object Day23 {
                 computers[0].input.offer(natValue.first)
                 computers[0].input.offer(natValue.second)
             } else {
-                computers.forEachIndexed { idx, state ->
+                computers.forEach { state ->
 //                    println("Running comp $idx")
                     while (true) {
                         if (state.input.isEmpty()) {

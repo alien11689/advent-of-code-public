@@ -42,18 +42,19 @@ object Day10 {
 
     private fun part2(lines: List<String>): Any {
         val cyclesValues = getCyclesValues(lines)
+        val sb = StringBuilder()
         for (i in 1..240) {
             val curValue = cyclesValues[i]!!.toInt()
             if ((i - 1) % 40 in setOf(curValue - 1, curValue, curValue + 1)) {
-                print("#")
+                sb.append("#")
             } else {
-                print(".")
+                sb.append(".")
             }
             if (i % 40 == 0) {
-                println()
+                sb.append("\n")
             }
         }
-        return ""
+        return sb.trim().toString()
     }
 }
 

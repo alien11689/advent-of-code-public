@@ -11,7 +11,7 @@ object Day06 {
     }
 
     private fun part1(input: List<String>): Any {
-        var counter = 'a'.toInt()
+        var counter = 'a'.code
         val points = input.map {
             val parts = it.split(", ")
             Point(parts[0].toInt(), parts[1].toInt(), ++counter)
@@ -52,14 +52,14 @@ object Day06 {
     }
 
     private fun part2(input: List<String>): Any {
-        var counter = 'a'.toInt()
+        var counter = 'a'.code
         val points = input.map {
             val parts = it.split(", ")
             Point(parts[0].toInt(), parts[1].toInt(), ++counter)
         }
         val board = (-5..(points.maxByOrNull { it.y }!!.y + 5)).map { y ->
             (-5..(points.maxByOrNull { it.x }!!.x + 5)).map { x ->
-                val dist = points.sumBy { it.distance(x, y) }
+                val dist = points.sumOf { it.distance(x, y) }
                 Cell2(x, y, dist)
             }
         }

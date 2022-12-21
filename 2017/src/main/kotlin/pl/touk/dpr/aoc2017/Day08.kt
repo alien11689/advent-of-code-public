@@ -43,14 +43,14 @@ object Day08 {
 
     data class Condition(val register: String, val sign: String, val amount: Int) {
         fun match(reg: Map<String, Int>): Boolean {
-            val reg = reg[register] ?: 0
+            val regValue = reg[register] ?: 0
             return when (sign) {
-                "==" -> reg == amount
-                "!=" -> reg != amount
-                ">=" -> reg >= amount
-                "<=" -> reg <= amount
-                ">" -> reg > amount
-                "<" -> reg < amount
+                "==" -> regValue == amount
+                "!=" -> regValue != amount
+                ">=" -> regValue >= amount
+                "<=" -> regValue <= amount
+                ">" -> regValue > amount
+                "<" -> regValue < amount
                 else -> throw RuntimeException(sign)
             }
         }

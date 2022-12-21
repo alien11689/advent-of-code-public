@@ -21,8 +21,8 @@ object Day22 {
         var size = 10007L
 
         fun mod(a: Long, b: Long): Long {
-            var r = a % b;
-            return if (r < 0) r + b else r;
+            val r = a % b
+            return if (r < 0) r + b else r
         }
 
         fun applyReversed(instr: List<String>, cur: Long, size: Long): Long {
@@ -63,7 +63,7 @@ object Day22 {
         for (i in 0..1) {
             val prev = cur
             cur = applyIteration(reversedInput, cur, size)
-            val diff = mod(cur - prev, size)
+            mod(cur - prev, size)
 //            println("After iteration \t ${i + 1}: \t $cur \t diff $diff ")
         }
         size = 119315717514047
@@ -72,7 +72,7 @@ object Day22 {
 
 //        println("Checking first iter")
 
-        val res = input.fold(buildMap(10007)) { m, inp -> apply(inp.split(" "), m) }
+        input.fold(buildMap(10007)) { m, inp -> apply(inp.split(" "), m) }
 //        println(inOrder(res).toList().find {it.second == 2019L})
         val xx = mutableMapOf<Int, Long>()
         xx[0] = cur

@@ -27,7 +27,7 @@ object IntCodeComputer {
 
     fun instruction(input: Queue<Long>, text: String) {
         text.forEach {
-            input.offer(it.toLong())
+            input.offer(it.code.toLong())
         }
         input.offer(10)
     }

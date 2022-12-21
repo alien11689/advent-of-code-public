@@ -16,7 +16,7 @@ object Day20 {
         val warps = mutableMapOf<Set<Point>, Set<Char>>()
 
         val sizeY = input.size
-        val sizeX = input[2].length
+//        val sizeX = input[2].length
 
         for (j in 0 until sizeY) {
             for (i in input[j].indices) {
@@ -114,14 +114,13 @@ object Day20 {
 
         val warpPoints = betterWarps.keys
 
-        val start = betterWarps.filter { it.value == setOf('A') }.toList().first().first!!
-        val dest = betterWarps.filter { it.value == setOf('Z') }.toList().first().first!!
+        val start = betterWarps.filter { it.value == setOf('A') }.toList().first().first
+        val dest = betterWarps.filter { it.value == setOf('Z') }.toList().first().first
 
         val pq = PriorityQueue<State2>()
         pq.offer(State2(start, 0))
 
         val outerWarps = betterWarps.keys.filter { it.x in listOf(2, sizeX - 3) || it.y in listOf(2, sizeY - 3) }
-        val innerWarps = betterWarps.keys - outerWarps
 
         val visited = mutableSetOf<Visited>()
 
@@ -155,7 +154,7 @@ object Day20 {
                         val warp = betterWarps[checkedPoint]
 //                println("Using warp $warp")
                         val to =
-                            betterWarps.filter { it.value == warp && it.key != checkedPoint }.toList().first().first!!
+                            betterWarps.filter { it.value == warp && it.key != checkedPoint }.toList().first().first
                         val level = if (checkedPoint in outerWarps) {
                             state.level - 1
                         } else {
@@ -190,15 +189,15 @@ object Day20 {
     data class PathElement(val warp: Set<Char>, val from: Point, val to: Point, val level: Int, val length: Int)
 
     data class State1(val cur: Point, val length: Int, val path: List<Set<Char>> = listOf()) : Comparable<State1> {
-        override fun compareTo(o: State1): Int {
-            return length.compareTo(o.length)
+        override fun compareTo(other: State1): Int {
+            return length.compareTo(other.length)
         }
     }
 
     data class State2(val cur: Point, val length: Int, val path: List<PathElement> = listOf(), val level: Int = 0) :
         Comparable<State2> {
-        override fun compareTo(o: State2): Int {
-            return length.compareTo(o.length)
+        override fun compareTo(other: State2): Int {
+            return length.compareTo(other.length)
         }
     }
 

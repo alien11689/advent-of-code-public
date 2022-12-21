@@ -24,10 +24,10 @@ object Day22 {
     }
 
     private fun part2(input: List<String>): Any {
-        val nodes = input
+        input
                 .drop(2)
                 .map { Node.fromLine(it) }
-//        printNodes(nodes)
+//                .also { printNodes(it) }
         return 15 + 16 + 150
     }
 

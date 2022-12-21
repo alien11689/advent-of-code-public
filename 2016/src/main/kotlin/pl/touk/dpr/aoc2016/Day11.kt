@@ -6,19 +6,23 @@ import java.util.Queue
 object Day11 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        println(solve(listOf(
-                setOf(1, 2, -2, 3, 4, -4, 5, -5),
-                setOf(-1, -3),
-                setOf(),
-                setOf()
-        )))
-        println(solve(listOf(
-                setOf(1, 2, -2, 3, 4, -4, 5, -5, 6, -6, 7, -7),
-                setOf(-1, -3),
-                setOf(),
-                setOf()
-        )))
+        println(part1())
+        println(part2())
     }
+
+    private fun part2() = solve(listOf(
+            setOf(1, 2, -2, 3, 4, -4, 5, -5, 6, -6, 7, -7),
+            setOf(-1, -3),
+            setOf(),
+            setOf()
+    ))
+
+    private fun part1() = solve(listOf(
+            setOf(1, 2, -2, 3, 4, -4, 5, -5),
+            setOf(-1, -3),
+            setOf(),
+            setOf()
+    ))
 
     private fun solve(input: List<Set<Int>>): Any {
         val mem = mutableSetOf<Any>()
@@ -94,10 +98,6 @@ object Day11 {
             }
         }
         return res
-    }
-
-    private fun part2(input: String): Any {
-        TODO()
     }
 
     data class Move(val stepCount: Int, val stage: Stage)

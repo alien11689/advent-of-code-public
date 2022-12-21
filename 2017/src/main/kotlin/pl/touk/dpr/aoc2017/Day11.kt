@@ -31,7 +31,7 @@ object Day11 {
         val processSteps = input.split(",").toList()
         val bd05 = BigDecimal("0.5")
         var max = BigDecimal.ZERO
-        val dest = processSteps.fold(Point(BigDecimal.ZERO, BigDecimal.ZERO)) { it, step ->
+        processSteps.fold(Point(BigDecimal.ZERO, BigDecimal.ZERO)) { it, step ->
             val point = when (step) {
                 "n" -> Point(it.x, it.y - BigDecimal.ONE)
                 "ne" -> Point(it.x + bd05, it.y - bd05)

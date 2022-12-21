@@ -28,9 +28,9 @@ object Day12 {
             for (i in 0 until xxs.size) {
                 var curX = xxs[i]
                 var curV = vvs[i]
-                vvs[i] = listOf(curV[0] + xxs.sumBy { signum(curX[0], it[0]) },
-                    curV[1] + xxs.sumBy { signum(curX[1], it[1]) },
-                    curV[2] + xxs.sumBy { signum(curX[2], it[2]) })
+                vvs[i] = listOf(curV[0] + xxs.sumOf { signum(curX[0], it[0]) },
+                        curV[1] + xxs.sumOf { signum(curX[1], it[1]) },
+                        curV[2] + xxs.sumOf { signum(curX[2], it[2]) })
             }
             for (i in 0 until xxs.size) {
                 var curX = xxs[i]
@@ -40,7 +40,7 @@ object Day12 {
 
         var sum = 0
         for (i in 0 until xxs.size) {
-            sum += xxs[i].sumBy { it.absoluteValue } * vvs[i].sumBy { it.absoluteValue }
+            sum += xxs[i].sumOf { it.absoluteValue } * vvs[i].sumOf { it.absoluteValue }
         }
 
         return sum
@@ -70,9 +70,9 @@ object Day12 {
             for (i in 0 until xxs.size) {
                 val curX = xxs[i]
                 val curV = vvs[i]
-                vvs[i] = listOf(curV[0] + xxs.sumBy { signum(curX[0], it[0]) },
-                    curV[1] + xxs.sumBy { signum(curX[1], it[1]) },
-                    curV[2] + xxs.sumBy { signum(curX[2], it[2]) })
+                vvs[i] = listOf(curV[0] + xxs.sumOf { signum(curX[0], it[0]) },
+                        curV[1] + xxs.sumOf { signum(curX[1], it[1]) },
+                        curV[2] + xxs.sumOf { signum(curX[2], it[2]) })
             }
             for (i in 0 until xxs.size) {
                 val curX = xxs[i]

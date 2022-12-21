@@ -14,14 +14,10 @@ object Day14 {
         return countOre(initReactions, fuel)
     }
 
-    private fun countOre(
-        initReactions: List<Reaction>,
-        fuel: Long
-    ): Long {
+    private fun countOre(initReactions: List<Reaction>, fuel: Long): Long {
         val reactions = initReactions.toMutableList()
         val usedReactions = mutableSetOf<Reaction>()
         val needs = mutableMapOf("FUEL" to fuel).withDefault { 0L }
-        var iter = 0
         while (needs.keys != setOf("ORE")) {
             if (reactions.isEmpty()) {
                 throw RuntimeException("Empty")

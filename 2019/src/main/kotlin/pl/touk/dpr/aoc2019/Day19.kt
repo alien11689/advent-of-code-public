@@ -23,8 +23,8 @@ object Day19 {
     }
 
     private fun part2(input: String): Any {
-        var j = 10L
-        var i = 0L
+        val j = 10L
+        val i = 0L
         var last = findLast(input, i, j)
 
         while (true) {

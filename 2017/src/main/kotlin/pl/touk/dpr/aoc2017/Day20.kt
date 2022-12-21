@@ -13,7 +13,7 @@ object Day20 {
     private fun part1(input: List<String>): Any {
         val particles = readInput(input)
 
-        (0 until 1000).forEach { iter ->
+        (0 until 1000).forEach {
             particles.forEach {
                 it.updateV()
                 it.updateP()
@@ -36,7 +36,7 @@ object Day20 {
 
     private fun part2(input: List<String>): Any {
         var particles = readInput(input)
-        (0 until 1000).forEach { iter ->
+        (0 until 1000).forEach {
             val hits = mutableMapOf<Coord, Int>()
             particles.forEach {
                 it.updateV()

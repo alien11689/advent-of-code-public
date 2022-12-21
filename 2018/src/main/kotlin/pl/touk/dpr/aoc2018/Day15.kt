@@ -14,7 +14,7 @@ object Day15 {
         val board = buildBoard(input)
         val players = buildPlayers(input).toMutableList()
         val round = game(players, board)
-        val sum = players.sumBy { it.hitPoints }
+        val sum = players.sumOf { it.hitPoints }
         return (round * sum)
     }
 
@@ -29,7 +29,7 @@ object Day15 {
             val players = buildPlayers(input, i).toMutableList()
             try {
                 val round = game(players, board, true)
-                val sum = players.sumBy { it.hitPoints }
+                val sum = players.sumOf { it.hitPoints }
                 maxSum = (round * sum)
                 maxBound = i - 1
             } catch (e: ElfDied) {
@@ -55,12 +55,12 @@ object Day15 {
             )
         }
 
-        override fun compareTo(o: Position): Int {
-            val dy = y - o.y
+        override fun compareTo(other: Position): Int {
+            val dy = y - other.y
             if (dy != 0) {
                 return dy
             } else {
-                return x - o.x
+                return x - other.x
             }
         }
     }
@@ -78,12 +78,12 @@ object Day15 {
             return hitPoints <= 0
         }
 
-        override fun compareTo(o: Player): Int {
-            val dy = y - o.y
+        override fun compareTo(other: Player): Int {
+            val dy = y - other.y
             return if (dy != 0) {
                 dy
             } else {
-                x - o.x
+                x - other.x
             }
         }
 

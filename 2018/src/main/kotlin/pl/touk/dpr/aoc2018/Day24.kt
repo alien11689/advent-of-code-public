@@ -57,13 +57,13 @@ object Day24 {
     ) : Comparable<Group> {
         fun effectivePower() = units * attack
 
-        override fun compareTo(o: Group): Int {
+        override fun compareTo(other: Group): Int {
             val powerA = effectivePower()
-            val powerB = o.effectivePower()
+            val powerB = other.effectivePower()
             if (powerA != powerB) {
                 return (-powerA).compareTo(-powerB)
             }
-            return (-initiative).compareTo(-o.initiative)
+            return (-initiative).compareTo(-other.initiative)
         }
 
         fun reset() {
@@ -135,7 +135,7 @@ object Day24 {
                 var initiative = -1
                 groups.filter { it.team != cur.team }.forEach { opponent ->
                     if (opponent.attacker == null) {
-                        var damage = 0
+                        var damage: Int
                         if (cur.attackType in opponent.immune) {
                             damage = 0
                         } else {
@@ -169,7 +169,7 @@ object Day24 {
                 }
             }
             // attack
-            val killed = groups.sortedBy { -it.initiative }.sumBy {
+            val killed = groups.sortedBy { -it.initiative }.sumOf {
 //            println("${it.team} ${it.id} attacks ${it.target?.id}")
                 it.attack()
             }
@@ -181,6 +181,6 @@ object Day24 {
             initGroups.removeAll { it.units <= 0 }
         }
 //    println("Winner ${groups[0].team}")
-        return Result(initGroups[0].team, initGroups.sumBy { it.units }, initGroups)
+        return Result(initGroups[0].team, initGroups.sumOf { it.units }, initGroups)
     }
 }

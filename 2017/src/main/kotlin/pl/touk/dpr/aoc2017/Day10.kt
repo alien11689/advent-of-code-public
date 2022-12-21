@@ -36,7 +36,7 @@ object Day10 {
     }
 
     fun knotHash(text: String): String {
-        val lengths = text.map { it.toInt() } + listOf(17, 31, 73, 47, 23)
+        val lengths = text.map { it.code } + listOf(17, 31, 73, 47, 23)
 
         var curPos = 0
         var skipSize = 0

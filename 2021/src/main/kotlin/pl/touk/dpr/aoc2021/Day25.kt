@@ -30,7 +30,7 @@ object Day25 {
                 val cur = it.key
                 val down = it.key.down(ySize)
                 val valueDownPrev = prev[down]
-                val valueDownCur = map[down]
+//                val valueDownCur = map[down]
                 if (down in map) { // dont't move
                     map.put(cur, it.value)
                 } else if (down in prev && valueDownPrev == it.value) {

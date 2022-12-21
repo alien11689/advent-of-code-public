@@ -26,9 +26,9 @@ object Day03 {
 //        println(index)
 //        println(lowerRight)
 //        println("Lower left")
-        val loweLeft = (lowerRight - index + 1)
+//        val loweLeft = (lowerRight - index + 1)
 //        println(loweLeft)
-//        println("Lower left is lower then search: ${loweLeft < input}")
+//        println("Lower left is lower than search: ${loweLeft < input}")
         val halfSide = ((index + 1) / 2)
 //        println("Half side = $halfSide")
         val distSide = halfSide - 1

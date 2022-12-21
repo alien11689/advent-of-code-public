@@ -20,7 +20,7 @@ object Day08 {
         val row = 25
         val tall = 6
         val black = '0'
-        val white = '1'
+//        val white = '1'
         val transparent = '2'
 
         val layers = input.chunked(row * tall)

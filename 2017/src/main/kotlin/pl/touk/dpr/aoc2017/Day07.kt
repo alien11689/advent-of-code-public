@@ -42,7 +42,7 @@ object Day07 {
                 cur = discs[cur.children.find { discs[it]!!.wholeSize(discs) == oddDiscSize }!!]!!
                 expectedSize = eachCount.maxByOrNull { it.value }!!.key
             } else {
-                return expectedSize - cur.children.sumBy { discs[it]!!.wholeSize(discs) }
+                return expectedSize - cur.children.sumOf { discs[it]!!.wholeSize(discs) }
             }
         }
     }
