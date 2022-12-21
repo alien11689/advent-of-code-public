@@ -32,8 +32,8 @@ object Day18 {
         return surface.size
     }
 
-    private fun readPoints(lines: List<String>) = lines.map {
-        val (x, y, z) = it.split(",").map { it.toInt() }
+    private fun readPoints(lines: List<String>) = lines.map { line ->
+        val (x, y, z) = line.split(",").map { it.toInt() }
         Point(x, y, z)
     }.toSet()
 
