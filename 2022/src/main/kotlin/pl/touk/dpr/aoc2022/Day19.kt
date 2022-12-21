@@ -15,6 +15,8 @@ object Day19 {
     }
 
     data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
+        val geodeCount = materials[Material.GEODE] ?: 0
+
         override fun compareTo(other: State): Int = if (other.possibleGeodes == possibleGeodes)
             if (other.possibleObsidians == possibleObsidians)
                 if (other.possibleClays == possibleClays) other.possibleOres.compareTo(possibleOres)
@@ -27,13 +29,13 @@ object Day19 {
             if (time < 7 && (robots[Material.CLAY] ?: 0) == 0 || time < 5 && (robots[Material.OBSIDIAN] ?: 0) == 0 || time < 3 && (robots[Material.GEODE] ?: 0) == 0) {
                 return options
             }
-            if (Material.values().all { (robots[it] ?: 0) > 0 }) {
+            if ((robots[Material.GEODE] ?: 0) > 0) {
                 options.add(copy(time = 0, materials = merge(materials, times(robots, time))))
             }
             robotCosts.forEach { e ->
                 val factory = e.key
                 val cost = e.value
-                if (robotCosts.keys.containsAll(cost.keys)) {
+                if (robots.keys.containsAll(cost.keys)) {
                     var curMaterials = materials
                     var nextTime = time - 1
                     while (nextTime >= 1) {
@@ -50,10 +52,10 @@ object Day19 {
             return options
         }
 
-        val possibleGeodes: Int = (materials[Material.GEODE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it + 1 }
-        val possibleObsidians: Int = (materials[Material.OBSIDIAN] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.OBSIDIAN] ?: 0) + it + 1 }
-        val possibleClays: Int = (materials[Material.CLAY] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.CLAY] ?: 0) + it + 1 }
-        val possibleOres: Int = (materials[Material.ORE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.ORE] ?: 0) + it + 1 }
+        val possibleGeodes: Int = geodeCount + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it + 1 }
+        private val possibleObsidians: Int = (materials[Material.OBSIDIAN] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.OBSIDIAN] ?: 0) + it + 1 }
+        private val possibleClays: Int = (materials[Material.CLAY] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.CLAY] ?: 0) + it + 1 }
+        private val possibleOres: Int = (materials[Material.ORE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.ORE] ?: 0) + it + 1 }
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
@@ -82,24 +84,18 @@ object Day19 {
                     if (it.possibleGeodes <= geodeMax || (it.robots[Material.ORE] ?: 0) > 4 || (it.robots[Material.CLAY] ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8) {
                         // it's ugly hack but works
                     } else if (it.time == 0) {
-                        val geodeCount = it.materials[Material.GEODE] ?: 0
-                        if (geodeMax < geodeCount) {
-                            geodeMax = geodeCount
+                        if (geodeMax < it.geodeCount) {
+                            geodeMax = it.geodeCount
 //                            println("New Max geode $geodeMax -> $it")
                         }
                     } else {
                         if (it !in memory) {
                             memory.add(it)
                             val key = it.materials to it.robots
-                            if (key !in best) {
-                                best[key] = it.time
+                            val bestTime = best[key] ?: -1
+                            if (bestTime < it.time) {
                                 pq.offer(it)
-                            } else {
-                                val bestTime = best[key]!!
-                                if (bestTime < it.time) {
-                                    pq.offer(it)
-                                    best[key] = it.time
-                                }
+                                best[key] = it.time
                             }
                         }
                     }
