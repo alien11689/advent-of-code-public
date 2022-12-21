@@ -55,7 +55,6 @@ object Day12 {
                 .map { State(it, points[it]!!, steps + 1) }
                 .toSet()
         }
-
     }
 
     data class Point(val x: Int, val y: Int) {
@@ -76,16 +75,21 @@ object Day12 {
             .min()
     }
 
-    private fun readPoints(lines: List<String>): Map<Point, Char> = lines.flatMapIndexed { y, line -> line.mapIndexed { x, c -> Point(x, y) to c } }.toMap()
-
-    private fun normalizePoints(points2: Map<Point, Char>): Map<Point, Char> {
-        return points2.map {
-            when (it.value) {
-                'S' -> it.key to 'a'
-                'E' -> it.key to 'z'
-                else -> it.key to it.value
+    private fun readPoints(lines: List<String>): Map<Point, Char> =
+        lines.flatMapIndexed { y, line ->
+            line.mapIndexed { x, c ->
+                Point(x, y) to c
             }
         }.toMap()
+
+    private fun normalizePoints(points2: Map<Point, Char>): Map<Point, Char> {
+        return points2.mapValues {
+            when (it.value) {
+                'S' -> 'a'
+                'E' -> 'z'
+                else -> it.value
+            }
+        }
     }
 }
 
