@@ -14,7 +14,8 @@ object Day10 {
 
     private fun part1(lines: List<String>): Any {
         val values = getCyclesValues(lines)
-        return values.filter { it.key in setOf(20, 60, 100, 140, 180, 220) }
+        val pivotalIndexes = setOf(20, 60, 100, 140, 180, 220)
+        return values.filter { it.key in pivotalIndexes }
             .map { it.key * it.value }
             .sum()
     }
@@ -43,14 +44,11 @@ object Day10 {
     private fun part2(lines: List<String>): Any {
         val cyclesValues = getCyclesValues(lines)
         val sb = StringBuilder()
-        for (i in 1..240) {
-            val curValue = cyclesValues[i]!!.toInt()
-            if ((i - 1) % 40 in setOf(curValue - 1, curValue, curValue + 1)) {
-                sb.append("#")
-            } else {
-                sb.append(".")
-            }
-            if (i % 40 == 0) {
+        repeat(240) { i ->
+            val curValue = cyclesValues[i + 1]!!.toInt()
+            val symbol = if (i % 40 in setOf(curValue - 1, curValue, curValue + 1)) "#" else " "
+            sb.append(symbol)
+            if ((i + 1) % 40 == 0) {
                 sb.append("\n")
             }
         }
