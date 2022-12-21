@@ -66,17 +66,7 @@ object Day21 {
                 monkeys[monkey] = Monkey(parts[0], parts[2], parts[1])
             }
         }
-        while ("root" !in values) {
-            val monkeysToDelete = mutableSetOf<String>()
-            monkeys.entries.forEach { (name, monkey) ->
-                val res = monkey.calculate(values)
-                if (res != null) {
-                    values[name] = res
-                    monkeysToDelete.add(name)
-                }
-            }
-            monkeysToDelete.forEach { monkeys.remove(it) }
-        }
+        calculateSimpleValues(monkeys, values)
         return values["root"]!!
     }
 
@@ -97,6 +87,16 @@ object Day21 {
                 }
             }
         }
+        calculateSimpleValues(monkeys, values)
+        var cur = monkeys[rootComparison!!.first]!!.match(values, values[rootComparison!!.second]!!)
+        while (cur.first != "humn") {
+//            println(cur)
+            cur = monkeys[cur.first]!!.match(values, cur.second)
+        }
+        return cur.second
+    }
+
+    private fun calculateSimpleValues(monkeys: MutableMap<String, Monkey>, values: MutableMap<String, Long>) {
         while (true) {
             val monkeysToDelete = mutableSetOf<String>()
             monkeys.entries.forEach { (name, monkey) ->
@@ -111,34 +111,6 @@ object Day21 {
                 break
             }
         }
-//        println(values)
-//        monkeys.forEach { println("$it") }
-//        println(rootComparison)
-//        var expression = "${rootComparison!!.first} == ${values[rootComparison!!.second]}"
-//        while (true) {
-//            val expressionBefore = expression
-//            values.forEach {
-//                if (expression.contains(it.key)) {
-//                    expression = expression.replace(it.key, it.value.toString())
-//                }
-//            }
-//            monkeys.forEach {
-//                if (expression.contains(it.key)) {
-//                    expression = expression.replace(it.key, it.value.toString())
-//                }
-//            }
-//            if (expression == expressionBefore) {
-//                break
-//            }
-//        }
-//        return expression
-        var cur = monkeys[rootComparison!!.first]!!.match(values, values[rootComparison!!.second]!!)
-        while (cur.first != "humn") {
-//            println(cur)
-            cur = monkeys[cur.first]!!.match(values, cur.second)
-        }
-
-        return cur.second
     }
 }
 
