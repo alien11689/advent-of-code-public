@@ -20,7 +20,7 @@ object Day05 {
                 val count = parts[1].toInt()
                 val from = parts[3].toInt()
                 val to = parts[5].toInt()
-                (1..count).forEach {
+                repeat(count) {
                     stacks[to - 1].push(stacks[from - 1].pop())
                 }
             }
@@ -36,7 +36,7 @@ object Day05 {
                 val from = parts[3].toInt()
                 val to = parts[5].toInt()
                 val local = Stack<Char>()
-                (1..count).forEach {
+                repeat(count) {
                     local.push(stacks[from - 1].pop())
                 }
                 while (local.isNotEmpty()) {
