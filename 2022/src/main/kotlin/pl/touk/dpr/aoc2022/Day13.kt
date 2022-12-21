@@ -16,9 +16,8 @@ object Day13 {
 
     private fun part1(lines: List<String>): Any {
         val pairs = parseExpressions(lines).chunked(2)
-
         return pairs.mapIndexed { i, pair ->
-            if (pair.first().compareTo(pair.last()) < 1) {
+            if (pair.first() <= pair.last()) {
                 i + 1
             } else 0
         }.sum()
@@ -29,59 +28,50 @@ object Day13 {
             if (this is V && other is V) {
                 return i.compareTo(other.i)
             } else if (this is L && other is L) {
-                this.l.indices.map { i ->
+                l.indices.map { i ->
                     if (i >= other.l.size) {
                         return 1
                     }
                     when (val comparedItem = l[i].compareTo(other.l[i])) {
-                        -1, 1 -> return comparedItem
-                        else -> {}
+                        0 -> {}
+                        else -> return comparedItem
                     }
                 }
-                return if (l.size == other.l.size) {
-                    0
-                } else if (l.size < other.l.size) {
-                    -1
-                } else {
-                    throw RuntimeException("Here")
-                }
+                return l.size.compareTo(other.l.size)
             } else {
-                return this.lift().compareTo(other.lift())
+                return lift().compareTo(other.lift())
             }
         }
 
-        fun lift(): Expr
+        fun lift(): L
 
         data class V(val i: Int) : Expr {
-            override fun lift(): Expr = L(listOf(this))
+            override fun lift() = L(listOf(this))
         }
 
         data class L(val l: List<Expr>) : Expr {
-            override fun lift(): Expr = this
+            override fun lift() = this
         }
     }
 
-    private fun parseExpressions(lines: List<String>): List<Expr> {
-        return lines.map {
+    private fun parseExpressions(lines: List<String>): List<Expr> =
+        lines.map {
             val stringTokenizer = StringTokenizer(it, ",[]", true)
             parseExpression(stringTokenizer.nextToken(), stringTokenizer)
         }
-    }
 
-    private fun parseExpression(token: String, tokens: StringTokenizer): Expr {
-        val expr = when (token) {
+    private fun parseExpression(token: String, tokens: StringTokenizer): Expr =
+        when (token) {
             "[" -> readContainer(tokens)
             else -> Expr.V(token.toInt())
         }
-        return expr
-    }
 
     private fun readContainer(tokens: StringTokenizer): Expr {
         val parts = mutableListOf<Expr>()
         while (tokens.hasMoreTokens()) {
             when (val token = tokens.nextToken()) {
                 "," -> continue
-                "]" -> return Expr.L(parts.toList())
+                "]" -> return Expr.L(parts)
                 else -> parts.add(parseExpression(token, tokens))
             }
         }
