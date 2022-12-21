@@ -12,7 +12,7 @@ object Day08 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val grid = lines.map { it.toList().map { it.toString().toInt() } }
+        val grid = lines.map { line -> line.map { it.toString().toInt() } }
         var notVisible = 0
         for (i in grid.indices) {
             if (i == 0 || i == grid.size - 1) {
@@ -28,21 +28,19 @@ object Day08 {
             }
         }
         return (grid.size * grid[0].size) - notVisible
-        // 6663 is wrong
-        // 8103 is wrong
     }
 
     private fun isNotVisible(i: Int, j: Int, grid: List<List<Int>>): Boolean {
         val cur = grid[i][j]
-        val s1 = (0..(i - 1)).map { grid[it][j] }.toSet().any { it >= cur }
-        val s2 = ((i + 1)..(grid.size - 1)).map { grid[it][j] }.toSet().any { it >= cur }
-        val s3 = (0..(j - 1)).map { grid[i][it] }.toSet().any { it >= cur }
-        val s4 = ((j + 1)..(grid[i].size - 1)).map { grid[i][it] }.toSet().any { it >= cur }
+        val s1 = (0 until i).map { grid[it][j] }.toSet().any { it >= cur }
+        val s2 = ((i + 1) until grid.size).map { grid[it][j] }.toSet().any { it >= cur }
+        val s3 = (0 until j).map { grid[i][it] }.toSet().any { it >= cur }
+        val s4 = ((j + 1) until grid[i].size).map { grid[i][it] }.toSet().any { it >= cur }
         return s1 && s2 && s3 && s4
     }
 
     private fun part2(lines: List<String>): Any {
-        val grid = lines.map { it.toList().map { it.toString().toInt() } }
+        val grid = lines.map { line -> line.map { it.toString().toInt() } }
         var bestScore = 0L
         for (i in grid.indices) {
             if (i == 0 || i == grid.size - 1) {
@@ -59,15 +57,14 @@ object Day08 {
             }
         }
         return bestScore
-        // 1176490 is wrong
     }
 
     private fun getScore(i: Int, j: Int, grid: List<List<Int>>): Long {
         val cur = grid[i][j]
-        val s1 = calculateSight((0..(i - 1)).map { grid[it][j] }.reversed(), cur)
-        val s2 = calculateSight(((i + 1)..(grid.size - 1)).map { grid[it][j] }, cur)
-        val s3 = calculateSight((0..(j - 1)).map { grid[i][it] }.reversed(), cur)
-        val s4 = calculateSight(((j + 1)..(grid[i].size - 1)).map { grid[i][it] }, cur)
+        val s1 = calculateSight((0 until i).map { grid[it][j] }.reversed(), cur)
+        val s2 = calculateSight(((i + 1) until grid.size).map { grid[it][j] }, cur)
+        val s3 = calculateSight((0 until j).map { grid[i][it] }.reversed(), cur)
+        val s4 = calculateSight(((j + 1) until grid[i].size).map { grid[i][it] }, cur)
 //        println("Tree $i, $j see is [$s1, $s2, $s3, $s4]")
         return s1 * s2 * s3 * s4
     }
