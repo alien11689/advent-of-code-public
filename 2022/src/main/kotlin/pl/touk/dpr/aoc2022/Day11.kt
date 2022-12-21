@@ -14,7 +14,7 @@ object Day11 {
 
     private fun part1(lines: List<String>): Any {
         val monkeys = readMonkeys(lines).toMap()
-        return mutlipleTwoBiggestInspected(monkeys, 20) { a: Long -> a / 3 }
+        return mutlipleTwoBiggestInspected(monkeys, 20) { a -> a / 3 }
     }
 
     private fun readMonkeys(lines: List<String>): MutableMap<Int, Monkey> {
@@ -64,12 +64,12 @@ object Day11 {
 
     private fun part2(lines: List<String>): Any {
         val monkeys = readMonkeys(lines).toMap()
-        val base = monkeys.values.map { it.test }.reduce { acc, cur -> acc * cur }
-        return mutlipleTwoBiggestInspected(monkeys, 10000) { a: Long -> a % base }
+        val base = monkeys.values.fold(1L) { acc, cur -> acc * cur.test }
+        return mutlipleTwoBiggestInspected(monkeys, 10000) { a -> a % base }
     }
 
     private fun mutlipleTwoBiggestInspected(monkeys: Map<Int, Monkey>, iterations: Int, magnitudeModifier: (Long) -> Long): Long {
-        (1..iterations).forEach {
+        repeat(iterations) {
             monkeys.values.sortedBy { it.id }.forEach { monkey ->
                 monkey.play(monkeys, magnitudeModifier)
             }
