@@ -33,7 +33,7 @@ object Day17 {
     private fun part1And2(lines: List<String>, limit: Long, print: Boolean = false): Any {
         val moves = parseMoves(lines)
         val board = mutableMapOf<Point, Pair<Int, Long>>() // point to (brickIdx to turn)
-        (0 until 7).forEach { board[Point(it, 0)] = 9 to -1 }
+        repeat(7) { board[Point(it, 0)] = 9 to -1 }
         val bricks = defineBricks()
         var moveIdx = 0
         var turn = 0L
@@ -71,9 +71,9 @@ object Day17 {
 //                        println("Mask repeated at $turn - $mask")
                         val step = turn - res.first
                         val dy = tallest - res.second
-                        val occurencesTillLimit = (limit - turn) / step
-                        turn += occurencesTillLimit * step
-                        maskBoost += occurencesTillLimit * dy
+                        val occurrencesTillLimit = (limit - turn) / step
+                        turn += occurrencesTillLimit * step
+                        maskBoost += occurrencesTillLimit * dy
                         maskUsed = true
 //                        println("Moving to turn $turn with $tallBoost")
                         break
@@ -93,7 +93,9 @@ object Day17 {
                 if (brickDown.isValid(board.keys)) {
                     brick = brickDown
                 } else {
-                    board.putAll(brick.elems.map { it to (brickIdx to turn) })
+                    brick.elems.forEach {
+                        board[it] = brickIdx to turn
+                    }
                     turns[turn] = brick.elems.maxOf { it.y } to moveIdx
                     ++turn
                     break
@@ -120,10 +122,10 @@ object Day17 {
         4 to Brick(listOf(Point(2, 0), Point(3, 0), Point(2, 1), Point(3, 1))),
     )
 
-    private fun printBoard(print: Boolean, board: MutableMap<Point, Pair<Int, Long>>) {
+    private fun printBoard(print: Boolean, board: Map<Point, Pair<Int, Long>>) {
         if (print) {
             for (y in board.keys.maxOf { it.y } downTo 0) {
-                for (x in 0 until 7) {
+                repeat(7) { x ->
                     print(board[Point(x, y)]?.first ?: '.')
                 }
                 println()
