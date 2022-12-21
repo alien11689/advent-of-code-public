@@ -11,14 +11,9 @@ object Day02 {
     }
 
     private fun part1(lines: List<String>): Any {
-        return lines.map {
+        return lines.sumOf {
             val (e, m) = it.split(" ")
-            val enemy = when (e) {
-                "A" -> Option.ROCK
-                "B" -> Option.PAPER
-                "C" -> Option.SCISSORS
-                else -> throw RuntimeException()
-            }
+            val enemy = interpretEnemy(e)
             val me = when (m) {
                 "X" -> Option.ROCK
                 "Y" -> Option.PAPER
@@ -26,7 +21,7 @@ object Day02 {
                 else -> throw RuntimeException()
             }
             result(enemy, me)
-        }.sum()
+        }
     }
 
     private fun result(enemy: Option, my: Option): Int {
@@ -49,34 +44,34 @@ object Day02 {
     }
 
     private fun part2(lines: List<String>): Any {
-        return lines
-            .map {
-                val (e, m) = it.split(" ")
-                val enemy = when (e) {
-                    "A" -> Option.ROCK
-                    "B" -> Option.PAPER
-                    "C" -> Option.SCISSORS
-                    else -> throw RuntimeException()
+        return lines.sumOf {
+            val (e, m) = it.split(" ")
+            val enemy = interpretEnemy(e)
+            val me = when (m) {
+                "X" -> when (enemy) {
+                    Option.ROCK -> Option.SCISSORS
+                    Option.PAPER -> Option.ROCK
+                    Option.SCISSORS -> Option.PAPER
                 }
-                val me = when (m) {
-                    "X" -> when (enemy) {
-                        Option.ROCK -> Option.SCISSORS
-                        Option.PAPER -> Option.ROCK
-                        Option.SCISSORS -> Option.PAPER
-                    }
 
-                    "Y" -> enemy
-                    "Z" -> when (enemy) {
-                        Option.ROCK -> Option.PAPER
-                        Option.PAPER -> Option.SCISSORS
-                        Option.SCISSORS -> Option.ROCK
-                    }
-
-                    else -> throw RuntimeException()
+                "Y" -> enemy
+                "Z" -> when (enemy) {
+                    Option.ROCK -> Option.PAPER
+                    Option.PAPER -> Option.SCISSORS
+                    Option.SCISSORS -> Option.ROCK
                 }
-                result(enemy, me)
+
+                else -> throw RuntimeException()
             }
-            .sum()
+            result(enemy, me)
+        }
+    }
+
+    private fun interpretEnemy(e: String) = when (e) {
+        "A" -> Option.ROCK
+        "B" -> Option.PAPER
+        "C" -> Option.SCISSORS
+        else -> throw RuntimeException()
     }
 }
 
