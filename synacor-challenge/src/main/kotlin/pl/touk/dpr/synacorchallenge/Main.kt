@@ -1,11 +1,13 @@
 package pl.touk.dpr.synacorchallenge
 
 import java.util.Stack
+import kotlin.math.pow
+import kotlin.system.exitProcess
 
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val bytes = javaClass.getResource("/challenge.bin").readBytes()
+        val bytes = javaClass.getResource("/challenge.bin")!!.readBytes()
         val program = readProgram(bytes)
         runProgram(program)
     }
@@ -18,7 +20,7 @@ object Main {
             val a = bytes[i].toInt().and(0xff)
             val b = bytes[i + 1].toInt().and(0xff)
             // little endian
-            val code = a + b * Math.pow(2.toDouble(), 8.toDouble()).toInt()
+            val code = a + b * 2.toDouble().pow(8.toDouble()).toInt()
             program.add(code)
             i += 2
         }
@@ -36,8 +38,7 @@ object Main {
         var debug = false
         val printOnly = false
         while (instrPointer < program.size) {
-            val opcode = program[instrPointer]
-            when (opcode) {
+            when (val opcode = program[instrPointer]) {
                 Opcodes.HALT -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "HALT", 0)
@@ -253,7 +254,7 @@ object Main {
                     }
                     if (read == 49) { // 1
                         println("Goodbye!!!")
-                        System.exit(0)
+                        exitProcess(0)
                     }
                     registers[program[instrPointer + 1] % BASE] = read
                     instrPointer += 2
@@ -285,31 +286,31 @@ object Main {
         return 1 + params
     }
 
-    private val BASE = 32768
+    private const val BASE = 32768
 
     private object Opcodes {
-        val HALT = 0
-        val SET = 1
-        val PUSH = 2
-        val POP = 3
-        val EQ = 4
-        val GT = 5
-        val JMP = 6
-        val JT = 7
-        val JF = 8
-        val ADD = 9
-        val MULT = 10
-        val MOD = 11
-        val AND = 12
-        val OR = 13
-        val NOT = 14
-        val RMEM = 15
-        val WMEM = 16
-        val CALL = 17
-        val RET = 18
-        val OUT = 19
-        val IN = 20
-        val NOOP = 21
+        const val HALT = 0
+        const val SET = 1
+        const val PUSH = 2
+        const val POP = 3
+        const val EQ = 4
+        const val GT = 5
+        const val JMP = 6
+        const val JT = 7
+        const val JF = 8
+        const val ADD = 9
+        const val MULT = 10
+        const val MOD = 11
+        const val AND = 12
+        const val OR = 13
+        const val NOT = 14
+        const val RMEM = 15
+        const val WMEM = 16
+        const val CALL = 17
+        const val RET = 18
+        const val OUT = 19
+        const val IN = 20
+        const val NOOP = 21
     }
 }
 

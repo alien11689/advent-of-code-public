@@ -6,15 +6,15 @@ object Teleporter {
         val r0 = 4
         val r1 = 1
         val x = (32767 downTo 1).find {
-            print("Checking $it: ")
+//            print("Checking $it: ")
             val first = solve(r0, r1, it, mutableMapOf()).first
-            println(first)
+//            println(first)
             first == 6
         }
         println(x)
     }
 
-    private val BASE = 32768
+    private const val BASE = 32768
 
     private fun solve(R0: Int, R1: Int, r7: Int, mem: MutableMap<Pair<Int, Int>, Pair<Int, Int>>): Pair<Int, Int> {
 //        println("solve $R0 $R1 ${mem.size}")
@@ -23,7 +23,7 @@ object Teleporter {
             return mem[key]!!
         }
         var r0 = R0
-        var r1 = R1
+        val r1 = R1
 
         if (r0 > 0) {
             val res = fun6035(r0, r1, r7, mem)

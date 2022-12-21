@@ -9,7 +9,7 @@ object Coins {
         val concave = 7
         val shiny = 5
 
-        val all = setOf<Int>(red, blue, corroded, concave, shiny)
+        val all = setOf(red, blue, corroded, concave, shiny)
         all.forEach { c1 ->
             all.forEach { c2 ->
                 all.forEach { c3 ->

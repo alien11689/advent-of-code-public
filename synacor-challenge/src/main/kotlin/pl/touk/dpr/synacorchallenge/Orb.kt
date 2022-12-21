@@ -19,8 +19,7 @@ object Orb {
             val path = pq.poll()
 //            println("Current: $path, pq: ${pq.size}")
             path.route.last().neighbours().forEach { np ->
-                val symbol = maze[np.y][np.x]
-                val newPath: Path = when (symbol) {
+                val newPath: Path = when (val symbol = maze[np.y][np.x]) {
                     "*" -> path.add(np, Operation.TIMES)
                     "+" -> path.add(np, Operation.PLUS)
                     "-" -> path.add(np, Operation.MINUS)
