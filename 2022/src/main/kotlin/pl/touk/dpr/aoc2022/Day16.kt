@@ -26,7 +26,7 @@ object Day16 {
 
     data class State(val room: String, val time: Int, val notOpenValves: Map<String, Int>, val presure: Long = 0) : Comparable<State> {
         override fun compareTo(other: State): Int = time - other.time
-        fun nexts(transitions: MutableMap<Set<String>, Int>): Set<State> {
+        fun nexts(transitions: Map<Set<String>, Int>): Set<State> {
             val options = mutableSetOf<State>()
             notOpenValves.forEach {
                 val target = it.key
@@ -95,7 +95,7 @@ object Day16 {
     private fun findMaxPresure(
         startRoom: String,
         valves: Map<String, Int>,
-        realTransitions: MutableMap<Set<String>, Int>,
+        realTransitions: Map<Set<String>, Int>,
     ): Long {
         var maxPresure = 0L
         val pq = PriorityQueue<State3>()
@@ -158,19 +158,17 @@ object Day16 {
         startRoom: String,
         valves: Map<String, Int>,
         transitions: Map<String, List<String>>,
-    ): MutableMap<Set<String>, Int> {
+    ): Map<Set<String>, Int> {
         val keys = (listOf(startRoom) + valves.keys).sorted()
-        val realTransitions = mutableMapOf<Set<String>, Int>()
-        keys.forEachIndexed { i, left ->
+        return keys.flatMapIndexed { i, left ->
             val interesting = keys.drop(i + 1).toSet()
             //            println("$left is interesting about $interesting")
             val found = findShortestTransistionsToAll(left, interesting, transitions)
             //            println("$left -> $found")
-            found.forEach {
-                realTransitions[setOf(left, it.key)] = it.value
+            found.map {
+                setOf(left, it.key) to it.value
             }
-        }
-        return realTransitions
+        }.toMap()
     }
 
     private fun findShortestTransistionsToAll(origin: String, interesting: Set<String>, transitions: Map<String, List<String>>): Map<String, Int> {
@@ -240,7 +238,7 @@ object Day16 {
         return maxPresureSum
     }
 
-    private fun findPaths(startRoom: String, time: Int, valves: Map<String, Int>, realTransitions: MutableMap<Set<String>, Int>): Map<List<String>, Int> {
+    private fun findPaths(startRoom: String, time: Int, valves: Map<String, Int>, realTransitions: Map<Set<String>, Int>): Map<List<String>, Int> {
         val options = mutableMapOf<List<String>, Int>()
         val pq = PriorityQueue<AltState>()
         pq.offer(AltState(listOf(startRoom), time, valves))
