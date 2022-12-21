@@ -24,12 +24,12 @@ object Day17 {
             val available = md5(cur.path).slice((0..3)).map {
                 it in setOf('b', 'c', 'd', 'e', 'f')
             }
-            val moves = listOf(
+            val moves = listOfNotNull(
                     if (available[0]) 'U' else null,
                     if (available[1]) 'D' else null,
                     if (available[2]) 'L' else null,
                     if (available[3]) 'R' else null,
-            ).filterNotNull()
+            )
 
             moves.map { newPos(cur, it) }.filter { it.isValid() }.forEach {
                 q.offer(it)
@@ -50,12 +50,12 @@ object Day17 {
             val available = md5(cur.path).slice((0..3)).map {
                 it in setOf('b', 'c', 'd', 'e', 'f')
             }
-            val moves = listOf(
+            val moves = listOfNotNull(
                     if (available[0]) 'U' else null,
                     if (available[1]) 'D' else null,
                     if (available[2]) 'L' else null,
                     if (available[3]) 'R' else null,
-            ).filterNotNull()
+            )
 
             moves.map { newPos(cur, it) }.filter { it.isValid() }.forEach {
                 q.offer(it)
