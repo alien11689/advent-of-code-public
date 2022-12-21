@@ -22,17 +22,14 @@ object Day07 {
 
     }
 
-    data class Dir(override val name: String, val parent: Dir?, val children: MutableList<Element>, var size: Long? = null) : Element {
+    data class Dir(override val name: String, val parent: Dir?, val children: MutableList<Element>, var size: Long = -1) : Element {
         override fun toString(): String = "Dir($name, children=$children)"
 
         override fun calculateSize(): Long {
-            if (size != null) {
-                return size as Long
-            } else {
-                val s = children.sumOf { it.calculateSize() }
-                size = s
-                return s
+            if (size < 0) {
+                size = children.sumOf { it.calculateSize() }
             }
+            return size
         }
     }
 
@@ -54,7 +51,6 @@ object Day07 {
                 }
             }
         }
-
         return totalSize
     }
 
@@ -70,24 +66,21 @@ object Day07 {
                 if (curDir.children.isEmpty()) {
                     readLines.forEach {
                         val parts = it.split(" ")
-                        if (parts[0] == "dir") {
-                            val dir = Dir(parts[1], curDir, emptyList<Element>().toMutableList())
-                            curDir.children.add(dir)
+                        val element = if (parts[0] == "dir") {
+                            Dir(parts[1], curDir, emptyList<Element>().toMutableList())
                         } else {
-                            val file = File(parts[1], parts[0].toLong())
-                            curDir.children.add(file)
+                            File(parts[1], parts[0].toLong())
                         }
+                        curDir.children.add(element)
                     }
                 }
                 i += readLines.size
             } else if (line.startsWith("$ cd ")) {
                 val dirName = line.split(" ")[2]
-                if (dirName == "/") {
-                    curDir = root
-                } else if (dirName == "..") {
-                    curDir = curDir.parent!!
-                } else {
-                    curDir = curDir.children.find { it.name == dirName } as Dir
+                curDir = when (dirName) {
+                    "/" -> root
+                    ".." -> curDir.parent!!
+                    else -> curDir.children.find { it.name == dirName } as Dir
                 }
                 ++i
             }
@@ -115,7 +108,7 @@ object Day07 {
             }
         }
 
-        return sizes.sorted().reversed().last { totalCapability - weHave + it > necessary }
+        return sizes.sortedDescending().last { totalCapability - weHave + it > necessary }
     }
 }
 
