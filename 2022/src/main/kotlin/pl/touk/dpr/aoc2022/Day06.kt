@@ -20,14 +20,8 @@ object Day06 {
 
     private fun getFirstIndexAfterDistinctSequence(lines: List<String>, distinctSize: Int): Int {
         val signal = lines.first().toList()
-        var i = 0
-        signal.windowed(distinctSize, 1).forEach {
-            if (it.toSet().size == distinctSize) {
-                return i + distinctSize
-            }
-            ++i
-        }
-        return -1
+        return distinctSize + signal.windowed(distinctSize, 1)
+            .indexOfFirst { it.toSet().size == distinctSize }
     }
 }
 
