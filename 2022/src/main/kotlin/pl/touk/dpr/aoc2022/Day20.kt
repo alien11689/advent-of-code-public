@@ -13,7 +13,7 @@ object Day20 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val elements = processElements(parseInput(lines, 1L))
+        val elements = processElements(parseInput(lines, 1L).toMutableMap())
         return calculateFinalScore(elements)
     }
 
@@ -21,15 +21,15 @@ object Day20 {
 
     private fun part2(lines: List<String>): Any {
         val encryptionKey = 811589153L
-        var elements = parseInput(lines, encryptionKey)
+        val elements = parseInput(lines, encryptionKey).toMutableMap()
         repeat(10) {
-            elements = processElements(elements)
+            processElements(elements)
         }
         return calculateFinalScore(elements)
     }
 
-    private fun processElements(initialElements: Map<Long, Elem>): Map<Long, Elem> {
-        var elements = initialElements
+    private fun processElements(elements: MutableMap<Long, Elem>): Map<Long, Elem> {
+        // mutable map instead of immutable speed up ~4-5 times execution
         val maxIdx = (elements.size - 1).toLong()
         (0 until elements.size).forEach { i ->
             val curElem = elements.entries.first { it.value.origin == i.toLong() }
@@ -53,27 +53,17 @@ object Day20 {
             } else curPos
             //                println("Applying $curElem: target pos is $targetPos and curPos is $curPos")
             require(targetPos in elements.keys)
-            elements = if (curPos < targetPos) {
-                elements.map {
-                    val x = when {
-                        it.key < curPos || it.key > targetPos -> it.key to it.value
-                        it.key == targetPos -> it.key to value
-                        else -> it.key to elements[it.key + 1]!!
-                    }
-                    //                    println("Moving $it to $x")
-                    x
-                }.toMap()
+            if (curPos < targetPos) {
+                for (j in curPos until targetPos) {
+                    elements[j] = elements[j + 1]!!
+                }
+                elements[targetPos] = value
             } else if (curPos > targetPos) {
-                elements.map {
-                    val x = when {
-                        it.key > curPos || it.key < targetPos -> it.key to it.value
-                        it.key == targetPos -> it.key to value
-                        else -> it.key to elements[it.key - 1]!!
-                    }
-                    //                    println("Moving $it to $x")
-                    x
-                }.toMap()
-            } else elements
+                for (j in curPos downTo (targetPos + 1)) {
+                    elements[j] = elements[j - 1]!!
+                }
+                elements[targetPos] = value
+            }
             //            println(elements.entries.sortedBy { it.key }.map { it.value.v }.joinToString(", "))
             //            println()
         }
