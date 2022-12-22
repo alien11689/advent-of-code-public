@@ -4,11 +4,11 @@ object Day17 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/17/input.txt")
-        println("Part 1:")
+//        println("Part 1:")
         val part1TurnLimit = 2022L
 //        println(part1And2(Util.getNotEmptyLinesFromFile("/17/test1.txt"), part1TurnLimit, false))
         println(part1And2(lines, part1TurnLimit, false))
-        println("Part 2:")
+//        println("Part 2:")
         val part2TurnLimit = 1000000000000L
 //        println(part1And2(Util.getNotEmptyLinesFromFile("/17/test1.txt"), part2TurnLimit, false))
         println(part1And2(lines, part2TurnLimit, print = false))

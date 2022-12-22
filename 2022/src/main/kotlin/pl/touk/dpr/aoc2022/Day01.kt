@@ -4,9 +4,9 @@ object Day01 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getLinesFromFile("/01/input.txt")
-        println("Part 1:")
+//        println("Part 1:")
         println(part1(lines))
-        println("Part 2:")
+//        println("Part 2:")
         println(part2(lines))
     }
 
