@@ -9,13 +9,13 @@ object Day04 {
     }
 
     private fun part1(input: List<String>): Any {
-        return input.map { Line.from(it.split(Regex("[-\\[\\]]+")).filter { it.isNotEmpty() }) }
+        return input.map { line -> Line.from(line.split(Regex("[-\\[\\]]+")).filter { it.isNotEmpty() }) }
                 .filter { it.isValid() }
                 .sumOf { it.id }
     }
 
     private fun part2(input: List<String>): Any {
-        return input.map { Line.from(it.split(Regex("[-\\[\\]]+")).filter { it.isNotEmpty() }) }
+        return input.map { line -> Line.from(line.split(Regex("[-\\[\\]]+")).filter { it.isNotEmpty() }) }
                 .first { it.decrypt().contains("north") }
                 .id
     }
@@ -29,6 +29,7 @@ object Day04 {
 
         fun isValid(): Boolean {
             return words
+                    .asSequence()
                     .flatMap { it.toCharArray().toList() }
                     .fold(mapOf<Char, Int>()) { acc, c ->
                         acc + Pair(c, if (acc.containsKey(c)) acc[c]!! + 1 else 1)

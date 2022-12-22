@@ -10,17 +10,12 @@ object Day24 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
-        val maze = input
+    private fun part1(maze: List<String>): Any {
         val (initX, initY) = find0(maze)
         val expected = findNumbers(maze)
 
         val memory = mutableSetOf<Stage>()
-        val q = LinkedList<Step>()
-
-        val initStep = Step(count = 0, stage = Stage(visited = setOf('0'), x = initX, y = initY))
-        q.add(initStep)
-        memory.add(initStep.stage)
+        val q = initQueue(initX, initY, memory)
 
         while (q.isNotEmpty()) {
             val step = q.poll()
@@ -37,18 +32,13 @@ object Day24 {
         throw RuntimeException("No solution")
     }
 
-    private fun part2(input: List<String>): Any {
-        val maze = input
+    private fun part2(maze: List<String>): Any {
         val (initX, initY) = find0(maze)
         val expected = findNumbers(maze)
 
-        val memory = mutableSetOf<Stage>()
         val toHomeMemory = mutableSetOf<Stage>()
-        val q = LinkedList<Step>()
-
-        val initStep = Step(count = 0, stage = Stage(visited = setOf('0'), x = initX, y = initY))
-        q.add(initStep)
-        memory.add(initStep.stage)
+        val memory = mutableSetOf<Stage>()
+        val q = initQueue(initX, initY, memory)
 
         while (q.isNotEmpty()) {
             val step = q.poll()
@@ -76,6 +66,15 @@ object Day24 {
         }
         throw RuntimeException("No solution")
 
+    }
+
+    private fun initQueue(initX: Int, initY: Int, memory: MutableSet<Stage>): LinkedList<Step> {
+        val q = LinkedList<Step>()
+
+        val initStep = Step(count = 0, stage = Stage(visited = setOf('0'), x = initX, y = initY))
+        q.add(initStep)
+        memory.add(initStep.stage)
+        return q
     }
 
     private fun findNeighbours(stage: Stage, maze: List<String>): List<Stage> {

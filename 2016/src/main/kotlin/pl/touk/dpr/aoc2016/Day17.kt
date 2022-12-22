@@ -21,19 +21,7 @@ object Day17 {
             if (cur.x == 3 && cur.y == 3) {
                 return cur.path.substring(input.length)
             }
-            val available = md5(cur.path).slice((0..3)).map {
-                it in setOf('b', 'c', 'd', 'e', 'f')
-            }
-            val moves = listOfNotNull(
-                    if (available[0]) 'U' else null,
-                    if (available[1]) 'D' else null,
-                    if (available[2]) 'L' else null,
-                    if (available[3]) 'R' else null,
-            )
-
-            moves.map { newPos(cur, it) }.filter { it.isValid() }.forEach {
-                q.offer(it)
-            }
+            processMoves(cur, q)
         }
     }
 
@@ -47,21 +35,25 @@ object Day17 {
                 pos = cur
                 continue
             }
-            val available = md5(cur.path).slice((0..3)).map {
-                it in setOf('b', 'c', 'd', 'e', 'f')
-            }
-            val moves = listOfNotNull(
-                    if (available[0]) 'U' else null,
-                    if (available[1]) 'D' else null,
-                    if (available[2]) 'L' else null,
-                    if (available[3]) 'R' else null,
-            )
-
-            moves.map { newPos(cur, it) }.filter { it.isValid() }.forEach {
-                q.offer(it)
-            }
+            processMoves(cur, q)
         }
         return pos.path.substring(input.length).length
+    }
+
+    private fun processMoves(cur: Pos, q: LinkedList<Pos>) {
+        val available = md5(cur.path).slice((0..3)).map {
+            it in setOf('b', 'c', 'd', 'e', 'f')
+        }
+        val moves = listOfNotNull(
+                if (available[0]) 'U' else null,
+                if (available[1]) 'D' else null,
+                if (available[2]) 'L' else null,
+                if (available[3]) 'R' else null,
+        )
+
+        moves.map { newPos(cur, it) }.filter { it.isValid() }.forEach {
+            q.offer(it)
+        }
     }
 
     private fun newPos(pos: Pos, x: Char): Pos {

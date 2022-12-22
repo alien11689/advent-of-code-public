@@ -49,7 +49,7 @@ object Day11 {
         return combinations
                 .filter { isValid(currentFloor - it) }
                 .flatMap { m ->
-                    listOf(e + 1, e - 1).filter { it >= 0 && it < 4 }.map { newE ->
+                    listOf(e + 1, e - 1).filter { it in 0..3 }.map { newE ->
                         val newFloors = floors.toMutableList()
                         newFloors[newE] = newFloors[newE] + m
                         newFloors[e] = newFloors[e] - m

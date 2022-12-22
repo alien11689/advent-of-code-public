@@ -50,10 +50,10 @@ object Day21 {
     }
 
     private fun permutations(input: Set<Char>): List<List<Char>> {
-        if (input.size == 1) {
-            return listOf(input.toList())
+        return if (input.size == 1) {
+            listOf(input.toList())
         } else {
-            return input.flatMap { cur ->
+            input.flatMap { cur ->
                 permutations(input - cur).map { it + cur }
             }
         }
@@ -65,12 +65,10 @@ object Day21 {
         data class SwapPosition(val from: Int, val to: Int) : Rule() {
             override fun use(input: List<Char>): List<Char> {
                 return input.mapIndexed { index, c ->
-                    if (index == from) {
-                        input[to]
-                    } else if (index == to) {
-                        input[from]
-                    } else {
-                        c
+                    when (index) {
+                        from -> input[to]
+                        to -> input[from]
+                        else -> c
                     }
                 }
             }

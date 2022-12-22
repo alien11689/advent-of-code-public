@@ -11,7 +11,7 @@ object Day03 {
     private fun part1(input: List<String>): Any {
         return input
                 .asSequence()
-                .map { it.trim().split(Regex("[ ]+")).map { it.toInt() } }
+                .map { line -> line.trim().split(Regex(" +")).map { it.toInt() } }
                 .count { isTriangle(it) }
     }
 
@@ -25,7 +25,7 @@ object Day03 {
     private fun part2(input: List<String>): Any {
         val triples = input
                 .asSequence()
-                .map { it.trim().split(Regex("[ ]+")).map { it.toInt() } }
+                .map { line -> line.trim().split(Regex(" +")).map { it.toInt() } }
         return (0..2)
                 .flatMap { col -> triples.map { it[col] } }
                 .chunked(3)

@@ -9,7 +9,7 @@ object Day06 {
     }
 
     private fun part1(input: List<String>): Any {
-        return (0..(input[0].length -1 )).map { col ->
+        return (0 until input[0].length).map { col ->
             input.map { it[col] }
                     .groupingBy { it }
                     .eachCount()
@@ -19,7 +19,7 @@ object Day06 {
     }
 
     private fun part2(input: List<String>): Any {
-        return (0..(input[0].length -1 )).map { col ->
+        return (0 until input[0].length).map { col ->
             input.map { it[col] }
                     .groupingBy { it }
                     .eachCount()

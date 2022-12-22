@@ -57,10 +57,10 @@ object Day14 {
         val mem = mutableMapOf<Int, String>()
         var i = 0
         while (true) {
-            val hash = getMd5_2017(input, i, mem)
+            val hash = getMd5For2017(input, i, mem)
             val triple = hasTriple(hash)
             if (triple != null) {
-                if (((i + 1)..(i + 1000)).any { hasFive(getMd5_2017(input, it, mem), triple) }) {
+                if (((i + 1)..(i + 1000)).any { hasFive(getMd5For2017(input, it, mem), triple) }) {
                     res.add(i)
                 }
             }
@@ -81,12 +81,12 @@ object Day14 {
         return v
     }
 
-    private fun getMd5_2017(input: String, idx: Int, mem: MutableMap<Int, String>): String {
+    private fun getMd5For2017(input: String, idx: Int, mem: MutableMap<Int, String>): String {
         if (idx in mem) {
             return mem[idx]!!
         }
         var res = "$input$idx"
-        (1..2017).forEach {
+        repeat(2017) {
             md5.reset()
             res = String.format("%032x", BigInteger(1, md5.digest(res.toByteArray())))
         }

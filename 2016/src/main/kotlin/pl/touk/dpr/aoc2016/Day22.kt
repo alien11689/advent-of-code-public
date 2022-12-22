@@ -31,18 +31,18 @@ object Day22 {
         return 15 + 16 + 150
     }
 
-    private fun printNodes(n: List<Node>) {
-        val nodes = n.map { Pair(Pair(it.x, it.y), it) }.toMap()
-        val maxX = nodes.values.maxByOrNull { it.x }!!.x
-        val maxY = nodes.values.maxByOrNull { it.y }!!.y
-        for (y in (0..maxY)) {
-            for (x in (0..maxX)) {
-                val node = nodes[Pair(x, y)]!!
-                print("${node.used}/${node.available}\t")
-            }
-            println()
-        }
-    }
+//    private fun printNodes(n: List<Node>) {
+//        val nodes = n.map { Pair(Pair(it.x, it.y), it) }.toMap()
+//        val maxX = nodes.values.maxByOrNull { it.x }!!.x
+//        val maxY = nodes.values.maxByOrNull { it.y }!!.y
+//        for (y in (0..maxY)) {
+//            for (x in (0..maxX)) {
+//                val node = nodes[Pair(x, y)]!!
+//                print("${node.used}/${node.available}\t")
+//            }
+//            println()
+//        }
+//    }
 
     data class Node(val x: Int, val y: Int, val size: Int, val used: Int, val available: Int, val percent: Int) {
         companion object {

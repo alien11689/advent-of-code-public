@@ -14,14 +14,12 @@ object Day08 {
         val res = input.fold(board) { acc, command ->
             val parts = command.split(Regex("[ xy=]+"))
             when (parts[0]) {
-                "rect" -> {
-                    acc.mapIndexed { y, _ ->
-                        acc[y].mapIndexed { x, cell ->
-                            if (x < parts[1].toInt() && y < parts[2].toInt()) {
-                                true
-                            } else {
-                                cell
-                            }
+                "rect" -> List(acc.size) { y ->
+                    acc[y].mapIndexed { x, cell ->
+                        if (x < parts[1].toInt() && y < parts[2].toInt()) {
+                            true
+                        } else {
+                            cell
                         }
                     }
                 }
@@ -29,36 +27,28 @@ object Day08 {
                     val which = parts[2].toInt()
                     val by = parts[4].toInt()
                     when (parts[1]) {
-                        "column" -> {
-                            acc.mapIndexed { y, _ ->
-                                acc[y].mapIndexed { x, cell ->
-                                    if (x == which) {
-                                        acc[(acc.size + y - by) % acc.size][x]
-                                    } else {
-                                        cell
-                                    }
+                        "column" -> List(acc.size) { y ->
+                            acc[y].mapIndexed { x, cell ->
+                                if (x == which) {
+                                    acc[(acc.size + y - by) % acc.size][x]
+                                } else {
+                                    cell
                                 }
                             }
                         }
-                        "row" -> {
-                            acc.mapIndexed { y, _ ->
-                                acc[y].mapIndexed { x, cell ->
-                                    if (y == which) {
-                                        acc[y][(acc[y].size + x - by) % acc[y].size]
-                                    } else {
-                                        cell
-                                    }
+                        "row" -> List(acc.size) { y ->
+                            acc[y].mapIndexed { x, cell ->
+                                if (y == which) {
+                                    acc[y][(acc[y].size + x - by) % acc[y].size]
+                                } else {
+                                    cell
                                 }
                             }
                         }
-                        else -> {
-                            acc
-                        }
+                        else -> acc
                     }
                 }
-                else -> {
-                    acc
-                }
+                else -> acc
             }
         }
         println(res.flatten().count { it })
