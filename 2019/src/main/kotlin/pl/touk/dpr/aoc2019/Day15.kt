@@ -1,12 +1,9 @@
 package pl.touk.dpr.aoc2019
 
-import pl.touk.dpr.aoc2019.intcode.IntCodeComputer
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputer.program
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputerState
-import java.util.LinkedList
 import java.util.PriorityQueue
 import java.util.Stack
-import kotlin.RuntimeException
 
 object Day15 {
     @JvmStatic
@@ -17,130 +14,28 @@ object Day15 {
     }
 
     private fun part1(input: String): Any {
-        val v = IntCodeComputer.parseInput(input)
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        val state = IntCodeComputerState(v, input = inputQ)
-
-        val board = mutableMapOf<Pair<Long, Long>, Long>()
-
-        var cur = 0L to 0L
-        board[cur] = 1L
-        val path = Stack<Int>()
-
-        while (true) {
-            val nextMove = listOf(1, 3, 2, 4).map { nextPos(cur, it) to it }.find {
-                !(it.first in board.keys)
-            }
-            if (nextMove == null && path.empty()) {
-                break
-            }
-            if (nextMove == null) {
-                val prev = path.pop()
-                val op = opposite(prev)
-                inputQ.offer(op.toLong())
-                program(state, output)
-                output.poll()
-                cur = nextPos(cur, op)
-            } else {
-                inputQ.offer(nextMove.second.toLong())
-                program(state, output)
-                val out = output.poll()
-                board[nextMove.first] = out
-                if (out != 0L) {
-                    cur = nextMove.first
-                    path.push(nextMove.second)
-                }
-            }
-        }
-
-        cur = 0L to 0L
-
+        val board = createBoard(input)
         val dest = board.toList().find { it.second == 2L }!!.first
 
-        val visited = mutableSetOf(cur)
-        val pq = PriorityQueue<List<Long>> { a, b ->
-            if (a[0] == b[0]) {
-                if (a[1] == b[1]) {
-                    (a[2] - b[2]).toInt()
-                } else {
-                    (a[1] - b[1]).toInt()
-                }
-            } else {
-                (a[0] - b[0]).toInt()
-            }
-        }
+        val visited = mutableSetOf(0L to 0L)
+        val pq = initPq()
         pq.offer(listOf(0L, 0L, 0L))
         while (!pq.isEmpty()) {
-            val c = pq.poll()
-            if (c[1] == dest.first && c[2] == dest.second) {
-                return c[0]
+            val currentState = pq.poll()
+            if (currentState[1] == dest.first && currentState[2] == dest.second) {
+                return currentState[0]
             }
-            visited.add(c[1] to c[2])
-            val nexts = listOf(1, 2, 3, 4).map { nextPos(c[1] to c[2], it) }.filter {
-                it !in visited && it in board.keys && board[it] != 0L
-            }
-            nexts.forEach {
-                pq.offer(listOf(c[0] + 1, it.first, it.second))
-            }
+            generateNewStates(visited, currentState, board, pq)
         }
         throw RuntimeException()
     }
 
     private fun part2(input: String): Any {
-        val v = IntCodeComputer.parseInput(input)
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        val state = IntCodeComputerState(v, input = inputQ)
-
-        val board = mutableMapOf<Pair<Long, Long>, Long>()
-
-        var cur = 0L to 0L
-        board[cur] = 1L
-        val path = Stack<Int>()
-
-        while (true) {
-            val nextMove = listOf(1, 3, 2, 4).map { nextPos(cur, it) to it }.find {
-                !(it.first in board.keys)
-            }
-            if (nextMove == null && path.empty()) {
-                break
-            }
-            if (nextMove == null) {
-                val prev = path.pop()
-                val op = opposite(prev)
-                inputQ.offer(op.toLong())
-                program(state, output)
-                output.poll()
-                cur = nextPos(cur, op)
-            } else {
-                inputQ.offer(nextMove.second.toLong())
-                program(state, output)
-                val out = output.poll()
-                board[nextMove.first] = out
-                if (out != 0L) {
-                    cur = nextMove.first
-                    path.push(nextMove.second)
-                }
-            }
-        }
-
-        cur = 0L to 0L
-
+        val board = createBoard(input)
         val dest = board.toList().find { it.second == 2L }!!.first
 
-        val visited = mutableSetOf(cur)
-        val pq = PriorityQueue<List<Long>> { a, b ->
-            if (a[0] == b[0]) {
-                if (a[1] == b[1]) {
-                    (a[2] - b[2]).toInt()
-                } else {
-                    (a[1] - b[1]).toInt()
-                }
-            } else {
-                (a[0] - b[0]).toInt()
-            }
-        }
+        val visited = mutableSetOf(0L to 0L)
+        val pq = initPq()
 
         var minutes = -1L
 
@@ -148,40 +43,93 @@ object Day15 {
         while (!pq.isEmpty()) {
             val c = pq.poll()
             minutes = c[0]
-            visited.add(c[1] to c[2])
-            val nexts = listOf(1, 2, 3, 4).map { nextPos(c[1] to c[2], it) }.filter {
-                it !in visited && it in board.keys && board[it] != 0L
-            }
-            nexts.forEach {
-                pq.offer(listOf(c[0] + 1, it.first, it.second))
-            }
+            generateNewStates(visited, c, board, pq)
         }
         return minutes
     }
 
-    fun printBoard(panel: MutableMap<Pair<Long, Long>, Long>) {
-        for (i in (panel.keys.minByOrNull { it.second }!!.second..panel.keys.maxByOrNull { it.second }!!.second)) {
-            for (j in (panel.keys.minByOrNull { it.first }!!.first..panel.keys.maxByOrNull { it.first }!!.first)) {
-                if (i == 0L && j == 0L) {
-                    print('S')
-                } else {
-                    val v = panel[j to i]?.toInt()
-                    if (v == null) {
-                        print(' ')
-                    } else if (v == 0) {
-                        print('#')
-                    } else if (v == 1) {
-                        print('.')
-                    } else if (v == 2) {
-                        print('O')
-                    }
-                }
-            }
-            println()
+    private fun generateNewStates(visited: MutableSet<Pair<Long, Long>>, currentState: List<Long>, board: Map<Pair<Long, Long>, Long>, pq: PriorityQueue<List<Long>>) {
+        visited.add(currentState[1] to currentState[2])
+        val nexts = listOf(1, 2, 3, 4).map { nextPos(currentState[1] to currentState[2], it) }.filter {
+            it !in visited && it in board.keys && board[it] != 0L
+        }
+        nexts.forEach {
+            pq.offer(listOf(currentState[0] + 1, it.first, it.second))
         }
     }
 
-    fun nextPos(curPos: Pair<Long, Long>, dir: Int): Pair<Long, Long> {
+    private fun createBoard(input: String): Map<Pair<Long, Long>, Long> {
+        val state = IntCodeComputerState.init(input)
+        val output = state.output
+        val inputQ = state.input
+        val board = mutableMapOf<Pair<Long, Long>, Long>()
+        var cur = 0L to 0L
+        board[cur] = 1L
+        val path = Stack<Int>()
+
+        while (true) {
+            val nextMove = listOf(1, 3, 2, 4).map { nextPos(cur, it) to it }.find {
+                it.first !in board.keys
+            }
+            if (nextMove == null && path.empty()) {
+                break
+            }
+            if (nextMove == null) {
+                val prev = path.pop()
+                val op = opposite(prev)
+                inputQ.offer(op.toLong())
+                program(state, output)
+                output.poll()
+                cur = nextPos(cur, op)
+            } else {
+                inputQ.offer(nextMove.second.toLong())
+                program(state, output)
+                val out = output.poll()
+                board[nextMove.first] = out
+                if (out != 0L) {
+                    cur = nextMove.first
+                    path.push(nextMove.second)
+                }
+            }
+        }
+        return board
+    }
+
+    private fun initPq() = PriorityQueue<List<Long>> { a, b ->
+        if (a[0] == b[0]) {
+            if (a[1] == b[1]) {
+                (a[2] - b[2]).toInt()
+            } else {
+                (a[1] - b[1]).toInt()
+            }
+        } else {
+            (a[0] - b[0]).toInt()
+        }
+    }
+
+//    fun printBoard(panel: MutableMap<Pair<Long, Long>, Long>) {
+//        for (i in (panel.keys.minByOrNull { it.second }!!.second..panel.keys.maxByOrNull { it.second }!!.second)) {
+//            for (j in (panel.keys.minByOrNull { it.first }!!.first..panel.keys.maxByOrNull { it.first }!!.first)) {
+//                if (i == 0L && j == 0L) {
+//                    print('S')
+//                } else {
+//                    val v = panel[j to i]?.toInt()
+//                    if (v == null) {
+//                        print(' ')
+//                    } else if (v == 0) {
+//                        print('#')
+//                    } else if (v == 1) {
+//                        print('.')
+//                    } else if (v == 2) {
+//                        print('O')
+//                    }
+//                }
+//            }
+//            println()
+//        }
+//    }
+
+    private fun nextPos(curPos: Pair<Long, Long>, dir: Int): Pair<Long, Long> {
         return when (dir) {
             1 -> Pair(curPos.first, curPos.second - 1)
             2 -> Pair(curPos.first, curPos.second + 1)
@@ -191,7 +139,7 @@ object Day15 {
         }
     }
 
-    fun opposite(dir: Int): Int {
+    private fun opposite(dir: Int): Int {
         return when (dir) {
             1 -> 2
             2 -> 1

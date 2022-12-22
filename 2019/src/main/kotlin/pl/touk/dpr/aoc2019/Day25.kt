@@ -2,7 +2,6 @@ package pl.touk.dpr.aoc2019
 
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputer
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputerState
-import java.util.LinkedList
 
 object Day25 {
     @JvmStatic
@@ -11,21 +10,20 @@ object Day25 {
         println(part1(input))
     }
 
-    fun runInteractive(v: MutableMap<Long, Long>) {
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        val state = IntCodeComputerState(v, input = inputQ)
+    fun runInteractive(input: String) {
+        val state = IntCodeComputerState.init(input)
+        val output = state.output
+        val inputQ = state.input
         while (true) {
-            IntCodeComputer.program(state, output)
+            IntCodeComputer.program(state)
 
             while (output.isNotEmpty()) {
-                val cur = output.poll()
-                when (cur) {
+                when (val cur = output.poll()) {
                     10L -> println()
                     else -> print(cur.toInt().toChar())
                 }
             }
-            var command = readLine()!!
+            var command = readln()
             when (command) {
                 "e" -> command = "east"
                 "s" -> command = "south"
@@ -36,10 +34,10 @@ object Day25 {
         }
     }
 
-    fun solve(v: MutableMap<Long, Long>): String {
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        val state = IntCodeComputerState(v, input = inputQ)
+    fun solve(input: String): String {
+        val state = IntCodeComputerState.init(input)
+        val output = state.output
+        val inputQ = state.input
         listOf(
                 "south",
                 "west",
@@ -67,7 +65,7 @@ object Day25 {
         ).forEach {
             IntCodeComputer.instruction(inputQ, it)
         }
-        IntCodeComputer.program(state, output)
+        IntCodeComputer.program(state)
         val out = mutableListOf<String>()
         val line = mutableListOf<Char>()
         val writing = false
@@ -84,6 +82,7 @@ object Day25 {
                         out.add(line.joinToString(""))
                         line.clear()
                     }
+
                     else -> line.add(cur.toInt().toChar())
                 }
             }
@@ -93,9 +92,9 @@ object Day25 {
     }
 
     private fun part1(input: String): String {
-        val intCodeInput = IntCodeComputer.parseInput(input)
-//        runInteractive(intCodeInput)
-        return solve(intCodeInput)
+//        runInteractive(input)
+        val solution = solve(input)
+        return solution.split(" ")[11]
     }
     //photons > X
 //molten lava > X

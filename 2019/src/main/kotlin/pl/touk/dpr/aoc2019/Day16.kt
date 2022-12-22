@@ -41,7 +41,7 @@ object Day16 {
     private fun generatePattern(base: List<Int>, iter: Int): List<Int> {
         val pattern = mutableListOf<Int>()
         base.forEach { p ->
-            (0 until iter).forEach() {
+            repeat(iter) {
                 pattern.add(p)
             }
         }
@@ -55,10 +55,10 @@ object Day16 {
         val times = 10000 - offset / nums.size
 
         val phases = 100
-        offset = offset % nums.size
+        offset %= nums.size
 
         val realInput = mutableListOf<Long>()
-        (0 until times).forEach() {
+        repeat(times) {
             realInput.addAll(nums)
         }
 

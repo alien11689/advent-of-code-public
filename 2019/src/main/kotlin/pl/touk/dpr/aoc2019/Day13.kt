@@ -1,6 +1,5 @@
 package pl.touk.dpr.aoc2019
 
-import pl.touk.dpr.aoc2019.intcode.IntCodeComputer
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputer.program
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputerState
 import java.util.LinkedList
@@ -14,10 +13,8 @@ object Day13 {
     }
 
     private fun part1(input: String): Any {
-        val v = IntCodeComputer.parseInput(input)
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        val state = IntCodeComputerState(v, input = inputQ)
+        val state = IntCodeComputerState.init(input)
+        val output = state.output
 
         val panel = mutableMapOf<Pair<Long, Long>, Long>()
         program(state, output)
@@ -35,13 +32,12 @@ object Day13 {
     }
 
     private fun part2(input: String): Any {
-        val v = IntCodeComputer.parseInput(input)
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        val state = IntCodeComputerState(v, input = inputQ)
+        val state = IntCodeComputerState.init(input)
+        val output = state.output
+        val inputQ = state.input
 
-        v[0L] = 2L
-        program(state, output)
+        state.v[0L] = 2L
+        program(state)
 
         val panel = mutableMapOf<Pair<Long, Long>, Long>()
         createBoard(panel, output)
@@ -78,7 +74,7 @@ object Day13 {
         return panel[-1L to 0L]!!
     }
 
-    fun createBoard(panel: MutableMap<Pair<Long, Long>, Long>, output: LinkedList<Long>) {
+    private fun createBoard(panel: MutableMap<Pair<Long, Long>, Long>, output: LinkedList<Long>) {
         while (output.size > 0) {
             val x = output.poll()
             val y = output.poll()
@@ -87,32 +83,32 @@ object Day13 {
         }
     }
 
-    fun printBoard(panel: MutableMap<Pair<Long, Long>, Long>) {
-        for (i in (panel.keys.minByOrNull { it.second }!!.second..panel.keys.maxByOrNull { it.second }!!.second)) {
-            for (j in (panel.keys.minByOrNull { it.first }!!.first..panel.keys.maxByOrNull { it.first }!!.first)) {
-                if (j == -1L) {
-                    if (i == 0L) {
-                        println("Score: " + panel[j to i])
-                    }
-                    continue
-                }
-                val v = panel[j to i]?.toInt()
-                if (v == null) {
-                    continue
-                }
-                if (v == 0) {
-                    print('.')
-                } else if (v == 1) {
-                    print('#')
-                } else if (v == 2) {
-                    print('B')
-                } else if (v == 3) {
-                    print('H')
-                } else if (v == 4) {
-                    print('O')
-                }
-            }
-            println()
-        }
-    }
+//    fun printBoard(panel: MutableMap<Pair<Long, Long>, Long>) {
+//        for (i in (panel.keys.minByOrNull { it.second }!!.second..panel.keys.maxByOrNull { it.second }!!.second)) {
+//            for (j in (panel.keys.minByOrNull { it.first }!!.first..panel.keys.maxByOrNull { it.first }!!.first)) {
+//                if (j == -1L) {
+//                    if (i == 0L) {
+//                        println("Score: " + panel[j to i])
+//                    }
+//                    continue
+//                }
+//                val v = panel[j to i]?.toInt()
+//                if (v == null) {
+//                    continue
+//                }
+//                if (v == 0) {
+//                    print('.')
+//                } else if (v == 1) {
+//                    print('#')
+//                } else if (v == 2) {
+//                    print('B')
+//                } else if (v == 3) {
+//                    print('H')
+//                } else if (v == 4) {
+//                    print('O')
+//                }
+//            }
+//            println()
+//        }
+//    }
 }

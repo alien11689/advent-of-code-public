@@ -6,18 +6,15 @@ import java.util.Queue
 object IntCodeComputer {
 
     fun run(programCode: String, input: Collection<Long>): Queue<Long> {
-        val v = parseInput(programCode)
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        val state = IntCodeComputerState(v, input = inputQ)
-        inputQ.addAll(input)
-        program(state, output)
-        return output
+        val state = IntCodeComputerState.init(programCode)
+        state.input.addAll(input)
+        program(state)
+        return state.output
     }
 
     fun parseInput(input: String): MutableMap<Long, Long> = parseInput(input.split(","))
 
-    fun parseInput(input: List<String>): MutableMap<Long, Long> {
+    private fun parseInput(input: List<String>): MutableMap<Long, Long> {
         val m = mutableMapOf<Long, Long>().withDefault { 0L }
         input.forEachIndexed { index, s ->
             m[index.toLong()] = s.toLong()
@@ -33,14 +30,10 @@ object IntCodeComputer {
     }
 
     private fun param(v: MutableMap<Long, Long>, pos: Long, mode: Int, rel: Long): Long {
-        if (mode == 0) {
-            val l = v[pos]!!
-            return v.getOrDefault(l, 0L)
-        } else if (mode == 1) {
-            return v[pos]!!
-        } else {
-            val l = v[pos]!!
-            return v.getOrDefault(rel + l, 0L)
+        return when (mode) {
+            0 -> v.getOrDefault(v[pos]!!, 0L)
+            1 -> v[pos]!!
+            else -> v.getOrDefault(rel + v[pos]!!, 0L)
         }
     }
 
@@ -56,7 +49,7 @@ object IntCodeComputer {
         return (op / 10000) % 10
     }
 
-    fun assignTo(v: MutableMap<Long, Long>, pos: Long, mode: Int, value: Long, rel: Long) {
+    private fun assignTo(v: MutableMap<Long, Long>, pos: Long, mode: Int, value: Long, rel: Long) {
         when (mode) {
             0 -> v[v[pos]!!] = value
             1 -> v[pos] = value
@@ -78,6 +71,7 @@ object IntCodeComputer {
                     s.ended = true
                     return
                 }
+
                 1 -> {
                     assignTo(
                             v,
@@ -88,6 +82,7 @@ object IntCodeComputer {
                     )
                     pos += 4
                 }
+
                 2 -> {
                     assignTo(
                             v,
@@ -98,6 +93,7 @@ object IntCodeComputer {
                     )
                     pos += 4
                 }
+
                 5 -> {
                     if (param(v, pos + 1, p1Mode(op), rel) != 0L) {
                         pos = param(v, pos + 2, p2Mode(op), rel)
@@ -105,6 +101,7 @@ object IntCodeComputer {
                         pos += 3
                     }
                 }
+
                 6 -> {
                     if (param(v, pos + 1, p1Mode(op), rel) == 0L) {
                         pos = param(v, pos + 2, p2Mode(op), rel)
@@ -112,6 +109,7 @@ object IntCodeComputer {
                         pos += 3
                     }
                 }
+
                 7 -> {
                     if (param(v, pos + 1, p1Mode(op), rel) < param(v, pos + 2, p2Mode(op), rel)) {
                         assignTo(v, pos + 3, p3Mode(op), 1, rel)
@@ -120,6 +118,7 @@ object IntCodeComputer {
                     }
                     pos += 4
                 }
+
                 8 -> {
                     if (param(v, pos + 1, p1Mode(op), rel) == param(v, pos + 2, p2Mode(op), rel)) {
                         assignTo(v, pos + 3, p3Mode(op), 1, rel)
@@ -128,11 +127,13 @@ object IntCodeComputer {
                     }
                     pos += 4
                 }
+
                 9 -> {
                     val shift = param(v, pos + 1, p1Mode(op), rel)
                     rel += shift
                     pos += 2
                 }
+
                 3 -> {
                     if (s.input.isEmpty()) {
                         s.v = v
@@ -145,15 +146,17 @@ object IntCodeComputer {
                     assignTo(v, pos + 1, p1Mode(op), s.input.poll(), rel)
                     pos += 2
                 }
+
                 4 -> {
                     val out = param(v, pos + 1, p1Mode(op), rel)
 //                println "Out: $out"
                     output.offer(out)
                     pos += 2
                 }
+
                 else -> {
                     println("ERROR $op")
-                    throw  NullPointerException()
+                    throw NullPointerException()
                 }
             }
         }
@@ -169,4 +172,11 @@ data class IntCodeComputerState(
         val output: LinkedList<Long> = LinkedList(),
         var ended: Boolean = false,
         var rel: Long = 0
-) 
+) {
+    companion object {
+        fun init(input: String): IntCodeComputerState {
+            val v = IntCodeComputer.parseInput(input)
+            return IntCodeComputerState(v)
+        }
+    }
+}

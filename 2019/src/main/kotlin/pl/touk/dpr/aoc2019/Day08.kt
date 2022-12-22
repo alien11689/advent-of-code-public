@@ -12,7 +12,7 @@ object Day08 {
         val row = 25
         val tall = 6
 
-        val sol = input.chunked(row * tall).minByOrNull { it.filter { it == '0' }.length }!!
+        val sol = input.chunked(row * tall).minByOrNull { it.filter { letter -> letter == '0' }.length }!!
         return sol.filter { it == '1' }.length * sol.filter { it == '2' }.length
     }
 

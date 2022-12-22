@@ -47,7 +47,7 @@ object Day22 {
                 }
             }
             throw RuntimeException()
-            // all operations are linear so it means that their combination is also linear -> y = ax+b
+            // all operations are linear, so it means that their combination is also linear -> y = ax+b
         }
 
         fun applyIteration( reversedInput:List<String>, toFind:Long, size:Long):Long {
@@ -115,7 +115,7 @@ object Day22 {
     }
 
     private fun buildMap(size: Long): Map<Long, Long> {
-        return (0L until size).map { it to it }.toMap()
+        return (0L until size).associateWith { it }
     }
 
     private fun apply(instr: List<String>, m: Map<Long, Long>): Map<Long, Long> {
@@ -133,23 +133,23 @@ object Day22 {
 
     private fun dealIntoNewStack(m: Map<Long, Long>): Map<Long, Long> {
         var i = 0L
-        return m.toList().sortedBy { -it.first }.map { (i++) to it.second }.toMap()
+        return m.toList().sortedBy { -it.first }.associate { (i++) to it.second }
     }
 
     private fun dealWithIncrement(incr: Int, m: Map<Long, Long>): Map<Long, Long> {
         var i = 0L
-        return m.toList().sortedBy { it.first }.map {
+        return m.toList().sortedBy { it.first }.associate {
             val now = i
             i = (i + incr) % m.size
             now to it.second
-        }.toMap()
+        }
     }
 
     private fun cut(point: Int, m: MutableMap<Long, Long>): Map<Long, Long> {
         var minIndex = m.keys.minOrNull()!!
         var maxIndex = m.keys.maxOrNull()!!
         if (point > 0) {
-            (0 until point).forEach {
+            repeat(point) {
                 val v = m[minIndex]!!
                 m.remove(minIndex)
                 ++minIndex
@@ -157,7 +157,7 @@ object Day22 {
                 ++maxIndex
             }
         } else {
-            (0 until point.absoluteValue).forEach() {
+            repeat(point.absoluteValue) {
                 val v = m[maxIndex]!!
                 m.remove(maxIndex)
                 --maxIndex
@@ -170,10 +170,10 @@ object Day22 {
 
     private fun inOrder(m: Map<Long, Long>): Map<Long, Long> {
         var i = 0L
-        return m.toList().sortedBy { it.first }.map {
+        return m.toList().sortedBy { it.first }.associate {
             val now = i
             i = (i + 1) % m.size
             now to it.second
-        }.toMap()
+        }
     }
 }

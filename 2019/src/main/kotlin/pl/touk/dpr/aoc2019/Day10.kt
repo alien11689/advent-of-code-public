@@ -21,11 +21,11 @@ object Day10 {
             }
         }
 
-        val solution = points.map { center ->
+        val solution = points.maxOf { center ->
             (points.filter { it != center }.map { other ->
                 listOf(calcA(center, other), signum(center.x, other.x), signum(center.y, other.y))
             }.toSet()).size
-        }.maxOrNull()!!
+        }
 
         return solution
     }
@@ -41,18 +41,17 @@ object Day10 {
             }
         }
 
-        val p2size = points.map { center ->
-            val size = (points.filter { it != center }.map { other ->
-                listOf(calcA(center, other), getOrd(center, other))
+        val p2size = points.associateWith { center ->
+            (points.filter { it != center }.map { other ->
+                listOf<Any>(calcA(center, other), getOrd(center, other))
             }.toSet()).size
-            center to size
-        }.toMap()
+        }
 
         val center = p2size.maxByOrNull { it.value }!!.key
 
-        val p2stats = points.filter { it != center }.map { p ->
-            p to Stats(getOrd(center, p), calcA(center, p))
-        }.toMap()
+        val p2stats = points.filter { it != center }.associateWith { p ->
+            Stats(getOrd(center, p), calcA(center, p))
+        }
 
         val stats2p = mutableMapOf<Stats, MutableList<Point>>()
         p2stats.forEach {
@@ -63,7 +62,7 @@ object Day10 {
             }
         }
 
-        stats2p.values.forEach() { l ->
+        stats2p.values.forEach { l ->
             l.sortBy { manhattan(center, it) }
         }
 
@@ -87,7 +86,7 @@ object Day10 {
         X_UP, RIGHT_UP, Y_RIGHT, RIGHT_DOWN, X_DOWN, LEFT_DOWN, Y_LEFT, LEFT_UP
     }
 
-    fun getOrd(p1: Point, p2: Point): Ord {
+    private fun getOrd(p1: Point, p2: Point): Ord {
         if (p1.x == p2.x) {
             return if (p1.y < p2.y) Ord.X_DOWN else Ord.X_UP
         }
@@ -100,26 +99,24 @@ object Day10 {
         return if (p1.y < p2.y) Ord.LEFT_DOWN else Ord.LEFT_UP
     }
 
-    fun manhattan(p1: Point, p2: Point): Int {
+    private fun manhattan(p1: Point, p2: Point): Int {
         return (p1.x - p2.x).absoluteValue + (p1.y - p2.y).absoluteValue
     }
 
-    fun calcA(p1: Point, p2: Point): Double {
-        if (p1.x == p2.x) {
-            return 1000000.0
+    private fun calcA(p1: Point, p2: Point): Double {
+        return if (p1.x == p2.x) {
+            1000000.0
         } else {
-            return (p2.y - p1.y).toDouble() / (p2.x - p1.x)
+            (p2.y - p1.y).toDouble() / (p2.x - p1.x)
         }
     }
 
-    fun signum(a: Int, b: Int): Int {
-        if (a == b) {
-            return 0
-        }
-        if (a < b) {
-            return -1
-        }
-        return 1
+    private fun signum(a: Int, b: Int): Int {
+        return if (a == b) {
+            0
+        } else if (a < b) {
+            -1
+        } else 1
     }
 
     data class Stats(val ord: Ord, val a: Double) : Comparable<Stats> {

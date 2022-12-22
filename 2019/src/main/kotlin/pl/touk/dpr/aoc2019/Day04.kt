@@ -33,27 +33,21 @@ object Day04 {
         return c
     }
 
-    fun isPassword1(password: List<Int>): Boolean {
-        val m = mutableMapOf(Pair(password[0], 1))
-        for (i in 1 until password.size) {
-            if (password[i - 1] > password[i]) {
-                return false
-            }
-            if (password[i] in m) {
-                m[password[i]] = m[password[i]]!! + 1
-            } else {
-                m[password[i]] = 1
-            }
-        }
-
-        return m.values.find { it >= 2 } != null
+    private fun isPassword1(password: List<Int>): Boolean {
+        val m = generate(password)
+        return m != null && m.values.find { it >= 2 } != null
     }
 
-    fun isPassword2(password: List<Int>): Boolean {
+    private fun isPassword2(password: List<Int>): Boolean {
+        val m = generate(password)
+        return m != null && m.values.find { it == 2 } != null
+    }
+
+    private fun generate(password: List<Int>): Map<Int, Int>? {
         val m = mutableMapOf(Pair(password[0], 1))
         for (i in 1 until password.size) {
             if (password[i - 1] > password[i]) {
-                return false
+                return null
             }
             if (password[i] in m) {
                 m[password[i]] = m[password[i]]!! + 1
@@ -61,8 +55,7 @@ object Day04 {
                 m[password[i]] = 1
             }
         }
-
-        return m.values.find { it == 2 } != null
+        return m
     }
 
 }

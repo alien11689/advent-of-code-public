@@ -11,35 +11,11 @@ object Day20 {
     }
 
     private fun part1(input: List<String>): Any {
-        val map = mutableMapOf<Point, Boolean>()
+        val (map, warps) = parseInput(input)
 
-        val warps = mutableMapOf<Set<Point>, Set<Char>>()
-
-        val sizeY = input.size
-//        val sizeX = input[2].length
-
-        for (j in 0 until sizeY) {
-            for (i in input[j].indices) {
-                val p = Point(i, j)
-                val s = input[j][i]
-                when (s) {
-                    '.' -> map[p] = true
-                    '#' -> map[p] = false
-                    ' ' -> {
-                    }
-                    else -> {
-                        val m = (p.neighbours() + p).filter {
-                            it.x >= 0 && it.x < input[j].length && it.y >= 0 && it.y < sizeY
-                        }.map { it to input[it.y][it.x] }.filter { it.second !in setOf(' ', '#', '.') }.toMap()
-                        warps[m.keys] = m.values.toSet()
-                    }
-                }
-            }
-        }
-
-        val betterWarps = warps.map {
-            val k = it.key.flatMap { it.neighbours() }.find { map[it] == true }
-            k to it.value
+        val betterWarps = warps.map { warp ->
+            val k = warp.key.flatMap { it.neighbours() }.find { map[it] == true }
+            k to warp.value
         }.toMap()
 
         val warpPoints = betterWarps.keys
@@ -80,23 +56,22 @@ object Day20 {
 
     }
 
-    private fun part2(input: List<String>): Any {
+    private fun parseInput(input: List<String>): Pair<MutableMap<Point, Boolean>, MutableMap<Set<Point>, Set<Char>>> {
         val map = mutableMapOf<Point, Boolean>()
 
         val warps = mutableMapOf<Set<Point>, Set<Char>>()
 
         val sizeY = input.size
-        val sizeX = input[2].length
 
         for (j in 0 until sizeY) {
             for (i in input[j].indices) {
                 val p = Point(i, j)
-                val s = input[j][i]
-                when (s) {
+                when (input[j][i]) {
                     '.' -> map[p] = true
                     '#' -> map[p] = false
                     ' ' -> {
                     }
+
                     else -> {
                         val m = (p.neighbours() + p).filter {
                             it.x >= 0 && it.x < input[j].length && it.y >= 0 && it.y < sizeY
@@ -106,10 +81,18 @@ object Day20 {
                 }
             }
         }
+        return Pair(map, warps)
+    }
 
-        val betterWarps = warps.map {
-            val k = it.key.flatMap { it.neighbours() }.find { map[it] == true }
-            k!! to it.value
+    private fun part2(input: List<String>): Any {
+        val (map, warps) = parseInput(input)
+
+        val sizeY = input.size
+        val sizeX = input[2].length
+
+        val betterWarps = warps.map { warp ->
+            val k = warp.key.flatMap { it.neighbours() }.find { map[it] == true }
+            k!! to warp.value
         }.toMap()
 
         val warpPoints = betterWarps.keys
@@ -144,9 +127,9 @@ object Day20 {
                 if (checkedPoint in setOf(dest, start) && state.level != 0) {
                     // dest and start are walls on inner levels
                 } else if (checkedPoint in warpPoints &&
-                    state.level == 0 &&
-                    checkedPoint !in setOf(dest, start) &&
-                    checkedPoint in outerWarps
+                        state.level == 0 &&
+                        checkedPoint !in setOf(dest, start) &&
+                        checkedPoint in outerWarps
                 ) {
                     // on level 0 outers do not work
                 } else {
@@ -154,7 +137,7 @@ object Day20 {
                         val warp = betterWarps[checkedPoint]
 //                println("Using warp $warp")
                         val to =
-                            betterWarps.filter { it.value == warp && it.key != checkedPoint }.toList().first().first
+                                betterWarps.filter { it.value == warp && it.key != checkedPoint }.toList().first().first
                         val level = if (checkedPoint in outerWarps) {
                             state.level - 1
                         } else {
@@ -178,10 +161,10 @@ object Day20 {
     data class Point(val x: Int, val y: Int) {
         fun neighbours(): Set<Point> {
             return setOf(
-                Point(x + 1, y),
-                Point(x - 1, y),
-                Point(x, y + 1),
-                Point(x, y - 1),
+                    Point(x + 1, y),
+                    Point(x - 1, y),
+                    Point(x, y + 1),
+                    Point(x, y - 1),
             )
         }
     }
@@ -195,7 +178,7 @@ object Day20 {
     }
 
     data class State2(val cur: Point, val length: Int, val path: List<PathElement> = listOf(), val level: Int = 0) :
-        Comparable<State2> {
+            Comparable<State2> {
         override fun compareTo(other: State2): Int {
             return length.compareTo(other.length)
         }

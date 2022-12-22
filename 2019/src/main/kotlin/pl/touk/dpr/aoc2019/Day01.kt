@@ -29,7 +29,7 @@ object Day01 {
         return sum
     }
 
-    fun calculateFuel(value: Int): Int {
+    private fun calculateFuel(value: Int): Int {
         return value / 3 - 2
     }
 }

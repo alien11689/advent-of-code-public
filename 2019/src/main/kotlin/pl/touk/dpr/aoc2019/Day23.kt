@@ -14,8 +14,7 @@ object Day23 {
 
     private fun part1(input: String): Any {
         val computers = (0L until 50).map {
-            val v = IntCodeComputer.parseInput(input)
-            val state = IntCodeComputerState(v)
+            val state = IntCodeComputerState.init(input)
             state.input.offer(it)
             state
         }
@@ -50,8 +49,7 @@ object Day23 {
 
     private fun part2(input: String): Any {
         val computers = (0L until 50).map {
-            val v = IntCodeComputer.parseInput(input)
-            val state = IntCodeComputerState(v)
+            val state = IntCodeComputerState.init(input)
             state.input.offer(it)
             state
         }

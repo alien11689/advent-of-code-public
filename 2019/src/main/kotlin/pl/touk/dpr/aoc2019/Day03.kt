@@ -14,29 +14,29 @@ object Day03 {
         val a = getVisited1(input[0].split(','))
         val b = getVisited1(input[1].split(','))
 
-        return a.intersect(b - (0 to 0)).map { it.first.absoluteValue + it.second.absoluteValue }.minOrNull()!!
+        return a.intersect(b - (0 to 0)).minOf { it.first.absoluteValue + it.second.absoluteValue }
     }
 
     private fun part2(input: List<String>): Any {
         val a = getVisited2(input[0].split(','))
         val b = getVisited2(input[1].split(','))
 
-        val intersections = (a.map { it[0] to it[1] }).intersect(b.map { it[0] to it[1] }).toSet()
+        val intersections = (a.map { it[0] to it[1] }).intersect(b.map { it[0] to it[1] }.toSet()).toSet()
 
-        return intersections.map { inter ->
-            a.filter { cur -> cur[0] to cur[1] == inter }.map { it[2] }.minOrNull()!! +
+        return intersections.minOf { inter ->
+            a.filter { cur -> cur[0] to cur[1] == inter }.minOf { it[2] } +
                     b.filter { cur -> cur[0] to cur[1] == inter }
-                        .map { it[2] }.minOrNull()!!
-        }.minOrNull()!!
+                            .minOf { it[2] }
+        }
     }
 
     private fun getVisited1(path: List<String>): Set<Pair<Int, Int>> {
         val mem = mutableSetOf<Pair<Int, Int>>()
         var cur = 0 to 0
         mem.add(cur)
-        path.forEach {
-            val dir = it[0]
-            val dist = it.substring(1).toInt()
+        path.forEach { segment ->
+            val dir = segment[0]
+            val dist = segment.substring(1).toInt()
             when (dir) {
                 'U' -> {
                     (cur.second..(cur.second + dist)).forEach {
@@ -71,9 +71,9 @@ object Day03 {
         val mem = mutableSetOf<List<Int>>()
         var cur = 0 to 0
         var step = 0
-        path.forEach {
-            val dir = it[0]
-            val dist = it.substring(1).toInt()
+        path.forEach { segment ->
+            val dir = segment[0]
+            val dist = segment.substring(1).toInt()
             when (dir) {
                 'U' -> {
                     ((cur.second + 1)..(cur.second + dist)).forEach {

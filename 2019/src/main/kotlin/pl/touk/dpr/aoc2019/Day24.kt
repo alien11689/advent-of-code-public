@@ -1,5 +1,7 @@
 package pl.touk.dpr.aoc2019
 
+import kotlin.math.pow
+
 object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -11,19 +13,19 @@ object Day24 {
     data class Point(val x: Int, val y: Int, val level: Int = 0) {
         fun neighbours1(): Set<Point> {
             return setOf(
-                Point(x + 1, y),
-                Point(x - 1, y),
-                Point(x, y + 1),
-                Point(x, y - 1),
+                    Point(x + 1, y),
+                    Point(x - 1, y),
+                    Point(x, y + 1),
+                    Point(x, y - 1),
             )
         }
 
         fun neighbours2(): Set<Point> {
             val base = setOf(
-                Point(x + 1, y, level),
-                Point(x - 1, y, level),
-                Point(x, y + 1, level),
-                Point(x, y - 1, level),
+                    Point(x + 1, y, level),
+                    Point(x - 1, y, level),
+                    Point(x, y + 1, level),
+                    Point(x, y - 1, level),
             )
             return base.flatMap { p ->
                 if (p.x < 0) {
@@ -80,15 +82,15 @@ object Day24 {
         return m
     }
 
-    fun printBoard(m: Map<Point, Boolean>) {
-        for (i in 0 until 5) {
-            for (j in 0 until 5) {
-                print(if (m[Point(j, i)] == true) '#' else '.')
-            }
-            println()
-
-        }
-    }
+//    fun printBoard(m: Map<Point, Boolean>) {
+//        for (i in 0 until 5) {
+//            for (j in 0 until 5) {
+//                print(if (m[Point(j, i)] == true) '#' else '.')
+//            }
+//            println()
+//
+//        }
+//    }
 
     private fun tick(cur: Map<Point, Boolean>): Map<Point, Boolean> {
         return cur.map { e ->
@@ -98,22 +100,22 @@ object Day24 {
             if (exists) {
                 p to (livingNeighbours == 1)
             } else {
-                p to (livingNeighbours in setOf(1, 2) || exists)
+                p to (livingNeighbours in setOf(1, 2))
             }
         }.toMap()
     }
 
     private fun tick2(cur: Map<Point, Boolean>): Map<Point, Boolean> {
         val points = (cur.filter { it.value }.keys.flatMap { it.neighbours2() } + cur.filter { it.value }.keys)
-        return points.map { p ->
+        return points.associate { p ->
             val exists = cur[p] ?: false
             val livingNeighbours = p.neighbours2().count { it in cur && cur[it] == true }
             if (exists) {
                 p to (livingNeighbours == 1)
             } else {
-                p to (livingNeighbours in setOf(1, 2) || exists)
+                p to (livingNeighbours in setOf(1, 2))
             }
-        }.toMap()
+        }
     }
 
     private fun part1(input: List<String>): Any {
@@ -133,7 +135,7 @@ object Day24 {
         val res = board.filter { it.value }.map {
             val p = it.key
             val power = p.y * 5 + p.x
-            Math.pow(2.0, power.toDouble()).toLong()
+            (2.0).pow(power.toDouble()).toLong()
         }.sum()
         return res
     }

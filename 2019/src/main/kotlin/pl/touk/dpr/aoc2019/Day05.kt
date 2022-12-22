@@ -2,7 +2,6 @@ package pl.touk.dpr.aoc2019
 
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputer
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputerState
-import java.util.LinkedList
 
 object Day05 {
     @JvmStatic
@@ -13,20 +12,16 @@ object Day05 {
     }
 
     private fun part1(input: String): Any {
-        val v = IntCodeComputer.parseInput(input)
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        inputQ.offer(1L)
-        IntCodeComputer.program(IntCodeComputerState(v, input = inputQ), output)
-        return output.last
+        val state = IntCodeComputerState.init(input)
+        state.input.offer(1L)
+        IntCodeComputer.program(state)
+        return state.output.last
     }
 
     private fun part2(input: String): Any {
-        val v = IntCodeComputer.parseInput(input)
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        inputQ.offer(5L)
-        IntCodeComputer.program(IntCodeComputerState(v, input = inputQ), output)
-        return output.last
+        val state = IntCodeComputerState.init(input)
+        state.input.offer(5L)
+        IntCodeComputer.program(state)
+        return state.output.last
     }
 }

@@ -23,10 +23,7 @@ object Day14 {
                 throw RuntimeException("Empty")
             }
             val basic = reactions.flatMap { it.from }.map { it.name }
-            val needed = needs.toList().find { it.first !in basic }
-            if (needed == null) {
-                throw RuntimeException("Empty needed")
-            }
+            val needed = needs.toList().find { it.first !in basic } ?: throw RuntimeException("Empty needed")
             needs.remove(needed.first)
             val r = reactions.find { it.to.name == needed.first }!!
             reactions.remove(r)
@@ -80,10 +77,10 @@ object Day14 {
         companion object {
             fun create(raw: String): Chemical {
                 val vals = raw.trim().split(' ')
-                if (vals.size == 1) {
-                    return Chemical(vals[0], 1)
+                return if (vals.size == 1) {
+                    Chemical(vals[0], 1)
                 } else {
-                    return Chemical(vals[1], vals[0].toInt())
+                    Chemical(vals[1], vals[0].toInt())
                 }
             }
         }

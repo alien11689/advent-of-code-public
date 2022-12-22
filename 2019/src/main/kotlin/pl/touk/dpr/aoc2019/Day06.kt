@@ -42,8 +42,8 @@ object Day06 {
             val count = m[cur]!!
             var nodes = v.filter { it[0] == cur }
             v.removeAll(nodes)
-            nodes.forEach() { n ->
-                if (!(n[1] in m)) {
+            nodes.forEach { n ->
+                if (n[1] !in m) {
                     stack.push(n[1])
                     m[n[1]] = count + 1
                 }
@@ -51,7 +51,7 @@ object Day06 {
             nodes = v.filter { it[1] == cur }
             v.removeAll(nodes)
             nodes.forEach { n ->
-                if (!(n[0] in m)) {
+                if (n[0] !in m) {
                     stack.push(n[0])
                     m[n[0]] = count + 1
                 }

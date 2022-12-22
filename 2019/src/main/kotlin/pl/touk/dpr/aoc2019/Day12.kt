@@ -10,32 +10,12 @@ object Day12 {
     }
 
     private fun part1(): Any {
-        val xxs = mutableListOf(
-            listOf(-1, 7, 3),
-            listOf(12, 2, -13),
-            listOf(14, 18, -8),
-            listOf(17, 4, -4),
-        )
+        val xxs = initXXS()
 
-        val vvs = mutableListOf(
-            listOf(0, 0, 0),
-            listOf(0, 0, 0),
-            listOf(0, 0, 0),
-            listOf(0, 0, 0),
-        )
+        val vvs = initVVS()
 
-        (1..1000).forEach {
-            for (i in 0 until xxs.size) {
-                var curX = xxs[i]
-                var curV = vvs[i]
-                vvs[i] = listOf(curV[0] + xxs.sumOf { signum(curX[0], it[0]) },
-                        curV[1] + xxs.sumOf { signum(curX[1], it[1]) },
-                        curV[2] + xxs.sumOf { signum(curX[2], it[2]) })
-            }
-            for (i in 0 until xxs.size) {
-                var curX = xxs[i]
-                xxs[i] = listOf(curX[0] + vvs[i][0], curX[1] + vvs[i][1], curX[2] + vvs[i][2])
-            }
+        repeat(1000) {
+            iteration(xxs, vvs)
         }
 
         var sum = 0
@@ -47,19 +27,9 @@ object Day12 {
     }
 
     private fun part2(): Any {
-        val xxs = mutableListOf(
-            listOf(-1, 7, 3),
-            listOf(12, 2, -13),
-            listOf(14, 18, -8),
-            listOf(17, 4, -4),
-        )
+        val xxs = initXXS()
 
-        val vvs = mutableListOf(
-            listOf(0, 0, 0),
-            listOf(0, 0, 0),
-            listOf(0, 0, 0),
-            listOf(0, 0, 0),
-        )
+        val vvs = initVVS()
 
         var iter = 0
         var nextX = 0
@@ -67,17 +37,7 @@ object Day12 {
         var nextZ = 0
         while (true) {
             ++iter
-            for (i in 0 until xxs.size) {
-                val curX = xxs[i]
-                val curV = vvs[i]
-                vvs[i] = listOf(curV[0] + xxs.sumOf { signum(curX[0], it[0]) },
-                        curV[1] + xxs.sumOf { signum(curX[1], it[1]) },
-                        curV[2] + xxs.sumOf { signum(curX[2], it[2]) })
-            }
-            for (i in 0 until xxs.size) {
-                val curX = xxs[i]
-                xxs[i] = listOf(curX[0] + vvs[i][0], curX[1] + vvs[i][1], curX[2] + vvs[i][2])
-            }
+            iteration(xxs, vvs)
             if (nextX == 0 && vvs.all { it[0] == 0 }) {
 //                println "$iter -> x"
                 nextX = iter
@@ -97,6 +57,34 @@ object Day12 {
             }
         }
     }
+
+    private fun iteration(xxs: MutableList<List<Int>>, vvs: MutableList<List<Int>>) {
+        for (i in 0 until xxs.size) {
+            val curX = xxs[i]
+            val curV = vvs[i]
+            vvs[i] = listOf(curV[0] + xxs.sumOf { signum(curX[0], it[0]) },
+                    curV[1] + xxs.sumOf { signum(curX[1], it[1]) },
+                    curV[2] + xxs.sumOf { signum(curX[2], it[2]) })
+        }
+        for (i in 0 until xxs.size) {
+            val curX = xxs[i]
+            xxs[i] = listOf(curX[0] + vvs[i][0], curX[1] + vvs[i][1], curX[2] + vvs[i][2])
+        }
+    }
+
+    private fun initVVS() = mutableListOf(
+            listOf(0, 0, 0),
+            listOf(0, 0, 0),
+            listOf(0, 0, 0),
+            listOf(0, 0, 0),
+    )
+
+    private fun initXXS() = mutableListOf(
+            listOf(-1, 7, 3),
+            listOf(12, 2, -13),
+            listOf(14, 18, -8),
+            listOf(17, 4, -4),
+    )
 
     private fun signum(a: Int, b: Int): Int {
         if (a == b) {

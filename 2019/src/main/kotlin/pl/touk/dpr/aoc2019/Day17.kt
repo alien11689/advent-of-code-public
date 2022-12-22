@@ -1,9 +1,7 @@
 package pl.touk.dpr.aoc2019
 
-import pl.touk.dpr.aoc2019.intcode.IntCodeComputer
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputer.program
 import pl.touk.dpr.aoc2019.intcode.IntCodeComputerState
-import java.util.LinkedList
 
 object Day17 {
     @JvmStatic
@@ -14,16 +12,14 @@ object Day17 {
     }
 
     private fun part1(input: String): Any {
-        val v = IntCodeComputer.parseInput(input)
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        val state = IntCodeComputerState(v, input = inputQ)
-        program(state, output)
+        val state = IntCodeComputerState.init(input)
+        program(state)
 
         var i = 0L
         var j = 0L
 
         val m = mutableMapOf<Pair<Long, Long>, Long>()
+        val output = state.output
         while (output.isNotEmpty()) {
             val cur = output.poll()
             when (cur.toInt()) {
@@ -31,38 +27,45 @@ object Day17 {
 //                    print('#')
                     m[i++ to j] = cur
                 }
+
                 46 -> {
 //                    print('.')
                     m[i++ to j] = cur
                 }
+
                 94 -> {
 //                    print('^')
                     m[i++ to j] = cur
                 }
+
                 60 -> {
 //                    print('<')
                     m[i++ to j] = cur
                 }
+
                 62 -> {
 //                    print('>')
                     m[i++ to j] = cur
                 }
+
                 118 -> {
 //                    print('v')
                     m[i++ to j] = cur
                 }
+
                 10 -> {
 //                    println()
                     j++
                     i = 0
                 }
+
                 else -> throw RuntimeException("$cur")
             }
         }
 
         var sum = 0L
-        for (jj in m.keys.map { it.second }.minOrNull()!!..m.keys.map { it.second }.maxOrNull()!!) {
-            for (ii in m.keys.map { it.first }.minOrNull()!!..m.keys.map { it.first }.maxOrNull()!!) {
+        for (jj in m.keys.minOf { it.second }..m.keys.maxOf { it.second }) {
+            for (ii in m.keys.minOf { it.first }..m.keys.maxOf { it.first }) {
                 if (m[ii to jj] == 35L && m[ii + 1 to jj] == 35L && m[ii - 1 to jj] == 35L && m[ii to jj + 1] == 35L && m[ii to jj - 1] == 35L) {
                     sum += ii * jj
                 }
@@ -72,12 +75,10 @@ object Day17 {
     }
 
     private fun part2(input: String): Any {
-        val v = IntCodeComputer.parseInput(input)
-        val output = LinkedList<Long>()
-        val inputQ = LinkedList<Long>()
-        val state = IntCodeComputerState(v, input = inputQ)
+        val state = IntCodeComputerState.init(input)
+        val inputQ = state.input
         state.v[0L] = 2L
-        program(state, output)
+        program(state)
 
         val R = 82L
         val L = 76L
@@ -102,89 +103,109 @@ object Day17 {
         // C => R4R6R6R4R4A
         //  BBCACACABA
 
-        inputQ.offer(B)
-        inputQ.offer(coma)
-        inputQ.offer(B)
-        inputQ.offer(coma)
-        inputQ.offer(C)
-        inputQ.offer(coma)
-        inputQ.offer(A)
-        inputQ.offer(coma)
-        inputQ.offer(C)
-        inputQ.offer(coma)
-        inputQ.offer(A)
-        inputQ.offer(coma)
-        inputQ.offer(C)
-        inputQ.offer(coma)
-        inputQ.offer(A)
-        inputQ.offer(coma)
-        inputQ.offer(B)
-        inputQ.offer(coma)
-        inputQ.offer(A)
-        inputQ.offer(nl)
+        listOf(
+                B,
+                coma,
+                B,
+                coma,
+                C,
+                coma,
+                A,
+                coma,
+                C,
+                coma,
+                A,
+                coma,
+                C,
+                coma,
+                A,
+                coma,
+                B,
+                coma,
+                A,
+                nl,
+        ).forEach {
+            inputQ.offer(it)
+        }
 
-//A
-        inputQ.offer(L)
-        inputQ.offer(coma)
-        inputQ.offer(_8)
-        inputQ.offer(coma)
-        inputQ.offer(R)
-        inputQ.offer(coma)
-        inputQ.offer(_6)
-        inputQ.offer(coma)
-        inputQ.offer(L)
-        inputQ.offer(coma)
-        inputQ.offer(_1)
-        inputQ.offer(_0)
-        inputQ.offer(coma)
-        inputQ.offer(L)
-        inputQ.offer(coma)
-        inputQ.offer(_1)
-        inputQ.offer(_0)
-        inputQ.offer(nl)
+        //A
+        listOf(
+                L,
+                coma,
+                _8,
+                coma,
+                R,
+                coma,
+                _6,
+                coma,
+                L,
+                coma,
+                _1,
+                _0,
+                coma,
+                L,
+                coma,
+                _1,
+                _0,
+                nl,
+        ).forEach {
+            inputQ.offer(it)
+        }
 
-// B
-        inputQ.offer(R)
-        inputQ.offer(coma)
-        inputQ.offer(_6)
-        inputQ.offer(coma)
-        inputQ.offer(L)
-        inputQ.offer(coma)
-        inputQ.offer(_8)
-        inputQ.offer(coma)
-        inputQ.offer(R)
-        inputQ.offer(coma)
-        inputQ.offer(_8)
-        inputQ.offer(nl)
+        // B
+        listOf(
+                R,
+                coma,
+                _6,
+                coma,
+                L,
+                coma,
+                _8,
+                coma,
+                R,
+                coma,
+                _8,
+                nl,
+        ).forEach {
+            inputQ.offer(it)
+        }
 
-//C
-        inputQ.offer(R)
-        inputQ.offer(coma)
-        inputQ.offer(_4)
-        inputQ.offer(coma)
-        inputQ.offer(R)
-        inputQ.offer(coma)
-        inputQ.offer(_6)
-        inputQ.offer(coma)
-        inputQ.offer(R)
-        inputQ.offer(coma)
-        inputQ.offer(_6)
-        inputQ.offer(coma)
-        inputQ.offer(R)
-        inputQ.offer(coma)
-        inputQ.offer(_4)
-        inputQ.offer(coma)
-        inputQ.offer(R)
-        inputQ.offer(coma)
-        inputQ.offer(_4)
-        inputQ.offer(nl)
+        //C
+        listOf(
+                R,
+                coma,
+                _4,
+                coma,
+                R,
+                coma,
+                _6,
+                coma,
+                R,
+                coma,
+                _6,
+                coma,
+                R,
+                coma,
+                _4,
+                coma,
+                R,
+                coma,
+                _4,
+                nl,
+        ).forEach {
+            inputQ.offer(it)
+        }
 
 //mode
-        inputQ.offer(n)
-        inputQ.offer(nl)
+        listOf(
+                n,
+                nl,
+        ).forEach {
+            inputQ.offer(it)
+        }
 
-        program(state, output)
+        program(state)
 
-        return output.last
+        return state.output.last
     }
 }
