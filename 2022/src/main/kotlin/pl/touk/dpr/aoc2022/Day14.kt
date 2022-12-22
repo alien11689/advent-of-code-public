@@ -51,7 +51,7 @@ object Day14 {
     private fun part2(lines: List<String>): Any {
         val points = readPoints(lines)
 //        printlnBoard(points)
-        val maxY = points.map { it.y }.max() + 2
+        val maxY = points.maxOf { it.y } + 2
         extendPoints(maxY, points)
         var curSand = Point(500, 0)
         var seen = 0
@@ -88,18 +88,18 @@ object Day14 {
         }
     }
 
-    private fun printlnBoard(points: MutableSet<Point>) {
-        val minX = points.minOf { it.x }
-        val maxX = points.maxOf { it.x }
-        val minY = points.minOf { it.y }
-        val maxY = points.maxOf { it.y }
-        for (y in minY..maxY) {
-            for (x in minX..maxX) {
-                print(if (Point(x, y) in points) "#" else ".")
-            }
-            println()
-        }
-    }
+//    private fun printlnBoard(points: MutableSet<Point>) {
+//        val minX = points.minOf { it.x }
+//        val maxX = points.maxOf { it.x }
+//        val minY = points.minOf { it.y }
+//        val maxY = points.maxOf { it.y }
+//        for (y in minY..maxY) {
+//            for (x in minX..maxX) {
+//                print(if (Point(x, y) in points) "#" else ".")
+//            }
+//            println()
+//        }
+//    }
 
     private fun readPoints(lines: List<String>): MutableSet<Point> {
         val points = mutableSetOf<Point>()

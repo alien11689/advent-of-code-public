@@ -32,7 +32,7 @@ object Day21 {
                     "+" -> Pair(right, result - v1) // v1 + x = res => x = res - v1
                     "-" -> Pair(right, v1 - result) // v1 - x = res => x = v1 - res
                     "*" -> Pair(right, result / v1) // v1 * x = result => x = result / v1
-                    "/" -> Pair(right, v1 / result) // v1 / x = result => v1 = resulut * x => x = v1/result
+                    "/" -> Pair(right, v1 / result) // v1 / x = result => v1 = result * x => x = v1/result
                     else -> throw RuntimeException("unknown $left $right $operation")
                 }
             } else if (right in values) {

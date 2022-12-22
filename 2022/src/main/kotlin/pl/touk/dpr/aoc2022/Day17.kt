@@ -47,8 +47,8 @@ object Day17 {
             // finding possible mask
             if (!maskUsed && brickIdx == 0 && turn > 20) {
                 // Mask can be found by printing the result after some big number of rounds but not so big for sequential calculations e.g. 10000
-                // and finding two turns where only items from those two rounds are used
-                // so it's done manually (in previous commits) when look e.g. for base line .10000.
+                // and finding two turns where only items from those two rounds are used,
+                // so it's done manually (in previous commits) when look e.g. for baseline .10000.
                 // remember to generate some turns more to see if previous rounds could be pivotal
                 val turnsToCheck = (turn - 15)..(turn - 6)
                 val possibleMask = board.filter { it.value.second in turnsToCheck }
@@ -114,7 +114,7 @@ object Day17 {
         }
     }
 
-    private fun defineBricks() = mapOf<Int, Brick>(
+    private fun defineBricks() = mapOf(
         0 to Brick(listOf(Point(2, 0), Point(3, 0), Point(4, 0), Point(5, 0))),
         1 to Brick(listOf(Point(3, 0), Point(2, 1), Point(3, 1), Point(4, 1), Point(3, 2))),
         2 to Brick(listOf(Point(2, 0), Point(3, 0), Point(4, 0), Point(4, 1), Point(4, 2))),
