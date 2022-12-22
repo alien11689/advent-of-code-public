@@ -20,35 +20,40 @@ object Day12 {
 //            println(generation)
 //            println(state)
             generation++
-            val max = state.keys.maxOrNull()!!
-            val min = state.keys.minOrNull()!!
-            state[min - 4] = '.'
-            state[min - 3] = '.'
-            state[min - 2] = '.'
-            state[min - 1] = '.'
-            state[max + 1] = '.'
-            state[max + 2] = '.'
-            state[max + 3] = '.'
-            state[max + 4] = '.'
-            val newGeneration = state.map { it.toPair() }.toMap().toMutableMap()
-            val min1 = state.keys.minOrNull()!!
-            val max1 = state.keys.maxOrNull()!!
-            for (i in min1..max1) {
-                val sb = StringBuilder()
-                for (j in (i - 2)..(i + 2)) {
-                    sb.append(state.getOrDefault(j, '.'))
-                }
-                val slice = sb.toString()
-                val toReplace = rules.mapNotNull { it.tryApply(slice) }.firstOrNull()
-                if (toReplace != null) {
-                    newGeneration[i] = toReplace
-                } else {
-                    newGeneration[i] = '.'
-                }
-            }
+            val newGeneration = createNewGeneration(state, rules)
             state = newGeneration
         }
         return state.filter { it.value == '#' }.map { it.key }.sum()
+    }
+
+    private fun createNewGeneration(state: MutableMap<Int, Char>, rules: List<Rule>): MutableMap<Int, Char> {
+        val max = state.keys.maxOrNull()!!
+        val min = state.keys.minOrNull()!!
+        state[min - 4] = '.'
+        state[min - 3] = '.'
+        state[min - 2] = '.'
+        state[min - 1] = '.'
+        state[max + 1] = '.'
+        state[max + 2] = '.'
+        state[max + 3] = '.'
+        state[max + 4] = '.'
+        val newGeneration = state.map { it.toPair() }.toMap().toMutableMap()
+        val min1 = state.keys.minOrNull()!!
+        val max1 = state.keys.maxOrNull()!!
+        for (i in min1..max1) {
+            val sb = StringBuilder()
+            for (j in (i - 2)..(i + 2)) {
+                sb.append(state.getOrDefault(j, '.'))
+            }
+            val slice = sb.toString()
+            val toReplace = rules.firstNotNullOfOrNull { it.tryApply(slice) }
+            if (toReplace != null) {
+                newGeneration[i] = toReplace
+            } else {
+                newGeneration[i] = '.'
+            }
+        }
+        return newGeneration
     }
 
     private fun part2(input: List<String>): Any {
@@ -64,33 +69,7 @@ object Day12 {
 //            println(generation)
 //            println(state)
             generation++
-
-            val max = state.keys.maxOrNull()!!
-            val min = state.keys.minOrNull()!!
-            state[min - 4] = '.'
-            state[min - 3] = '.'
-            state[min - 2] = '.'
-            state[min - 1] = '.'
-            state[max + 1] = '.'
-            state[max + 2] = '.'
-            state[max + 3] = '.'
-            state[max + 4] = '.'
-            val newGeneration = state.map { it.toPair() }.toMap().toMutableMap()
-            val min1 = state.keys.minOrNull()!!
-            val max1 = state.keys.maxOrNull()!!
-            for (i in min1..max1) {
-                val sb = StringBuilder()
-                for (j in (i - 2)..(i + 2)) {
-                    sb.append(state.getOrDefault(j, '.'))
-                }
-                val slice = sb.toString()
-                val toReplace = rules.mapNotNull { it.tryApply(slice) }.firstOrNull()
-                if (toReplace != null) {
-                    newGeneration[i] = toReplace
-                } else {
-                    newGeneration[i] = '.'
-                }
-            }
+            val newGeneration = createNewGeneration(state, rules)
             if (stateAsString(state) == stateAsString(newGeneration)) {
 //                println(stateAsString(state))
 //                println(generation)

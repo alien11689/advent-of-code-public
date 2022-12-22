@@ -58,27 +58,27 @@ object Day17 {
         fun contains(x: Int, y: Int) = x in fromX..toX && y in fromY..toY
     }
 
-    fun printClays(
-            claysSet: Set<Pair<Int, Int>>,
-            water: Set<Pair<Int, Int>>,
-            drained: Set<Pair<Int, Int>>
-    ) {
-        for (j in claysSet.minByOrNull { it.second }!!.second..claysSet.maxByOrNull { it.second }!!.second) {
-            for (i in claysSet.minByOrNull { it.first }!!.first..claysSet.maxByOrNull { it.first }!!.first) {
-                val pos = i to j
-                if (pos in drained) {
-                    print('~')
-                } else if (pos in water) {
-                    print('|')
-                } else if (pos in claysSet) {
-                    print('#')
-                } else {
-                    print(' ')
-                }
-            }
-            println()
-        }
-    }
+//    fun printClays(
+//            claysSet: Set<Pair<Int, Int>>,
+//            water: Set<Pair<Int, Int>>,
+//            drained: Set<Pair<Int, Int>>
+//    ) {
+//        for (j in claysSet.minByOrNull { it.second }!!.second..claysSet.maxByOrNull { it.second }!!.second) {
+//            for (i in claysSet.minByOrNull { it.first }!!.first..claysSet.maxByOrNull { it.first }!!.first) {
+//                val pos = i to j
+//                if (pos in drained) {
+//                    print('~')
+//                } else if (pos in water) {
+//                    print('|')
+//                } else if (pos in claysSet) {
+//                    print('#')
+//                } else {
+//                    print(' ')
+//                }
+//            }
+//            println()
+//        }
+//    }
 
     enum class ActionType {
         GoUp,
@@ -89,15 +89,14 @@ object Day17 {
     data class Action(val type: ActionType, val curX: Int? = null)
 
 
-    fun goDown(
+    private fun goDown(
             claysSet: Set<Pair<Int, Int>>,
             filled: MutableSet<Pair<Int, Int>>,
-            initX: Int,
+            x: Int,
             initY: Int,
             drained: MutableSet<Pair<Int, Int>>,
             visitedDown: MutableSet<Pair<Int, Int>>
     ) {
-        val x = initX
         var y = initY
         visitedDown.add(x to y)
         val maxY = claysSet.maxByOrNull { it.second }!!.second

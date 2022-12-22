@@ -32,13 +32,13 @@ object Day11 {
     data class Point(val x: Int, val y: Int, val sum: Int, val rackSize: Int? = null)
 
     private fun getFuelLevel(x: Int, y: Int, serialNumber: Int): Int {
-        var rackId = x + 10L
-        var powerLevel = (rackId * y + serialNumber) * rackId
-        if (powerLevel > 99) {
+        val rackId = x + 10L
+        val powerLevel = (rackId * y + serialNumber) * rackId
+        return if (powerLevel > 99) {
             val plAsString = powerLevel.toString()
-            return (plAsString[plAsString.length - 3].toString().toInt()) - 5
+            (plAsString[plAsString.length - 3].toString().toInt()) - 5
         } else {
-            return -5
+            -5
         }
     }
 
@@ -50,32 +50,29 @@ object Day11 {
         }.toMutableList()
     }
 
-    fun calculateRacks(board: MutableList<MutableList<Int>>): List<Point> {
+    private fun calculateRacks(board: MutableList<MutableList<Int>>): List<Point> {
         return (1..(board.size - 2)).map { y ->
             (1..(board[0].size - 2)).map { x ->
                 val ix = x - 1
                 val iy = y - 1
-                val sum = (iy..(iy + 2)).map { i ->
-                    (ix..(ix + 2)).map { j ->
-                        board[i][j]
-                    }.sum()
-                }.sum()
+                val sum = (iy..(iy + 2)).sumOf { i ->
+                    (ix..(ix + 2)).sumOf { j -> board[i][j] }
+                }
                 Point(x, y, sum)
             }
         }.flatten()
     }
 
-    fun findLargestRack(racks: List<Point>) =
+    private fun findLargestRack(racks: List<Point>) =
         racks.maxByOrNull { it.sum }!!
 
-    fun calculateRacksMax(board: MutableList<MutableList<Int>>): Point {
+    private fun calculateRacksMax(board: MutableList<MutableList<Int>>): Point {
         var maxFuel = -1000000
         var currentMax: Point? = null
         for (y in 1..board.size) {
             for (x in 1..board.size) {
                 var rackSize = 0
-                var current = Point(x, y, board[y - 1][x - 1], rackSize + 1)
-                rackSize++
+                var current = Point(x, y, board[y - 1][x - 1], ++rackSize)
                 while (rackSize + x <= board.size && rackSize + y <= board.size) {
                     val additionalX = x + rackSize
                     val additionalY = y + rackSize

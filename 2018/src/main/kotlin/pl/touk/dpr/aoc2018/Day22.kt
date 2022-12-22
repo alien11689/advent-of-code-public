@@ -143,7 +143,7 @@ object Day22 {
         return level
     }
 
-    fun geologicalIndex(
+    private fun geologicalIndex(
         pos: Pos,
         geoIndex: MutableMap<Pos, Long>,
         target: Pos,
@@ -191,7 +191,7 @@ object Day22 {
         NOTHING
     }
 
-    fun getType(
+    private fun getType(
         pos: Pos, geoIndex: MutableMap<Pos, Long>,
         target: Pos,
         pos2Erosion: MutableMap<Pos, Long>,

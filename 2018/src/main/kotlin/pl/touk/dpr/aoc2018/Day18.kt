@@ -65,7 +65,7 @@ object Day18 {
         return lumb * woods
     }
 
-    fun neighbours(x: Int, y: Int, board: List<List<Char>>): List<Pair<Int, Int>> {
+    private fun neighbours(x: Int, y: Int, board: List<List<Char>>): List<Pair<Int, Int>> {
         return listOf(
             x - 1 to y,
             x + 1 to y,

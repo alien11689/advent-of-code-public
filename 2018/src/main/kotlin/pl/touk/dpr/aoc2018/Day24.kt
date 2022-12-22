@@ -78,7 +78,7 @@ object Day24 {
             return target!!.takeDamage(if (target!!.weak.contains(attackType)) effectivePower() * 2 else effectivePower())
         }
 
-        fun takeDamage(damage: Int): Int {
+        private fun takeDamage(damage: Int): Int {
 //        println("\tI take $damage damage and I have $hitPoints ,")
             val toKill = damage / hitPoints
 //        println("\tTo kill $toKill")
@@ -87,7 +87,7 @@ object Day24 {
         }
     }
 
-    fun generateGroups(): MutableList<Group> {
+    private fun generateGroups(): MutableList<Group> {
         val bludgeoning = "bludgeoning"
         val cold = "cold"
         val slashing = "slashing"
@@ -122,7 +122,7 @@ object Day24 {
 
     data class Result(val team: Team? = null, val sum: Int? = null, val groups: List<Group> = listOf())
 
-    fun fight(initGroups: MutableList<Group>): Result {
+    private fun fight(initGroups: MutableList<Group>): Result {
         while (initGroups.map { it.team }.toSet().size > 1) {
 //            println(initGroups)
             val groups = initGroups.sorted()

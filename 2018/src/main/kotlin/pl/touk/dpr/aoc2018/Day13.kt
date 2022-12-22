@@ -16,8 +16,8 @@ object Day13 {
             ++tick
 //            println(tick)
 //            println(drivers)
-            drivers.sortedBy { it.y * 10000 + it.x }.forEach {
-                it.move(cells)
+            drivers.sortedBy { it.y * 10000 + it.x }.forEach { driver ->
+                driver.move(cells)
                 val positions = mutableMapOf<Pair<Int, Int>, List<Driver>>()
                 drivers.forEach { d -> positions[d.x to d.y] = (positions[d.x to d.y] ?: listOf()) + d }
                 val crashes = positions.filter { it.value.size > 1 }.keys
@@ -73,7 +73,7 @@ object Day13 {
 
         while (true) {
             ++tick
-            var crashes = mutableListOf<Driver>()
+            val crashes = mutableListOf<Driver>()
             drivers.sortedBy { it.y * 10000 + it.x }.forEach {
                 if (it !in crashes) {
                     it.move(cells)
@@ -132,20 +132,20 @@ object Day13 {
         },
         LEFT {
             override fun turnLeft(): Direction {
-                return Direction.DOWN
+                return DOWN
             }
 
             override fun turnRight(): Direction {
-                return Direction.UP
+                return UP
             }
         },
         RIGHT {
             override fun turnLeft(): Direction {
-                return Direction.UP
+                return UP
             }
 
             override fun turnRight(): Direction {
-                return Direction.DOWN
+                return DOWN
             }
         };
 
@@ -169,18 +169,18 @@ object Day13 {
                 Direction.LEFT -> --x
             }
             if (cells[y][x] == Type.SLASH) {
-                when (direction) {
-                    Direction.UP -> direction = Direction.RIGHT
-                    Direction.RIGHT -> direction = Direction.UP
-                    Direction.DOWN -> direction = Direction.LEFT
-                    Direction.LEFT -> direction = Direction.DOWN
+                direction = when (direction) {
+                    Direction.UP -> Direction.RIGHT
+                    Direction.RIGHT -> Direction.UP
+                    Direction.DOWN -> Direction.LEFT
+                    Direction.LEFT -> Direction.DOWN
                 }
             } else if (cells[y][x] == Type.BACKSHLASH) {
-                when (direction) {
-                    Direction.UP -> direction = Direction.LEFT
-                    Direction.RIGHT -> direction = Direction.DOWN
-                    Direction.DOWN -> direction = Direction.RIGHT
-                    Direction.LEFT -> direction = Direction.UP
+                direction = when (direction) {
+                    Direction.UP -> Direction.LEFT
+                    Direction.RIGHT -> Direction.DOWN
+                    Direction.DOWN -> Direction.RIGHT
+                    Direction.LEFT -> Direction.UP
                 }
             } else if (cells[y][x] == Type.CROSS) {
                 when (dirOnCross) {
@@ -196,15 +196,6 @@ object Day13 {
                         dirOnCross = DirOnCross.LEFT
                     }
                 }
-            }
-        }
-
-        fun sign(): String {
-            return when (direction) {
-                Direction.LEFT -> "<"
-                Direction.UP -> "^"
-                Direction.RIGHT -> ">"
-                Direction.DOWN -> "v"
             }
         }
     }

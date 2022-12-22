@@ -48,30 +48,26 @@ object Day15 {
 
         fun neighbours(): List<Position> {
             return listOf(
-                Position(x + 1, y),
-                Position(x - 1, y),
-                Position(x, y - 1),
-                Position(x, y + 1),
+                    Position(x + 1, y),
+                    Position(x - 1, y),
+                    Position(x, y - 1),
+                    Position(x, y + 1),
             )
         }
 
         override fun compareTo(other: Position): Int {
             val dy = y - other.y
-            if (dy != 0) {
-                return dy
-            } else {
-                return x - other.x
-            }
+            return if (dy != 0) dy else x - other.x
         }
     }
 
     data class Player(
-        var x: Int,
-        var y: Int,
-        val type: PlayerType,
-        var hitPoints: Int = 200,
-        val attackPower: Int = 3,
-        var moved: Boolean = true
+            var x: Int,
+            var y: Int,
+            val type: PlayerType,
+            var hitPoints: Int = 200,
+            val attackPower: Int = 3,
+            var moved: Boolean = true
     ) : Comparable<Player> {
 
         fun isDead(): Boolean {
@@ -87,29 +83,21 @@ object Day15 {
             }
         }
 
-        fun neighbours(): List<Position> {
+        private fun neighbours(): List<Position> {
             return Position(x, y).neighbours()
-        }
-
-        fun inRange(players: List<Player>, board: List<List<CellType>>): List<Position> {
-            return neighbours().filter { p ->
-                board[y][x] == CellType.FREE && !players.any {
-                    !it.isDead() && p.x == it.x && p.y == it.y
-                }
-            }
         }
 
         fun move(players: List<Player>, board: List<List<CellType>>) {
             findNextMove(players, board).forEach { it.action() }
         }
 
-        fun findNextMove(players: List<Player>, board: List<List<CellType>>): List<Action> {
+        private fun findNextMove(players: List<Player>, board: List<List<CellType>>): List<Action> {
             val enemies = neighbours().mapNotNull { n ->
                 players.find { !it.isDead() && it.type != type && it.onPosition(n) }
             }
             if (enemies.isNotEmpty()) {
 //                    println("Attack $enemy")
-                return listOf(Attack(enemies.sorted().sortedBy { it.hitPoints }.first(), this))
+                return listOf(Attack(enemies.sorted().minBy { it.hitPoints }, this))
             }
 //        println("I won't attack an enemy")
             val memory = mutableSetOf<Position>()
@@ -152,7 +140,7 @@ object Day15 {
                     }
                     if (es.isNotEmpty()) {
 //                    println("Move and attack $enemy")
-                        return listOf(e.move, Attack(es.sorted().sortedBy { it.hitPoints }.first(), this))
+                        return listOf(e.move, Attack(es.sorted().minBy { it.hitPoints }, this))
                     }
                     return listOf(e.move)
                 }
@@ -160,7 +148,7 @@ object Day15 {
             return listOf(Nop)
         }
 
-        fun onPosition(p: Position): Boolean {
+        private fun onPosition(p: Position): Boolean {
             return x == p.x && y == p.y
         }
     }
@@ -196,13 +184,13 @@ object Day15 {
         FREE
     }
 
-    fun buildBoard(lines: List<String>): List<List<CellType>> {
+    private fun buildBoard(lines: List<String>): List<List<CellType>> {
         return lines.map { line ->
             line.map { if (it == '#') CellType.CLOSED else CellType.FREE }
         }
     }
 
-    fun buildPlayers(lines: List<String>, attack: Int = 3): List<Player> {
+    private fun buildPlayers(lines: List<String>, attack: Int = 3): List<Player> {
         val players = mutableListOf<Player>()
         for (y in lines.indices) {
             for (x in lines[y].indices) {
@@ -216,7 +204,7 @@ object Day15 {
         return players
     }
 
-    fun game(players: MutableList<Player>, board: List<List<CellType>>, elfCannotDie: Boolean = false): Int {
+    private fun game(players: MutableList<Player>, board: List<List<CellType>>, elfCannotDie: Boolean = false): Int {
         var round = 0
         try {
             while (true) {
@@ -257,18 +245,18 @@ object Day15 {
 
     class End(val round: Int) : RuntimeException()
 
-    fun printBoard(players: List<Player>, board: List<List<CellType>>) {
-        for (y in board.indices) {
-            for (x in board[y].indices) {
-                val p = players.find { it.onPosition(Position(x, y)) }
-                if (p != null) {
-                    print(p.type)
-                } else {
-                    print(if (board[y][x] == CellType.FREE) '.' else '#')
-                }
-            }
-            println()
-        }
-        players.sorted().forEach { println(it) }
-    }
+//    fun printBoard(players: List<Player>, board: List<List<CellType>>) {
+//        for (y in board.indices) {
+//            for (x in board[y].indices) {
+//                val p = players.find { it.onPosition(Position(x, y)) }
+//                if (p != null) {
+//                    print(p.type)
+//                } else {
+//                    print(if (board[y][x] == CellType.FREE) '.' else '#')
+//                }
+//            }
+//            println()
+//        }
+//        players.sorted().forEach { println(it) }
+//    }
 }

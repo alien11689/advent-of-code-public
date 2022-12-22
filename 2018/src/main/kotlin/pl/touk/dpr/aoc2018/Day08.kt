@@ -37,14 +37,13 @@ object Day08 {
             if (value != null) {
                 return value!!
             }
-            if (metadataCount == 0) {
-                value = 0
+            value = if (metadataCount == 0) {
+                0
             } else if (childrenCount == 0) {
-                value = metadata.sum()
+                metadata.sum()
             } else {
-                value = metadata.filter { it <= childrenCount }
-                    .map { children[it - 1].calculateMeta() }
-                    .sum()
+                metadata.filter { it <= childrenCount }
+                        .sumOf { children[it - 1].calculateMeta() }
             }
             return value!!
         }
@@ -54,11 +53,11 @@ object Day08 {
         val childrenCount = values.removeFirst()
         val metadataCount = values.removeFirst()
         val node = Node(childrenCount = childrenCount, metadataCount = metadataCount)
-        (0 until childrenCount).forEach {
+        repeat(childrenCount) {
             val child = readNode(values)
             node.children.add(child)
         }
-        (0 until metadataCount).forEach {
+        repeat(metadataCount) {
             val metadata = values.removeFirst()
             node.metadata.add(metadata)
         }

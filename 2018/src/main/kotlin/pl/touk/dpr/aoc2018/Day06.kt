@@ -19,36 +19,36 @@ object Day06 {
 
         val board = (0..(points.maxByOrNull { it.y }!!.y + 1)).map { y ->
             (0..(points.maxByOrNull { it.x }!!.x + 1)).map { x ->
-                val distances = points.map { Pair(it.id, it.distance(x, y)) }.toMap()
-                val min = distances.minByOrNull { it.value }!!.value
-                val mins = distances.filter { it.value == min }
-                val ids = mins.keys
-                Cell1(ids)
+                getCell(points, x, y)
             }
         }
 
-        val mins1 = points.map { p ->
+        val mins1 = points.associate { p ->
             val count = board.flatten().filter { c -> c.nearestPoints == setOf(p.id) }.size
             Pair(p.id, count)
-        }.toMap()
+        }
 
         val board2 = (-10..(points.maxByOrNull { it.y }!!.y + 10)).map { y ->
             (-10..(points.maxByOrNull { it.x }!!.x + 10)).map { x ->
-                val distances = points.map { Pair(it.id, it.distance(x, y)) }.toMap()
-                val min = distances.minByOrNull { it.value }!!.value
-                val mins = distances.filter { it.value == min }
-                val ids = mins.keys
-                Cell1(ids)
+                getCell(points, x, y)
             }
         }
 
-        val mins2 = points.map { p ->
+        val mins2 = points.associate { p ->
             val count = board2.flatten().filter { c -> c.nearestPoints == setOf(p.id) }.size
             Pair(p.id, count)
-        }.toMap()
+        }
 
         return mins1.filter { it.value == mins2[it.key] }.maxByOrNull { it.value }!!.value
 
+    }
+
+    private fun getCell(points: List<Point>, x: Int, y: Int): Cell1 {
+        val distances = points.associate { Pair(it.id, it.distance(x, y)) }
+        val min = distances.minByOrNull { it.value }!!.value
+        val mins = distances.filter { it.value == min }
+        val ids = mins.keys
+        return Cell1(ids)
     }
 
     private fun part2(input: List<String>): Any {
@@ -71,21 +71,9 @@ object Day06 {
 
     data class Cell1(val nearestPoints: Set<Int>)
 
-    data class Cell2(val x: Int, val y: Int, val distance: Int) {
-        fun isNeighbour(o: Cell2): Boolean {
-            return (o.x - this.x).absoluteValue + (o.y - this.y).absoluteValue <= 1
-        }
-
-        fun isPoint(x: Int, y: Int): Boolean {
-            return this.x == x && this.y == y
-        }
-    }
+    data class Cell2(val x: Int, val y: Int, val distance: Int)
 
     data class Point(val x: Int, val y: Int, val id: Int) {
-        fun isPoint(x: Int, y: Int): Boolean {
-            return this.x == x && this.y == y
-        }
-
         fun distance(x: Int, y: Int): Int {
             return (this.x - x).absoluteValue + (this.y - y).absoluteValue
         }

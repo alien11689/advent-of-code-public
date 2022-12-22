@@ -17,10 +17,7 @@ object Day14 {
         val elves = mutableListOf(0, 1)
 
         while (scores.size < input + steps + 1) {
-            val newValue = scores[elves[0]] + scores[elves[1]]
-            scores.addAll(newValue.toString().map { it.toString().toInt() })
-            elves[0] = (elves[0] + scores[elves[0]] + 1) % scores.size
-            elves[1] = (elves[1] + scores[elves[1]] + 1) % scores.size
+            play(scores, elves)
         }
         return scores.subList(input, input + steps + 1).joinToString("")
     }
@@ -34,10 +31,7 @@ object Day14 {
         val inputString = input.toString()
 
         while (true) {
-            val newValue = scores[elves[0]] + scores[elves[1]]
-            scores.addAll(newValue.toString().map { it.toString().toInt() })
-            elves[0] = (elves[0] + scores[elves[0]] + 1) % scores.size
-            elves[1] = (elves[1] + scores[elves[1]] + 1) % scores.size
+            play(scores, elves)
 
             if (scores.size > inputString.length) {
                 val substring = scores.subList(scores.size - inputString.length - 1, scores.size).joinToString("")
@@ -49,5 +43,12 @@ object Day14 {
         }
 
 
+    }
+
+    private fun play(scores: MutableList<Int>, elves: MutableList<Int>) {
+        val newValue = scores[elves[0]] + scores[elves[1]]
+        scores.addAll(newValue.toString().map { it.toString().toInt() })
+        elves[0] = (elves[0] + scores[elves[0]] + 1) % scores.size
+        elves[1] = (elves[1] + scores[elves[1]] + 1) % scores.size
     }
 }

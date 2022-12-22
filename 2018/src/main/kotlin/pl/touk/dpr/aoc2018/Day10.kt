@@ -44,13 +44,9 @@ object Day10 {
             x += vx
             y += vy
         }
-
-        fun isPoint(x: Int, y: Int): Boolean {
-            return this.x == x && this.y == y
-        }
     }
 
-    fun printPoints(points: List<Point>) {
+    private fun printPoints(points: List<Point>) {
         val minX = points.minByOrNull { it.x }!!.x
         val maxX = points.maxByOrNull { it.x }!!.x
         val minY = points.minByOrNull { it.y }!!.y

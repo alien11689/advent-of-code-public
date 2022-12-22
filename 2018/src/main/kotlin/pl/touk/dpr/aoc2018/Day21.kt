@@ -10,10 +10,7 @@ object Day21 {
 
     private fun part1(input: List<String>): Any {
         val ip = input[0].split(" ").last().toInt()
-        val instructions = input.drop(1).map { line ->
-            val parts = line.split(" ")
-            Operation(parts[0], parts[1].toInt(), parts[2].toInt(), parts[3].toInt())
-        }
+        val instructions = parseInstructions(input)
 
         val threshold = 10000
         var curMinR4 = 10000000000L
@@ -37,9 +34,9 @@ object Day21 {
                 throw RuntimeException("Finished")
             }
             registers[6] = registers[ip] + 1
-            val count = instrToCount[28] ?: 0 > threshold
+            val count = (instrToCount[28] ?: 0) > threshold
             if (count) {
-                println("Break  is in loop")
+                println("Break is in loop")
                 throw RuntimeException("In a loop ")
             }
         }
@@ -47,10 +44,7 @@ object Day21 {
 
     private fun part2(input: List<String>): Any {
         val ip = input[0].split(" ").last().toInt()
-        val instructions = input.drop(1).map { line ->
-            val parts = line.split(" ")
-            Operation(parts[0], parts[1].toInt(), parts[2].toInt(), parts[3].toInt())
-        }
+        val instructions = parseInstructions(input)
         val threshold = 100000
         var operations = 0L
         val result2Iteration = mutableMapOf<Long, Long>()
@@ -87,6 +81,14 @@ object Day21 {
             }
             registers[6] = registers[ip] + 1
         }
+    }
+
+    private fun parseInstructions(input: List<String>): List<Operation> {
+        val instructions = input.drop(1).map { line ->
+            val parts = line.split(" ")
+            Operation(parts[0], parts[1].toInt(), parts[2].toInt(), parts[3].toInt())
+        }
+        return instructions
     }
 
     data class Operation(val name: String, val a: Int, val b: Int, val c: Int) {

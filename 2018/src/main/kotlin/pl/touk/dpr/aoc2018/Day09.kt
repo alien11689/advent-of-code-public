@@ -51,7 +51,7 @@ object Day09 {
         }
     }
 
-    fun findHighestScore(playersCount: Int, maxScore: Int): Long {
+    private fun findHighestScore(playersCount: Int, maxScore: Int): Long {
         val players = (1..playersCount).map { Player(it) }
 
         val root = Node(0)
@@ -64,13 +64,13 @@ object Day09 {
         var cur = root
 
         while (score <= maxScore) {
-            if (score % 23 == 0) {
+            cur = if (score % 23 == 0) {
                 players[curPlayer].addScore(score)
                 val result = cur.removeBehind()
                 players[curPlayer].addScore(result.second)
-                cur = result.first
+                result.first
             } else {
-                cur = cur.insertAfter(score)
+                cur.insertAfter(score)
             }
             score++
             curPlayer = (curPlayer + 1) % playersCount

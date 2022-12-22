@@ -40,8 +40,7 @@ object Day02 {
                     }
                 }
                 if (diff == 1) {
-                    val c = a.indices.map { if (a[it] == b[it]) a[it] else "" }.joinToString("")
-                    return c
+                    return a.indices.map<Int, Any> { if (a[it] == b[it]) a[it] else "" }.joinToString("")
                 }
             }
         }

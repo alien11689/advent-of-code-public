@@ -27,7 +27,7 @@ object Day23 {
 
     private fun part2(input: List<String>): Any {
         val drones = readInput(input)
-        val ZERO = Point(0, 0, 0)
+        val zero = Point(0, 0, 0)
 
         var minX = drones.minByOrNull { it.x }!!.x
         var maxX = drones.maxByOrNull { it.x }!!.x
@@ -53,7 +53,7 @@ object Day23 {
                     for (z in minZ..maxZ step distZ) {
                         val p = Point(x, y, z)
                         val fdest = p.fDest(drones)
-                        val dist = p.manhattan(ZERO)
+                        val dist = p.manhattan(zero)
                         if (fdest > maxFDest || fdest == maxFDest && dist < minDist) {
                             maxFDest = fdest
                             best = p

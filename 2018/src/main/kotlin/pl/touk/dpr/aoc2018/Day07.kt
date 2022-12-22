@@ -11,29 +11,11 @@ object Day07 {
     }
 
     private fun part1(input: List<String>): Any {
-        val instructions = (input.map { it.split(' ')[7] }.toSet())
-            .map { Instr(it.first()) }
-            .toMutableList()
-
-        input.forEach { l ->
-            val split = l.split(' ')
-            val dest = split[7].first()
-            val from = split[1].first()
-            val instr = instructions.find { it.dest == dest }!!
-            instr.before.add(from)
-        }
-
-        (instructions.flatMap { it.before }.toSet()).forEach { letter ->
-            if (instructions.find { it.dest == letter } != null) {
-                //nothing
-            } else {
-                instructions.add(Instr(letter))
-            }
-        }
+        val instructions = parseInstructions(input)
         val order = mutableListOf<Char>()
 
-        while (!instructions.isEmpty()) {
-            val next = instructions.filter { it.before.isEmpty() }.sortedBy { it.dest }.first()
+        while (instructions.isNotEmpty()) {
+            val next = instructions.filter { it.before.isEmpty() }.minBy { it.dest }
             val letter = next.dest
             order.add(letter)
             instructions.remove(next)
@@ -46,35 +28,17 @@ object Day07 {
     }
 
     private fun part2(input: List<String>): Any {
-        val instructions = (input.map { it.split(' ')[7] }.toSet())
-            .map { Instr(it.first()) }
-            .toMutableList()
-
-        input.forEach { l ->
-            val split = l.split(' ')
-            val dest = split[7].first()
-            val from = split[1].first()
-            val instr = instructions.find { it.dest == dest }!!
-            instr.before.add(from)
-        }
-
-        (instructions.flatMap { it.before }.toSet()).forEach { letter ->
-            if (instructions.find { it.dest == letter } != null) {
-                //nothing
-            } else {
-                instructions.add(Instr(letter))
-            }
-        }
+        val instructions = parseInstructions(input)
         val order = mutableListOf<Char>()
 
         val workers = (1..5).map { Worker() }
 
         var ticks = 0
         while (true) {
-            workers.filter { it.isFinished() }.map {
-                val letter = it.cur
+            workers.filter { it.isFinished() }.map { worker ->
+                val letter = worker.cur
                 order.add(letter!!)
-                it.makeEmpty()
+                worker.makeEmpty()
                 val toDelete = instructions.find { it.dest == letter }
                 instructions.remove(toDelete)
                 instructions.filter { it.before.contains(letter) }.forEach {
@@ -88,8 +52,8 @@ object Day07 {
             val nextWorker = workers.find { it.isEmpty() }
             var shouldTick = true
             if (nextWorker != null && instructions.isNotEmpty()) {
-                val available = instructions.filter { it.before.isEmpty() }.filter {
-                    !workers.mapNotNull { it.cur }.contains(it.dest)
+                val available = instructions.filter { it.before.isEmpty() }.filter { instr ->
+                    !workers.mapNotNull { it.cur }.contains(instr.dest)
                 }.minByOrNull { it.dest }
                 if (available != null) {
                     val letter = available.dest
@@ -105,13 +69,36 @@ object Day07 {
         return ticks
     }
 
+    private fun parseInstructions(input: List<String>): MutableList<Instr> {
+        val instructions = (input.map { it.split(' ')[7] }.toSet())
+                .map { Instr(it.first()) }
+                .toMutableList()
+
+        input.forEach { l ->
+            val split = l.split(' ')
+            val dest = split[7].first()
+            val from = split[1].first()
+            val instr = instructions.find { it.dest == dest }!!
+            instr.before.add(from)
+        }
+
+        (instructions.flatMap { it.before }.toSet()).forEach { letter ->
+            if (instructions.find { it.dest == letter } != null) {
+                //nothing
+            } else {
+                instructions.add(Instr(letter))
+            }
+        }
+        return instructions
+    }
+
     data class Instr(val dest: Char, val before: TreeSet<Char> = TreeSet())
 
     data class Worker(var cur: Char? = null, var timeout: Int? = null, var seconds: Int = 0) {
         companion object {
-            val times = ('A'..'Z').map {
-                it to (it.code - 64 + 60)
-            }.toMap()
+            val times = ('A'..'Z').associateWith {
+                (it.code - 64 + 60)
+            }
         }
 
         fun isFinished() =

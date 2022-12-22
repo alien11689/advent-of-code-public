@@ -18,6 +18,7 @@ object Day20 {
             if (c == '(') {
                 cross.push(curPos)
             } else if (c == '$') {
+                // do nth
             } else if (c == ')') {
                 curPos = cross.pop()
             } else if (c == '|') {
@@ -25,10 +26,10 @@ object Day20 {
             } else {
                 val distance = posToDist[curPos]!!
                 curPos = when (c) {
-                    'E' -> curPos.E()
-                    'W' -> curPos.W()
-                    'N' -> curPos.N()
-                    'S' -> curPos.S()
+                    'E' -> curPos.goE()
+                    'W' -> curPos.goW()
+                    'N' -> curPos.goN()
+                    'S' -> curPos.goS()
                     else -> throw RuntimeException()
                 }
                 if (posToDist[curPos] != null) {
@@ -49,19 +50,19 @@ object Day20 {
     }
 
     data class Pos(val x: Int, val y: Int) {
-        fun E(): Pos {
+        fun goE(): Pos {
             return Pos(x + 1, y)
         }
 
-        fun W(): Pos {
+        fun goW(): Pos {
             return Pos(x - 1, y)
         }
 
-        fun N(): Pos {
+        fun goN(): Pos {
             return Pos(x, y - 1)
         }
 
-        fun S(): Pos {
+        fun goS(): Pos {
             return Pos(x, y + 1)
         }
     }

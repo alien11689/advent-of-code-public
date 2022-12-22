@@ -19,8 +19,8 @@ object Day03 {
     private fun createField(size: Int, carpets: List<Carpet>): List<List<Cell>> {
         val field = (1..size).map { (1..size).map { Cell() } }
         carpets.forEach {
-            (it.fromTop..(it.fromTop + it.height - 1)).forEach { i ->
-                (it.fromLeft..(it.fromLeft + it.width - 1)).forEach { j ->
+            (it.fromTop until it.fromTop + it.height).forEach { i ->
+                (it.fromLeft until it.fromLeft + it.width).forEach { j ->
                     field[i][j].ids.add(it.id)
                 }
             }

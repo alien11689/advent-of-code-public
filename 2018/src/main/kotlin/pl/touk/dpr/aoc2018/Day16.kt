@@ -10,22 +10,22 @@ object Day16 {
     private fun part1And2(lines: List<String>) {
         var i = 0
         val availableOperations = mutableListOf(
-            Operation.Addi(),
-            Operation.Addr(),
-            Operation.Mulr(),
-            Operation.Muli(),
-            Operation.Setr(),
-            Operation.Seti(),
-            Operation.Banr(),
-            Operation.Bani(),
-            Operation.Borr(),
-            Operation.Bori(),
-            Operation.Gtir(),
-            Operation.Gtri(),
-            Operation.Gtrr(),
-            Operation.Eqir(),
-            Operation.Eqri(),
-            Operation.Eqrr(),
+            Operation.Addi,
+            Operation.Addr,
+            Operation.Mulr,
+            Operation.Muli,
+            Operation.Setr,
+            Operation.Seti,
+            Operation.Banr,
+            Operation.Bani,
+            Operation.Borr,
+            Operation.Bori,
+            Operation.Gtir,
+            Operation.Gtri,
+            Operation.Gtrr,
+            Operation.Eqir,
+            Operation.Eqri,
+            Operation.Eqrr,
         )
         var countWhenMultipleMatch = 0
         val unknownOperations = mutableListOf<UnknownOperation>()
@@ -33,12 +33,12 @@ object Day16 {
             if (!lines[i].startsWith("Before")) {
                 break
             }
-            val before = lines[i].replace("[", "").replace("]", "").replace(",", "").split(Regex("[ ]+"))
+            val before = lines[i].replace("[", "").replace("]", "").replace(",", "").split(Regex(" +"))
             val registers = listOf(before[1].toInt(), before[2].toInt(), before[3].toInt(), before[4].toInt())
 
-            val operands = lines[i + 1].split(Regex("[ ]+")).map { it.toInt() }
+            val operands = lines[i + 1].split(Regex(" +")).map { it.toInt() }
 
-            val after = lines[i + 2].replace("[", "").replace("]", "").replace(",", "").split(Regex("[ ]+"))
+            val after = lines[i + 2].replace("[", "").replace("]", "").replace(",", "").split(Regex(" +"))
             val registersAfter = listOf(after[1].toInt(), after[2].toInt(), after[3].toInt(), after[4].toInt())
 
             val matches = availableOperations.filter {
@@ -55,14 +55,14 @@ object Day16 {
 
         val mapping = mutableMapOf<Int, Operation>()
         unknownOperations.removeAll { it.matches.isEmpty() }
-        while (!unknownOperations.isEmpty() && mapping.size != 16) {
+        while (unknownOperations.isNotEmpty() && mapping.size != 16) {
             val operandsToRemove = mutableSetOf<Operation>()
             unknownOperations.filter { it.matches.size == 1 }.forEach {
                 mapping[it.operands[0]] = it.matches[0]
                 operandsToRemove.add(it.matches[0])
             }
-            operandsToRemove.forEach() { operand ->
-                unknownOperations.forEach() {
+            operandsToRemove.forEach { operand ->
+                unknownOperations.forEach {
                     it.matches.remove(operand)
                 }
             }
@@ -76,17 +76,17 @@ object Day16 {
                 ++i
                 continue
             }
-            val operands = cur.split(Regex("[ ]+")).map { it.toInt() }
+            val operands = cur.split(Regex(" +")).map { it.toInt() }
             registers = mapping[operands[0]]!!.apply(operands[1], operands[2], operands[3], registers).toMutableList()
             ++i
         }
         println(registers[0])
     }
 
-    sealed class Operation() {
+    sealed class Operation {
         abstract fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int>
 
-        class Addr : Operation() {
+        object Addr : Operation() {
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
                 result[c] = registers[a] + registers[b]
@@ -94,7 +94,7 @@ object Day16 {
             }
         }
 
-        class Addi : Operation() {
+        object Addi : Operation() {
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
                 result[c] = registers[a] + b
@@ -102,7 +102,7 @@ object Day16 {
             }
         }
 
-        class Mulr : Operation() {
+        object Mulr : Operation() {
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
                 result[c] = registers[a] * registers[b]
@@ -110,8 +110,7 @@ object Day16 {
             }
         }
 
-
-        class Muli : Operation() {
+        object Muli : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -120,8 +119,7 @@ object Day16 {
             }
         }
 
-
-        class Banr : Operation() {
+        object Banr : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -130,8 +128,7 @@ object Day16 {
             }
         }
 
-
-        class Bani : Operation() {
+        object Bani : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -140,8 +137,7 @@ object Day16 {
             }
         }
 
-
-        class Borr : Operation() {
+        object Borr : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -150,8 +146,7 @@ object Day16 {
             }
         }
 
-
-        class Bori : Operation() {
+        object Bori : Operation() {
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
                 result[c] = registers[a].or(b)
@@ -159,8 +154,7 @@ object Day16 {
             }
         }
 
-
-        class Setr : Operation() {
+        object Setr : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -169,8 +163,7 @@ object Day16 {
             }
         }
 
-
-        class Seti : Operation() {
+        object Seti : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -179,8 +172,7 @@ object Day16 {
             }
         }
 
-
-        class Gtir : Operation() {
+        object Gtir : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -189,8 +181,7 @@ object Day16 {
             }
         }
 
-
-        class Gtri : Operation() {
+        object Gtri : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -199,8 +190,7 @@ object Day16 {
             }
         }
 
-
-        class Gtrr : Operation() {
+        object Gtrr : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -209,8 +199,7 @@ object Day16 {
             }
         }
 
-
-        class Eqir : Operation() {
+        object Eqir : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -219,8 +208,7 @@ object Day16 {
             }
         }
 
-
-        class Eqri : Operation() {
+        object Eqri : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -229,8 +217,7 @@ object Day16 {
             }
         }
 
-
-        class Eqrr : Operation() {
+        object Eqrr : Operation() {
 
             override fun apply(a: Int, b: Int, c: Int, registers: List<Int>): List<Int> {
                 val result = registers.toMutableList()
@@ -238,7 +225,6 @@ object Day16 {
                 return result
             }
         }
-
     }
 
     data class UnknownOperation(

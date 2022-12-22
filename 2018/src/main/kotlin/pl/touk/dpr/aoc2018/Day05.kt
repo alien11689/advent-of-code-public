@@ -30,10 +30,10 @@ object Day05 {
 
     private fun part2(input: String): Any {
         val changes = ('a'..'z').flatMap { listOf(Regex("$it${it.uppercaseChar()}"), Regex("${it.uppercaseChar()}$it")) }
-        val reducting = ('a'..'z').flatMap { listOf(Regex("[$it${it.uppercaseChar()}]")) }
+        val reducing = ('a'..'z').flatMap { listOf(Regex("[$it${it.uppercaseChar()}]")) }
 
         val res = reduce(input, changes)
 
-        return reducting.map { reduce(res.replace(it, ""), changes) }.minByOrNull { it.length }?.length!!
+        return reducing.map { reduce(res.replace(it, ""), changes) }.minByOrNull { it.length }?.length!!
     }
 }
