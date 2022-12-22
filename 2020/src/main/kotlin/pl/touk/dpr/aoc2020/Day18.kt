@@ -16,7 +16,7 @@ object Day18 {
     }
 
     private fun part1(input: List<String>): Any {
-        return input.map { solve(it) }.sum()
+        return input.sumOf { solve(it) }
     }
 
     private fun solve(expression: String): Long {
@@ -24,7 +24,11 @@ object Day18 {
                 .flatMap { if (it in setOf('(', ')')) listOf(' ', it, ' ') else listOf(it) }
                 .joinToString(separator = "")
                 .trim()
-                .split(Regex("[ ]+"))
+                .split(Regex(" +"))
+        return solveInternal(parts)
+    }
+
+    private fun solveInternal(parts: List<String>): Long {
         val stack = Stack<Pair<Long, Operation>>()
         var res = -1L
         var curOp = Operation.None
@@ -34,6 +38,7 @@ object Day18 {
                     stack.push(Pair(res, curOp))
                     res = -1L
                 }
+
                 ")" -> {
                     val (prevRes, operation) = stack.pop()
                     if (prevRes > -1) {
@@ -41,17 +46,20 @@ object Day18 {
                         curOp = Operation.None
                     }
                 }
+
                 "+" -> {
                     curOp = Operation.Plus
                 }
+
                 "*" -> {
                     curOp = Operation.Times
                 }
+
                 else -> {
-                    if (res > -1) {
-                        res = curOp.calc(res, p.toLong())
+                    res = if (res > -1) {
+                        curOp.calc(res, p.toLong())
                     } else {
-                        res = p.toLong()
+                        p.toLong()
                     }
                 }
             }
@@ -60,7 +68,7 @@ object Day18 {
     }
 
     private fun part2(input: List<String>): Any {
-        return input.map { solve2(it) }.sum()
+        return input.sumOf { solve2(it) }
     }
 
     enum class Operation {
@@ -88,39 +96,8 @@ object Day18 {
                 }
                 .joinToString(separator = "", prefix = "( ", postfix = " )")
                 .trim()
-                .split(Regex("[ ]+"))
-        val stack = Stack<Pair<Long, Operation>>()
-        var res = -1L
-        var curOp = Operation.None
-        parts.forEach { p ->
-            when (p) {
-                "(" -> {
-                    stack.push(Pair(res, curOp))
-                    res = -1L
-                }
-                ")" -> {
-                    val (prevRes, operation) = stack.pop()
-                    if (prevRes > -1) {
-                        res = operation.calc(prevRes, res)
-                        curOp = Operation.None
-                    }
-                }
-                "+" -> {
-                    curOp = Operation.Plus
-                }
-                "*" -> {
-                    curOp = Operation.Times
-                }
-                else -> {
-                    if (res > -1) {
-                        res = curOp.calc(res, p.toLong())
-                    } else {
-                        res = p.toLong()
-                    }
-                }
-            }
-        }
-        return res
+                .split(Regex(" +"))
+        return solveInternal(parts)
     }
 
 }

@@ -35,13 +35,13 @@ object Day14 {
     private fun part2(input: List<String>): Any {
         val memory = mutableMapOf<Long, Long>()
         var mask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-        input.map { it.split(Regex("[ =\\[\\]]+")).toList() }.forEach {
-            if (it.size == 2) {
+        input.map { it.split(Regex("[ =\\[\\]]+")).toList() }.forEach { parts ->
+            if (parts.size == 2) {
                 // set mask
-                mask = it[1]
+                mask = parts[1]
             } else {
-                val value = it[2].toLong()
-                val maskedAddress = it[1].toLong().toString(2).padStart(36, '0').mapIndexed { index, c ->
+                val value = parts[2].toLong()
+                val maskedAddress = parts[1].toLong().toString(2).padStart(36, '0').mapIndexed { index, c ->
                     val v = if (mask[index] == '0') {
                         c
                     } else if (mask[index] == '1')

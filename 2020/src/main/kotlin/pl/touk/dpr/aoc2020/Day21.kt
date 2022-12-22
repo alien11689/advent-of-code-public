@@ -11,20 +11,20 @@ object Day21 {
     private fun part1(input: List<String>): Any {
         val ingredientList = input.map { IngredientsList.from(it) }
         val glossary = buildGlossary(ingredientList)
-        return ingredientList.flatMap { it.ingredients }.filter { it !in glossary.values.toSet() }.count()
+        return ingredientList.flatMap { it.ingredients }.count { it !in glossary.values.toSet() }
     }
 
     private fun buildGlossary(ingredientList: List<IngredientsList>): MutableMap<String, String> {
         val allergens = ingredientList.flatMap { it.allergens }.toSet()
-        val allIngre = ingredientList.flatMap { it.ingredients }.toSet()
+        val allIngredients = ingredientList.flatMap { it.ingredients }.toSet()
         val glossary = mutableMapOf<String, String>()
         while (glossary.size < allergens.size) {
-            allergens.forEach { allerg ->
-                if (allerg !in glossary) {
-                    val possibleDishes = ingredientList.filter { allerg in it.allergens }.map { it.ingredients }
-                    val couldBeIn = possibleDishes.fold(allIngre) { acc, set -> acc.intersect(set) } - glossary.values.toSet()
+            allergens.forEach { allergen ->
+                if (allergen !in glossary) {
+                    val possibleDishes = ingredientList.filter { allergen in it.allergens }.map { it.ingredients }
+                    val couldBeIn = possibleDishes.fold(allIngredients) { acc, set -> acc.intersect(set) } - glossary.values.toSet()
                     if (couldBeIn.size == 1) {
-                        glossary[allerg] = couldBeIn.first()
+                        glossary[allergen] = couldBeIn.first()
                     }
                 }
             }
@@ -35,14 +35,14 @@ object Day21 {
     private fun part2(input: List<String>): Any {
         val ingredientList = input.map { IngredientsList.from(it) }
         val glossary = buildGlossary(ingredientList)
-        return glossary.keys.sorted().map { glossary[it]!! }.joinToString(",")
+        return glossary.keys.sorted().joinToString(",") { glossary[it]!! }
     }
 
     data class IngredientsList(val ingredients: Set<String>, val allergens: Set<String> = setOf()) {
         companion object {
             fun from(inp: String): IngredientsList {
                 if (inp.contains("(contains")) {
-                    val ingre = mutableSetOf<String>()
+                    val ingredient = mutableSetOf<String>()
                     val allergens = mutableSetOf<String>()
                     var readingAllergens = false
                     inp.split(" ").forEach { part ->
@@ -51,10 +51,10 @@ object Day21 {
                         } else if (readingAllergens) {
                             allergens.add(part.removeSuffix(")").removeSuffix(","))
                         } else {
-                            ingre.add(part)
+                            ingredient.add(part)
                         }
                     }
-                    return IngredientsList(ingre.toSet(), allergens.toSet())
+                    return IngredientsList(ingredient.toSet(), allergens.toSet())
                 } else {
                     return IngredientsList(inp.split(" ").toSet())
                 }

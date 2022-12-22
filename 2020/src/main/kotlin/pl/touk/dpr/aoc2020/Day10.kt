@@ -19,8 +19,7 @@ object Day10 {
         var difference1 = 0
         var difference3 = 0
         sorted.forEach { num ->
-            val diff = num - current
-            when (diff) {
+            when (num - current) {
                 1 -> ++difference1
                 3 -> ++difference3
                 else -> {
@@ -38,8 +37,7 @@ object Day10 {
         var set = mutableListOf<Int>()
         val groups = mutableSetOf<Group>()
         sorted.forEach { num ->
-            val diff = num - current
-            when (diff) {
+            when (num - current) {
                 3 -> {
                     groups.add(Group(base, current, set - current))
                     set = mutableListOf()
@@ -52,7 +50,7 @@ object Day10 {
             current = num
         }
 
-        val res = groups.map { it.calculate() }.fold(1L, { acc, l -> acc * l })
+        val res = groups.map { it.calculate() }.fold(1L) { acc, l -> acc * l }
         println(res)
     }
 
@@ -66,7 +64,7 @@ object Day10 {
                 if (current + 3 >= to) {
                     paths.add(path)
                 }
-                if (!next.isEmpty()) {
+                if (next.isNotEmpty()) {
                     val first = next.first()
                     val tail = next.subList(1, next.size)
                     if (current + 3 >= first) {

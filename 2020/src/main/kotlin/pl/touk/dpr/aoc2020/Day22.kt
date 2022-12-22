@@ -53,7 +53,7 @@ object Day22 {
     private fun part2(input: List<String>): Any {
         val (player1: Queue<Int>, player2: Queue<Int>) = readPlayers(input)
         val (p1, p2) = play(player1, player2, 1)
-        val winner = if (p1.isEmpty()) p2 else p1
+        val winner = p1.ifEmpty { p2 }
         return winner.reversed().foldIndexed(0L) { index, acc, i -> acc + (index + 1) * i.toLong() }
     }
 

@@ -37,11 +37,11 @@ object Day07 {
         while (!stack.empty()) {
             val current = stack.pop()
             val rule = rules.find { it.from == current }!!
-            rule.to.forEach { entry ->
-                (1..entry.value).forEach {
-                    stack.push(entry.key)
+            rule.to.forEach { (key, value) ->
+                repeat(value) {
+                    stack.push(key)
                 }
-                count += entry.value
+                count += value
             }
         }
         // 121 is too low

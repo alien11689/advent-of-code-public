@@ -10,12 +10,12 @@ object Day23 {
     }
 
     private fun part1(input: String): Any {
-        var cups = input.map { it.toString().toInt() }.toList()
+        val cups = input.map { it.toString().toInt() }.toList()
         val pair = buildNodes(cups)
         var current: Node? = pair.first
         val mem = pair.second
         val max = mem.keys.maxOrNull()!!
-        (1..100).forEach {
+        repeat(100) {
             current = move(current!!, max, mem)
         }
         val node1: Node = mem[1]!!
@@ -35,7 +35,7 @@ object Day23 {
         var current: Node? = pair.first
         val mem = pair.second
         val max = mem.keys.maxOrNull()!!
-        (1..10000000).forEach {
+        repeat(10000000) {
             current = move(current!!, max, mem)
         }
         val node1: Node = mem[1]!!

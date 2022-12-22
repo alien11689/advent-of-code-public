@@ -10,35 +10,31 @@ object Day17 {
     }
 
     private fun part1(input: List<String>): Any {
-        val initPoints = mutableSetOf<Point>()
-        input.forEachIndexed { r, line ->
-            line.forEachIndexed { c, column ->
-                if (column == '#') {
-                    initPoints.add(Point(c, r))
-                }
-            }
-        }
-        var points = initPoints.toSet()
-        (1..6).forEach {
+        var points = initPoints(input)
+        repeat(6) {
             points = cycle(points)
         }
         return points.size
     }
 
     private fun part2(input: List<String>): Any {
-        val initPoints = mutableSetOf<Point>()
-        input.forEachIndexed { r, line ->
-            line.forEachIndexed { c, column ->
-                if (column == '#') {
-                    initPoints.add(Point(c, r))
-                }
-            }
-        }
-        var points = initPoints.toSet()
-        (1..6).forEach {
+        var points = initPoints(input)
+        repeat(6) {
             points = cycle2(points)
         }
         return points.size
+    }
+
+    private fun initPoints(input: List<String>): Set<Point> {
+        val points = mutableSetOf<Point>()
+        input.forEachIndexed { r, line ->
+            line.forEachIndexed { c, column ->
+                if (column == '#') {
+                    points.add(Point(c, r))
+                }
+            }
+        }
+        return points.toSet()
     }
 
     data class Point(val x: Int, val y: Int, val z: Int = 0, val w: Int = 0) {
@@ -82,7 +78,7 @@ object Day17 {
                 }
             }.toSet()
 
-    fun cycle2(points: Set<Point>): Set<Point> =
+    private fun cycle2(points: Set<Point>): Set<Point> =
             points.flatMap { it.neighbours2() }.toSet().filter { p ->
                 if (p in points) {
                     val n = p.neighbours2()

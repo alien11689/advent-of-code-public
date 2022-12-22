@@ -10,7 +10,7 @@ object Day05 {
     }
 
     private fun part1(input: List<Seat>) {
-        println(input.map { it.toId() }.maxOrNull()!!)
+        println(input.maxOf { it.toId() })
     }
 
     private fun part2(input: List<Seat>) {

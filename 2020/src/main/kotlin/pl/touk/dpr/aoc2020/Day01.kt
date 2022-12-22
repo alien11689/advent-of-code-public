@@ -8,31 +8,12 @@ object Day01 {
         part2(input)
     }
 
-    private fun part2(input: List<String>) {
-        val nums = input.map { it.toInt() }
-        nums.withIndex().forEach {
-            val a = it.value
-            val i = it.index
-            nums.withIndex().filter { it.index > i }.forEach {
-                val b = it.value
-                val ii = it.index
-                nums.withIndex().filter { it.index > ii }.forEach {
-                    val c = it.value
-                    if (a + b + c == 2020) {
-                        println(a * b * c)
-                        return
-                    }
-                }
-            }
-        }
-    }
-
     private fun part1(input: List<String>) {
         val mem = mutableSetOf<Int>()
         println(input
                 .flatMap { s ->
                     val n = s.toInt()
-                    val compliant = 2020 - n;
+                    val compliant = 2020 - n
                     if (compliant in mem) {
                         listOf(n * compliant)
                     } else {
@@ -41,6 +22,20 @@ object Day01 {
                     }
                 }
                 .take(1)[0])
+    }
+
+    private fun part2(input: List<String>) {
+        val nums = input.map { it.toInt() }
+        nums.forEachIndexed { i, a ->
+            nums.withIndex().filter { it.index > i }.forEach { (ii, b) ->
+                nums.withIndex().filter { it.index > ii }.forEach { (_, c) ->
+                    if (a + b + c == 2020) {
+                        println(a * b * c)
+                        return
+                    }
+                }
+            }
+        }
     }
 
 }

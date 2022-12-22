@@ -44,14 +44,14 @@ object Day16 {
         val rules = mutableSetOf<Rule>()
         var readingRules = true
         var nearbyTickets = false
-        var myTicktet = false
-        var myTicktetValue = listOf(0)
+        var myTicket = false
+        var myTicketValue = listOf(0)
         val otherValidTickets = mutableSetOf<List<Int>>()
         while (i < input.size) {
             if (input[i].isEmpty()) {
                 readingRules = false
                 nearbyTickets = false
-                myTicktet = false
+                myTicket = false
                 ++i
                 continue
             } else if (readingRules) {
@@ -60,10 +60,10 @@ object Day16 {
                 rules.add(Rule(IntRange(parts[1].toInt(), parts[2].toInt()), IntRange(parts[4].toInt(), parts[5].toInt()), split1[0]))
                 ++i
             } else if (input[i] == "your ticket:") {
-                myTicktet = true
+                myTicket = true
                 ++i
-            } else if (myTicktet) {
-                myTicktetValue = input[i].split(",").map { it.toInt() }
+            } else if (myTicket) {
+                myTicketValue = input[i].split(",").map { it.toInt() }
                 ++i
             } else if (input[i] == "nearby tickets:") {
                 nearbyTickets = true
@@ -79,20 +79,20 @@ object Day16 {
             }
         }
         i = 0
-        val columntToRules = mutableMapOf<Int, Set<Rule>>()
+        val columnToRules = mutableMapOf<Int, Set<Rule>>()
         while (i < otherValidTickets.first().size) {
             val column = otherValidTickets.map { it[i] }
             val matchingRules = rules.filter { r -> column.all { r.match(it) } }
-            columntToRules[i] = matchingRules.toSet()
+            columnToRules[i] = matchingRules.toSet()
             ++i
         }
         val departureColumns = mutableSetOf<Int>()
-        while (columntToRules.isNotEmpty()) {
-            val found = columntToRules.filter { it.value.size == 1 }
+        while (columnToRules.isNotEmpty()) {
+            val found = columnToRules.filter { it.value.size == 1 }
             found.forEach { (k, v) ->
-                columntToRules.remove(k)
-                columntToRules.forEach { (col, rules) ->
-                    columntToRules[col] = rules - v
+                columnToRules.remove(k)
+                columnToRules.forEach { (col, rules) ->
+                    columnToRules[col] = rules - v
                 }
                 if (v.count { it.name!!.startsWith("departure") } > 0) {
                     departureColumns.add(k)
@@ -100,7 +100,7 @@ object Day16 {
             }
         }
 
-        return departureColumns.fold(1L) { acc, col -> acc * myTicktetValue[col] }
+        return departureColumns.fold(1L) { acc, col -> acc * myTicketValue[col] }
     }
 
     data class Rule(val r1: IntRange, val r2: IntRange, val name: String? = null) {

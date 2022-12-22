@@ -13,7 +13,7 @@ object Day19 {
         val (rules, text) = parseInput(input)
         val rule0Raw = rules[0]!!
         val rule0 = resolveRule(rule0Raw, rules)
-        val reg = Regex("^${rule0.toString()}$")
+        val reg = Regex("^$rule0$")
         return text.count { reg.matches(it) }
     }
 
@@ -39,8 +39,8 @@ object Day19 {
                         }
                     }
                 }
-                rules.put(num, if (ruleParts.size == 1) ruleParts[0] else Rule.Complex(ruleParts))
-            } else if (!line.isEmpty()) {
+                rules[num] = if (ruleParts.size == 1) ruleParts[0] else Rule.Complex(ruleParts)
+            } else if (line.isNotEmpty()) {
                 text.add(line)
             }
             ++i
@@ -96,26 +96,26 @@ object Day19 {
         var res = 0
         initSet.forEach { s ->
 //            println("Checking $s")
-            var I = 0
-            var i = I + 1
-            var J = s.length
-            var j = J - 1
+            var a = 0
+            var i = a + 1
+            var b = s.length
+            var j = b - 1
             var ends = 0
             while (0 < j) {
-                val toCheckEnd = s.substring(j, J)
+                val toCheckEnd = s.substring(j, b)
                 if (exactRule31.matches(toCheckEnd)) {
 //                    println("Matched end $toCheckEnd")
-                    J = j
+                    b = j
                     ++ends
                 }
                 --j
             }
             var begins = 0
-            while (i <= J) {
-                val toCheckBegin = s.substring(I, i)
+            while (i <= b) {
+                val toCheckBegin = s.substring(a, i)
                 if (exactRule42.matches(toCheckBegin)) {
 //                    println("Matched begin $toCheckBegin")
-                    I = i
+                    a = i
                     ++begins
                 }
                 ++i

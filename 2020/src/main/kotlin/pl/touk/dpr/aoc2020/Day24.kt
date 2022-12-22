@@ -31,25 +31,22 @@ object Day24 {
         var cur = Tile(0, 0)
         var i = 0
         while (i < instr.size) {
-            val c = instr[i]
-            when (c) {
+            when (val c = instr[i]) {
                 'e' -> cur = cur.east()
                 'w' -> cur = cur.west()
                 'n' -> {
                     ++i
-                    val nextC = instr[i]
-                    when (nextC) {
-                        'w' -> cur = cur.northwest()
-                        'e' -> cur = cur.northeast()
+                    cur = when (val nextC = instr[i]) {
+                        'w' -> cur.northwest()
+                        'e' -> cur.northeast()
                         else -> throw RuntimeException("$c$nextC")
                     }
                 }
                 's' -> {
                     ++i
-                    val nextC = instr[i]
-                    when (nextC) {
-                        'w' -> cur = cur.southwest()
-                        'e' -> cur = cur.southeast()
+                    cur = when (val nextC = instr[i]) {
+                        'w' -> cur.southwest()
+                        'e' -> cur.southeast()
                         else -> throw RuntimeException("$c$nextC")
                     }
                 }
@@ -62,7 +59,7 @@ object Day24 {
 
     private fun part2(input: List<String>): Any {
         var blackTiles: Set<Tile> = readInitialTiles(input)
-        (1..100).forEach {
+        repeat(100) {
             blackTiles = blackTiles.flatMap { it.neighbours() }.toSet().flatMap { curTile ->
                 val adj = curTile.neighbours().count { it in blackTiles }
                 if (curTile in blackTiles) {

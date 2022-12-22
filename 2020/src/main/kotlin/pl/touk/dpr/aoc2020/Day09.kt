@@ -16,14 +16,14 @@ object Day09 {
             val nums: List<Long> = input.subList(i - 25, i).sorted()
             val expected = input[i]
             var j = 0
-            val checed = mutableSetOf<Long>()
+            val checked = mutableSetOf<Long>()
             var found = false
             while (j < nums.size - 1) {
-                if (nums[j] in checed) {
+                if (nums[j] in checked) {
                     ++j
                     continue
                 }
-                checed.add(nums[j])
+                checked.add(nums[j])
                 val target = expected - nums[j]
                 ++j
                 if (target in nums) {

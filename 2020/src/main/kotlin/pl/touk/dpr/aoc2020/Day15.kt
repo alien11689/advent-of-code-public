@@ -22,7 +22,7 @@ object Day15 {
             current = s.toInt()
         }
         var round = mem.size
-        var res = mutableListOf<Int>()
+        val res = mutableListOf<Int>()
         while (round < 30000000 + 1) {
             if (round == 2020 || round == 30000000) {
 //                println("round: $round, current: $current")

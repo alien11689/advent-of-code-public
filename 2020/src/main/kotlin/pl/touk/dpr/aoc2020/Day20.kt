@@ -12,7 +12,7 @@ object Day20 {
         val tiles = readTiles(input)
         val borders = tiles.values.flatMap { it.borders }.groupBy { it }.mapValues { it.value.size }
         val uniqueBorders = borders.filter { it.value == 1 }.keys.toSet()
-        val corners = tiles.values.filter { it.borders.count { it in uniqueBorders } > 3 }.map { it.id }
+        val corners = tiles.values.filter { tile -> tile.borders.count { it in uniqueBorders } > 3 }.map { it.id }
         return corners.fold(1L) { acc, l -> acc * l }
     }
 
@@ -49,7 +49,7 @@ object Day20 {
         while (true) {
             val foundDragons = lookForDragon(whole)
             if (foundDragons > 0) {
-                val all = whole.image.map { it.filter { it == '#' }.count() }.sum()
+                val all = whole.image.sumOf { tile -> tile.count { it == '#' } }
                 return all - foundDragons * dragonPoints().size
             }
             whole = if (i % 4 == 3) whole.transpose() else whole.rotate()
@@ -197,12 +197,12 @@ object Day20 {
             })
         }
 
-        fun print() {
-            image.forEach {
-                it.forEach { print(it) }
-                println()
-            }
-        }
+//        fun print() {
+//            image.forEach {
+//                it.forEach { print(it) }
+//                println()
+//            }
+//        }
 
         fun withoutBorders(): Tile {
             val newImage = image.mapIndexed { rowIdx: Int, row: List<Char> ->
