@@ -11,10 +11,10 @@ object Day22 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getLinesFromFile("/22/input.txt")
         println("Part 1:")
-//        println(part1(Util.getLinesFromFile("/22/test1.txt")))
+        println(part1(Util.getLinesFromFile("/22/test1.txt")))
         println(part1(lines))
         println("Part 2:")
-//        println(part2(Util.getLinesFromFile("/22/test1.txt")))
+        println(part2(Util.getLinesFromFile("/22/test1.txt")))
         println(part2(lines))
         // 132088 is too low
     }
@@ -47,25 +47,35 @@ object Day22 {
         fun turnLeft(): Position = copy(facing = facing.turnLeft())
 
         fun turnRight(): Position = copy(facing = facing.turnRight())
-        fun go1(steps: Int, map: MutableMap<Point, Elem>): Position {
+
+        fun go(steps: Int, map: MutableMap<Point, Elem>, handleWrap: (Position) -> Position): Position {
             var cur = this
+            var curFacing = this.facing
             repeat(steps) {
-                var newPoint = cur.point.copy(x = cur.point.x + facing.dx, y = cur.point.y + facing.dy)
+                var newPoint = cur.point.copy(x = cur.point.x + curFacing.dx, y = cur.point.y + curFacing.dy)
                 if (newPoint !in map) {
-                    newPoint = when (facing) {
-                        R -> map.keys.filter { it.y == cur.point.y }.minBy { it.x }
-                        D -> map.keys.filter { it.x == cur.point.x }.minBy { it.y }
-                        L -> map.keys.filter { it.y == cur.point.y }.maxBy { it.x }
-                        U -> map.keys.filter { it.x == cur.point.x }.maxBy { it.y }
-                    }
+                    val wrappedPosition = handleWrap(cur)
+                    newPoint = wrappedPosition.point
+                    curFacing = wrappedPosition.facing
                 }
                 cur = when (map[newPoint]) {
-                    Elem.EMPTY -> cur.copy(point = newPoint)
+                    Elem.EMPTY -> cur.copy(point = newPoint, facing = curFacing)
                     Elem.WALL -> return cur
                     else -> throw RuntimeException()
                 }
             }
             return cur
+        }
+
+        fun go1(steps: Int, map: MutableMap<Point, Elem>): Position {
+            return go(steps, map) { cur ->
+                Position(facing = cur.facing, point = when (cur.facing) {
+                    R -> map.keys.filter { it.y == cur.point.y }.minBy { it.x }
+                    D -> map.keys.filter { it.x == cur.point.x }.minBy { it.y }
+                    L -> map.keys.filter { it.y == cur.point.y }.maxBy { it.x }
+                    U -> map.keys.filter { it.x == cur.point.x }.maxBy { it.y }
+                })
+            }
         }
 
         fun score() = 1000 * point.y + 4 * point.x + facing.num
@@ -116,7 +126,7 @@ object Day22 {
                                 curFacing = R
                                 newPoint = Point(x = 1, y = 151 - curPoint.y)
                             }
-//                            // sector 6 R -> 5 U without changeing indices
+//                            // sector 6 R -> 5 U without changing indices
                             curPoint.x == 50 && curPoint.y in 151..200 && curFacing == R -> {
                                 curFacing = U
                                 newPoint = Point(x = curPoint.y - 100, y = 150)
@@ -157,7 +167,6 @@ object Day22 {
                                 curFacing = D
                                 newPoint = Point(x = 100 + curPoint.x, y = 1)
                             }
-                            // fixed!!!
 //                            // sector 4 L -> 1 R with
                             curPoint.x == 1 && curPoint.y in 101..150 && curFacing == L -> {
                                 curFacing = R
