@@ -14,8 +14,9 @@ object Day22 {
 //        println(part1(Util.getLinesFromFile("/22/test1.txt")))
         println(part1(lines))
         println("Part 2:")
-        println(part2(Util.getLinesFromFile("/22/test1.txt")))
+//        println(part2(Util.getLinesFromFile("/22/test1.txt")))
         println(part2(lines))
+        // 132088 is too low
     }
 
     data class Point(val x: Int, val y: Int)
@@ -120,11 +121,85 @@ object Day22 {
                         // 45.
                         // 6..
 
+//                        println("Modeling $cur -> sector xx=${(curPoint.x - 1) / 50} yy=${(curPoint.y - 1) / 50}")
                         when {
-                            else -> throw RuntimeException("Model me $cur")
+                            // sector 1 L -> 4 R with change indices
+                            curPoint.x == 51 && curPoint.y in 1..50 && curFacing == L -> {
+                                curFacing = R
+                                newPoint = Point(x = 1, y = 151 - curPoint.y)
+                            }
+//                            // sector 6 R -> 5 U without changeing indices
+                            curPoint.x == 50 && curPoint.y in 151..200 && curFacing == R -> {
+                                curFacing = U
+                                newPoint = Point(x = curPoint.y - 100, y = 150)
+                            }
+//                            // sector 3 L -> 4 D without changing indices
+                            curPoint.x == 51 && curPoint.y in 51..100 && curFacing == L -> {
+                                curFacing = D
+                                newPoint = Point(x = curPoint.y - 50, y = 101)
+                            }
+//                            // sector 5 R -> 2 L with changing indices
+                            curPoint.x == 100 && curPoint.y in 101..150 && curFacing == R -> {
+                                curFacing = L
+                                newPoint = Point(x = 150, y = 151 - curPoint.y)
+                            }
+//                            // sector 2 D -> 3 L without
+                            curPoint.y == 50 && curPoint.x in 101..150 && curFacing == D -> {
+                                curFacing = L
+                                newPoint = Point(x = 100, y = curPoint.x - 50)
+                            }
+//                            // sector 2 R -> 5 L with
+                            curPoint.x == 150 && curPoint.y in 1..50 && curFacing == R -> {
+                                curFacing = L
+                                // y 1..50 to y 150..101
+                                newPoint = Point(x = 100, y = 151 - curPoint.y)
+                            }
+//                            // sector 3 R -> 2 U without
+                            curPoint.x == 100 && curPoint.y in 51..100 && curFacing == R -> {
+                                curFacing = U
+                                newPoint = Point(x = 50 + curPoint.y, y = 50)
+                            }
+//                            // sector 1 U -> 6 R without
+                            curPoint.y == 1 && curPoint.x in 51..100 && curFacing == U -> {
+                                curFacing = R
+                                newPoint = Point(x = 1, y = 100 + curPoint.x)
+                            }
+//                            // sector 6 D -> 2 D without
+                            curPoint.y == 200 && curPoint.x in 1..50 && curFacing == D -> {
+                                curFacing = D
+                                newPoint = Point(x = 100 + curPoint.x, y = 1)
+                            }
+                            // fixed!!!
+//                            // sector 4 L -> 1 R with
+                            curPoint.x == 1 && curPoint.y in 101..150 && curFacing == L -> {
+                                curFacing = R
+                                newPoint = Point(x = 51, y = 151 - curPoint.y)
+                            }
+//                            // sector 6 L -> 1 D without
+                            curPoint.x == 1 && curPoint.y in 151..200 && curFacing == L -> {
+                                curFacing = D
+                                newPoint = Point(x = curPoint.y - 100, y = 1)
+                            }
+//                            // sector 4 U -> 3 R without
+                            curPoint.y == 101 && curPoint.x in 1..50 && curFacing == U -> {
+                                curFacing = R
+                                newPoint = Point(x = 51, y = curPoint.x + 50)
+                            }
+//                            // sector 5 D -> 6 L without
+                            curPoint.y == 150 && curPoint.x in 51..100 && curFacing == D -> {
+                                curFacing = L
+                                newPoint = Point(x = 50, y = curPoint.x + 100)
+                            }
+//                            // sector 2 U -> 6 U without
+                            curPoint.y == 1 && curPoint.x in 101..150 && curFacing == U -> {
+                                curFacing = U
+                                newPoint = Point(x = curPoint.x - 100, y = 200)
+                            }
+
+                            else -> throw RuntimeException("Model me $cur -> sector xx=${(curPoint.x - 1) / 50} yy=${(curPoint.y - 1) / 50}")
                         }
                     }
-                    println("Wrapping from $curPoint to $newPoint facing $curFacing")
+//                    println("Wrapping from $curPoint to $newPoint facing $curFacing (xx=${(newPoint.x - 1) / 50} yy=${(newPoint.y - 1) / 50})")
                 }
                 cur = when (map[newPoint]) {
                     Elem.EMPTY -> cur.copy(point = newPoint, facing = curFacing)
@@ -187,7 +262,7 @@ object Day22 {
                 "R" -> curPos.turnRight()
                 else -> curPos.go2(token.toInt(), map)
             }
-            println(curPos)
+//            println(curPos)
         }
         return curPos.score()
     }
