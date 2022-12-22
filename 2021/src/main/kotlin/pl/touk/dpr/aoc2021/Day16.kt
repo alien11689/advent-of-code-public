@@ -8,7 +8,7 @@ object Day16 {
         println(part2(lines))
     }
 
-    val mapping = mapOf(
+    private val mapping = mapOf(
         Pair('0', "0000"),
         Pair('1', "0001"),
         Pair('2', "0010"),
@@ -88,28 +88,21 @@ object Day16 {
 
     data class Package(val version: Int, val type: Int, val literal: Long? = null, val subPackages: List<Package> = emptyList()) {
         fun sumVersions(): Int {
-            return version + subPackages.map { it.sumVersions() }.sum()
+            return version + subPackages.sumOf { it.sumVersions() }
         }
 
         fun doMath(): Long {
-            if (type == 4) {
-                return literal!!
-            } else if (type == 0) {
-                return subPackages.sumOf { it.doMath() }
-            } else if (type == 1) {
-                return if (subPackages.isEmpty()) 0 else subPackages.map { it.doMath() }.fold(1) { acc, l -> acc * l }
-            } else if (type == 2) {
-                return subPackages.minOf { it.doMath() }
-            } else if (type == 3) {
-                return subPackages.maxOf { it.doMath() }
-            } else if (type == 5) {
-                return if (subPackages[0].doMath() > subPackages[1].doMath()) 1 else 0
-            } else if (type == 6) {
-                return if (subPackages[0].doMath() < subPackages[1].doMath()) 1 else 0
-            } else if (type == 7) {
-                return if (subPackages[0].doMath() == subPackages[1].doMath()) 1 else 0
+            return when (type) {
+                4 -> literal!!
+                0 -> subPackages.sumOf { it.doMath() }
+                1 -> if (subPackages.isEmpty()) 0 else subPackages.map { it.doMath() }.fold(1) { acc, l -> acc * l }
+                2 -> subPackages.minOf { it.doMath() }
+                3 -> subPackages.maxOf { it.doMath() }
+                5 -> if (subPackages[0].doMath() > subPackages[1].doMath()) 1 else 0
+                6 -> if (subPackages[0].doMath() < subPackages[1].doMath()) 1 else 0
+                7 -> if (subPackages[0].doMath() == subPackages[1].doMath()) 1 else 0
+                else -> throw RuntimeException()
             }
-            throw RuntimeException()
         }
     }
 

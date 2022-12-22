@@ -12,12 +12,12 @@ object Day18 {
 
     private fun part1(lines: List<String>): Any {
         val result = lines.map { line -> readSnumber(line) }
-            .reduce { first, second ->
-                val mm = add(first.toMutableList(), second.toMutableList())
-                val res = fullReduce(mm)
+                .reduce { first, second ->
+                    val mm = add(first.toMutableList(), second.toMutableList())
+                    val res = fullReduce(mm)
 //                printExpr(res)
-                res
-            }
+                    res
+                }
 //            .forEach(::println)
 
         return magnitude(result.toMutableList())
@@ -48,9 +48,9 @@ object Day18 {
         return s.pop()
     }
 
-    private fun printExpr(res: MutableList<Snumber>) {
-        println(res.joinToString(",").replace(",]", "]").replace("[,", "["))
-    }
+//    private fun printExpr(res: MutableList<Snumber>) {
+//        println(res.joinToString(",").replace(",]", "]").replace("[,", "["))
+//    }
 
     private fun fullReduce(snumbers: MutableList<Snumber>): MutableList<Snumber> {
         var before = snumbers.toList()
@@ -61,26 +61,21 @@ object Day18 {
 //            print("After explosions: ")
 //            printExpr(snumbers)
             val after = snumbers.toList()
-            if (after == before) {
+            before = if (after == before) {
                 reduceSplit(snumbers)
-//                print("After split: ")
-//                printExpr(snumbers)
+    //                print("After split: ")
+    //                printExpr(snumbers)
                 val afterSplit = snumbers.toList()
                 if (afterSplit == after) {
                     break
                 } else {
-                    before = afterSplit
+                    afterSplit
                 }
             } else {
-                before = after
+                after
             }
         }
         return snumbers
-    }
-
-    fun <T> List<T>.mutableCopyOf(): MutableList<T> {
-        val original = this
-        return mutableListOf<T>().apply { addAll(original) }
     }
 
     private fun part2(lines: List<String>): Any {
@@ -164,11 +159,11 @@ object Day18 {
 //                    print("Input: ")
 //                    printExpr(snumbers)
 //                    println("Explode on parentLevel $parenCount: [$cur,$next]")
-                    val firstNumLeft = snumbers.take(i - 1).filter { it is Snumber.Num }.lastOrNull() as Snumber.Num?
+                    val firstNumLeft = snumbers.take(i - 1).filterIsInstance<Snumber.Num>().lastOrNull()
                     if (firstNumLeft != null) {
                         firstNumLeft.n += cur.n
                     }
-                    val firstNumRight = snumbers.drop(i + 3).filter { it is Snumber.Num }.firstOrNull() as Snumber.Num?
+                    val firstNumRight = snumbers.drop(i + 3).filterIsInstance<Snumber.Num>().firstOrNull()
                     if (firstNumRight != null) {
                         firstNumRight.n += next.n
                     }

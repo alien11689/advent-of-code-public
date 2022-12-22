@@ -12,19 +12,17 @@ object Day12 {
 
     private fun part1(lines: List<String>): Any {
         val connections = lines.map { it.split("-").toSet() }.toSet()
-        val pq = PriorityQueue<Path>()
-        pq.add(Path("start", listOf("start"), setOf("start")))
+        val pq = initPQ()
         var fullPaths = 0
         while (!pq.isEmpty()) {
             val cur = pq.poll()
             if (cur.last == "end") {
                 fullPaths += 1
-//                println("FInished ${cur.path}")
+//                println("Finished ${cur.path}")
                 continue
             }
 //            println("Checking $cur")
-            val neighbours = connections.filter { cur.last in it }.map { (it - cur.last).first() }
-            for (n in neighbours) {
+            for (n in getNeighbours(connections, cur)) {
                 if (n == n.lowercase()) {
                     if (n !in cur.visitedCaves) {
                         pq.offer(Path(n, cur.path + n, cur.visitedCaves + n))
@@ -51,8 +49,7 @@ object Day12 {
 
     private fun part2(lines: List<String>): Any {
         val connections = lines.map { it.split("-").toSet() }.toSet()
-        val pq = PriorityQueue<Path>()
-        pq.add(Path("start", listOf("start"), setOf("start")))
+        val pq = initPQ()
         var fullPaths = 0
         while (!pq.isEmpty()) {
             val cur = pq.poll()
@@ -62,8 +59,7 @@ object Day12 {
                 continue
             }
 //            println("Checking $cur")
-            val neighbours = connections.filter { cur.last in it }.map { (it - cur.last).first() }
-            for (n in neighbours) {
+            for (n in getNeighbours(connections, cur)) {
                 if (n == n.lowercase()) {
                     if (n == "start") {
                         continue
@@ -78,6 +74,14 @@ object Day12 {
             }
         }
         return fullPaths
+    }
+
+    private fun getNeighbours(connections: Set<Set<String>>, cur: Path) = connections.filter { cur.last in it }.map { (it - cur.last).first() }
+
+    private fun initPQ(): PriorityQueue<Path> {
+        val pq = PriorityQueue<Path>()
+        pq.add(Path("start", listOf("start"), setOf("start")))
+        return pq
     }
 }
 

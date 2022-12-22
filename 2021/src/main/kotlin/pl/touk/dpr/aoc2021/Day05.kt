@@ -13,7 +13,7 @@ object Day05 {
 
     private fun part1(lines: List<String>): Int {
         val m = mutableMapOf<Pair<Int, Int>, Int>()
-        lines.map { it.split(' ', '>', ',', '-').filter { it.isNotEmpty() }.map { it.toInt() } }
+        lines.map { line -> line.split(' ', '>', ',', '-').filter { it.isNotEmpty() }.map { it.toInt() } }
             .filter { it[0] == it[2] || it[1] == it[3] }
             .forEach {
                 for (i in listOf(it[0], it[2]).minOrNull()!!..listOf(it[0], it[2]).maxOrNull()!!) {
@@ -28,7 +28,7 @@ object Day05 {
 
     private fun part2(lines: List<String>): Int {
         val m = mutableMapOf<Pair<Int, Int>, Int>()
-        val coords = lines.map { it.split(' ', '>', ',', '-').filter { it.isNotEmpty() }.map { it.toInt() } }
+        val coords = lines.map { line -> line.split(' ', '>', ',', '-').filter { it.isNotEmpty() }.map { it.toInt() } }
         coords.forEach {
             val stepX = if (it[0] < it[2]) 1 else if (it[0] > it[2]) -1 else 0
             val stepY = if (it[1] < it[3]) 1 else if (it[1] > it[3]) -1 else 0

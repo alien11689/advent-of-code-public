@@ -11,7 +11,7 @@ object Day11 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val numbers = lines.map { it.map { it.toString().toInt() }.toMutableList() }.toMutableList()
+        val numbers = lines.map { line -> line.map { it.toString().toInt() }.toMutableList() }.toMutableList()
         var flashesCount = 0L
         for (i in 1..100) {
             flashesCount += tick1(numbers).size
@@ -49,7 +49,7 @@ object Day11 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val numbers = lines.map { it.map { it.toString().toInt() }.toMutableList() }.toMutableList()
+        val numbers = lines.map { line -> line.map { it.toString().toInt() }.toMutableList() }.toMutableList()
         var i = 0
         while (true) {
             i += 1
@@ -62,18 +62,19 @@ object Day11 {
     data class Point(val x: Int, val y: Int)
 
     private fun neigh(p: Point): Set<Point> {
+        val coordLimit = 0..9
         return setOf(
-            Point(p.x, p.y + 1),
-            Point(p.x, p.y - 1),
-            Point(p.x + 1, p.y - 1),
-            Point(p.x + 1, p.y),
-            Point(p.x + 1, p.y + 1),
-            Point(p.x - 1, p.y + 1),
-            Point(p.x - 1, p.y - 1),
-            Point(p.x - 1, p.y),
+                Point(p.x, p.y + 1),
+                Point(p.x, p.y - 1),
+                Point(p.x + 1, p.y - 1),
+                Point(p.x + 1, p.y),
+                Point(p.x + 1, p.y + 1),
+                Point(p.x - 1, p.y + 1),
+                Point(p.x - 1, p.y - 1),
+                Point(p.x - 1, p.y),
         )
-            .filter { it.x >= 0 && it.x < 10 && it.y >= 0 && it.y < 10 }
-            .toSet()
+                .filter { it.x in coordLimit && it.y in coordLimit }
+                .toSet()
     }
 }
 

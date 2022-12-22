@@ -96,7 +96,7 @@ object Day04 {
             if (numbers.isEmpty()) {
                 numbers = line.split(",").map { it.toInt() }
             } else if (line.isBlank() || line.isEmpty()) {
-                if (!board.isEmpty()) {
+                if (board.isNotEmpty()) {
                     boards.add(Board(board))
                 }
                 board = mutableListOf()
@@ -104,8 +104,7 @@ object Day04 {
                 board.add(line.trim().split("\\s+".toRegex()).map { it.toInt() })
             }
         }
-        var input = Input(boards, numbers)
-        return input
+        return Input(boards, numbers)
     }
 }
 

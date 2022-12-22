@@ -21,9 +21,9 @@ object Day25 {
                 val cur = it.key
                 val right = it.key.right(xSize)
                 if (right !in prev) {
-                    map.put(right, it.value)
+                    map[right] = it.value
                 } else {
-                    map.put(cur, it.value)
+                    map[cur] = it.value
                 }
             }
             prev.filter { it.value == 'v' }.forEach {
@@ -31,12 +31,12 @@ object Day25 {
                 val down = it.key.down(ySize)
                 val valueDownPrev = prev[down]
 //                val valueDownCur = map[down]
-                if (down in map) { // dont't move
-                    map.put(cur, it.value)
+                if (down in map) { // don't move
+                    map[cur] = it.value
                 } else if (down in prev && valueDownPrev == it.value) {
-                    map.put(cur, it.value)
+                    map[cur] = it.value
                 } else {
-                    map.put(down, it.value)
+                    map[down] = it.value
                 }
             }
         }
@@ -48,8 +48,8 @@ object Day25 {
         lines.forEachIndexed { i, line ->
             line.forEachIndexed { j, c ->
                 when (c) {
-                    '>' -> map.put(Pos(j, i), c)
-                    'v' -> map.put(Pos(j, i), c)
+                    '>' -> map[Pos(j, i)] = c
+                    'v' -> map[Pos(j, i)] = c
                     else -> Unit
                 }
             }
@@ -68,14 +68,14 @@ object Day25 {
         }
     }
 
-    fun printlnMap(map: Map<Pos, Char>, ySize: Int, xSize: Int) {
-        for (i in 0 until ySize) {
-            for (j in 0 until xSize) {
-                print(map[Pos(j, i)] ?: '.')
-            }
-            println()
-        }
-    }
+//    fun printlnMap(map: Map<Pos, Char>, ySize: Int, xSize: Int) {
+//        for (i in 0 until ySize) {
+//            for (j in 0 until xSize) {
+//                print(map[Pos(j, i)] ?: '.')
+//            }
+//            println()
+//        }
+//    }
 }
 
 

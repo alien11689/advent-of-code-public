@@ -11,7 +11,7 @@ object Day09 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val numbers = lines.map { it.map { it.toString().toInt() } }
+        val numbers = lines.map { line -> line.map { it.toString().toInt() } }
         var risks = 0
         for (i in numbers.indices) {
             for (j in numbers[i].indices) {
@@ -37,7 +37,7 @@ object Day09 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val numbers = lines.map { it.map { it.toString().toInt() } }
+        val numbers = lines.map { line -> line.map { it.toString().toInt() } }
         val basins = mutableSetOf<MutableSet<Point>>()
         for (i in numbers.indices) {
             for (j in numbers[i].indices) {

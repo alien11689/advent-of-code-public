@@ -12,7 +12,7 @@ object Day15 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val numbers = lines.map { it.map { it.toString().toInt() } }
+        val numbers = lines.map { line -> line.map { it.toString().toInt() } }
         val init = Pos(0, 0)
         val pq = PriorityQueue<Path>()
         val maxX = numbers[0].indices.last
@@ -63,7 +63,7 @@ object Day15 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val board = Board(lines.map { it.map { it.toString().toInt() } })
+        val board = Board(lines.map { line -> line.map { it.toString().toInt() } })
         val init = Pos(0, 0)
         val pq = PriorityQueue<Path>()
         val maxX = lines[0].length * 5 - 1

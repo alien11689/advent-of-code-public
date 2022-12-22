@@ -14,7 +14,7 @@ object Day07 {
         val positions = lines[0].split(",").map { it.toInt() }
         var minFuel = positions.maxOrNull()!!.toLong() * positions.size
         for (i in positions.minOrNull()!!..positions.maxOrNull()!!) {
-            val fuel = positions.map { (it - i).absoluteValue.toLong() }.sum()
+            val fuel = positions.sumOf { (it - i).absoluteValue.toLong() }
             if (fuel < minFuel) {
                 minFuel = fuel
 //                println("On $i there is $fuel")

@@ -22,7 +22,7 @@ object Day20 {
 //            println("Iter $i")
 //            println(image.map { it.joinToString("") }.joinToString("\n"))
         }
-        return newImage.sumOf { it.count { it == '#' } }
+        return newImage.sumOf { row -> row.count { it == '#' } }
 
     }
 

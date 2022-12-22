@@ -11,7 +11,7 @@ object Day10 {
     }
 
     private fun part1(lines: List<String>): Any {
-        return lines.map { findIllegalCaracter(it).second }.mapNotNull {
+        return lines.map { findIllegalCharacter(it).second }.mapNotNull {
             when (it) {
                 ')' -> 3L
                 '}' -> 1197L
@@ -22,27 +22,27 @@ object Day10 {
         }.sum()
     }
 
-    private fun findIllegalCaracter(line: String): Pair<Stack<Char>, Char?> {
+    private fun findIllegalCharacter(line: String): Pair<Stack<Char>, Char?> {
         val stack = Stack<Char>()
         line.forEach {
-            when {
-                it in setOf('(', '[', '{', '<') -> stack.push(it)
-                it == ')' -> {
+            when (it) {
+                in setOf('(', '[', '{', '<') -> stack.push(it)
+                ')' -> {
                     val last = stack.peek()
                     if (last != '(') return Pair(stack, it)
                     stack.pop()
                 }
-                it == '}' -> {
+                '}' -> {
                     val last = stack.peek()
                     if (last != '{') return Pair(stack, it)
                     stack.pop()
                 }
-                it == '>' -> {
+                '>' -> {
                     val last = stack.peek()
                     if (last != '<') return Pair(stack, it)
                     stack.pop()
                 }
-                it == ']' -> {
+                ']' -> {
                     val last = stack.peek()
                     if (last != '[') return Pair(stack, it)
                     stack.pop()
@@ -53,7 +53,7 @@ object Day10 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val results = lines.map { findIllegalCaracter(it) }
+        val results = lines.map { findIllegalCharacter(it) }
             .filter { it.second == null }
             .map { score(it.first) }
             .sorted()

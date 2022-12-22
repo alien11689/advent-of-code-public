@@ -5,9 +5,8 @@ import java.util.PriorityQueue
 object Day23 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        val inputFile = "/23/input"
-        println(part1And2(Util.getNotEmptyLinesFromFile(inputFile + ".txt")))
-        println(part1And2(Util.getNotEmptyLinesFromFile(inputFile + "_2.txt")))
+        println(part1And2(Util.getNotEmptyLinesFromFile("/23/input.txt")))
+        println(part1And2(Util.getNotEmptyLinesFromFile("/23/input_2.txt")))
     }
 
     private fun part1And2(lines: List<String>): Any {
@@ -28,7 +27,7 @@ object Day23 {
                 return cur.score
             }
             mem.add(cur)
-            val takenPos = cur.amipods.map { Pair(it.pos, it.name) }.toMap()
+            val takenPos = cur.amipods.associate { Pair(it.pos, it.name) }
             for (amipod in cur.amipods) {
                 if (amipod.pos.y == 1) {
                     val destX = State.FULL_DEST[amipod.name]!!.first()
@@ -103,7 +102,7 @@ object Day23 {
         return -1
     }
 
-    fun scoreFor(amipodName: Char, moves: Int): Int {
+    private fun scoreFor(amipodName: Char, moves: Int): Int {
         val moveCost = when (amipodName) {
             'A' -> 1
             'B' -> 10
@@ -119,13 +118,15 @@ object Day23 {
         val amipods = mutableSetOf<Amipod>()
         lines.forEachIndexed { i, line ->
             line.forEachIndexed { j, c ->
-                if (c == '.') {
-                    openSpace.add(Pos(j, i))
-                } else if (c == ' ' || c == '#') {
-                    // do nothing
-                } else {
-                    amipods.add(Amipod(c, false, Pos(j, i)))
-                    openSpace.add(Pos(j, i))
+                when (c) {
+                    '.' -> openSpace.add(Pos(j, i))
+                    ' ', '#' -> {
+                        // do nothing
+                    }
+                    else -> {
+                        amipods.add(Amipod(c, false, Pos(j, i)))
+                        openSpace.add(Pos(j, i))
+                    }
                 }
             }
         }

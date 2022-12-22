@@ -33,7 +33,7 @@ object Day19 {
 //                        println("Common beacons count is ${commonBeacons1.size}")
 //                        println("Common beacons is ${commonBeacons1}")
                         for (cb in commonBeacons1) {
-                            val x = m1.filter { it.key in commonDistances }.filter { it.value.count { it.contains(cb) } > 0 }
+                            val x = m1.filter { it.key in commonDistances }.filter { (_, value) -> value.count { it.contains(cb) } > 0 }
                             val two = x.toList().take(2).toMap()
                             val matchingInSecond = m2.filter { it.key in two.keys }.map { it.value }.flatten().flatten()
                                     .groupBy { it }.maxByOrNull { it.value.count() }!!.key
@@ -101,16 +101,16 @@ object Day19 {
                     continue
                 }
                 val zeroAndOne = beaconsMatching.filter { theSame -> theSame.count { it.first in listOf(0, j) } == 2 }
-                        .map { it.filter { it.first in listOf(0, j) } }
+                        .map { pairs -> pairs.filter { it.first in listOf(0, j) } }
                         .take(2)
-                val onlyFrom0 = zeroAndOne.map { it.filter { it.first == 0 } }.flatten()
-                val onlyFromJ = zeroAndOne.map { it.filter { it.first == j } }.flatten()
+                val onlyFrom0 = zeroAndOne.map { pairs -> pairs.filter { it.first == 0 } }.flatten()
+                val onlyFromJ = zeroAndOne.map { pairs -> pairs.filter { it.first == j } }.flatten()
                 if (onlyFromJ.size != 2) {
                     continue
                 }
                 val zeroExpectedVector = onlyFrom0.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
-                val rotations1 = onlyFromJ.get(0).second.allRotations()
-                val rotations2 = onlyFromJ.get(1).second.allRotations()
+                val rotations1 = onlyFromJ[0].second.allRotations()
+                val rotations2 = onlyFromJ[1].second.allRotations()
                 for (rotationId in rotations1.indices) {
                     val vector = listOf(rotations1[rotationId], rotations2[rotationId]).reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
                     if (vector == zeroExpectedVector) {
@@ -123,8 +123,8 @@ object Day19 {
                         break
                     }
                 }
-                beaconsMatching = beaconsMatching.filter { it.filter { it.first !in centers.keys }.count() > 0 }
-                beaconsMatching = beaconsMatching.map { it.map { if (it.first in rotations.keys) Pair(0, it.second.allRotations()[rotations[it.first]!!] + centers[it.first]!!) else it }.toSet() }
+                beaconsMatching = beaconsMatching.filter { pairs -> pairs.any { it.first !in centers.keys } }
+                beaconsMatching = beaconsMatching.map { pairs -> pairs.map { if (it.first in rotations.keys) Pair(0, it.second.allRotations()[rotations[it.first]!!] + centers[it.first]!!) else it }.toSet() }
             }
         }
 //        println(centers)
@@ -177,19 +177,19 @@ object Day19 {
             return all
         }
 
-        fun rotateZ(degree: Int): Beacon {
+        private fun rotateZ(degree: Int): Beacon {
             val sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0
             val cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0
             return Beacon(x * cosTheta - y * sinTheta, y * cosTheta + x * sinTheta, z)
         }
 
-        fun rotateX(degree: Int): Beacon {
+        private fun rotateX(degree: Int): Beacon {
             val sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0
             val cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0
             return Beacon(x, y * cosTheta - z * sinTheta, z * cosTheta + y * sinTheta)
         }
 
-        fun rotateY(degree: Int): Beacon {
+        private fun rotateY(degree: Int): Beacon {
             val sinTheta = if (degree == 90) 1 else if (degree == 270) -1 else 0
             val cosTheta = if (degree == 180) -1 else if (degree == 0) 1 else 0
             return Beacon(x * cosTheta + z * sinTheta, y, z * cosTheta - x * sinTheta)
@@ -223,7 +223,7 @@ object Day19 {
         }
     }
 
-    fun manhattan(a: Beacon, b: Beacon): Int {
+    private fun manhattan(a: Beacon, b: Beacon): Int {
         return (a.x - b.x).absoluteValue + (a.y - b.y).absoluteValue + (a.z - b.z).absoluteValue
     }
 

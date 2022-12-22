@@ -13,13 +13,7 @@ object Day14 {
 
     private fun part1(lines: List<String>): Any {
         var template = lines.first().toList()
-        val mm = HashMap<Pair<Char, Char>, Char>()
-        lines.subList(1, lines.size)
-            .map { it.split(" -> ") }
-            .map { Instr(Pair(it[0][0], it[0][1]), it[1][0]) }
-            .forEach {
-                mm[it.pattern] = it.insert
-            }
+        val mm = parseReactions(lines)
         for (i in 1..10) {
             val newTemplate = LinkedList<Char>()
             newTemplate.add(template.first())
@@ -36,6 +30,17 @@ object Day14 {
             acc
         }.values
         return counts.maxOrNull()!! - counts.minOrNull()!!
+    }
+
+    private fun parseReactions(lines: List<String>): HashMap<Pair<Char, Char>, Char> {
+        val mm = HashMap<Pair<Char, Char>, Char>()
+        lines.subList(1, lines.size)
+                .map { it.split(" -> ") }
+                .map { Instr(Pair(it[0][0], it[0][1]), it[1][0]) }
+                .forEach {
+                    mm[it.pattern] = it.insert
+                }
+        return mm
     }
 
     data class Instr(val pattern: Pair<Char, Char>, val insert: Char)
@@ -100,16 +105,12 @@ object Day14 {
 //        }
 //        return countsInit.values.maxOrNull()!! - countsInit.values.minOrNull()!!
 //    }
+//
+//    data class Node(val c: Char, var next: Node?, var prev: Node? = null)
 
     private fun part2b(lines: List<String>): Any {
         val template = lines.first().toList()
-        val mm = HashMap<Pair<Char, Char>, Char>()
-        lines.subList(1, lines.size)
-            .map { it.split(" -> ") }
-            .map { Instr(Pair(it[0][0], it[0][1]), it[1][0]) }
-            .forEach {
-                mm[it.pattern] = it.insert
-            }
+        val mm = parseReactions(lines)
         var memory = mutableMapOf<Pair<Char, Char>, BigInteger>()
         template.zipWithNext().forEach { p ->
             memory[p] = (memory[p] ?: BigInteger.ZERO) + BigInteger.ONE
@@ -132,7 +133,5 @@ object Day14 {
         counts[template.first()] = counts[template.first()]!! + BigInteger.ONE
         return counts.values.maxOrNull()!! - counts.values.minOrNull()!!
     }
-
-    data class Node(val c: Char, var next: Node?, var prev: Node? = null)
 }
 

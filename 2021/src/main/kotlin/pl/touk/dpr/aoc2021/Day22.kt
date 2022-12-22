@@ -30,10 +30,10 @@ object Day22 {
                     cubicles = cubicles.flatMap { oldCubicle ->
                         oldCubicle.fullSplit(curCub)
                     }.toSet()
-                    if (instr.oper == Oper.on) {
-                        cubicles = cubicles.filter { !curCub.contains(it) }.toSet() + curCub
+                    cubicles = if (instr.oper == Oper.ON) {
+                        cubicles.filter { !curCub.contains(it) }.toSet() + curCub
                     } else {
-                        cubicles = cubicles.filter { !curCub.contains(it) }.toSet()
+                        cubicles.filter { !curCub.contains(it) }.toSet()
                     }
                 }
 //                println("Cubicles size is ${cubicles.size} and volume is ${cubicles.sumOf { volume(it) }}")
@@ -44,7 +44,7 @@ object Day22 {
     private fun readInstructions(lines: List<String>) = lines.map { it.split(" ", ",", ".", "=") }
         .map {
             Instr(
-                if (it[0] == "on") Oper.on else Oper.off,
+                if (it[0] == "on") Oper.ON else Oper.OFF,
                 Cubicle(
                     it[2].toInt()..it[4].toInt(),
                     it[6].toInt()..it[8].toInt(),
@@ -53,7 +53,7 @@ object Day22 {
             )
         }
 
-    enum class Oper { on, off }
+    enum class Oper { ON, OFF }
 
     data class Instr(val oper: Oper, val cubicle: Cubicle) {
         fun isInit(): Boolean = initCubicle.contains(cubicle)
@@ -75,16 +75,16 @@ object Day22 {
                     && this.zRange.contains(other.zRange.first) && this.zRange.contains(other.zRange.last)
         }
 
-        fun overLap(other: Cubicle): Boolean {
+        private fun overLap(other: Cubicle): Boolean {
             return (this.xRange.contains(other.xRange.first) || this.xRange.contains(other.xRange.last) || other.xRange.contains(this.xRange.first) || other.xRange.contains(this.xRange.last))
                     && (this.yRange.contains(other.yRange.first) || this.yRange.contains(other.yRange.last) || other.yRange.contains(this.yRange.first) || other.yRange.contains(this.yRange.last))
                     && (this.zRange.contains(other.zRange.first) || this.zRange.contains(other.zRange.last) || other.zRange.contains(this.zRange.first) || other.zRange.contains(this.zRange.last))
         }
 
-        fun splitX(x: Int): Set<Cubicle> {
+        private fun splitX(x: Int): Set<Cubicle> {
             return if (xRange.contains(x)) {
                 setOf(
-                    copy(xRange = xRange.first..(x - 1)),
+                    copy(xRange = xRange.first until x),
                     copy(xRange = x..x),
                     copy(xRange = (x + 1)..xRange.last),
                 )
@@ -95,10 +95,10 @@ object Day22 {
             }
         }
 
-        fun splitY(y: Int): Set<Cubicle> {
+        private fun splitY(y: Int): Set<Cubicle> {
             return if (yRange.contains(y)) {
                 setOf(
-                    copy(yRange = yRange.first..(y - 1)),
+                    copy(yRange = yRange.first until y),
                     copy(yRange = y..y),
                     copy(yRange = (y + 1)..yRange.last),
                 )
@@ -109,10 +109,10 @@ object Day22 {
             }
         }
 
-        fun splitZ(z: Int): Set<Cubicle> {
+        private fun splitZ(z: Int): Set<Cubicle> {
             return if (zRange.contains(z)) {
                 setOf(
-                    copy(zRange = zRange.first..(z - 1)),
+                    copy(zRange = zRange.first until z),
                     copy(zRange = z..z),
                     copy(zRange = (z + 1)..zRange.last),
                 )
