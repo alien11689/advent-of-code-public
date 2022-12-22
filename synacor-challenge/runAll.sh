@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mvn clean package
+mvn clean package > /dev/null
 
 jar=target/synacor-challenge-1.0.0-SNAPSHOT-jar-with-dependencies.jar
 
