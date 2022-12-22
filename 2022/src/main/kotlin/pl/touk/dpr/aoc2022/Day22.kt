@@ -28,37 +28,25 @@ object Day22 {
     enum class Direction(val num: Int, val dx: Int, val dy: Int) {
         R(0, 1, 0), D(1, 0, 1), L(2, -1, 0), U(3, 0, -1);
 
-        fun turn(side: String) = when (this) {
-            R -> when (side) {
-                "R" -> D
-                "L" -> U
-                else -> throw RuntimeException()
-            }
+        fun turnLeft() = when (this) {
+            R -> U
+            D -> R
+            L -> D
+            U -> L
+        }
 
-            D -> when (side) {
-                "R" -> L
-                "L" -> R
-                else -> throw RuntimeException()
-            }
-
-            L -> when (side) {
-                "R" -> U
-                "L" -> D
-                else -> throw RuntimeException()
-            }
-
-            U -> when (side) {
-                "R" -> R
-                "L" -> L
-                else -> throw RuntimeException()
-            }
+        fun turnRight() = when (this) {
+            R -> D
+            D -> L
+            L -> U
+            U -> R
         }
     }
 
     data class Position(val point: Point, val facing: Direction) {
-        fun turnLeft(): Position = copy(facing = facing.turn("L"))
+        fun turnLeft(): Position = copy(facing = facing.turnLeft())
 
-        fun turnRight(): Position = copy(facing = facing.turn("R"))
+        fun turnRight(): Position = copy(facing = facing.turnRight())
         fun go1(steps: Int, map: MutableMap<Point, Elem>): Position {
             var cur = this
             repeat(steps) {
