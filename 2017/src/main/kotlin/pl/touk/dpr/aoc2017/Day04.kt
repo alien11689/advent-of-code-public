@@ -17,8 +17,8 @@ object Day04 {
     }
 
     private fun part2(input: List<String>): Any {
-        return input.map {
-            it.split(" ").toList().map { it.toCharArray().sorted() }
+        return input.map { line ->
+            line.split(" ").toList().map { it.toCharArray().sorted() }
         }.count {
             it.size == it.toSet().size
         }

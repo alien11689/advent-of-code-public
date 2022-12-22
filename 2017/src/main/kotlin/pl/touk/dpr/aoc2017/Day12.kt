@@ -15,7 +15,7 @@ object Day12 {
 
         while (true) {
             val prev = group.toSet()
-            group.addAll(routes.filter { it.any { it in group } }.flatten())
+            group.addAll(routes.filter { route -> route.any { it in group } }.flatten())
             if (prev == group.toSet()) {
                 break
             }
@@ -24,8 +24,8 @@ object Day12 {
     }
 
     private fun readRoutes(routesDef: List<String>): MutableList<Set<Int>> {
-        val routes = routesDef.flatMap {
-            val parts = it.split(" ", limit = 3)
+        val routes = routesDef.flatMap { line ->
+            val parts = line.split(" ", limit = 3)
             val from = parts[0].toInt()
             val tos = parts[2].split(",").map { it.trim().toInt() }
             tos.map {
@@ -46,7 +46,7 @@ object Day12 {
             val group = remain.first().toMutableSet()
             while (true) {
                 val prev = group.toSet()
-                val matchingRules = routes.filter { it !in used && it.any { it in group } }
+                val matchingRules = routes.filter { route -> route !in used && route.any { it in group } }
                 group.addAll(matchingRules.flatten())
                 used.addAll(matchingRules)
                 if (prev == group.toSet()) {

@@ -43,22 +43,30 @@ object Day10 {
 
         val inp = (0..255).toMutableList()
 
-        (1..64).forEach {
-            lengths.forEach { length ->
-                val reversed = (0 until length).map {
-                    inp[(curPos + it) % inp.size]
-                }.reversed()
-                (0 until length).forEach {
-                    inp[(curPos + it) % inp.size] = reversed[it]
-                }
-                curPos = (curPos + length + skipSize) % inp.size
-                ++skipSize
-            }
-
+        repeat(64) {
+            val p = processLengths(lengths, inp, curPos, skipSize)
+            curPos = p.first
+            skipSize = p.second
         }
 
         return inp.chunked(16)
-                .map { it.reduce() { a, b -> a.xor(b) } }
+                .map { it.reduce { a, b -> a.xor(b) } }
                 .joinToString("") { String.format("%02x", it) }
+    }
+
+    private fun processLengths(lengths: List<Int>, inp: MutableList<Int>, curPos: Int, skipSize: Int): Pair<Int, Int> {
+        var curPos1 = curPos
+        var skipSize1 = skipSize
+        lengths.forEach { length ->
+            val reversed = (0 until length).map {
+                inp[(curPos1 + it) % inp.size]
+            }.reversed()
+            repeat(length) {
+                inp[(curPos1 + it) % inp.size] = reversed[it]
+            }
+            curPos1 = (curPos1 + length + skipSize1) % inp.size
+            ++skipSize1
+        }
+        return curPos1 to skipSize1
     }
 }

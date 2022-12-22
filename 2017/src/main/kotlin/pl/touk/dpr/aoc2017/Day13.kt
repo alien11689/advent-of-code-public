@@ -30,7 +30,7 @@ object Day13 {
             ++myPos
         }
 
-        return caught.map { pos2Range[it]!! * it }.sum()
+        return caught.sumOf { pos2Range[it]!! * it }
     }
 
     private fun readInput(input: List<String>): MutableMap<Int, Int> {

@@ -36,9 +36,8 @@ object Day03 {
         val middleSide = (lowerRight - distSide)
 //        println("Middle side $middleSide")
         val leftOrRight = input - middleSide
-        val manhattan = distSide + leftOrRight
-//        println("Distance $manhattan")
-        return manhattan
+        //        println("Distance $manhattan")
+        return distSide + leftOrRight
     }
 
     private fun part2(input: Int): Any {
@@ -63,7 +62,7 @@ object Day03 {
         }
 
         while (last <= input) {
-            cur = cur + dir
+            cur += dir
             last = sumNeighbours(mesh, cur)
             mesh[cur] = last
             if (mesh[cur + dir.nextDir()] == null) {

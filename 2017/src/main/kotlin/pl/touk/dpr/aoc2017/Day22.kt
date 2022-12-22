@@ -27,7 +27,7 @@ object Day22 {
         }
 
         val virus = Virus(curX, curY)
-        (0 until 10000).forEach {
+        repeat(10000) {
             virus.burst(grid)
         }
 
@@ -54,7 +54,7 @@ object Day22 {
         }
 
         val virus = Virus(curX, curY)
-        (0 until 10000000).forEach {
+        repeat(10000000) {
             virus.burst2(grid)
         }
 

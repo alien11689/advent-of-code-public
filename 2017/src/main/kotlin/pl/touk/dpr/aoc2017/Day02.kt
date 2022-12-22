@@ -10,16 +10,14 @@ object Day02 {
 
     private fun part1(input: List<String>): Any {
         return input
-                .map { it.split('\t').map { it.toInt() } }
-                .map { it.maxOrNull()!! - it.minOrNull()!! }
-                .sum()
+                .map { line -> line.split('\t').map { it.toInt() } }
+                .sumOf { it.max() - it.min() }
     }
 
     private fun part2(input: List<String>): Any {
         return input
-                .map { it.split('\t').map { it.toInt() }.sorted().reversed() }
-                .map { findDivisible(it) }
-                .sum()
+                .map { line -> line.split('\t').map { it.toInt() }.sorted().reversed() }
+                .sumOf { findDivisible(it) }
     }
 
     private fun findDivisible(nums: List<Int>): Int {

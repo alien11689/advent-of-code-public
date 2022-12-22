@@ -13,7 +13,7 @@ object Day20 {
     private fun part1(input: List<String>): Any {
         val particles = readInput(input)
 
-        (0 until 1000).forEach {
+        repeat(1000) {
             particles.forEach {
                 it.updateV()
                 it.updateP()
@@ -36,7 +36,7 @@ object Day20 {
 
     private fun part2(input: List<String>): Any {
         var particles = readInput(input)
-        (0 until 1000).forEach {
+        repeat(1000) {
             val hits = mutableMapOf<Coord, Int>()
             particles.forEach {
                 it.updateV()
@@ -44,7 +44,7 @@ object Day20 {
                 hits[it.p] = 1 + (hits[it.p] ?: 0)
             }
             val doubles = hits.filter { it.value > 1 }.keys
-            particles = particles.filter { !(it.p in doubles) }
+            particles = particles.filter { it.p !in doubles }
         }
         return particles.size
     }

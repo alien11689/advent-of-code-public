@@ -1,7 +1,6 @@
 package pl.touk.dpr.aoc2017
 
-import java.util.LinkedList
-import java.util.Stack
+import java.util.*
 
 object Day14 {
     @JvmStatic
@@ -40,9 +39,7 @@ object Day14 {
     private fun buildGrid(input: String): List<String> {
         val grid = ((0..127).map { "$input-$it" }.map { Day10.knotHash(it) })
                 .map {
-                    it.map {
-                        map[it]
-                    }.joinToString("")
+                    it.map { letter -> map[letter] }.joinToString("")
                 }
         return grid
     }
@@ -56,9 +53,9 @@ object Day14 {
             (0 until grid[i].size).forEach { j ->
                 if (grid[i][j] == '1') {
                     val v = currentGroup--
-                    val mem = mutableSetOf<Pair<Int,Int>>()
-                    val neighbours = Stack<Pair<Int,Int>>()
-                    neighbours.push(Pair(i,j))
+                    val mem = mutableSetOf<Pair<Int, Int>>()
+                    val neighbours = Stack<Pair<Int, Int>>()
+                    neighbours.push(Pair(i, j))
                     while (neighbours.isNotEmpty()) {
                         val cur = neighbours.pop()
                         if (grid[cur.first][cur.second] == '1') {
@@ -77,13 +74,14 @@ object Day14 {
     }
 
     private fun neighbour(i: Int, j: Int, size: Int): List<Pair<Int, Int>> {
+        val limit = 0 until size
         return listOf(
                 listOf(i - 1, j),
                 listOf(i + 1, j),
                 listOf(i, j - 1),
                 listOf(i, j + 1),
         )
-                .filter { it[0] >= 0 && it[0] < size && it[1] >= 0 && it[1] < size }
+                .filter { it[0] in limit && it[1] in limit }
                 .map { Pair(it[0], it[1]) }
     }
 }

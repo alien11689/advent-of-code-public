@@ -46,7 +46,7 @@ object Day21 {
                     parts.add(rule.output)
                     j += split
                 }
-                newImage.addAll(parts.fold(if(parts[0].size == 3) mutableListOf(mutableListOf<Char>(),mutableListOf<Char>(),mutableListOf<Char>()) else mutableListOf(mutableListOf<Char>(),mutableListOf<Char>(),mutableListOf<Char>(), mutableListOf<Char>())) { acc, cur ->
+                newImage.addAll(parts.fold(if(parts[0].size == 3) mutableListOf(mutableListOf(),mutableListOf(),mutableListOf()) else mutableListOf(mutableListOf(),mutableListOf(),mutableListOf(), mutableListOf())) { acc, cur ->
                     (0 until cur.size).forEach {
                         acc[it].addAll(cur[it])
                     }
@@ -77,7 +77,7 @@ object Day21 {
 
     private fun rotate(grid: List<List<Char>>): List<List<Char>> {
         val matrix = grid.map { it.toMutableList() }.toMutableList()
-        val length = matrix.size - 1;
+        val length = matrix.size - 1
 
         var i = 0
         while (i <= (length) / 2) {
@@ -88,19 +88,19 @@ object Day21 {
                 val p1 = matrix[i][j]
 
                 //Coordinate 2
-                val p2 = matrix[j][length - i];
+                val p2 = matrix[j][length - i]
 
                 //Coordinate 3
-                val p3 = matrix[length - i][length - j];
+                val p3 = matrix[length - i][length - j]
 
                 //Coordinate 4
-                val p4 = matrix[length - j][i];
+                val p4 = matrix[length - j][i]
 
                 //Swap values of 4 coordinates.
-                matrix[j][length - i] = p1;
-                matrix[length - i][length - j] = p2;
-                matrix[length - j][i] = p3;
-                matrix[i][j] = p4;
+                matrix[j][length - i] = p1
+                matrix[length - i][length - j] = p2
+                matrix[length - j][i] = p3
+                matrix[i][j] = p4
 
                 ++j
             }
@@ -111,9 +111,7 @@ object Day21 {
 
     private fun transpose(input: List<List<Char>>): List<List<Char>> {
         val out = (0 until input[0].size).map {
-            (0 until input.size).map {
-                'a'
-            }.toMutableList()
+            List(input.size) { 'a' }.toMutableList()
         }.toMutableList()
         for (i in input.indices) {
             for (j in input[i].indices) {

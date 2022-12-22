@@ -11,8 +11,8 @@ object Day24 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val cpus = lines.map {
-            Cpu(it.split('/').map { it.toInt() })
+        val cpus = lines.map { line ->
+            Cpu(line.split('/').map { it.toInt() })
         }
 
         var bestLength = 0
@@ -35,8 +35,8 @@ object Day24 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val cpus = lines.map {
-            Cpu(it.split('/').map { it.toInt() })
+        val cpus = lines.map { line ->
+            Cpu(line.split('/').map { it.toInt() })
         }
         val l2sizes = mutableMapOf<Int, List<Int>>()
         val queue = LinkedList<Chain>()

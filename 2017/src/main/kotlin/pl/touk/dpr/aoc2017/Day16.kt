@@ -24,17 +24,17 @@ object Day16 {
         val acc = input.split(",").map { action ->
             val type = action[0]
             val params = action.substring(1)
-            if (type == 's') {
-                val nums = params.toInt()
-                Action.Spin(nums)
-            } else if (type == 'x') {
-                val parts = params.split('/')
-                Action.Exchange(p1 = parts[0].toInt(), p2 = parts[1].toInt())
-            } else if (type == 'p') {
-                val parts = params.split('/')
-                Action.Partner(n1 = parts[0].first(), n2 = parts[1].first())
-            } else {
-                throw RuntimeException(action)
+            when (type) {
+                's' -> Action.Spin(params.toInt())
+                'x' -> {
+                    val parts = params.split('/')
+                    Action.Exchange(p1 = parts[0].toInt(), p2 = parts[1].toInt())
+                }
+                'p' -> {
+                    val parts = params.split('/')
+                    Action.Partner(n1 = parts[0].first(), n2 = parts[1].first())
+                }
+                else -> throw RuntimeException(action)
             }
         }
         return Pair(a, acc)
@@ -91,12 +91,10 @@ object Day16 {
             override fun apply(a: List<Char>): List<Char> {
                 val newA = mutableListOf<Char>()
                 (a.indices).forEach { i ->
-                    if (i == p1) {
-                        newA.add(a[p2])
-                    } else if (i == p2) {
-                        newA.add(a[p1])
-                    } else {
-                        newA.add(a[i])
+                    when (i) {
+                        p1 -> newA.add(a[p2])
+                        p2 -> newA.add(a[p1])
+                        else -> newA.add(a[i])
                     }
                 }
                 return newA

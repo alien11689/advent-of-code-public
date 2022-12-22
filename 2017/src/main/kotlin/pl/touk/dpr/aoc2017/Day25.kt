@@ -13,67 +13,67 @@ object Day25 {
 
         val tape = Tape()
 
-        (0 until steps).forEach {
+        repeat(steps) {
             when (state) {
                 'A' ->
-                    if (tape.read() == 0) {
+                    state = if (tape.read() == 0) {
                         tape.write(1)
                         tape.right()
-                        state = 'B'
+                        'B'
                     } else {
                         tape.write(0)
                         tape.left()
-                        state = 'C'
+                        'C'
                     }
                 'B' ->
-                    if (tape.read() == 0) {
+                    state = if (tape.read() == 0) {
                         tape.write(1)
                         tape.left()
-                        state = 'A'
+                        'A'
                     } else {
                         tape.write(1)
                         tape.left()
-                        state = 'D'
+                        'D'
                     }
                 'C' ->
-                    if (tape.read() == 0) {
+                    state = if (tape.read() == 0) {
                         tape.write(1)
                         tape.right()
-                        state = 'D'
+                        'D'
                     } else {
                         tape.write(0)
                         tape.right()
-                        state = 'C'
+                        'C'
                     }
                 'D' ->
-                    if (tape.read() == 0) {
+                    state = if (tape.read() == 0) {
                         tape.write(0)
                         tape.left()
-                        state = 'B'
+                        'B'
                     } else {
                         tape.write(0)
                         tape.right()
-                        state = 'E'
+                        'E'
                     }
                 'E' ->
-                    if (tape.read() == 0) {
+                    state = if (tape.read() == 0) {
                         tape.write(1)
                         tape.right()
-                        state = 'C'
+                        'C'
                     } else {
                         tape.write(1)
                         tape.left()
-                        state = 'F'
+                        'F'
                     }
                 'F' ->
-                    if (tape.read() == 0) {
+                    state = if (tape.read() == 0) {
                         tape.write(1)
                         tape.left()
-                        state = 'E'
+                        'E'
                     } else {
                         tape.write(1)
                         tape.right()
-                        state = 'A'
+                        'A'
                     }
             }
         }

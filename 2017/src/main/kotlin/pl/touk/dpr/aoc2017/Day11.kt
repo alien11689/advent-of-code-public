@@ -14,15 +14,7 @@ object Day11 {
         val processSteps = input.split(",").toList()
         val bd05 = BigDecimal("0.5")
         val dest = processSteps.fold(Point(BigDecimal.ZERO, BigDecimal.ZERO)) { it, step ->
-            when (step) {
-                "n" -> Point(it.x, it.y - BigDecimal.ONE)
-                "ne" -> Point(it.x + bd05, it.y - bd05)
-                "nw" -> Point(it.x - bd05, it.y - bd05)
-                "s" -> Point(it.x, it.y + BigDecimal.ONE)
-                "se" -> Point(it.x + bd05, it.y + bd05)
-                "sw" -> Point(it.x - bd05, it.y + bd05)
-                else -> throw RuntimeException(step)
-            }
+            nextStep(step, it, bd05)
         }
         return (dest.x / bd05 + dest.y - dest.x).toInt()
     }
@@ -32,15 +24,7 @@ object Day11 {
         val bd05 = BigDecimal("0.5")
         var max = BigDecimal.ZERO
         processSteps.fold(Point(BigDecimal.ZERO, BigDecimal.ZERO)) { it, step ->
-            val point = when (step) {
-                "n" -> Point(it.x, it.y - BigDecimal.ONE)
-                "ne" -> Point(it.x + bd05, it.y - bd05)
-                "nw" -> Point(it.x - bd05, it.y - bd05)
-                "s" -> Point(it.x, it.y + BigDecimal.ONE)
-                "se" -> Point(it.x + bd05, it.y + bd05)
-                "sw" -> Point(it.x - bd05, it.y + bd05)
-                else -> throw RuntimeException(step)
-            }
+            val point = nextStep(step, it, bd05)
             val dist = (point.x / bd05 + point.y - point.x)
             if (dist > max) {
                 max = dist
@@ -48,6 +32,16 @@ object Day11 {
             point
         }
         return max.toInt()
+    }
+
+    private fun nextStep(step: String, it: Point, bd05: BigDecimal) = when (step) {
+        "n" -> Point(it.x, it.y - BigDecimal.ONE)
+        "ne" -> Point(it.x + bd05, it.y - bd05)
+        "nw" -> Point(it.x - bd05, it.y - bd05)
+        "s" -> Point(it.x, it.y + BigDecimal.ONE)
+        "se" -> Point(it.x + bd05, it.y + bd05)
+        "sw" -> Point(it.x - bd05, it.y + bd05)
+        else -> throw RuntimeException(step)
     }
 
     data class Point(val x: BigDecimal, val y: BigDecimal)

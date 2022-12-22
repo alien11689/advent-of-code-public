@@ -54,7 +54,7 @@ object Day07 {
             if (sum >= 0) {
                 return sum
             }
-            sum = size + (children.map { discs[it]!!.wholeSize(discs) }.sum())
+            sum = size + (children.sumOf { discs[it]!!.wholeSize(discs) })
             return sum
         }
 

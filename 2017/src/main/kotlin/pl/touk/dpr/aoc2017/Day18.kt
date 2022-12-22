@@ -85,17 +85,17 @@ object Day18 {
     }
 
         class Register {
-            val reg = mutableMapOf<String, Long>()
+            private val reg = mutableMapOf<String, Long>()
 
             fun get(key: String): Long {
                 if (key.matches(Regex("[-0-9]+"))) {
                     return key.toLong()
                 }
-                if (key in reg) {
-                    return reg[key]!!
+                return if (key in reg) {
+                    reg[key]!!
                 } else {
                     reg[key] = 0
-                    return 0
+                    0
                 }
             }
 
@@ -109,14 +109,14 @@ object Day18 {
 
             data class Snd(val x: String) : Action() {
                 override fun apply(c: Context): Pair<Int, String?> {
-                    if (c.next == c) {
+                    return if (c.next == c) {
                         c.reg.put("lastPlayed", c.reg.get(x))
-                        return Pair(1, null)
+                        Pair(1, null)
                     } else {
                         c.next!!.mes.offer(c.reg.get(x))
                         c.next!!.waiting = false
                         c.send++
-                        return Pair(1, null)
+                        Pair(1, null)
                     }
                 }
             }
