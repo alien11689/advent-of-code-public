@@ -15,11 +15,11 @@ object Day14 {
         val res = mutableListOf<Int>()
         val mem = mutableMapOf<Int, String>()
         var i = 0
+        val range = (1..1000).toList()
         while (res.size < 64) {
             val hash = getMd5(input, i, mem)
-            val triple = hasTriple(hash)
-            if (triple != null) {
-                if (((i + 1)..(i + 1000)).any { hasFive(getMd5(input, it, mem), triple) }) {
+            hasTriple(hash)?.let { triple ->
+                if (range.any { hasFive(getMd5(input, it + i, mem), triple) }) {
                     res.add(i)
                 }
             }
@@ -40,12 +40,14 @@ object Day14 {
     }
 
     private fun hasFive(hash: String, c: Char): Boolean {
-        var i = 0
-        while (i < hash.length - 4) {
-            if (hash[i] == c && hash[i] == hash[i + 1] && hash[i] == hash[i + 2] && hash[i] == hash[i + 3] && hash[i] == hash[i + 4]) {
-                return true
+        if (hasTriple(hash) == c) {
+            var i = 0
+            while (i < hash.length - 4) {
+                if (hash[i] == c && hash[i] == hash[i + 1] && hash[i] == hash[i + 2] && hash[i] == hash[i + 3] && hash[i] == hash[i + 4]) {
+                    return true
+                }
+                ++i
             }
-            ++i
         }
         return false
     }
@@ -54,11 +56,11 @@ object Day14 {
         val res = mutableListOf<Int>()
         val mem = mutableMapOf<Int, String>()
         var i = 0
+        val range = (1..1000).toList()
         while (res.size < 64) {
             val hash = getMd5For2017(input, i, mem)
-            val triple = hasTriple(hash)
-            if (triple != null) {
-                if (((i + 1)..(i + 1000)).any { hasFive(getMd5For2017(input, it, mem), triple) }) {
+            hasTriple(hash)?.let { triple ->
+                if (range.any { hasFive(getMd5For2017(input, it + i, mem), triple) }) {
                     res.add(i)
                 }
             }
