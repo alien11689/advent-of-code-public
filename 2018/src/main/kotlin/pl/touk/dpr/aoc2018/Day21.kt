@@ -70,9 +70,13 @@ object Day21 {
                     result2Iteration[registers[4]] = operations
 //                    println("Max: ${result2Iteration.maxByOrNull {it.value}!!.key}")
                 }
-                if (result2Iteration.size > threshold || operations > threshold.toLong() * 100000) {
+                // 100000 is ok
+                // 10000 is too less
+                // 25000 is too less
+                // 50000 is ok
+                if (result2Iteration.size > threshold || operations > threshold * 50000L) {
 //                println("Max: ${result2Iteration.maxByOrNull {it.value}!!.key}")
-                    return result2Iteration.maxByOrNull { it.value }!!.key
+                    return result2Iteration.maxBy { it.value }.key
                 }
             }
             if (registers[ip] + 1 >= instructions.size) {
