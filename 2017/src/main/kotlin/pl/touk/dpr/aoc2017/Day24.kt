@@ -11,11 +11,11 @@ object Day24 {
         println(part2(chains))
     }
 
-    private fun part1(chains: Set<Chain>) = chains.maxOf { it.strength }
+    private fun part1(chains: Set<Chain>) = chains.maxOf { it.strength() }
 
     private fun part2(chains: Set<Chain>): Int {
         val maxLength = chains.maxOf { it.cpus.size }
-        return chains.filter { it.cpus.size == maxLength }.maxOf { it.strength }
+        return chains.filter { it.cpus.size == maxLength }.maxOf { it.strength() }
     }
 
     private fun chains(lines: List<String>): Set<Chain> {
@@ -25,7 +25,7 @@ object Day24 {
 
         val chains = mutableSetOf<Chain>()
         val queue = LinkedList<Chain>()
-        queue.offer(Chain(listOf(), 0))
+        queue.offer(Chain(setOf(), 0))
 
         while (queue.isNotEmpty()) {
             val current = queue.poll()
@@ -42,7 +42,7 @@ object Day24 {
 
     data class Cpu(val pins: List<Int>)
 
-    data class Chain(val cpus: List<Cpu>, val lastPin: Int, val strength: Int = cpus.flatMap { it.pins }.sum(), val length: Int = cpus.size) {
+    data class Chain(val cpus: Set<Cpu>, val lastPin: Int) {
         fun connectTo(c: Cpu): Chain? {
             if (c in cpus) {
                 return null
@@ -52,5 +52,7 @@ object Day24 {
             }
             return Chain(cpus + c, if (lastPin == c.pins[0]) c.pins[1] else c.pins[0])
         }
+
+        fun strength(): Int = cpus.flatMap { it.pins }.sum()
     }
 }
