@@ -84,41 +84,50 @@ object Day21 {
     }
 
     private fun parseInstructions(input: List<String>): List<Operation> {
-        val instructions = input.drop(1).map { line ->
+        return input.drop(1).map { line ->
             val parts = line.split(" ")
-            Operation(parts[0], parts[1].toInt(), parts[2].toInt(), parts[3].toInt())
+            Operation(OperationName.valueOf(parts[0].uppercase()), parts[1].toInt(), parts[2].toInt(), parts[3].toInt())
         }
-        return instructions
     }
 
-    data class Operation(val name: String, val a: Int, val b: Int, val c: Int) {
+    enum class OperationName{
+        ADDR,
+        ADDI,
+        SETR,
+        SETI,
+        MULR,
+        MULI,
+        BANR,
+        BANI,
+        BORR,
+        BORI,
+        GTIR,
+        GTRI,
+        GTRR,
+        EQIR,
+        EQRI,
+        EQRR,
+    }
+
+    data class Operation(val name: OperationName, val a: Int, val b: Int, val c: Int) {
         fun apply(registers: MutableList<Long>) {
             when (name) {
-                "addr" -> registers[c] = registers[a] + registers[b]
-                "addi" -> registers[c] = registers[a] + b
-                "setr" -> registers[c] = registers[a]
-                "seti" -> registers[c] = a.toLong()
-                "mulr" -> registers[c] = registers[a] * registers[b]
-
-                "muli" -> registers[c] = registers[a] * b
-                "banr" -> registers[c] = registers[a].and(registers[b])
-
-                "bani" -> registers[c] = registers[a] and b.toLong()
-                "borr" -> registers[c] = registers[a] or registers[b]
-                "bori" -> registers[c] = registers[a] or b.toLong()
-
-                "gtir" -> registers[c] = if (a > registers[b]) 1 else 0
-
-                "gtri" -> registers[c] = if (registers[a] > b) 1 else 0
-
-                "gtrr" -> registers[c] = if (registers[a] > registers[b]) 1 else 0
-
-                "eqir" -> registers[c] = if (a.toLong() == registers[b]) 1 else 0
-
-                "eqri" -> registers[c] = if (registers[a] == b.toLong()) 1 else 0
-
-                "eqrr" -> registers[c] = if (registers[a] == registers[b]) 1 else 0
-
+                OperationName.ADDR -> registers[c] = registers[a] + registers[b]
+                OperationName.ADDI -> registers[c] = registers[a] + b
+                OperationName.SETR -> registers[c] = registers[a]
+                OperationName.SETI -> registers[c] = a.toLong()
+                OperationName.MULR -> registers[c] = registers[a] * registers[b]
+                OperationName.MULI -> registers[c] = registers[a] * b
+                OperationName.BANR -> registers[c] = registers[a].and(registers[b])
+                OperationName.BANI -> registers[c] = registers[a] and b.toLong()
+                OperationName.BORR -> registers[c] = registers[a] or registers[b]
+                OperationName.BORI -> registers[c] = registers[a] or b.toLong()
+                OperationName.GTIR -> registers[c] = if (a > registers[b]) 1 else 0
+                OperationName.GTRI -> registers[c] = if (registers[a] > b) 1 else 0
+                OperationName.GTRR -> registers[c] = if (registers[a] > registers[b]) 1 else 0
+                OperationName.EQIR -> registers[c] = if (a.toLong() == registers[b]) 1 else 0
+                OperationName.EQRI -> registers[c] = if (registers[a] == b.toLong()) 1 else 0
+                OperationName.EQRR -> registers[c] = if (registers[a] == registers[b]) 1 else 0
             }
         }
     }
