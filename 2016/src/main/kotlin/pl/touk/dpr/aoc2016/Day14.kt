@@ -15,7 +15,7 @@ object Day14 {
         val res = mutableListOf<Int>()
         val mem = mutableMapOf<Int, String>()
         var i = 0
-        while (true) {
+        while (res.size < 64) {
             val hash = getMd5(input, i, mem)
             val triple = hasTriple(hash)
             if (triple != null) {
@@ -23,11 +23,9 @@ object Day14 {
                     res.add(i)
                 }
             }
-            if (res.size == 64) {
-                return res.last()
-            }
             ++i
         }
+        return res.last()
     }
 
     private fun hasTriple(hash: String): Char? {
@@ -56,7 +54,7 @@ object Day14 {
         val res = mutableListOf<Int>()
         val mem = mutableMapOf<Int, String>()
         var i = 0
-        while (true) {
+        while (res.size < 64) {
             val hash = getMd5For2017(input, i, mem)
             val triple = hasTriple(hash)
             if (triple != null) {
@@ -64,11 +62,9 @@ object Day14 {
                     res.add(i)
                 }
             }
-            if (res.size == 64) {
-                return res.last()
-            }
             ++i
         }
+        return res.last()
     }
 
     private fun getMd5(input: String, idx: Int, mem: MutableMap<Int, String>): String {
