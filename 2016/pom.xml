@@ -14,6 +14,7 @@
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <java-version>17</java-version>
+        <fast-md5.version>2.7.1</fast-md5.version>
     </properties>
 
     <dependencies>
@@ -26,6 +27,12 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
+        </dependency>
+        <!-- Used only for day 14 -->
+        <dependency>
+            <groupId>com.joyent.util</groupId>
+            <artifactId>fast-md5</artifactId>
+            <version>${fast-md5.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

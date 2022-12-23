@@ -1,7 +1,9 @@
 package pl.touk.dpr.aoc2016
 
+import com.twmacinta.util.MD5
 import java.math.BigInteger
 import java.security.MessageDigest
+import javax.swing.text.html.parser.DTDConstants.MD
 
 object Day14 {
     @JvmStatic
@@ -85,8 +87,11 @@ object Day14 {
         }
         var res = "$input$idx"
         repeat(2017) {
-            md5.reset()
-            res = hashToString(md5.digest(res.toByteArray()))
+//            md5.reset()
+//            res = hashToString(md5.digest(res.toByteArray()))
+            externalMd5.Init()
+            externalMd5.Update(res.toByteArray())
+            res = externalMd5.asHex()
         }
         mem[idx] = res
         return res
@@ -108,4 +113,5 @@ object Day14 {
 //            String.format("%032x", BigInteger(1, hash))
 
     private val md5 = MessageDigest.getInstance("MD5")
+    private val externalMd5 = MD5()
 }
