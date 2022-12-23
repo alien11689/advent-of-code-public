@@ -55,6 +55,12 @@ object Day21 {
     }
 
     private fun part1(lines: List<String>): Any {
+        val (values, monkeys) = parseInput(lines)
+        calculateSimpleValues(monkeys, values)
+        return values["root"]!!
+    }
+
+    private fun parseInput(lines: List<String>): Pair<MutableMap<String, Long>, MutableMap<String, Monkey>> {
         val values = mutableMapOf<String, Long>()
         val monkeys = mutableMapOf<String, Monkey>()
         lines.forEach { line ->
@@ -66,29 +72,16 @@ object Day21 {
                 monkeys[monkey] = Monkey(parts[0], parts[2], parts[1])
             }
         }
-        calculateSimpleValues(monkeys, values)
-        return values["root"]!!
+        return Pair(values, monkeys)
     }
 
     private fun part2(lines: List<String>): Any {
-        val values = mutableMapOf<String, Long>()
-        val monkeys = mutableMapOf<String, Monkey>()
-        var rootComparison: Pair<String, String>? = null
-        lines.forEach { line ->
-            val (monkey, expression) = line.split(":").map { it.trim() }
-            if (monkey != "humn") {
-                val parts = expression.split(" ")
-                if (parts.size == 1) {
-                    values[monkey] = parts[0].toLong()
-                } else {
-                    if (monkey == "root") {
-                        rootComparison = Pair(parts[0], parts[2])
-                    } else monkeys[monkey] = Monkey(parts[0], parts[2], parts[1])
-                }
-            }
-        }
+        val (values, monkeys) = parseInput(lines)
+        values.remove("humn")
+        val rootComparison: Pair<String, String> = monkeys["root"]!!.let { it.left to it.right }
+        monkeys.remove("root")
         calculateSimpleValues(monkeys, values)
-        var cur = monkeys[rootComparison!!.first]!!.match(values, values[rootComparison!!.second]!!)
+        var cur = monkeys[rootComparison.first]!!.match(values, values[rootComparison.second]!!)
         while (cur.first != "humn") {
 //            println(cur)
             cur = monkeys[cur.first]!!.match(values, cur.second)
