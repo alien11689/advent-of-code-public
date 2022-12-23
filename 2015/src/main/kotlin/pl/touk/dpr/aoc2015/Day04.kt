@@ -17,7 +17,6 @@ object Day04 {
         val md5 = MessageDigest.getInstance("MD5")
         return generateSequence(init) { it + 1 }
                 .first {
-                    md5.reset()
                     val toHash = input + it
                     val res = String.format("%032x", BigInteger(1, md5.digest(toHash.toByteArray())))
                     res.startsWith(prefix)
