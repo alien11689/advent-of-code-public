@@ -15,14 +15,9 @@ object Day09 {
     }
 
     private fun part1(lines: List<String>): Any {
-        var state = State(List(2) { Point(0, 0) })
-        lines.forEach {
-            val (dir, step) = it.split(" ")
-            repeat(step.toInt()) {
-                state = state.move(dir)
-            }
-        }
-        return state.tailVisited.size
+        val state = State(List(2) { Point(0, 0) })
+        val tailVisited = traverse(state, lines)
+        return tailVisited.size
     }
 
     data class Point(val x: Int, val y: Int) {
@@ -35,12 +30,13 @@ object Day09 {
         }
 
         fun moveToward(newHead: Point): Point {
+            val newHeadNeighbours = newHead.neighbours()
             return if (newHead.x == x || newHead.y == y) {
                 //                println("Moving $this towards $newHead, possible moves lines: ${neighboursLines()}")
-                newHead.neighbours().intersect(this.neighboursLines()).first()
+                neighboursLines().first { it in newHeadNeighbours }
             } else {
                 //                println("Moving $this towards $newHead, possible moves diagonal: ${neighboursDiagonal()}")
-                newHead.neighbours().intersect(this.neighboursDiagonal()).first()
+                neighboursDiagonal().first { it in newHeadNeighbours }
             }
         }
 
@@ -62,18 +58,25 @@ object Day09 {
     }
 
     private fun part2(lines: List<String>): Any {
-        var state = State(List(10) { Point(0, 0) })
-//        println("Head: ${state.head}, tail: ${state.tail}")
+        val state = State(List(10) { Point(0, 0) })
+        val tailVisited = traverse(state, lines)
+        return tailVisited.size
+    }
+
+    private fun traverse(initState: State, lines: List<String>): MutableSet<Point> {
+        var state = initState
+        val tailVisited = mutableSetOf(state.points.last())
         lines.forEach {
-//            println("Moving $it")
+            //            println("Moving $it")
             val (dir, step) = it.split(" ")
             repeat(step.toInt()) {
                 state = state.move(dir)
-//                println("Head: ${state.head}, tail: ${state.tail}")
+                tailVisited.add(state.points.last())
+                //                println("Head: ${state.head}, tail: ${state.tail}")
             }
-//            draw(state)
+            //            draw(state)
         }
-        return state.tailVisited.size
+        return tailVisited
     }
 
 //    private fun draw(state: State) {
@@ -91,7 +94,7 @@ object Day09 {
 //        }
 //    }
 
-    data class State(val points: List<Point>, val tailVisited: Set<Point> = setOf(points.last())) {
+    data class State(val points: List<Point>) {
         fun move(dir: String): State {
             var newHead = points.first().move(dir)
             val newPoints = mutableListOf(newHead)
@@ -105,7 +108,7 @@ object Day09 {
                     break
                 }
             }
-            return copy(points = newPoints, tailVisited = tailVisited + newPoints.last())
+            return copy(points = newPoints)
         }
     }
 }
