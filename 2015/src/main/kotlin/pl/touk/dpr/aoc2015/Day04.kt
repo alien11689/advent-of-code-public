@@ -1,6 +1,5 @@
 package pl.touk.dpr.aoc2015
 
-import java.math.BigInteger
 import java.security.MessageDigest
 
 
@@ -15,11 +14,16 @@ object Day04 {
 
     private fun part1And2(input: String, prefix: String, init: Int = 0): Int {
         val md5 = MessageDigest.getInstance("MD5")
+        val zero = 0.toByte()
+        val expectedInitialZero = prefix.length
         return generateSequence(init) { it + 1 }
                 .first {
                     val toHash = input + it
-                    val res = String.format("%032x", BigInteger(1, md5.digest(toHash.toByteArray())))
-                    res.startsWith(prefix)
+                    val hash = md5.digest(toHash.toByteArray())
+                    hash[0] == zero && hash[1] == zero && (
+                            if (expectedInitialZero == 5) hash[2] >= zero else hash[2] == zero)
+//                    val res = String.format("%032x", BigInteger(1, hash))
+//                    res.startsWith(prefix)
                 }
     }
 }
