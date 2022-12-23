@@ -15,13 +15,11 @@ object Day04 {
     private fun part1And2(input: String, prefix: String): Int {
         val md5 = MessageDigest.getInstance("MD5")
         return generateSequence(0) { it + 1 }
-                .map {
+                .first {
                     md5.reset()
                     val toHash = input + it
-                    Pair(it, String.format("%032x", BigInteger(1, md5.digest(toHash.toByteArray()))))
+                    val res = String.format("%032x", BigInteger(1, md5.digest(toHash.toByteArray())))
+                    res.startsWith(prefix)
                 }
-                .filter { it.second.startsWith(prefix) }
-                .take(1)
-                .first().first
     }
 }
