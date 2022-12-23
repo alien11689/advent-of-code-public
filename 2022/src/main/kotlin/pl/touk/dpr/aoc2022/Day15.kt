@@ -38,21 +38,17 @@ object Day15 {
         val minX = sensors.minOf { it.x } - maxDist
         val maxX = sensors.maxOf { it.x } + maxDist
 
-        var positions = 0
-        for (x in minX..maxX) {
+        return (minX..maxX).count { x ->
             val possibleBeacon = Point(x, interestingRow)
             if (possibleBeacon in beacons) {
-                continue
-            }
-            val sensorCloserExist = sensors2Beacon.any {
-                val localDist = possibleBeacon.manhattan(it.sensor)
-                localDist <= it.dist
-            }
-            if (sensorCloserExist) {
-                ++positions
+                false
+            } else {
+                sensors2Beacon.any {
+                    val localDist = possibleBeacon.manhattan(it.sensor)
+                    localDist <= it.dist
+                }
             }
         }
-        return positions
     }
 
     private fun readInput(lines: List<String>) = lines.map {
