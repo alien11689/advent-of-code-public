@@ -74,7 +74,7 @@ object Day14 {
             return mem[idx]!!
         }
         md5.reset()
-        val v = String.format("%032x", BigInteger(1, md5.digest("$input$idx".toByteArray())))
+        val v = hashToString(md5.digest("$input$idx".toByteArray()))
         mem[idx] = v
         return v
     }
@@ -86,11 +86,26 @@ object Day14 {
         var res = "$input$idx"
         repeat(2017) {
             md5.reset()
-            res = String.format("%032x", BigInteger(1, md5.digest(res.toByteArray())))
+            res = hashToString(md5.digest(res.toByteArray()))
         }
         mem[idx] = res
         return res
     }
+
+    private fun hashToString(hash: ByteArray) =
+            BigInteger(1, hash).toString(16).let {
+                when (it.length) {
+                    32 -> it
+                    31 -> "0$it"
+                    30 -> "00$it"
+                    29 -> "000$it"
+                    28 -> "0000$it"
+                    27 -> "00000$it"
+                    26 -> "000000$it"
+                    else -> throw RuntimeException("${it.length}")
+                }
+            }
+//            String.format("%032x", BigInteger(1, hash))
 
     private val md5 = MessageDigest.getInstance("MD5")
 }
