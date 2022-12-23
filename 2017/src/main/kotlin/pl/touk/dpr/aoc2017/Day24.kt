@@ -6,59 +6,43 @@ object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/24/input.txt")
-        println(part1(input))
-        println(part2(input))
+        val chains = chains(input)
+        println(part1(chains))
+        println(part2(chains))
     }
 
-    private fun part1(lines: List<String>): Any {
+    private fun part1(chains: Set<Chain>) = chains.maxOf { it.strength }
+
+    private fun part2(chains: Set<Chain>): Int {
+        val maxLength = chains.maxOf { it.cpus.size }
+        return chains.filter { it.cpus.size == maxLength }.maxOf { it.strength }
+    }
+
+    private fun chains(lines: List<String>): Set<Chain> {
         val cpus = lines.map { line ->
             Cpu(line.split('/').map { it.toInt() })
         }
 
-        var bestLength = 0
+        val chains = mutableSetOf<Chain>()
         val queue = LinkedList<Chain>()
         queue.offer(Chain(listOf(), 0))
 
         while (queue.isNotEmpty()) {
-            val parent = queue.poll()
-            if (parent.length > bestLength) {
-                bestLength = parent.length
-            }
+            val current = queue.poll()
             cpus.mapNotNull {
-                parent.connectTo(it)
+                current.connectTo(it)
             }.forEach {
                 queue.offer(it)
+                chains.add(it)
             }
         }
 
-        return bestLength
-    }
-
-    private fun part2(lines: List<String>): Any {
-        val cpus = lines.map { line ->
-            Cpu(line.split('/').map { it.toInt() })
-        }
-        val l2sizes = mutableMapOf<Int, List<Int>>()
-        val queue = LinkedList<Chain>()
-        queue.offer(Chain(listOf(), 0))
-
-        while (queue.isNotEmpty()) {
-            val parent = queue.poll()
-            l2sizes[parent.length2] = (l2sizes[parent.length2] ?: listOf()) + parent.length
-            cpus.mapNotNull {
-                parent.connectTo(it)
-            }.forEach {
-                queue.offer(it)
-            }
-        }
-
-        val maxLength = l2sizes.keys.maxOrNull()!!
-        return l2sizes[maxLength]!!.maxOrNull()!!
+        return chains
     }
 
     data class Cpu(val pins: List<Int>)
 
-    data class Chain(val cpus: List<Cpu>, val lastPin: Int, val length: Int = cpus.flatMap { it.pins }.sum(), val length2: Int = cpus.size) {
+    data class Chain(val cpus: List<Cpu>, val lastPin: Int, val strength: Int = cpus.flatMap { it.pins }.sum(), val length: Int = cpus.size) {
         fun connectTo(c: Cpu): Chain? {
             if (c in cpus) {
                 return null
