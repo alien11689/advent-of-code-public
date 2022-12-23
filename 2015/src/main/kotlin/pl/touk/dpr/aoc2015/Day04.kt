@@ -8,13 +8,14 @@ object Day04 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = "iwrupvqb"
-        println(part1And2(input, "00000"))
-        println(part1And2(input, "000000"))
+        val part1Result = part1And2(input, "00000")
+        println(part1Result)
+        println(part1And2(input, "000000", init = part1Result))
     }
 
-    private fun part1And2(input: String, prefix: String): Int {
+    private fun part1And2(input: String, prefix: String, init: Int = 0): Int {
         val md5 = MessageDigest.getInstance("MD5")
-        return generateSequence(0) { it + 1 }
+        return generateSequence(init) { it + 1 }
                 .first {
                     md5.reset()
                     val toHash = input + it
