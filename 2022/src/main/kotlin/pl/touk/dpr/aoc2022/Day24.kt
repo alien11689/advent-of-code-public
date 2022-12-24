@@ -11,8 +11,8 @@ object Day24 {
         println(part1(Util.getNotEmptyLinesFromFile("/24/test1.txt")))
         println(part1(lines))
 //        println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/24/test1.txt")))
-//        println(part2(lines))
+        println(part2(Util.getNotEmptyLinesFromFile("/24/test1.txt")))
+        println(part2(lines))
         // 382 is too high
     }
 
@@ -49,29 +49,31 @@ object Day24 {
 //        println(start)
 //        println(target)
 
+        val initTime = 0
         val boards = mutableMapOf<Int, Map<Point, Set<Wind>>>()
         boards[0] = board.filter { it.value != setOf(Wind.EMPTY) }
-        val visited = mutableSetOf<Pair<Point, Int>>()
-
         val yRange = minY..maxY
+
+        return traverse(start, initTime, target, boards, yRange)
+    }
+
+    private fun traverse(
+        start: Point,
+        initTime: Int,
+        target: Point,
+        boards: MutableMap<Int, Map<Point, Set<Wind>>>,
+        yRange: IntRange,
+    ): Int {
+        val visited = mutableSetOf<Pair<Point, Int>>()
         val pq = PriorityQueue<State>()
-        pq.offer(State(start, 0, start.manhattan(target)))
-        var theBest = Int.MAX_VALUE
+        pq.offer(State(start, initTime, start.manhattan(target)))
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
-            if (cur.time >= theBest) {
-                continue
-            }
             val key = cur.curPos to cur.time
             if (key in visited) {
                 continue
             }
             visited.add(key)
-//            if (cur.time > maxTime) {
-//                maxTime = cur.time
-//                println("Checking $maxTime")
-//            }
-//            println("Checking $cur")
             val nextTime = cur.time + 1
             val newBoard = if (nextTime in boards) boards[nextTime]!! else {
                 val b = generateNextBoard(boards[cur.time]!!)
@@ -84,22 +86,13 @@ object Day24 {
                     if (nextPoint !in newBoard) {
                         val nextState = cur.copy(curPos = nextPoint, time = nextTime, distanceToTarget = nextPoint.manhattan(target), path = cur.path + (nextPoint to nextTime))
                         if (nextState.curPos == target) {
-                            if (nextTime < theBest) {
-                                theBest = nextTime
-                                println("New Leader $theBest")
-                            }
-//                            println("Winner $nextState")
-//                            for (i in 0..nextTime) {
-//                                println("Iteration $i")
-//                                printBoard(boards[i]!!)
-//                            }
-//                            return nextTime
+                            return nextTime
                         }
                         pq.offer(nextState)
                     }
                 }
         }
-        return theBest
+        return Int.MIN_VALUE
     }
 
     private fun generateNextBoard(current: Map<Point, Set<Wind>>): Map<Point, Set<Wind>> {
