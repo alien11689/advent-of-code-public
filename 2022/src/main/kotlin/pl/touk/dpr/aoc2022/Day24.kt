@@ -7,13 +7,24 @@ object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/24/input.txt")
-//        println("Part 1:")
-//        println(part1(Util.getNotEmptyLinesFromFile("/24/test1.txt")))
-        println(part1(lines))
-//        println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/24/test1.txt")))
-        println(part2(lines))
-        // 382 is too high
+//        part1And2(Util.getNotEmptyLinesFromFile("/24/test1.txt"))
+        part1And2(lines)
+    }
+
+    private fun part1And2(lines: List<String>) {
+        val board = parseBoard(lines)
+        val minY = board.minOf { it.key.y }
+        val maxY = board.maxOf { it.key.y }
+        val start = board.filter { it.key.y == minY && it.value == setOf(Wind.EMPTY) }.keys.first()
+        val target = board.filter { it.key.y == maxY && it.value == setOf(Wind.EMPTY) }.keys.first()
+        val boards = mutableMapOf<Int, Map<Point, Set<Wind>>>()
+        boards[0] = board.filter { it.value != setOf(Wind.EMPTY) }
+        val yRange = minY..maxY
+
+        val journeyToTarget = traverse(0, start, target, boards, yRange)
+        println(journeyToTarget) // Part 1
+        val journeyToStart = traverse(journeyToTarget, target, start, boards, yRange)
+        println(traverse(journeyToStart, start, target, boards, yRange)) // Part 2
     }
 
     data class Point(val x: Int, val y: Int) {
@@ -37,23 +48,6 @@ object Day24 {
         RIGHT,
         WALL,
         EMPTY
-    }
-
-    private fun part1(lines: List<String>): Any {
-        val board = parseBoard(lines)
-        val minY = board.minOf { it.key.y }
-        val maxY = board.maxOf { it.key.y }
-        val start = board.filter { it.key.y == minY && it.value == setOf(Wind.EMPTY) }.keys.first()
-        val target = board.filter { it.key.y == maxY && it.value == setOf(Wind.EMPTY) }.keys.first()
-//        println(board)
-//        println(start)
-//        println(target)
-
-        val boards = mutableMapOf<Int, Map<Point, Set<Wind>>>()
-        boards[0] = board.filter { it.value != setOf(Wind.EMPTY) }
-        val yRange = minY..maxY
-
-        return traverse(0, start, target, boards, yRange)
     }
 
     private fun traverse(initTime: Int, start: Point, target: Point, boards: MutableMap<Int, Map<Point, Set<Wind>>>, yRange: IntRange): Int {
@@ -93,46 +87,19 @@ object Day24 {
         val maxY = current.maxOf { it.key.y }
         val minX = current.minOf { it.key.x }
         val maxX = current.maxOf { it.key.x }
-        current.forEach { point, winds ->
+        current.forEach { (point, winds) ->
             if (winds == setOf(Wind.WALL)) {
                 board[point] = winds
             } else {
                 winds.forEach { curWind ->
-                    when (curWind) {
-                        Wind.LEFT -> {
-                            var next = point.copy(x = point.x - 1)
-                            if (next.x == minX) {
-                                next = point.copy(x = maxX - 1)
-                            }
-                            board[next] = (board[next] ?: emptySet()) + curWind
-                        }
-
-                        Wind.RIGHT -> {
-                            var next = point.copy(x = point.x + 1)
-                            if (next.x == maxX) {
-                                next = point.copy(x = minX + 1)
-                            }
-                            board[next] = (board[next] ?: emptySet()) + curWind
-                        }
-
-                        Wind.UP -> {
-                            var next = point.copy(y = point.y - 1)
-                            if (next.y == minY) {
-                                next = point.copy(y = maxY - 1)
-                            }
-                            board[next] = (board[next] ?: emptySet()) + curWind
-                        }
-
-                        Wind.DOWN -> {
-                            var next = point.copy(y = point.y + 1)
-                            if (next.y == maxY) {
-                                next = point.copy(y = minY + 1)
-                            }
-                            board[next] = (board[next] ?: emptySet()) + curWind
-                        }
-
+                    val next = when (curWind) {
+                        Wind.LEFT -> point.copy(x = point.x - 1).let { if (it.x != minX) it else point.copy(x = maxX - 1) }
+                        Wind.RIGHT -> point.copy(x = point.x + 1).let { if (it.x != maxX) it else point.copy(x = minX + 1) }
+                        Wind.UP -> point.copy(y = point.y - 1).let { if (it.y != minY) it else point.copy(y = maxY - 1) }
+                        Wind.DOWN -> point.copy(y = point.y + 1).let { if (it.y != maxY) it else point.copy(y = minY + 1) }
                         else -> throw RuntimeException("Unknown wind $curWind")
                     }
+                    board[next] = (board[next] ?: emptySet()) + curWind
                 }
             }
         }
@@ -168,7 +135,9 @@ object Day24 {
         return board.toMap()
     }
 
-//    fun printBoard(current: Map<Point, Set<Wind>>) {
+//    }
+
+    //    fun printBoard(current: Map<Point, Set<Wind>>) {
 //        val minY = current.minOf { it.key.y }
 //        val maxY = current.maxOf { it.key.y }
 //        val minX = current.minOf { it.key.x }
@@ -188,21 +157,5 @@ object Day24 {
 //            }
 //            println()
 //        }
-//    }
-
-    private fun part2(lines: List<String>): Any {
-        val board = parseBoard(lines)
-        val minY = board.minOf { it.key.y }
-        val maxY = board.maxOf { it.key.y }
-        val start = board.filter { it.key.y == minY && it.value == setOf(Wind.EMPTY) }.keys.first()
-        val target = board.filter { it.key.y == maxY && it.value == setOf(Wind.EMPTY) }.keys.first()
-        val boards = mutableMapOf<Int, Map<Point, Set<Wind>>>()
-        boards[0] = board.filter { it.value != setOf(Wind.EMPTY) }
-        val yRange = minY..maxY
-
-        val journeyToTarget = traverse(0, start, target, boards, yRange)
-        val journeyToStart = traverse(journeyToTarget, target, start, boards, yRange)
-        return traverse(journeyToStart, start, target, boards, yRange)
-    }
 }
 
