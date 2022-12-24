@@ -13,6 +13,7 @@ object Day24 {
 //        println("Part 2:")
 //        println(part2(Util.getNotEmptyLinesFromFile("/24/test1.txt")))
 //        println(part2(lines))
+        // 382 is too high
     }
 
     data class Point(val x: Int, val y: Int) {
@@ -50,12 +51,26 @@ object Day24 {
 
         val boards = mutableMapOf<Int, Map<Point, Set<Wind>>>()
         boards[0] = board.filter { it.value != setOf(Wind.EMPTY) }
+        val visited = mutableSetOf<Pair<Point, Int>>()
 
         val yRange = minY..maxY
         val pq = PriorityQueue<State>()
         pq.offer(State(start, 0, start.manhattan(target)))
+        var theBest = Int.MAX_VALUE
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
+            if (cur.time >= theBest) {
+                continue
+            }
+            val key = cur.curPos to cur.time
+            if (key in visited) {
+                continue
+            }
+            visited.add(key)
+//            if (cur.time > maxTime) {
+//                maxTime = cur.time
+//                println("Checking $maxTime")
+//            }
 //            println("Checking $cur")
             val nextTime = cur.time + 1
             val newBoard = if (nextTime in boards) boards[nextTime]!! else {
@@ -69,19 +84,22 @@ object Day24 {
                     if (nextPoint !in newBoard) {
                         val nextState = cur.copy(curPos = nextPoint, time = nextTime, distanceToTarget = nextPoint.manhattan(target), path = cur.path + (nextPoint to nextTime))
                         if (nextState.curPos == target) {
-                            println("Winner $nextState")
+                            if (nextTime < theBest) {
+                                theBest = nextTime
+                                println("New Leader $theBest")
+                            }
+//                            println("Winner $nextState")
 //                            for (i in 0..nextTime) {
 //                                println("Iteration $i")
 //                                printBoard(boards[i]!!)
 //                            }
-                            return nextTime
+//                            return nextTime
                         }
                         pq.offer(nextState)
                     }
                 }
         }
-
-        TODO()
+        return theBest
     }
 
     private fun generateNextBoard(current: Map<Point, Set<Wind>>): Map<Point, Set<Wind>> {
@@ -143,6 +161,10 @@ object Day24 {
                 return distanceToTarget.compareTo(other.distanceToTarget)
             }
             return time.compareTo(other.time)
+//            if (distanceToTarget == other.distanceToTarget) {
+//                return time.compareTo(other.time)
+//            }
+//            return distanceToTarget.compareTo(other.distanceToTarget)
         }
 
     }
