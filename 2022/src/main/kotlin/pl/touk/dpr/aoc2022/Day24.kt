@@ -7,11 +7,11 @@ object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/24/input.txt")
-        println("Part 1:")
-        println(part1(Util.getNotEmptyLinesFromFile("/24/test1.txt")))
+//        println("Part 1:")
+//        println(part1(Util.getNotEmptyLinesFromFile("/24/test1.txt")))
         println(part1(lines))
 //        println("Part 2:")
-        println(part2(Util.getNotEmptyLinesFromFile("/24/test1.txt")))
+//        println(part2(Util.getNotEmptyLinesFromFile("/24/test1.txt")))
         println(part2(lines))
         // 382 is too high
     }
@@ -49,31 +49,23 @@ object Day24 {
 //        println(start)
 //        println(target)
 
-        val initTime = 0
         val boards = mutableMapOf<Int, Map<Point, Set<Wind>>>()
         boards[0] = board.filter { it.value != setOf(Wind.EMPTY) }
         val yRange = minY..maxY
 
-        return traverse(start, initTime, target, boards, yRange)
+        return traverse(0, start, target, boards, yRange)
     }
 
-    private fun traverse(
-        start: Point,
-        initTime: Int,
-        target: Point,
-        boards: MutableMap<Int, Map<Point, Set<Wind>>>,
-        yRange: IntRange,
-    ): Int {
-        val visited = mutableSetOf<Pair<Point, Int>>()
+    private fun traverse(initTime: Int, start: Point, target: Point, boards: MutableMap<Int, Map<Point, Set<Wind>>>, yRange: IntRange): Int {
+        val visited = mutableSetOf<State>()
         val pq = PriorityQueue<State>()
         pq.offer(State(start, initTime, start.manhattan(target)))
         while (pq.isNotEmpty()) {
             val cur = pq.poll()
-            val key = cur.curPos to cur.time
-            if (key in visited) {
+            if (cur in visited) {
                 continue
             }
-            visited.add(key)
+            visited.add(cur)
             val nextTime = cur.time + 1
             val newBoard = if (nextTime in boards) boards[nextTime]!! else {
                 val b = generateNextBoard(boards[cur.time]!!)
@@ -84,7 +76,7 @@ object Day24 {
                 .filter { it.y in yRange }
                 .forEach { nextPoint ->
                     if (nextPoint !in newBoard) {
-                        val nextState = cur.copy(curPos = nextPoint, time = nextTime, distanceToTarget = nextPoint.manhattan(target), path = cur.path + (nextPoint to nextTime))
+                        val nextState = cur.copy(curPos = nextPoint, time = nextTime, distanceToTarget = nextPoint.manhattan(target))
                         if (nextState.curPos == target) {
                             return nextTime
                         }
@@ -148,16 +140,12 @@ object Day24 {
     }
 
 
-    data class State(val curPos: Point, val time: Int, val distanceToTarget: Int, val path: List<Pair<Point, Int>> = emptyList()) : Comparable<State> {
+    data class State(val curPos: Point, val time: Int, val distanceToTarget: Int) : Comparable<State> {
         override fun compareTo(other: State): Int {
             if (time == other.time) {
                 return distanceToTarget.compareTo(other.distanceToTarget)
             }
             return time.compareTo(other.time)
-//            if (distanceToTarget == other.distanceToTarget) {
-//                return time.compareTo(other.time)
-//            }
-//            return distanceToTarget.compareTo(other.distanceToTarget)
         }
 
     }
@@ -180,30 +168,41 @@ object Day24 {
         return board.toMap()
     }
 
-    fun printBoard(current: Map<Point, Set<Wind>>) {
-        val minY = current.minOf { it.key.y }
-        val maxY = current.maxOf { it.key.y }
-        val minX = current.minOf { it.key.x }
-        val maxX = current.maxOf { it.key.x }
-        for (y in minY..maxY) {
-            for (x in minX..maxX) {
-                val p = Point(x, y)
-                when (val winds = current[p]) {
-                    null -> print('.')
-                    setOf(Wind.WALL) -> print("#")
-                    setOf(Wind.UP) -> print("^")
-                    setOf(Wind.DOWN) -> print("v")
-                    setOf(Wind.LEFT) -> print("<")
-                    setOf(Wind.RIGHT) -> print(">")
-                    else -> print(winds.size)
-                }
-            }
-            println()
-        }
-    }
+//    fun printBoard(current: Map<Point, Set<Wind>>) {
+//        val minY = current.minOf { it.key.y }
+//        val maxY = current.maxOf { it.key.y }
+//        val minX = current.minOf { it.key.x }
+//        val maxX = current.maxOf { it.key.x }
+//        for (y in minY..maxY) {
+//            for (x in minX..maxX) {
+//                val p = Point(x, y)
+//                when (val winds = current[p]) {
+//                    null -> print('.')
+//                    setOf(Wind.WALL) -> print("#")
+//                    setOf(Wind.UP) -> print("^")
+//                    setOf(Wind.DOWN) -> print("v")
+//                    setOf(Wind.LEFT) -> print("<")
+//                    setOf(Wind.RIGHT) -> print(">")
+//                    else -> print(winds.size)
+//                }
+//            }
+//            println()
+//        }
+//    }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        val board = parseBoard(lines)
+        val minY = board.minOf { it.key.y }
+        val maxY = board.maxOf { it.key.y }
+        val start = board.filter { it.key.y == minY && it.value == setOf(Wind.EMPTY) }.keys.first()
+        val target = board.filter { it.key.y == maxY && it.value == setOf(Wind.EMPTY) }.keys.first()
+        val boards = mutableMapOf<Int, Map<Point, Set<Wind>>>()
+        boards[0] = board.filter { it.value != setOf(Wind.EMPTY) }
+        val yRange = minY..maxY
+
+        val journeyToTarget = traverse(0, start, target, boards, yRange)
+        val journeyToStart = traverse(journeyToTarget, target, start, boards, yRange)
+        return traverse(journeyToStart, start, target, boards, yRange)
     }
 }
 
