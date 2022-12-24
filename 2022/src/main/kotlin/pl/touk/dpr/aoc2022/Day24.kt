@@ -15,16 +15,19 @@ object Day24 {
         val board = parseBoard(lines)
         val minY = board.minOf { it.key.y }
         val maxY = board.maxOf { it.key.y }
+        val minX = board.minOf { it.key.x }
+        val maxX = board.maxOf { it.key.x }
         val start = board.filter { it.key.y == minY && it.value == setOf(Wind.EMPTY) }.keys.first()
         val target = board.filter { it.key.y == maxY && it.value == setOf(Wind.EMPTY) }.keys.first()
         val boards = mutableMapOf<Int, Map<Point, Set<Wind>>>()
         boards[0] = board.filter { it.value != setOf(Wind.EMPTY) }
         val yRange = minY..maxY
+        val xRange = minX..maxX
 
-        val journeyToTarget = traverse(0, start, target, boards, yRange)
+        val journeyToTarget = traverse(0, start, target, boards, xRange, yRange)
         println(journeyToTarget) // Part 1
-        val journeyToStart = traverse(journeyToTarget, target, start, boards, yRange)
-        println(traverse(journeyToStart, start, target, boards, yRange)) // Part 2
+        val journeyToStart = traverse(journeyToTarget, target, start, boards, xRange, yRange)
+        println(traverse(journeyToStart, start, target, boards, xRange, yRange)) // Part 2
     }
 
     data class Point(val x: Int, val y: Int) {
@@ -50,7 +53,7 @@ object Day24 {
         EMPTY
     }
 
-    private fun traverse(initTime: Int, start: Point, target: Point, boards: MutableMap<Int, Map<Point, Set<Wind>>>, yRange: IntRange): Int {
+    private fun traverse(initTime: Int, start: Point, target: Point, boards: MutableMap<Int, Map<Point, Set<Wind>>>, xRange: IntRange, yRange: IntRange): Int {
         val visited = mutableSetOf<State>()
         val pq = PriorityQueue<State>()
         pq.offer(State(start, initTime, start.manhattan(target)))
@@ -62,7 +65,7 @@ object Day24 {
             visited.add(cur)
             val nextTime = cur.time + 1
             val newBoard = if (nextTime in boards) boards[nextTime]!! else {
-                val b = generateNextBoard(boards[cur.time]!!)
+                val b = generateNextBoard(boards[cur.time]!!, xRange, yRange)
                 boards[nextTime] = b
                 b
             }
@@ -81,12 +84,12 @@ object Day24 {
         return Int.MIN_VALUE
     }
 
-    private fun generateNextBoard(current: Map<Point, Set<Wind>>): Map<Point, Set<Wind>> {
+    private fun generateNextBoard(current: Map<Point, Set<Wind>>, xRange: IntRange, yRange: IntRange): Map<Point, Set<Wind>> {
         val board = mutableMapOf<Point, Set<Wind>>()
-        val minY = current.minOf { it.key.y }
-        val maxY = current.maxOf { it.key.y }
-        val minX = current.minOf { it.key.x }
-        val maxX = current.maxOf { it.key.x }
+        val minY = yRange.min()
+        val maxY = yRange.max()
+        val minX = xRange.min()
+        val maxX = xRange.max()
         current.forEach { (point, winds) ->
             if (winds == setOf(Wind.WALL)) {
                 board[point] = winds
