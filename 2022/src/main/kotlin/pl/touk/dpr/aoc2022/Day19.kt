@@ -25,10 +25,26 @@ object Day19 {
         else other.possibleGeodes.compareTo(possibleGeodes)
 
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>): List<State> {
-            val options = mutableListOf<State>()
-            if (time < 7 && (robots[Material.CLAY] ?: 0) == 0 || time < 5 && (robots[Material.OBSIDIAN] ?: 0) == 0 || time < 3 && (robots[Material.GEODE] ?: 0) == 0) {
-                return options
+            if (time <= 1 && (robots[Material.GEODE] ?: 0) == 0 // you have to have at least one geode factory in last turn
+                    // min geode factory cost is 7 so you need to have ready at least 1 obsidian factory
+                    // 7 turn obs: 0, obsrobot: 0
+                    // 6 turn obs: 0, obsrobot: 1
+                    // 5 turn obs: 1, obsrobot: 2
+                    // 4 turn obs: 3, obsrobot: 3
+                    // 3 turn obs: 6, obsrobot: 4
+                    // 2 turn obs: 10, obsrobot: 5
+                    || time <= 6 && (robots[Material.OBSIDIAN] ?: 0) == 0
+                    // min obsidian factory cost is 5 clay
+                    // 11 turn clay: 0, clayrobot: 0
+                    // 10 turn clay: 0, clayrobot: 1
+                    // 9 turn clay: 1, clayrobot: 2
+                    // 8 turn clay: 3, clayrobot: 3
+                    // 7 turn clay: 6, clayrobot: 4
+                    || time <= 10 && (robots[Material.CLAY] ?: 0) == 0
+            ) {
+                return emptyList()
             }
+            val options = mutableListOf<State>()
             if ((robots[Material.GEODE] ?: 0) > 0) {
                 options.add(copy(time = 0, materials = merge(materials, times(robots, time))))
             }
@@ -73,24 +89,30 @@ object Day19 {
     data class Blueprint(val id: Int, val robotCosts: Map<Material, Map<Material, Int>>) {
         fun findMostGeode(turns: Int): Long {
             val best = mutableMapOf<Pair<Map<Material, Int>, Map<Material, Int>>, Int>()
+            val bestPossible = MutableList(turns + 1) { 0 }
             var geodeMax = 0
             val pq = PriorityQueue<State>()
             pq.add(State(turns, emptyMap(), mapOf(Material.ORE to 1)))
             while (pq.isNotEmpty()) {
                 val cur = pq.poll()
 //                println("Analyzing $cur, pq size: ${pq.size}, max geode: $geodeMax, possible: ${cur.possibleGeodes}")
-                if (cur.possibleGeodes <= geodeMax) {
+                if (cur.possibleGeodes <= geodeMax || bestPossible[cur.time] > cur.possibleGeodes) {
                     continue
                 }
                 cur.nexts(robotCosts).forEach {
-                    if (it.possibleGeodes <= geodeMax || (it.robots[Material.ORE] ?: 0) > 4 || (it.robots[Material.CLAY] ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8) {
-                        // it's ugly hack but works
+                    if (it.possibleGeodes <= geodeMax || bestPossible[it.time] > it.possibleGeodes) {
+                        // skip worse
+                    } else if ((it.robots[Material.ORE] ?: 0) > 4 || (it.robots[Material.CLAY] ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8) {
+                        // it's ugly hack but works - maybe get rid of it in the future
                     } else if (it.time == 0) {
                         if (geodeMax < it.geodeCount) {
                             geodeMax = it.geodeCount
 //                            println("New Max geode $geodeMax -> $it")
                         }
                     } else {
+                        if (bestPossible[it.time] < it.possibleGeodes) {
+                            bestPossible[it.time] = it.possibleGeodes
+                        }
                         val key = it.materials to it.robots
                         val bestTime = best[key] ?: -1
                         if (bestTime < it.time) {
@@ -114,7 +136,7 @@ object Day19 {
 
     private fun part1(lines: List<String>): Any {
         val blueprints = parseBlueprints(lines)
-        return blueprints.sumOf { it.id * it.findMostGeode(24) }
+        return blueprints.parallelStream().map { it.id * it.findMostGeode(24) }.reduce { acc, it -> acc + it }.get()
     }
 
     private fun parseBlueprints(lines: List<String>): List<Blueprint> {
@@ -132,7 +154,7 @@ object Day19 {
 
     private fun part2(lines: List<String>): Any {
         val blueprints = parseBlueprints(lines).take(3)
-        return blueprints.map { it.findMostGeode(32) }.reduce { acc, cur -> acc * cur }
+        return blueprints.parallelStream().map { it.findMostGeode(32) }.reduce { acc, cur -> acc * cur }.get()
     }
 }
 
