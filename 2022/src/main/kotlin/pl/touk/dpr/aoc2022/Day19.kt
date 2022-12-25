@@ -89,18 +89,19 @@ object Day19 {
     data class Blueprint(val id: Int, val robotCosts: Map<Material, Map<Material, Int>>) {
         fun findMostGeode(turns: Int): Long {
             val best = mutableMapOf<Pair<Map<Material, Int>, Map<Material, Int>>, Int>()
-            val bestPossible = MutableList(turns + 1) { 0 }
+            // having additional cache for best possible score per turn is too agresive
+//            val bestPossible = MutableList(turns + 1) { 0 }
             var geodeMax = 0
             val pq = PriorityQueue<State>()
             pq.add(State(turns, emptyMap(), mapOf(Material.ORE to 1)))
             while (pq.isNotEmpty()) {
                 val cur = pq.poll()
 //                println("Analyzing $cur, pq size: ${pq.size}, max geode: $geodeMax, possible: ${cur.possibleGeodes}")
-                if (cur.possibleGeodes <= geodeMax || bestPossible[cur.time] > cur.possibleGeodes) {
+                if (cur.possibleGeodes <= geodeMax) {
                     continue
                 }
                 cur.nexts(robotCosts).forEach {
-                    if (it.possibleGeodes <= geodeMax || bestPossible[it.time] > it.possibleGeodes) {
+                    if (it.possibleGeodes <= geodeMax) {
                         // skip worse
                     } else if ((it.robots[Material.ORE] ?: 0) > 4 || (it.robots[Material.CLAY] ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8) {
                         // it's ugly hack but works - maybe get rid of it in the future
@@ -110,9 +111,6 @@ object Day19 {
 //                            println("New Max geode $geodeMax -> $it")
                         }
                     } else {
-                        if (bestPossible[it.time] < it.possibleGeodes) {
-                            bestPossible[it.time] = it.possibleGeodes
-                        }
                         val key = it.materials to it.robots
                         val bestTime = best[key] ?: -1
                         if (bestTime < it.time) {
