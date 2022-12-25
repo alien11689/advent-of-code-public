@@ -74,7 +74,7 @@ object Day19 {
         private val possibleOres: Int = calculatePossible(Material.ORE)
 
         private fun calculatePossible(material: Material) =
-                (materials[material] ?: 0) + +time * (robots[material] ?: 0) + (time - 1) * time / 2
+                (materials[material] ?: 0) + time * ((robots[material] ?: 0) * 2 + time - 1) / 2
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
