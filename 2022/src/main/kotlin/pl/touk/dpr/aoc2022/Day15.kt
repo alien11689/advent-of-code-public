@@ -28,35 +28,57 @@ object Day15 {
             val dx = dist - (y - sensor.y).absoluteValue
             return listOf(-dx + sensor.x, dx + sensor.x).max()
         }
+
+        fun lowestXSawFor(possibleBeacon: Point): Int {
+            // dist = abs(x - sx) + abs(y-sy)
+            // abs(x - sx) = dist - abs(y-sy)
+            // x - sx = dist - abs(y-sy) or x - sx = - dist + abs(y-sy)
+            // x = x + dist - abs(y-sy) or x - sx = x - dist + abs(y-sy)
+            val y = possibleBeacon.y
+            val dx = dist - (y - sensor.y).absoluteValue
+            return listOf(-dx + sensor.x, dx + sensor.x).min()
+        }
     }
 
     private fun part1(lines: List<String>, interestingRow: Int): Any {
         val sensors2Beacon = readInput(lines)
-        val sensors = sensors2Beacon.map { it.sensor }
         val beacons = sensors2Beacon.map { it.beacon }.toSet()
-        val maxDist = sensors2Beacon.maxOf { it.dist }
-        val minX = sensors.minOf { it.x } - maxDist
-        val maxX = sensors.maxOf { it.x } + maxDist
 
-        var firstX: Int? = null
-        var x = minX
-        while (x <= maxX) {
+        // we don't have to iterate from minX, we can go left from one beacon on interesting line
+        val initX = beacons.first { it.y == interestingRow }.x
+        val minX: Int
+        val maxX: Int
+
+        var x = initX
+        while (true) {
             val possibleBeacon = Point(x, interestingRow)
             val matchingBeacon = sensors2Beacon.firstOrNull {
                 val localDist = possibleBeacon.manhattan(it.sensor)
                 localDist <= it.dist
             }
-            if (matchingBeacon == null && firstX != null) {
-                return (x - firstX) - beacons.count { it.y == interestingRow }
-            } else if (matchingBeacon != null) {
-                if (firstX == null) {
-                    firstX = x
-                }
-                x = matchingBeacon.farrestXSawFor(possibleBeacon)
+            if (matchingBeacon == null) {
+                maxX = x - 1
+                break
+            } else {
+                x = matchingBeacon.farrestXSawFor(possibleBeacon) + 1
             }
-            ++x
         }
-        return -1
+
+        x = initX
+        while (true) {
+            val possibleBeacon = Point(x, interestingRow)
+            val matchingBeacon = sensors2Beacon.firstOrNull {
+                val localDist = possibleBeacon.manhattan(it.sensor)
+                localDist <= it.dist
+            }
+            if (matchingBeacon == null) {
+                minX = x + 1
+                break
+            } else {
+                x = matchingBeacon.lowestXSawFor(possibleBeacon) - 1
+            }
+        }
+        return ((maxX + 1) - minX) - beacons.count { it.y == interestingRow }
     }
 
     private fun readInput(lines: List<String>) = lines.map {
@@ -78,7 +100,7 @@ object Day15 {
                     localDist <= it.dist
                 }
                 if (sensorsSeeing == null) {
-                    return possibleBeacon.x.toLong() * maxCoord + possibleBeacon.y
+                    return possibleBeacon.x.toLong() * 4000000 + possibleBeacon.y
                 } else {
                     x = sensorsSeeing.farrestXSawFor(possibleBeacon) + 1
                 }
