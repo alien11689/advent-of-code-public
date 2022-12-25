@@ -52,10 +52,13 @@ object Day19 {
             return options
         }
 
-        val possibleGeodes: Int = geodeCount + ((time - 1) downTo 0).sumOf { (robots[Material.GEODE] ?: 0) + it + 1 }
-        private val possibleObsidians: Int = (materials[Material.OBSIDIAN] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.OBSIDIAN] ?: 0) + it + 1 }
-        private val possibleClays: Int = (materials[Material.CLAY] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.CLAY] ?: 0) + it + 1 }
-        private val possibleOres: Int = (materials[Material.ORE] ?: 0) + ((time - 1) downTo 0).sumOf { (robots[Material.ORE] ?: 0) + it + 1 }
+        val possibleGeodes: Int = calculatePossible(Material.GEODE)
+        private val possibleObsidians: Int = calculatePossible(Material.OBSIDIAN)
+        private val possibleClays: Int = calculatePossible(Material.CLAY)
+        private val possibleOres: Int = calculatePossible(Material.ORE)
+
+        private fun calculatePossible(material: Material) =
+                (materials[material] ?: 0) + +time * (robots[material] ?: 0) + (time - 1) * time / 2
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
