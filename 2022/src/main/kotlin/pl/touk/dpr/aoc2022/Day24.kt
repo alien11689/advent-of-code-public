@@ -17,10 +17,10 @@ object Day24 {
         val maxY = board.maxOf { it.key.y }
         val minX = board.minOf { it.key.x }
         val maxX = board.maxOf { it.key.x }
-        val start = board.filter { it.key.y == minY && it.value == setOf(Wind.EMPTY) }.keys.first()
-        val target = board.filter { it.key.y == maxY && it.value == setOf(Wind.EMPTY) }.keys.first()
-        val boards = mutableMapOf<Int, Map<Point, Set<Wind>>>()
-        boards[0] = board.filter { it.value != setOf(Wind.EMPTY) }
+        val start = board.filter { it.key.y == minY && it.value == listOf(Wind.EMPTY) }.keys.first()
+        val target = board.filter { it.key.y == maxY && it.value == listOf(Wind.EMPTY) }.keys.first()
+        val boards = mutableMapOf<Int, Map<Point, List<Wind>>>()
+        boards[0] = board.filter { it.value != listOf(Wind.EMPTY) }
         val yRange = minY..maxY
         val xRange = minX..maxX
 
@@ -36,11 +36,11 @@ object Day24 {
         }
 
         fun nextPositions() = setOf(
-            copy(x = x - 1),
-            copy(x = x + 1),
-            copy(y = y - 1),
-            copy(y = y + 1),
-            this,
+                copy(x = x - 1),
+                copy(x = x + 1),
+                copy(y = y - 1),
+                copy(y = y + 1),
+                this,
         )
     }
 
@@ -53,7 +53,7 @@ object Day24 {
         EMPTY
     }
 
-    private fun traverse(initTime: Int, start: Point, target: Point, boards: MutableMap<Int, Map<Point, Set<Wind>>>, xRange: IntRange, yRange: IntRange): Int {
+    private fun traverse(initTime: Int, start: Point, target: Point, boards: MutableMap<Int, Map<Point, List<Wind>>>, xRange: IntRange, yRange: IntRange): Int {
         val visited = mutableSetOf<State>()
         val pq = PriorityQueue<State>()
         pq.offer(State(start, initTime, start.manhattan(target)))
@@ -70,28 +70,28 @@ object Day24 {
                 b
             }
             cur.curPos.nextPositions()
-                .filter { it.y in yRange }
-                .forEach { nextPoint ->
-                    if (nextPoint !in newBoard) {
-                        val nextState = cur.copy(curPos = nextPoint, time = nextTime, distanceToTarget = nextPoint.manhattan(target))
-                        if (nextState.curPos == target) {
-                            return nextTime
+                    .filter { it.y in yRange }
+                    .forEach { nextPoint ->
+                        if (nextPoint !in newBoard) {
+                            val nextState = cur.copy(curPos = nextPoint, time = nextTime, distanceToTarget = nextPoint.manhattan(target))
+                            if (nextState.curPos == target) {
+                                return nextTime
+                            }
+                            pq.offer(nextState)
                         }
-                        pq.offer(nextState)
                     }
-                }
         }
         return Int.MIN_VALUE
     }
 
-    private fun generateNextBoard(current: Map<Point, Set<Wind>>, xRange: IntRange, yRange: IntRange): Map<Point, Set<Wind>> {
-        val board = mutableMapOf<Point, Set<Wind>>()
+    private fun generateNextBoard(current: Map<Point, List<Wind>>, xRange: IntRange, yRange: IntRange): Map<Point, List<Wind>> {
+        val board = mutableMapOf<Point, List<Wind>>()
         val minY = yRange.min()
         val maxY = yRange.max()
         val minX = xRange.min()
         val maxX = xRange.max()
         current.forEach { (point, winds) ->
-            if (winds == setOf(Wind.WALL)) {
+            if (winds == listOf(Wind.WALL)) {
                 board[point] = winds
             } else {
                 winds.forEach { curWind ->
@@ -102,7 +102,7 @@ object Day24 {
                         Wind.DOWN -> point.copy(y = point.y + 1).let { if (it.y != maxY) it else point.copy(y = minY + 1) }
                         else -> throw RuntimeException("Unknown wind $curWind")
                     }
-                    board[next] = (board[next] ?: emptySet()) + curWind
+                    board[next] = (board[next] ?: emptyList()) + curWind
                 }
             }
         }
@@ -120,17 +120,17 @@ object Day24 {
 
     }
 
-    private fun parseBoard(lines: List<String>): Map<Point, Set<Wind>> {
-        val board = mutableMapOf<Point, Set<Wind>>()
+    private fun parseBoard(lines: List<String>): Map<Point, List<Wind>> {
+        val board = mutableMapOf<Point, List<Wind>>()
         lines.forEachIndexed { y, line ->
             line.forEachIndexed { x, c ->
                 when (c) {
-                    '#' -> board[Point(x, y)] = setOf(Wind.WALL)
-                    '>' -> board[Point(x, y)] = setOf(Wind.RIGHT)
-                    '<' -> board[Point(x, y)] = setOf(Wind.LEFT)
-                    '^' -> board[Point(x, y)] = setOf(Wind.UP)
-                    'v' -> board[Point(x, y)] = setOf(Wind.DOWN)
-                    '.' -> board[Point(x, y)] = setOf(Wind.EMPTY)
+                    '#' -> board[Point(x, y)] = listOf(Wind.WALL)
+                    '>' -> board[Point(x, y)] = listOf(Wind.RIGHT)
+                    '<' -> board[Point(x, y)] = listOf(Wind.LEFT)
+                    '^' -> board[Point(x, y)] = listOf(Wind.UP)
+                    'v' -> board[Point(x, y)] = listOf(Wind.DOWN)
+                    '.' -> board[Point(x, y)] = listOf(Wind.EMPTY)
                     else -> throw RuntimeException("Unknown input $c")
                 }
             }
