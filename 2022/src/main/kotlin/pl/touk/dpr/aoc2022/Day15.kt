@@ -33,22 +33,30 @@ object Day15 {
     private fun part1(lines: List<String>, interestingRow: Int): Any {
         val sensors2Beacon = readInput(lines)
         val sensors = sensors2Beacon.map { it.sensor }
-        val beacons = sensors2Beacon.map { it.beacon }
+        val beacons = sensors2Beacon.map { it.beacon }.toSet()
         val maxDist = sensors2Beacon.maxOf { it.dist }
         val minX = sensors.minOf { it.x } - maxDist
         val maxX = sensors.maxOf { it.x } + maxDist
 
-        return (minX..maxX).count { x ->
+        var firstX: Int? = null
+        var x = minX
+        while (x <= maxX) {
             val possibleBeacon = Point(x, interestingRow)
-            if (possibleBeacon in beacons) {
-                false
-            } else {
-                sensors2Beacon.any {
-                    val localDist = possibleBeacon.manhattan(it.sensor)
-                    localDist <= it.dist
-                }
+            val matchingBeacon = sensors2Beacon.firstOrNull {
+                val localDist = possibleBeacon.manhattan(it.sensor)
+                localDist <= it.dist
             }
+            if (matchingBeacon == null && firstX != null) {
+                return (x - firstX) - beacons.count { it.y == interestingRow }
+            } else if (matchingBeacon != null) {
+                if (firstX == null) {
+                    firstX = x
+                }
+                x = matchingBeacon.farrestXSawFor(possibleBeacon)
+            }
+            ++x
         }
+        return -1
     }
 
     private fun readInput(lines: List<String>) = lines.map {
