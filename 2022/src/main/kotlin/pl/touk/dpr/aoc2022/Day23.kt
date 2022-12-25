@@ -30,27 +30,27 @@ object Day23 {
         }
 
         private fun northRegion(): Set<Elf> = setOf(
-            Elf(x - 1, y - 1),
-            copy(y = y - 1),
-            Elf(x + 1, y - 1),
+                Elf(x - 1, y - 1),
+                copy(y = y - 1),
+                Elf(x + 1, y - 1),
         )
 
         private fun southRegion(): Set<Elf> = setOf(
-            Elf(x - 1, y + 1),
-            copy(y = y + 1),
-            Elf(x + 1, y + 1),
+                Elf(x - 1, y + 1),
+                copy(y = y + 1),
+                Elf(x + 1, y + 1),
         )
 
         private fun eastRegion(): Set<Elf> = setOf(
-            Elf(x + 1, y - 1),
-            copy(x = x + 1),
-            Elf(x + 1, y + 1),
+                Elf(x + 1, y - 1),
+                copy(x = x + 1),
+                Elf(x + 1, y + 1),
         )
 
         private fun westRegion(): Set<Elf> = setOf(
-            Elf(x - 1, y - 1),
-            copy(x = x - 1),
-            Elf(x - 1, y + 1),
+                Elf(x - 1, y - 1),
+                copy(x = x - 1),
+                Elf(x - 1, y + 1),
         )
 
         private fun north() = copy(y = y - 1)
@@ -85,16 +85,9 @@ object Day23 {
     private fun nextGeneration(directions: Array<Direction>, round: Int, elves: Set<Elf>): Set<Elf> {
         val curDirection = directions.drop(round % 4).take(4)
 //        println("Moving Order $curDirection")
-        val possibleMoves = elves.associateWith { it.proposeMove(curDirection, elves) }
-        val places = possibleMoves.values.fold(mutableMapOf<Elf, Int>()) { acc, elf ->
-            acc[elf] = (acc[elf] ?: 0) + 1
-            acc
-        }
-//        println("Moves ${possibleMoves.values.toSet()}")
-        val newElves = possibleMoves.map { (curElf, move) ->
-            if (places[move]!! == 1) move else curElf
-        }.toSet()
-        return newElves
+        return elves.groupBy { it.proposeMove(curDirection, elves) }
+                .flatMap { (possibleMove, it) -> if (it.size == 1) listOf(possibleMove) else it }
+                .toSet()
     }
 
     private fun parseElves(lines: List<String>) = lines.flatMapIndexed { y, line ->
