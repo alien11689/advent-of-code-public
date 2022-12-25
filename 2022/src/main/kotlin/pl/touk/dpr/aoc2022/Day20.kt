@@ -52,7 +52,7 @@ object Day20 {
                 }
             } else curPos
             //                println("Applying $curElem: target pos is $targetPos and curPos is $curPos")
-            require(targetPos in elements.keys)
+//            require(targetPos in elements.keys)
             if (curPos < targetPos) {
                 for (j in curPos until targetPos) {
                     elements[j] = elements[j + 1]!!
