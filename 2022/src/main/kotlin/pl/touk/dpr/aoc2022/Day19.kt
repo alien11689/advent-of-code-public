@@ -59,18 +59,17 @@ object Day19 {
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
-        Material.values().associateWith { (first[it] ?: 0) + (second[it] ?: 0) }
+            Material.values().associateWith { (first[it] ?: 0) + (second[it] ?: 0) }
 
     private fun minus(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
-        Material.values().associateWith { (first[it] ?: 0) - (second[it] ?: 0) }
+            Material.values().associateWith { (first[it] ?: 0) - (second[it] ?: 0) }
 
     private fun times(first: Map<Material, Int>, repeat: Int): Map<Material, Int> =
-        Material.values().associateWith { (first[it] ?: 0) * repeat }
+            Material.values().associateWith { (first[it] ?: 0) * repeat }
 
     data class Blueprint(val id: Int, val robotCosts: Map<Material, Map<Material, Int>>) {
         fun findMostGeode(turns: Int): Long {
             val best = mutableMapOf<Pair<Map<Material, Int>, Map<Material, Int>>, Int>()
-            val memory = mutableSetOf<State>()
             var geodeMax = 0
             val pq = PriorityQueue<State>()
             pq.add(State(turns, emptyMap(), mapOf(Material.ORE to 1)))
@@ -89,14 +88,11 @@ object Day19 {
 //                            println("New Max geode $geodeMax -> $it")
                         }
                     } else {
-                        if (it !in memory) {
-                            memory.add(it)
-                            val key = it.materials to it.robots
-                            val bestTime = best[key] ?: -1
-                            if (bestTime < it.time) {
-                                pq.offer(it)
-                                best[key] = it.time
-                            }
+                        val key = it.materials to it.robots
+                        val bestTime = best[key] ?: -1
+                        if (bestTime < it.time) {
+                            pq.offer(it)
+                            best[key] = it.time
                         }
                     }
                 }
@@ -122,10 +118,10 @@ object Day19 {
         return lines.map { line ->
             val parts = line.split(" ", ":")
             val costs = mapOf(
-                Material.ORE to mapOf(Material.ORE to parts[7].toInt()),
-                Material.CLAY to mapOf(Material.ORE to parts[13].toInt()),
-                Material.OBSIDIAN to mapOf(Material.ORE to parts[19].toInt(), Material.CLAY to parts[22].toInt()),
-                Material.GEODE to mapOf(Material.ORE to parts[28].toInt(), Material.OBSIDIAN to parts[31].toInt()),
+                    Material.ORE to mapOf(Material.ORE to parts[7].toInt()),
+                    Material.CLAY to mapOf(Material.ORE to parts[13].toInt()),
+                    Material.OBSIDIAN to mapOf(Material.ORE to parts[19].toInt(), Material.CLAY to parts[22].toInt()),
+                    Material.GEODE to mapOf(Material.ORE to parts[28].toInt(), Material.OBSIDIAN to parts[31].toInt()),
             )
             Blueprint(parts[1].toInt(), costs)
         }
