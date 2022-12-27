@@ -31,6 +31,7 @@ object Day20 {
     private fun processElements(elements: MutableMap<Long, Elem>): Map<Long, Elem> {
         // mutable map instead of immutable speed up ~4-5 times execution
         val maxIdx = (elements.size - 1).toLong()
+	val maxIdxWithBuffer = maxIdx * 10000000000L
         repeat(elements.size) { i ->
             val curElem = elements.entries.first { it.value.origin == i.toLong() }
             val curPos = curElem.key
@@ -48,7 +49,7 @@ object Day20 {
                 } else if (curPos + shift == 0L) {
                     maxIdx
                 } else {
-                    (maxIdx * 10000000000 + curPos + shift) % maxIdx
+                    (maxIdxWithBuffer + curPos + shift) % maxIdx
                 }
             } else curPos
             //                println("Applying $curElem: target pos is $targetPos and curPos is $curPos")
