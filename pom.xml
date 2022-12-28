@@ -19,6 +19,7 @@
         <module>2020</module>
         <module>2021</module>
         <module>2022</module>
+        <module>euler-project</module>
     </modules>
 
 </project>
