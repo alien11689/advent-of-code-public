@@ -51,4 +51,17 @@ object Util {
         return true
     }
 
+    fun properDividers(value: Int): Set<Int> {
+        val divs = mutableSetOf(1)
+        var i = 2
+        while (i <= sqrt(value.toDouble())) {
+            if (value % i == 0) {
+                divs.add(i)
+                divs.add(value / i)
+            }
+            ++i
+        }
+        return divs
+    }
+
 }
