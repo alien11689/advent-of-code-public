@@ -2,6 +2,7 @@ package pl.touk.dpr.eulerproject
 
 import java.time.Duration
 import java.util.function.Supplier
+import kotlin.math.sqrt
 
 object Util {
     fun getFileContent(fileName: String): String = javaClass.getResource(fileName).readText()
@@ -32,4 +33,22 @@ object Util {
         val end = System.currentTimeMillis();
         println("Finished in ${Duration.ofMillis(end - start)}")
     }
+
+    fun isPrime(n: Long): Boolean {
+        when {
+            n < 2L -> return false
+            n == 2L || n == 3L -> return true
+            else -> {
+                var i = 2L
+                while (i <= sqrt(n.toDouble())) {
+                    if (n % i == 0L) {
+                        return false
+                    }
+                    ++i
+                }
+            }
+        }
+        return true
+    }
+
 }
