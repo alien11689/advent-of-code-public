@@ -3,34 +3,28 @@ package pl.touk.dpr.eulerproject
 object Problem0033 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        val fractions = (11..98)
-                .filter { it % 10 != 0 }
-                .flatMap { n ->
-                    (n..99).filter { it > n && it % 10 != 0 }.map { n to it }
-                }
-                .flatMap {
-                    val digitsInBoth = digits(it.first).intersect(digits(it.second))
-                    if(digitsInBoth.isEmpty()){
-                        emptyList<Pair<Int,Int>>()
-                    }else {
-                        digitsInBoth.map {digit ->
-                            val newX = (digits(it.first) - digit).firstOrNull() ?: digit
-                            val newY = (digits(it.second) - digit).firstOrNull() ?: digit
-                            if(it.first* newY == newX * it.second) newX to newY else null
-                        }
-                    }
-                }
-                .filterNotNull()
-                .toSet()
-//        println(fractions)
-        val res = fractions.reduce { acc, cur ->
-            acc.first * cur.first to acc.second * cur.second
+        val res = (3..99999).fold(0L) { cur, num ->
+            val value = num.toString().sumOf { factorial(it) }
+            if(value == num){
+                cur + num
+            }else cur
         }
-//        println(res)
-        println(res.second / res.first) // simplification
+        println(res)
     }
 
-    private fun digits(number: Int): Set<Int> {
-        return setOf(number / 10, number % 10)
+    private fun factorial(number: Char): Int {
+        return when (number){
+            '0' -> 1
+            '1' -> 1
+            '2' -> 2
+            '3' -> 6
+            '4' -> 24
+            '5' -> 120
+            '6' -> 720
+            '7' -> 5040
+            '8' -> 40320
+            '9' -> 362880
+            else -> throw RuntimeException("$number")
+        }
     }
 }
