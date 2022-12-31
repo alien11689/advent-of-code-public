@@ -23,7 +23,7 @@ object Problem0018 {
         println(maxPath(0, 0, triangle, mutableMapOf()))
     }
 
-    private fun maxPath(row: Int, column: Int, triangle: List<List<Int>>, mem: MutableMap<Pair<Int, Int>, Int>): Int {
+    fun maxPath(row: Int, column: Int, triangle: List<List<Int>>, mem: MutableMap<Pair<Int, Int>, Int>): Int {
         val key = row to column
         if (key in mem) {
             return mem[key]!!
