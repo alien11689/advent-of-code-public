@@ -4,13 +4,31 @@ object Problem0041 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val digits = '1'..'9'
-        val prime = generateSequence(987_654_321L) {it - 2}
-                .first {
-                    val asString = it.toString()
-                    val asCharSet = asString.toSet()
-                    asString.length == asCharSet.size && asCharSet == digits.take(asString.length).toSet() && Util.isPrime(it)
-                }
-
-        println(prime)
+        val mutableMap = mutableMapOf<Pair<Set<Char>, Int>, Set<String>>()
+        for(i in 9 downTo 1){
+            val value = permutations(digits.take(i).toSet(), i, mutableMap)
+                    .sortedDescending()
+                    .firstOrNull { Util.isPrime(it.toLong())}
+            if(value != null){
+                println(value)
+                break
+            }
+        }
     }
+
+    private fun permutations(digits: Set<Char>, size: Int,
+                             permutationsMem: MutableMap<Pair<Set<Char>, Int>, Set<String>>): Set<String> {
+        if (digits to size in permutationsMem) {
+            return permutationsMem[digits to size]!!
+        }
+        if (size == 1) {
+            return digits.map { it.toString() }.toSet()
+        }
+        val perms = digits.flatMap { digit ->
+            permutations(digits - digit, size - 1, permutationsMem).map { it + digit }
+        }.toSet()
+        permutationsMem[digits to size] = perms
+        return perms
+    }
+
 }
