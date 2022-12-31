@@ -1,8 +1,5 @@
 package pl.touk.dpr.eulerproject
 
-import java.lang.StringBuilder
-import java.math.BigInteger
-
 object Problem0028 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -18,8 +15,8 @@ object Problem0028 {
         val limit = 1001 * 1001
 //        val limit = 5*5
 
-        while(value <= limit){
-            when(dir){
+        while (value <= limit) {
+            when (dir) {
                 Dir.RIGHT -> {
                     val x = cur.first
                     cur = (++maxRight) to cur.second
@@ -27,6 +24,7 @@ object Problem0028 {
                     dir = Dir.DOWN
                     sumDiagonal += value - 1
                 }
+
                 Dir.LEFT -> {
                     val x = cur.first
                     cur = (--maxLeft) to cur.second
@@ -42,6 +40,7 @@ object Problem0028 {
                     dir = Dir.RIGHT
                     sumDiagonal += value
                 }
+
                 Dir.DOWN -> {
                     val y = cur.second
                     cur = cur.first to (++maxDown)

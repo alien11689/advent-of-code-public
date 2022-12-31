@@ -10,7 +10,7 @@ object Problem0035 {
 
         val res = mutableSetOf<String>()
 
-        primes.forEach{ prime ->
+        primes.forEach { prime ->
             when {
                 prime.length == 1 -> res.add(prime)
                 prime in res -> {}
@@ -18,8 +18,8 @@ object Problem0035 {
                     val primeAsString = prime.toString()
                     val doublePrime = primeAsString + primeAsString
                     val possiblePrimes = primeAsString.indices.map { doublePrime.substring(it, it + primeAsString.length) }
-                    if (primes.containsAll(possiblePrimes)){
-                       res.addAll(possiblePrimes)
+                    if (primes.containsAll(possiblePrimes)) {
+                        res.addAll(possiblePrimes)
                     }
                 }
             }

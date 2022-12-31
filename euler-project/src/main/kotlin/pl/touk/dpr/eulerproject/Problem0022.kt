@@ -8,7 +8,7 @@ object Problem0022 {
                 .split(",")
                 .sorted()
                 .mapIndexed { i, word ->
-                    (i + 1L) * word.sumOf { letterToNum[it]?:0 }
+                    (i + 1L) * word.sumOf { letterToNum[it] ?: 0 }
                 }
                 .sum()
         println(res)

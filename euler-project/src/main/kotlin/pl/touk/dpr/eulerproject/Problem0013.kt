@@ -1,7 +1,6 @@
 package pl.touk.dpr.eulerproject
 
 import java.math.BigInteger
-import kotlin.math.sqrt
 
 object Problem0013 {
     @JvmStatic

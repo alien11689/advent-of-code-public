@@ -1,8 +1,6 @@
 package pl.touk.dpr.eulerproject
 
 import java.math.BigInteger
-import java.time.DayOfWeek
-import java.time.LocalDate
 
 object Problem0020 {
     @JvmStatic

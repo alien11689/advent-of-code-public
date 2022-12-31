@@ -5,15 +5,15 @@ object Problem0033 {
     fun main(args: Array<String>) = Util.measureTime {
         val res = (3..99999).fold(0L) { cur, num ->
             val value = num.toString().sumOf { factorial(it) }
-            if(value == num){
+            if (value == num) {
                 cur + num
-            }else cur
+            } else cur
         }
         println(res)
     }
 
     private fun factorial(number: Char): Int {
-        return when (number){
+        return when (number) {
             '0' -> 1
             '1' -> 1
             '2' -> 2

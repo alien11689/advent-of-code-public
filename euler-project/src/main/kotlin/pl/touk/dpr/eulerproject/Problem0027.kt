@@ -1,8 +1,5 @@
 package pl.touk.dpr.eulerproject
 
-import java.lang.StringBuilder
-import java.math.BigInteger
-
 object Problem0027 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -16,12 +13,12 @@ object Problem0027 {
         var cur = -1000 to -1000
         var maxConsecutive = 0
 
-        generateSequence(-999) {it + 1}
+        generateSequence(-999) { it + 1 }
                 .takeWhile { it < 1000 }
                 .forEach { a ->
                     possibleB.forEach { b ->
                         val consecutive = consecutivePrimes(a, b, primes)
-                        if(consecutive > maxConsecutive){
+                        if (consecutive > maxConsecutive) {
                             cur = a to b
                             maxConsecutive = consecutive
 //                            println("Leader $cur with $maxConsecutive")
@@ -36,10 +33,10 @@ object Problem0027 {
     private fun consecutivePrimes(a: Int, b: Int, primes: Set<Int>): Int {
 //        println("Checking $a and $b")
         var n = 0
-        while(true){
+        while (true) {
             ++n
             val res = n * n + a * n + b
-            if (res !in primes ){
+            if (res !in primes) {
                 return n
             }
         }

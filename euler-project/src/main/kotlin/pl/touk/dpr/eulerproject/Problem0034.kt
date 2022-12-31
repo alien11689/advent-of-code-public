@@ -10,13 +10,13 @@ object Problem0034 {
                 }
                 .flatMap {
                     val digitsInBoth = digits(it.first).intersect(digits(it.second))
-                    if(digitsInBoth.isEmpty()){
-                        emptyList<Pair<Int,Int>>()
-                    }else {
-                        digitsInBoth.map {digit ->
+                    if (digitsInBoth.isEmpty()) {
+                        emptyList<Pair<Int, Int>>()
+                    } else {
+                        digitsInBoth.map { digit ->
                             val newX = (digits(it.first) - digit).firstOrNull() ?: digit
                             val newY = (digits(it.second) - digit).firstOrNull() ?: digit
-                            if(it.first* newY == newX * it.second) newX to newY else null
+                            if (it.first * newY == newX * it.second) newX to newY else null
                         }
                     }
                 }

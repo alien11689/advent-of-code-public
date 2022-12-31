@@ -32,7 +32,7 @@ object Problem0032 {
     }
 
     private fun permutations(digits: Set<Char>, size: Int, permutationsMem: MutableMap<Pair<Set<Char>, Int>, Set<List<Char>>>): Set<List<Char>> {
-        if(digits to size in permutationsMem){
+        if (digits to size in permutationsMem) {
             return permutationsMem[digits to size]!!
         }
         if (size == 1) {

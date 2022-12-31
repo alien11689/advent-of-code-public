@@ -10,12 +10,12 @@ object Problem0031 {
 
     private fun groups(amount: Int, coins: List<Int>, mem: MutableMap<Pair<Int, List<Int>>, Int>): Int {
         val key = amount to coins
-        if(key in mem){
+        if (key in mem) {
             return mem[key]!!
         }
-        val x = if(coins.isEmpty() || amount < 0){
+        val x = if (coins.isEmpty() || amount < 0) {
             0
-        }else if(amount == 0){
+        } else if (amount == 0) {
             1
         } else {
             val first = coins.first()
