@@ -24,13 +24,16 @@ object Problem0700 {
                 prevN = n
             }
         }
-//        while(prev > 1L){
-        while(prev > 1L && n <= 10000){
+        while(prev > 1L){
+//        while(prev > 1L && n <= 20000){
             cur += 2 * base
             n += 2
             val nInc = (mod - cur) / step + 1
             cur = (cur + nInc * step) % mod
 //            println("Increased from $prev to $cur by ${prev - cur}")
+            while (prev < cur){
+                cur = (cur + 2044785486369) % step
+            }
             n += nInc
 //            cur = (cur + base) % mod
 //            ++n
