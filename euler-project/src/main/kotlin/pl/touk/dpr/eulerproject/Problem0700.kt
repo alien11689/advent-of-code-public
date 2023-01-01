@@ -13,10 +13,27 @@ object Problem0700 {
         var cur = base
         var n = 1L
         var prevN = 1L
-        println("$n:\t\t$cur")
-        while(prev > 1L){ // && n <= 3000
+//        println("$n:\t\t$cur")
+        while(prev > step){
             cur = (cur + base) % mod
             ++n
+            if (cur < prev) {
+                sum += cur
+                println("Found $cur on $n - cur sum is $sum")
+                prev = cur
+                prevN = n
+            }
+        }
+//        while(prev > 1L){
+        while(prev > 1L && n <= 10000){
+            cur += 2 * base
+            n += 2
+            val nInc = (mod - cur) / step + 1
+            cur = (cur + nInc * step) % mod
+//            println("Increased from $prev to $cur by ${prev - cur}")
+            n += nInc
+//            cur = (cur + base) % mod
+//            ++n
 //            println("$n:\t\t$cur")
             if (cur < prev){
                 sum += cur
