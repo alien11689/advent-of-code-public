@@ -40,8 +40,8 @@ object Problem0700 {
                 cur = (cur + 2044785486369) % step
                 ++manualIncreased
             }
+            println("Performed $manualIncreased increased and its ${manualIncreased - prevManualIncrease} more than previously (${manualIncreased * 1.0 / prevManualIncrease})")
             prevManualIncrease = manualIncreased
-            println("Performed $manualIncreased increased")
             n += nInc
 //            cur = (cur + base) % mod
 //            ++n
@@ -63,5 +63,6 @@ object Problem0700 {
         }
         println(sum)
         // 1517926517477964 wrong
+        // 1517926517777546 wrong
     }
 }
