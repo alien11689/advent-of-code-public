@@ -13,24 +13,19 @@ object Problem0700 {
         var prev = base
         var sum = base
         var cur = base
-        var n = 1L
-        var prevN = 1L
 //        println("$n:\t\t$cur")
         while(prev > step){
             cur = (cur + base) % mod
-            ++n
             if (cur < prev) {
                 sum += cur
-                println("Found $cur on $n - cur sum is $sum")
+                println("Found $cur - cur sum is $sum")
                 prev = cur
-                prevN = n
             }
         }
         var prevManualIncrease = 0L
         while(prev > 1L){
 //        while(prev > 1L && n <= 20000){
             cur += 2 * base
-            n += 2
             val nInc = (mod - cur) / step + 1
             cur = (cur + nInc * step) % mod
 //            println("Increased from $prev to $cur by ${prev - cur}")
@@ -42,23 +37,19 @@ object Problem0700 {
             }
             println("Performed $manualIncreased increased and its ${manualIncreased - prevManualIncrease} more than previously (${manualIncreased * 1.0 / prevManualIncrease})")
             prevManualIncrease = manualIncreased
-            n += nInc
 //            cur = (cur + base) % mod
 //            ++n
 //            println("$n:\t\t$cur")
             if (cur < prev){
                 sum += cur
                 val diff = prev - cur
-                val diffN = n - prevN
-                println("Found $cur on $n (diffN is $diffN) - cur sum is $sum, diff $diff")
+                println("Found $cur - cur sum is $sum, diff $diff")
                 while (cur > diff){
                     cur -= diff
                     sum += cur
-                    n += diffN
-                    println("Found $cur on $n (diffN is $diffN) - cur sum is $sum")
+                    println("Found $cur  - cur sum is $sum")
                 }
                 prev = cur
-                prevN = n
             }
         }
         println(sum)
