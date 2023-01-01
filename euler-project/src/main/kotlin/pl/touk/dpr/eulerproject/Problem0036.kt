@@ -3,12 +3,11 @@ package pl.touk.dpr.eulerproject
 object Problem0036 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        val res = generateSequence(1) {it + 2}
+        val res = generateSequence(1) { it + 2 }
                 .takeWhile { it < 1_000_000 }
                 .sumOf {
                     val numAsString = it.toString()
-                    val reversed = Integer.parseInt(numAsString.reversed())
-                    if(numAsString == numAsString.reversed() &&
+                    if (numAsString == numAsString.reversed() &&
                             Integer.toBinaryString(it) == Integer.toBinaryString(it).reversed()) {
 //                        println(numAsString + " and " + Integer.toBinaryString(it))
                         it

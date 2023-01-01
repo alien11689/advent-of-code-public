@@ -1,7 +1,5 @@
 package pl.touk.dpr.eulerproject
 
-import java.lang.StringBuilder
-
 object Problem0045 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,7 +8,7 @@ object Problem0045 {
         val pentagonals = mutableMapOf<Int, Long>()
         val hexagonals = mutableMapOf<Int, Long>()
         var limit = 285
-        while(true) {
+        while (true) {
             while (n <= limit) {
                 triangles[n] = triangle(n)
                 pentagonals[n] = pentagonal(n)
@@ -28,7 +26,7 @@ object Problem0045 {
     }
 
 
-    fun triangle(n: Int): Long = n.toLong()*(n+1)/2
-    fun pentagonal(n: Int): Long = n.toLong()* (3 * n - 1) /2
-    fun hexagonal(n: Int): Long = n.toLong()* ( 2 * n - 1)
+    fun triangle(n: Int): Long = n.toLong() * (n + 1) / 2
+    fun pentagonal(n: Int): Long = n.toLong() * (3 * n - 1) / 2
+    fun hexagonal(n: Int): Long = n.toLong() * (2 * n - 1)
 }

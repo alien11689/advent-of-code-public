@@ -14,7 +14,7 @@ object Problem0700 {
         var sum = base
         var cur = base
 //        println("$n:\t\t$cur")
-        while(prev > step){
+        while (prev > step) {
             cur = (cur + base) % mod
             if (cur < prev) {
                 sum += cur
@@ -23,8 +23,7 @@ object Problem0700 {
             }
         }
         var prevManualIncrease = 0L
-        var internalBump = 0L
-        while(prev > 1L){
+        while (prev > 1L) {
 //        while(prev > 1L && n <= 20000){
             cur += 2 * base
             val nInc = (mod - cur) / step + 1
@@ -32,7 +31,7 @@ object Problem0700 {
 //            println("Increased from $prev to $cur by ${prev - cur}")
             cur = (cur + BigInteger.valueOf(2 * 2044785486369).times(BigInteger.valueOf(prevManualIncrease)).mod(BigInteger.valueOf(step)).toLong())
             var manualIncreased = 2 * prevManualIncrease
-            while (prev < cur){
+            while (prev < cur) {
                 cur = (cur + 2044785486369) % step
                 ++manualIncreased
             }
@@ -41,19 +40,19 @@ object Problem0700 {
 //            cur = (cur + base) % mod
 //            ++n
 //            println("$n:\t\t$cur")
-            if (cur < prev){
+            if (cur < prev) {
                 sum += cur
                 val diff = prev - cur
                 println("Found $cur - cur sum is $sum, diff $diff")
-                internalBump = 0L
-                while (cur > diff){
+                var internalBump = 0L
+                while (cur > diff) {
                     cur -= diff
                     sum += cur
                     println("Found $cur  - cur sum is $sum")
                     ++internalBump
                 }
                 println("Performed $internalBump internal bumps")
-                if (cur == 17L && diff == 30L){
+                if (cur == 17L && diff == 30L) {
                     // Based on observation
                     // > Found 77 - cur sum is 1517926517777482, diff 30
                     // > Found 47  - cur sum is 1517926517777529

@@ -5,11 +5,11 @@ object Problem0041 {
     fun main(args: Array<String>) = Util.measureTime {
         val digits = '1'..'9'
         val mutableMap = mutableMapOf<Pair<Set<Char>, Int>, Set<String>>()
-        for(i in 9 downTo 1){
+        for (i in 9 downTo 1) {
             val value = permutations(digits.take(i).toSet(), i, mutableMap)
                     .sortedDescending()
-                    .firstOrNull { Util.isPrime(it.toLong())}
-            if(value != null){
+                    .firstOrNull { Util.isPrime(it.toLong()) }
+            if (value != null) {
                 println(value)
                 break
             }
