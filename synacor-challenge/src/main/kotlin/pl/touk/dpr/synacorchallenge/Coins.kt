@@ -2,7 +2,7 @@ package pl.touk.dpr.synacorchallenge
 
 object Coins {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val red = 2
         val blue = 9
         val corroded = 3
@@ -17,7 +17,7 @@ object Coins {
                         all.forEach { c5 ->
                             if (setOf(c1, c2, c3, c4, c5) == all && c1 + c2 * c3 * c3 + c4 * c4 * c4 - c5 == 399) {
                                 println("$c1 $c2 $c3 $c4 $c5")
-                                return
+                                return@measureTime
                             }
                         }
                     }

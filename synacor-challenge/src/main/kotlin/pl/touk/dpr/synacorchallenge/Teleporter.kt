@@ -2,7 +2,7 @@ package pl.touk.dpr.synacorchallenge
 
 object Teleporter {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val r0 = 4
         val r1 = 1
         val x = (32767 downTo 1).find {

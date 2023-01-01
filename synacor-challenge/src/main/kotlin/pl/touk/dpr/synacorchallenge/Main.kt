@@ -2,11 +2,10 @@ package pl.touk.dpr.synacorchallenge
 
 import java.util.Stack
 import kotlin.math.pow
-import kotlin.system.exitProcess
 
 object Main {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val bytes = javaClass.getResource("/challenge.bin")!!.readBytes()
         val program = readProgram(bytes)
         runProgram(program)
@@ -254,7 +253,7 @@ object Main {
                     }
                     if (read == 49) { // 1
                         println("Goodbye!!!")
-                        exitProcess(0)
+                        return
                     }
                     registers[program[instrPointer + 1] % BASE] = read
                     instrPointer += 2

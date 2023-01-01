@@ -4,7 +4,7 @@ import java.util.PriorityQueue
 
 object Orb {
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main(args: Array<String>) = Util.measureTime {
         val cur = Point(0, 0)
         val maze = listOf(
 // maze is upside down
@@ -28,7 +28,7 @@ object Orb {
                 if (newPath.route.last() == Point(3, 3)) {
                     if (newPath.orb == 30) {
                         println(newPath.route)
-                        return
+                        return@measureTime
                     }
                 } else if (newPath.orb <= 0) {
                     // do nothing
