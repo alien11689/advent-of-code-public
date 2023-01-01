@@ -1,5 +1,7 @@
 package pl.touk.dpr.eulerproject
 
+import java.math.BigInteger
+
 object Problem0700 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -24,6 +26,7 @@ object Problem0700 {
                 prevN = n
             }
         }
+        var prevManualIncrease = 0L
         while(prev > 1L){
 //        while(prev > 1L && n <= 20000){
             cur += 2 * base
@@ -31,9 +34,14 @@ object Problem0700 {
             val nInc = (mod - cur) / step + 1
             cur = (cur + nInc * step) % mod
 //            println("Increased from $prev to $cur by ${prev - cur}")
+            cur = (cur + BigInteger.valueOf(2 * 2044785486369).times(BigInteger.valueOf(prevManualIncrease)).mod(BigInteger.valueOf(step)).toLong())
+            var manualIncreased = 2 * prevManualIncrease
             while (prev < cur){
                 cur = (cur + 2044785486369) % step
+                ++manualIncreased
             }
+            prevManualIncrease = manualIncreased
+            println("Performed $manualIncreased increased")
             n += nInc
 //            cur = (cur + base) % mod
 //            ++n
