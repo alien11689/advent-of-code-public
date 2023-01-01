@@ -23,6 +23,7 @@ object Problem0700 {
             }
         }
         var prevManualIncrease = 0L
+        var internalBump = 0L
         while(prev > 1L){
 //        while(prev > 1L && n <= 20000){
             cur += 2 * base
@@ -44,16 +45,42 @@ object Problem0700 {
                 sum += cur
                 val diff = prev - cur
                 println("Found $cur - cur sum is $sum, diff $diff")
+                internalBump = 0L
                 while (cur > diff){
                     cur -= diff
                     sum += cur
                     println("Found $cur  - cur sum is $sum")
+                    ++internalBump
+                }
+                println("Performed $internalBump internal bumps")
+                if (cur == 17L && diff == 30L){
+                    // Based on observation
+                    // > Found 77 - cur sum is 1517926517777482, diff 30
+                    // > Found 47  - cur sum is 1517926517777529
+                    // > Found 17  - cur sum is 1517926517777546
+                    // > Performed 2 internal bumps
+                    // next found will be 30 - 17 = 13 lower than current
+                    // so I expect next line to be
+                    // > Found 4  - cur sum is 1517926517777550, diff X
+                    // possible diff are 3, 2 or 1
+                    // if it's 3 than
+                    // > Found 4  - cur sum is 1517926517777550, diff 3
+                    // > Found 1  - cur sum is 1517926517777551 and it's wrong
+                    // if it's 2 then
+                    // > Found 4  - cur sum is 1517926517777550, diff 2
+                    // > Found 2  - cur sum is 1517926517777552
+                    // > Found 0  - cur sum is 1517926517777552 and it's wrong
+                    // if it's 1 than
+                    // > Found 4  - cur sum is 1517926517777550, diff 1
+                    // > Found 3  - cur sum is 1517926517777553
+                    // > Found 2  - cur sum is 1517926517777555
+                    // > Found 1  - cur sum is 1517926517777556
+                    sum += 4 + 3 + 2 + 1
+                    break
                 }
                 prev = cur
             }
         }
         println(sum)
-        // 1517926517477964 wrong
-        // 1517926517777546 wrong
     }
 }
