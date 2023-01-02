@@ -35,7 +35,7 @@ object Problem0047 {
         }
         if (res.isEmpty()){
             primes.add(i)
-            println("Found prime $i")
+//            println("Found prime $i")
         }
         return res
     }
