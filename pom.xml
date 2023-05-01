@@ -20,7 +20,7 @@
         <module>2021</module>
         <module>2022</module>
         <module>euler-project</module>
-        <module>hota-anki</module>
+        <module>anki</module>
     </modules>
 
 </project>
