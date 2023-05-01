@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>pl.touk.dpr.adventofcode</groupId>
+    <groupId>dpr.adventofcode</groupId>
     <artifactId>2022</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
@@ -68,7 +68,7 @@
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>pl.touk.dpr.aoc2022.All</mainClass>
+                                    <mainClass>dpr.aoc2022.All</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>

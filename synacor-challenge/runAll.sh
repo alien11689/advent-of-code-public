@@ -5,14 +5,14 @@ mvn clean package > /dev/null
 jar=target/synacor-challenge-1.0.0-SNAPSHOT-jar-with-dependencies.jar
 
 echo Coins
-java -cp $jar pl.touk.dpr.synacorchallenge.Coins
+java -cp $jar dpr.synacorchallenge.Coins
 
 echo Teleporter
-java -cp $jar -Xss100m pl.touk.dpr.synacorchallenge.Teleporter
+java -cp $jar -Xss100m dpr.synacorchallenge.Teleporter
 
 echo Orb
-java -cp $jar pl.touk.dpr.synacorchallenge.Orb
+java -cp $jar dpr.synacorchallenge.Orb
 
 echo Whole
-java -cp $jar pl.touk.dpr.synacorchallenge.Main < actions
+java -cp $jar dpr.synacorchallenge.Main < actions
 
