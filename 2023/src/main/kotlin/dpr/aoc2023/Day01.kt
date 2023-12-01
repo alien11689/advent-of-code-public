@@ -27,38 +27,11 @@ object Day01 {
             "eight" to "8",
             "nine" to "9",
             "zero" to "0",
-        )
-        val startingRegexToDigit = mapping.map { (word, digit) -> Regex("^${word}") to digit }
-        val endingRegexToDigit = mapping.map { (word, digit) -> Regex("${word}$") to digit }
+        ) + (0..9).associate { "$it" to "$it" }
         return lines.sumOf { line ->
-            val firstDigit: Char = getFirstDigit(line, startingRegexToDigit)
-            val lastDigit: Char = getLastDigit(line, endingRegexToDigit)
+            val firstDigit = mapping.entries.filter { line.contains(it.key) }.minByOrNull { line.indexOf(it.key) }!!.value
+            val lastDigit = mapping.entries.filter { line.contains(it.key) }.maxByOrNull { line.lastIndexOf(it.key) }!!.value
             Integer.parseInt("${firstDigit}${lastDigit}")
         }
     }
-
-    private fun getFirstDigit(line: String, startingRegexToDigit: List<Pair<Regex, String>>): Char {
-        var curLine = line
-        while (true) {
-            curLine = startingRegexToDigit.fold(curLine) { l, (w, d) -> l.replace(w, d) }
-            if (curLine.first().isDigit()) {
-                return curLine.first()
-            } else {
-                curLine = curLine.substring(1)
-            }
-        }
-    }
-
-    private fun getLastDigit(line: String, endingRegexToDigit: List<Pair<Regex, String>>): Char {
-        var curLine = line
-        while (true) {
-            curLine = endingRegexToDigit.fold(curLine) { l, (w, d) -> l.replace(w, d) }
-            if (curLine.last().isDigit()) {
-                return curLine.last()
-            } else {
-                curLine = curLine.substring(0, curLine.length - 1)
-            }
-        }
-    }
 }
-
