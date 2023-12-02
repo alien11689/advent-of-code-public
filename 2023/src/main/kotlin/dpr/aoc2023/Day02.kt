@@ -29,24 +29,18 @@ object Day02 {
 
     private fun part2(lines: List<String>): Any {
         return lines.sumOf { line ->
-            val (_, rest) = line.split(": ")
+            val rest = line.split(": ")[1]
             val rounds = rest.split("; ")
-            val max = mutableMapOf("blue" to 1L, "green" to 1L, "red" to 1L)
-            for (round in rounds) {
-                val minorResults = round.split(Regex("[ ,]+"))
-                var i = 0
-                val m = mutableMapOf<String, Long>()
-                while (i < minorResults.size) {
-                    m[minorResults[i + 1]] = minorResults[i].toLong()
-                    i += 2
-                }
-                setOf("green", "blue", "red").forEach { color ->
+            val max = limits.mapValues { 1 }.toMutableMap()
+            rounds.forEach { round ->
+                val m = round.split(Regex("[ ,]+")).chunked(2) { l -> l[1] to l[0].toInt() }.toMap()
+                max.keys.forEach { color ->
                     if ((m[color] ?: 0) > max[color]!!) {
                         max[color] = m[color]!!
                     }
                 }
             }
-            setOf("green", "blue", "red").fold(1L) { acc, color -> acc * max[color]!! }
+            max.values.fold(1L) { acc, colorValue -> acc * colorValue }
         }
     }
 }
