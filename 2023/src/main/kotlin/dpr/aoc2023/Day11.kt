@@ -3,7 +3,7 @@ package dpr.aoc2023
 object Day11 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        val lines = Util.getLinesFromFile("/11/input.txt")
+        val lines = Util.getNotEmptyLinesFromFile("/11/input.txt")
         println(part1(lines))
         println(part2(lines))
     }
