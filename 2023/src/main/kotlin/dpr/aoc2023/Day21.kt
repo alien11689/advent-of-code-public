@@ -9,11 +9,11 @@ object Day21 {
     }
 
     private fun part1(lines: List<String>): Any {
-        return TODO()
+        TODO()
     }
 
     private fun part2(lines: List<String>): Any {
-        return TODO()
+        TODO()
     }
 }
 
