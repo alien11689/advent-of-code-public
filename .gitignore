@@ -1,2 +1,4 @@
 out
 .sdkmanrc
+a.out
+*.c~
