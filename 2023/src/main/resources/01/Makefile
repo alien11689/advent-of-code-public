@@ -1,13 +1,13 @@
-all: clean compile run
+all: run
 
 lint:
 	indent -kr -ts4 -brf *.c
 
 clean:
-	rm -r a.out
+	rm -rf a.out
 
-compile: 
+compile: clean lint
 	gcc *.c
 
-run:
+run: compile
 	./a.out
