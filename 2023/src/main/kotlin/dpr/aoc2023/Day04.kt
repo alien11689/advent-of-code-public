@@ -19,10 +19,9 @@ object Day04 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val cards = (0..(lines.size - 1)).associateWith { 1L }.toMutableMap()
+        val cards = lines.indices.associateWith { 1L }.toMutableMap()
         lines.forEachIndexed { i, line ->
-            val (winning, my) = line.split(":")[1].split("|").map { it.trim().split(Regex("\\s+")) }
-            val win = my.count { it in winning }
+            val win = calculateNumberOfWinningLots(line)
             if (win >= 0) {
                 val curCard = cards[i]!!
                 for (nextCard in 1..win) {
@@ -31,6 +30,11 @@ object Day04 {
             }
         }
         return cards.values.sum()
+    }
+
+    private fun calculateNumberOfWinningLots(line: String): Int {
+        val (winning, my) = line.split(":")[1].split("|").map { it.trim().split(Regex("\\s+")) }
+        return my.count { it in winning }
     }
 }
 
