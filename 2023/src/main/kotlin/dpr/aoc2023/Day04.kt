@@ -19,7 +19,18 @@ object Day04 {
     }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        val cards = (0..(lines.size - 1)).associateWith { 1L }.toMutableMap()
+        lines.forEachIndexed { i, line ->
+            val (winning, my) = line.split(":")[1].split("|").map { it.trim().split(Regex("\\s+")) }
+            val win = my.count { it in winning }
+            if (win >= 0) {
+                val curCard = cards[i]!!
+                for (nextCard in 1..win) {
+                    cards[i + nextCard] = cards[i + nextCard]!! + curCard
+                }
+            }
+        }
+        return cards.values.sum()
     }
 }
 
