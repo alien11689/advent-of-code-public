@@ -1,5 +1,7 @@
 package dpr.aoc2023
 
+import kotlin.text.Typography.times
+
 object Day06 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -17,7 +19,7 @@ object Day06 {
         var i = 0
         var wonsProduct = 1L
         while (i < times.size) {
-            val sail = sail(times[i], distances[i])
+            val sail = sail(times[i].toLong(), distances[i].toLong())
             println("For ${times[i]} we can won in $sail")
             wonsProduct *= sail
             ++i
@@ -25,14 +27,14 @@ object Day06 {
         return wonsProduct
     }
 
-    private fun sail(time: Int, distance: Int): Int {
+    private fun sail(time: Long, distance: Long): Int {
         return (1..time).count { speed ->
             speed * (time - speed) > distance
         }
     }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        return sail(53717880L, 275118112151524L)
     }
 }
 
