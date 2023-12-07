@@ -26,7 +26,7 @@ object Day07 {
         A;
 
         companion object {
-            fun fromChar(c: Char): CardType = when (c) {
+            fun fromChar(c: Char, withJoker: Boolean): CardType = when (c) {
                 '2' -> _2
                 '3' -> _3
                 '4' -> _4
@@ -36,36 +36,19 @@ object Day07 {
                 '8' -> _8
                 '9' -> _9
                 'T' -> T
-                'J' -> J
+                'J' -> if (withJoker) JOKER else J
                 'Q' -> Q
                 'K' -> K
                 else -> A
             }
-
-            fun fromCharWithJoker(c: Char): CardType = when (c) {
-                '2' -> _2
-                '3' -> _3
-                '4' -> _4
-                '5' -> _5
-                '6' -> _6
-                '7' -> _7
-                '8' -> _8
-                '9' -> _9
-                'T' -> T
-                'J' -> JOKER
-                'Q' -> Q
-                'K' -> K
-                else -> A
-            }
-
         }
     }
 
     data class Card(val elements: Map<CardType, Int>, val text: String, val withJoker: Boolean) : Comparable<Card> {
 
         val type: Int = calculateType(elements)
-        private val cardTypes = text.map { if (withJoker) CardType.fromCharWithJoker(it) else CardType.fromChar(it) }
-        val realType: Int = if (withJoker) upgradeType() else type
+        private val cardTypes = text.map { CardType.fromChar(it, withJoker) }
+        private val realType: Int = if (withJoker) upgradeType() else type
 
         private fun upgradeType(): Int {
             if (type == 7) {
@@ -95,7 +78,7 @@ object Day07 {
         companion object {
             fun from(s: String, withJoker: Boolean): Card {
                 val elements = s.toCharArray().groupBy { it }
-                    .map { (if (withJoker) CardType.fromCharWithJoker(it.key) else CardType.fromChar(it.key)) to it.value.size }.toMap()
+                    .map { (CardType.fromChar(it.key, withJoker = withJoker)) to it.value.size }.toMap()
                 return Card(elements, s, withJoker)
             }
         }
