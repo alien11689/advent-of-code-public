@@ -51,8 +51,8 @@ object Day07 {
         private val realType: Int = if (withJoker) upgradeType() else type
 
         private fun upgradeType(): Int {
-            if (type == 7) {
-                return 7
+            if (elements.size == 1) {
+                return type
             }
             if (elements.none { it.key == CardType.JOKER }) {
                 return type
@@ -63,16 +63,7 @@ object Day07 {
         }
 
         private fun calculateType(elements: Map<CardType, Int>): Int {
-            val values = elements.values
-            return when {
-                5 in values -> 7
-                4 in values -> 6
-                3 in values && 2 in values -> 5
-                3 in values -> 4
-                2 in values && values.size == 3 -> 3
-                2 in values && values.size == 4 -> 2
-                else -> 1
-            }
+            return elements.values.sumOf { it * it }
         }
 
         companion object {
@@ -87,17 +78,13 @@ object Day07 {
             if (realType != other.realType) {
                 return realType.compareTo(other.realType)
             } else {
-                val level1 = cardTypes[0].compareTo(other.cardTypes[0])
-                return if (level1 == 0) {
-                    val level2 = cardTypes[1].compareTo(other.cardTypes[1])
-                    return if (level2 == 0) {
-                        val level3 = cardTypes[2].compareTo(other.cardTypes[2])
-                        return if (level3 == 0) {
-                            val level4 = cardTypes[3].compareTo(other.cardTypes[3])
-                            return if (level4 == 0) cardTypes[4].compareTo(other.cardTypes[4]) else level4
-                        } else level3
-                    } else level2
-                } else level1
+                for ((l, r) in cardTypes.zip(other.cardTypes)) {
+                    val res = l.compareTo(r)
+                    if (res != 0) {
+                        return res
+                    }
+                }
+                return 0
             }
         }
     }
