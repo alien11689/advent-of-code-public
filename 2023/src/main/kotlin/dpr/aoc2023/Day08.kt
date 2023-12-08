@@ -24,40 +24,23 @@ object Day08 {
     private fun part2(lines: List<String>): Any {
         val directions = lines[0]
         val mapping = readMapping(lines)
-        val startingPoints = mapping.filter { it.key.endsWith("A") }.map { it.key to 0 }
-        val endPoints = mapping.filter { it.key.endsWith("Z") }.keys
-        println(startingPoints)
-        println(endPoints)
-        var steps = 0
-        var cur = startingPoints[5].first
-        var previousSeen = 0
-        while (steps < 100000) {
-            if (cur.endsWith("Z")) {
-                println("On step $steps (delta = ${steps - previousSeen})")
-                previousSeen = steps
+        val startingPoints = mapping.filter { it.key.endsWith("A") }.keys
+        return startingPoints.map {
+            var steps = 0
+            var cur = it
+            while (steps < 100000) {
+                if (cur.endsWith("Z")) {
+                    break
+                }
+                val curMapping = mapping[cur]!!
+                cur = if (directions[steps % directions.length] == 'L') curMapping.first else curMapping.second
+                ++steps
             }
-            val curMapping = mapping[cur]!!
-            cur = if (directions[steps % directions.length] == 'L') curMapping.first else curMapping.second
-            ++steps
+            steps
         }
-        return listOf(16343L, 16897L, 20221L, 18559L, 11911L, 21883L).fold(1L) { acc, cur -> nww(acc, cur) }
+
+            .fold(1L) { acc, cur -> MathUtil.lowestCommonMultiple(acc, cur.toLong()) }
         // 27011809034838424525673297 is too high
-    }
-
-    private fun nww(x: Long, y: Long): Long {
-        return (x * y) / nwd(x, y);
-    }
-
-    private fun nwd(xx: Long, yy: Long): Long {
-        var x = xx
-        var y = yy
-        while (x != y) {
-            if (x > y)
-                x -= y;
-            else
-                y -= x;
-        }
-        return x;
     }
 
     private fun readMapping(lines: List<String>): MutableMap<String, Pair<String, String>> {
