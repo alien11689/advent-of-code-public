@@ -15,6 +15,13 @@ object Day09 {
         }
     }
 
+    private fun part2(lines: List<String>): Any {
+        return lines.sumOf { line ->
+            val values = line.split(" ").map { it.toLong() }
+            findPrevValue(values)
+        }
+    }
+
     private fun findNextValue(values: List<Long>): Long {
         if (values.toSet().size == 1) {
             return values[0]
@@ -25,8 +32,14 @@ object Day09 {
         }
     }
 
-    private fun part2(lines: List<String>): Any {
-        TODO()
+    private fun findPrevValue(values: List<Long>): Long {
+        if (values.toSet().size == 1) {
+            return values[0]
+        } else {
+            val lowerList = values.windowed(2, 1, false) { it[1] - it[0] }
+            val increment = findPrevValue(lowerList)
+            return values.first() - increment
+        }
     }
 }
 
