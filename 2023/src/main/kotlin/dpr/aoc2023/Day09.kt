@@ -4,41 +4,29 @@ object Day09 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/09/input.txt")
-        println(part1(lines))
-        println(part2(lines))
+        val (part1, part2) = part1And2(lines)
+        println(part1)
+        println(part2)
     }
 
-    private fun part1(lines: List<String>): Any {
-        return lines.sumOf { line ->
+    private fun part1And2(lines: List<String>): Pair<Long, Long> {
+        val results = lines.map { line ->
             val values = line.split(" ").map { it.toLong() }
-            findNextValue(values)
+            findPrevAndNextValue(values)
         }
+        return Pair(
+            results.sumOf { it.second },
+            results.sumOf { it.first },
+        )
     }
 
-    private fun part2(lines: List<String>): Any {
-        return lines.sumOf { line ->
-            val values = line.split(" ").map { it.toLong() }
-            findPrevValue(values)
-        }
-    }
-
-    private fun findNextValue(values: List<Long>): Long {
+    private fun findPrevAndNextValue(values: List<Long>): Pair<Long, Long> {
         if (values.toSet().size == 1) {
-            return values[0]
+            return Pair(values[0], values[0])
         } else {
             val lowerList = values.windowed(2, 1, false) { it[1] - it[0] }
-            val increment = findNextValue(lowerList)
-            return values.last() + increment
-        }
-    }
-
-    private fun findPrevValue(values: List<Long>): Long {
-        if (values.toSet().size == 1) {
-            return values[0]
-        } else {
-            val lowerList = values.windowed(2, 1, false) { it[1] - it[0] }
-            val increment = findPrevValue(lowerList)
-            return values.first() - increment
+            val (decrement, increment) = findPrevAndNextValue(lowerList)
+            return Pair(values.first() - decrement, values.last() + increment)
         }
     }
 }
