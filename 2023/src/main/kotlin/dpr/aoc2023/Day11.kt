@@ -32,7 +32,7 @@ object Day11 {
         var lengths2 = 0L
         for (g1 in galaxies) {
             for (g2 in galaxies) {
-                if (g1 != g2) {
+                if (g1 != g2 && g1.x <= g2.x) {
                     val pair = setOf(g1, g2)
                     if (pair !in pairs) {
                         pairs.add(pair)
