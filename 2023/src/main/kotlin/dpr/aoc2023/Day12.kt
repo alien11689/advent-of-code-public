@@ -14,7 +14,7 @@ object Day12 {
             val (pattern, nums) = line.split(" ")
             val orderedNumbers = nums.split(",").map { it.toInt() }
             val memory = mutableMapOf<Pair<String, List<Int>>, Long>()
-            val res = getPossibleOptions(pattern.replace(".", " ").trim(), orderedNumbers, memory)
+            val res = getPossibleOptions(pattern.dropWhile { it == '.' }, orderedNumbers, memory)
 //            println("$line -> $res")
             res
         }
@@ -33,18 +33,19 @@ object Day12 {
         }
         val patternLength = pattern.length
         val orderedNumbersMinSize = orderedNumbers.sum() + orderedNumbers.size - 1
-        if (orderedNumbers.sum() > pattern.count { it != ' ' }) {
+        if (orderedNumbers.sum() > pattern.count { it != '.' }) {
             memory[key] = 0
 //            println("Shortcut")
             return 0
         }
         if (patternLength < orderedNumbersMinSize) {
+            memory[key] = 0
             return 0
         }
         var res = 0L
-        val regex = if (orderedNumbers.size > 1) "^[?#]{${orderedNumbers[0]}}[? ].*" else "^[?#]{${orderedNumbers[0]}}.*"
+        val regex = if (orderedNumbers.size > 1) "^[?#]{${orderedNumbers[0]}}[?.].*" else "^[?#]{${orderedNumbers[0]}}.*"
 //        println("Regex: $regex")
-        if (pattern.startsWith(" ")) {
+        if (pattern.startsWith(".")) {
             res += getPossibleOptions(pattern.substring(1), orderedNumbers, memory)
         } else {
             if (pattern.matches(Regex(regex))) {
@@ -59,9 +60,6 @@ object Day12 {
             }
         }
 //        println("Result checking '$pattern' against $orderedNumbers -> $res")
-//        println(pattern)
-//        println(patternLength)
-//        println(orderedNumbersMinSize)
         memory[key] = res
         return res
     }
@@ -73,11 +71,10 @@ object Day12 {
             val realPattern = listOf(pattern, pattern, pattern, pattern, pattern).joinToString(separator = "?")
             val realNumbers = listOf(orderedNumbers, orderedNumbers, orderedNumbers, orderedNumbers, orderedNumbers).flatten()
             val memory = mutableMapOf<Pair<String, List<Int>>, Long>()
-            val res = getPossibleOptions(realPattern.replace(".", " ").trim(), realNumbers, memory)
+            val res = getPossibleOptions(realPattern.dropWhile { it == '.' }, realNumbers, memory)
 //            println("$realPattern with $realNumbers -> $res")
             res
         }
-//        TODO()
     }
 }
 
