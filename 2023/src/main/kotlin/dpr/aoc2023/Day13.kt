@@ -15,40 +15,34 @@ object Day13 {
         val rows = mutableListOf<String>()
         while (i < lines.size) {
             if (lines[i].isEmpty()) {
-                val findPatchScore = findPatchScore(rows)
-                sum += findPatchScore
+                sum += findScore(rows)
                 rows.clear()
-            }else {
+            } else {
                 rows.add(lines[i])
             }
             ++i
         }
-//        sum += findPatchScore(rows)
         // 83315 is too high
         return sum
     }
 
-    private fun findPatchScore(rows: MutableList<String>): Long {
-        var resI = 0
-        var resJ = 0
+    private fun findScore(rows: MutableList<String>): Int {
         var i = 0
         while (i < rows.size - 1) {
-            if (rows[i] == rows[i + 1] && checkSymetry(rows, i, i + 1)) {
-                resI = ++i
-                break
+            if (rows[i] == rows[i + 1] && checkSymmetry(rows, i, i + 1)) {
+                return (++i) * 100
             }
             ++i
         }
         val columns = transpose(rows)
         var j = 0
         while (j < columns.size - 1) {
-            if (columns[j] == columns[j + 1] && checkSymetry(columns, j, j + 1)) {
-                resJ = ++j
-                break
+            if (columns[j] == columns[j + 1] && checkSymmetry(columns, j, j + 1)) {
+                return ++j
             }
             ++j
         }
-        return resI * 100L + resJ
+        throw RuntimeException("No symmetry")
     }
 
     private fun transpose(rows: MutableList<String>): List<String> {
@@ -58,16 +52,15 @@ object Day13 {
         }
         rows.forEach { r ->
             r.forEachIndexed { i, c ->
-
                 res[i].add(c)
             }
         }
         return res.map { it.joinToString("") }.toList()
     }
 
-    private fun checkSymetry(rows: List<String>, left: Int, right: Int): Boolean {
-        var i = left
-        var j = right
+    private fun checkSymmetry(rows: List<String>, left: Int, right: Int): Boolean {
+        var i = left - 1
+        var j = right + 1
         while (i >= 0 && j < rows.size) {
             if (rows[i] != rows[j]) {
                 return false
@@ -79,7 +72,65 @@ object Day13 {
     }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        var i = 0
+        var sum = 0L
+        val rows = mutableListOf<String>()
+        while (i < lines.size) {
+            if (lines[i].isEmpty()) {
+                sum += findSmudgeScore(rows)
+                rows.clear()
+            } else {
+                rows.add(lines[i])
+            }
+            ++i
+        }
+        //29000 is too low
+        return sum
+    }
+
+    private fun findSmudgeScore(rows: MutableList<String>): Int {
+        var i = 0
+        while (i < rows.size - 1) {
+            if (isSmudge(rows[i], rows[i + 1]) && checkSymmetry(rows, i, i + 1) ||
+                rows[i] == rows[i + 1] && checkSymmetryWithOneSmudge(rows, i, i + 1)
+            ) {
+                return (++i) * 100
+            }
+            ++i
+        }
+        val columns = transpose(rows)
+        var j = 0
+        while (j < columns.size - 1) {
+            if (isSmudge(columns[j], columns[j + 1]) && checkSymmetry(columns, j, j + 1) ||
+                columns[j] == columns[j + 1] && checkSymmetryWithOneSmudge(columns, j, j + 1)
+            ) {
+                return ++j
+            }
+            ++j
+        }
+        throw RuntimeException("No smudge symmetry")
+    }
+
+    private fun checkSymmetryWithOneSmudge(rows: List<String>, left: Int, right: Int): Boolean {
+        var smudge = false
+        var i = left - 1
+        var j = right + 1
+        while (i >= 0 && j < rows.size) {
+            if (rows[i] != rows[j]) {
+                if (!smudge && isSmudge(rows[i], rows[j])) {
+                    smudge = true
+                } else {
+                    return false
+                }
+            }
+            --i
+            ++j
+        }
+        return smudge
+    }
+
+    private fun isSmudge(a: String, b: String): Boolean {
+        return a.zip(b).count { (a, b) -> a != b } == 1
     }
 }
 
