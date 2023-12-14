@@ -4,6 +4,7 @@ object Day22 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/22/input.txt")
+//        val lines = Util.getNotEmptyLinesFromFile("/22/test1.txt")
         println(part1(lines))
         println(part2(lines))
     }

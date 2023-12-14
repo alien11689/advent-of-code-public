@@ -119,5 +119,12 @@ object Day14 {
         }
         return res.toSet()
     }
+
+    enum class Dir {
+        N,
+        W,
+        S,
+        E
+    }
 }
 
