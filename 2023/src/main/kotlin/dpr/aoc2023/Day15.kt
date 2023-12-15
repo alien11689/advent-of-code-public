@@ -10,7 +10,15 @@ object Day15 {
     }
 
     private fun part1(lines: List<String>): Any {
-        TODO()
+        // 467627 is too low
+        return lines.sumOf { line ->
+            line.split(",").sumOf { hash(it) }
+        }
+    }
+
+    private fun hash(s: String): Long {
+        return s.fold(0L) { acc, c -> (acc + c.code) * 17 % 256 }
+//            .also { println("For $s -> $it") }
     }
 
     private fun part2(lines: List<String>): Any {
