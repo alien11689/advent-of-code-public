@@ -10,15 +10,13 @@ object Day15 {
     }
 
     private fun part1(lines: List<String>): Any {
-        // 467627 is too low
         return lines.sumOf { line ->
             line.split(",").sumOf { hash(it) }
         }
     }
 
-    private fun hash(s: String): Long {
-        return s.fold(0L) { acc, c -> (acc + c.code) * 17 % 256 }
-//            .also { println("For $s -> $it") }
+    private fun hash(s: String): Int {
+        return s.fold(0) { acc, c -> (acc + c.code) * 17 % 256 }
     }
 
     data class Lens(val name: String, var value: Int)
@@ -26,22 +24,19 @@ object Day15 {
     data class Box(val lenses: MutableList<Lens> = mutableListOf())
 
     private fun part2(lines: List<String>): Any {
-        val boxes = mutableMapOf<Int, Box>()
-        repeat(256) { i -> boxes[i] = Box() }
+        val boxes = mutableListOf<MutableList<Lens>>()
+        repeat(256) { boxes.add(mutableListOf()) }
         lines.forEach { line ->
-            val operations = line.split(",")
-            operations.forEach {
+            line.split(",").forEach { operation ->
                 when {
-                    it.endsWith("-") -> {
-                        val name = it.substring(0, it.length - 1)
-                        val h = hash(name).toInt()
-                        boxes[h]!!.lenses.removeIf { it.name == name }
+                    operation.endsWith("-") -> {
+                        val name = operation.substring(0, operation.length - 1)
+                        boxes[hash(name)].removeIf { it.name == name }
                     }
 
-                    it.contains("=") -> {
-                        val (name, value) = it.split("=")
-                        val h = hash(name).toInt()
-                        val lenses = boxes[h]!!.lenses
+                    operation.contains("=") -> {
+                        val (name, value) = operation.split("=")
+                        val lenses = boxes[hash(name)]
                         val lens = lenses.firstOrNull { it.name == name }
                         if (lens != null) {
                             lens.value = value.toInt()
@@ -52,7 +47,7 @@ object Day15 {
                 }
             }
         }
-        return (0..255).sumOf { boxId -> boxes[boxId]!!.lenses.mapIndexed { lId, lens -> 1L * (boxId + 1) * (lId + 1) * lens.value }.sum() }
+        return boxes.flatMapIndexed { boxId, lenses -> lenses.mapIndexed { lId, lens -> 1L * (boxId + 1) * (lId + 1) * lens.value } }.sum()
     }
 }
 
