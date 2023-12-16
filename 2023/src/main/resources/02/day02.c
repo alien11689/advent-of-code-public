@@ -55,7 +55,36 @@ int part2(char *fileName) {
 	char buffer[LINE_BUFFER_LENGTH];
 	int result = 0;
 	while (fgets(buffer, LINE_BUFFER_LENGTH, f)) {
-		// TODO
+		strtok(strtok(buffer, "\n"), ":");
+		char *rest = strtok(NULL, ":");
+		int green = 1;
+		int blue = 1;
+		int red = 1;
+		int curNum = -1;
+		char *token;
+		while ((token = strsep(&rest, " ;,")) != NULL) {
+			if (strlen(token) > 0) {
+				if (curNum < 0) {
+					curNum = atoi(token);
+				} else {
+					if (strcmp(token, "red") == 0) {
+						if (curNum > red) {
+							red = curNum;
+						}
+					} else if (strcmp(token, "green") == 0) {
+						if (curNum > green) {
+							green = curNum;
+						}
+					} else if (strcmp(token, "blue") == 0) {
+						if (curNum > blue) {
+							blue = curNum;
+						}
+					}
+					curNum = -1;
+				}
+			}
+		}
+		result += red * green * blue;
 	}
 	fclose(f);
 	return result;
