@@ -5,7 +5,7 @@
 // must be long enough to read the whole input string
 #define INPUT_LENGTH 10240
 #define BOX_LENGTH 256
-#define LENS_LENGTH 1024
+#define LENS_LENGTH 256
 
 int hash(char *txt, int length) {
 	int res = 0;
@@ -51,6 +51,9 @@ int part2(char *fileName) {
 	char buffer[INPUT_LENGTH];
 	int i;
 	int j;
+	for (i = 0; i < BOX_LENGTH; ++i) {
+		boxes[i].length = 0;
+	}
 	while (fgets(buffer, INPUT_LENGTH, f)) {
 		char *mem = NULL;
 		char *token = strtok_r(buffer, ",", &mem);
@@ -115,6 +118,7 @@ int part2(char *fileName) {
 		for (j = 0; j < boxes[i].length; ++j) {
 //          printf("Box %d has %d lenses\n", i, boxes[i].length);
 			result += (i + 1) * (j + 1) * boxes[i].lenses[j].value;
+			free(boxes[i].lenses[j].name);
 		}
 	}
 	return result;

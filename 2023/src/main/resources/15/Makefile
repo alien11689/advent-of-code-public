@@ -7,7 +7,10 @@ clean:
 	rm -rf a.out
 
 compile: clean lint
-	gcc *.c
+	gcc -Wall -Wextra *.c
 
 run: compile
 	./a.out
+
+valgrind: compile
+	valgrind -s --leak-check=full ./a.out
