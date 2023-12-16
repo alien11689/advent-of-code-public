@@ -21,8 +21,6 @@ object Day15 {
 
     data class Lens(val name: String, var value: Int)
 
-    data class Box(val lenses: MutableList<Lens> = mutableListOf())
-
     private fun part2(lines: List<String>): Any {
         val boxes = mutableListOf<MutableList<Lens>>()
         repeat(256) { boxes.add(mutableListOf()) }
