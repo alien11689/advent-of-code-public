@@ -46,14 +46,13 @@ object Day16 {
         maxX: Int,
         maxY: Int,
         mirrors: MutableMap<Point2D, Char>
-    ): MutableSet<Point2D> {
+    ): Set<Point2D> {
         val stack = Stack<Current>()
         val energized = mutableSetOf<Point2D>()
         stack.push(start)
         val mem = mutableSetOf<Current>()
         while (!stack.isEmpty()) {
             val cur = stack.pop()
-            //            println("Checking $cur")
             if (cur in mem) {
                 continue
             }
@@ -63,8 +62,7 @@ object Day16 {
                 continue
             }
             energized.add(nextPos)
-            val mirror = mirrors[nextPos]
-            when (mirror) {
+            when (mirrors[nextPos]) {
                 null -> stack.push(Current(cur.dir, nextPos))
                 '-' -> {
                     if (cur.dir in setOf(Dir.N, Dir.S)) {
@@ -104,7 +102,7 @@ object Day16 {
                     stack.push(Current(nextDir, nextPos))
                 }
 
-                else -> throw RuntimeException("Unknown mirror $mirror")
+                else -> throw RuntimeException("Unknown mirror ${mirrors[nextPos]}")
             }
         }
         return energized
@@ -114,18 +112,20 @@ object Day16 {
         val mirrors = readMirrors(lines)
         val maxX = lines[0].length - 1
         val maxY = lines.size - 1
-        val options = ((0..maxY).flatMap { y ->
-            setOf(
-                Current(Dir.E, Point2D(-1, y)),
-                Current(Dir.W, Point2D(maxX + 1, y)),
-            )
-        } + (0..maxX).flatMap { x ->
-            setOf(
-                Current(Dir.S, Point2D(x, -1)),
-                Current(Dir.N, Point2D(x, maxY + 1)),
-            )
-        }).toSet()
-        return options.maxOf { getEnergized(it, maxX, maxY, mirrors).size }
+        val starts = generatePossibleStarts(maxY, maxX)
+        return starts.maxOf { getEnergized(it, maxX, maxY, mirrors).size }
     }
+
+    private fun generatePossibleStarts(maxY: Int, maxX: Int): Set<Current> = ((0..maxY).flatMap { y ->
+        setOf(
+            Current(Dir.E, Point2D(-1, y)),
+            Current(Dir.W, Point2D(maxX + 1, y)),
+        )
+    } + (0..maxX).flatMap { x ->
+        setOf(
+            Current(Dir.S, Point2D(x, -1)),
+            Current(Dir.N, Point2D(x, maxY + 1)),
+        )
+    }).toSet()
 }
 
