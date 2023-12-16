@@ -47,9 +47,9 @@ typedef struct Box {
 
 int part2(char *fileName) {
 	Box boxes[BOX_LENGTH];
-	int i;
 	FILE *f = fopen(fileName, "r");
 	char buffer[INPUT_LENGTH];
+	int i;
 	int j;
 	while (fgets(buffer, INPUT_LENGTH, f)) {
 		char *mem = NULL;
@@ -60,9 +60,7 @@ int part2(char *fileName) {
 //          printf("Checking '%s'\n", token);
 			if (token[len - 1] == '-') {
 //              printf("Removing lens\n");
-				char name[256];
-				strncpy(name, token, len - 1);
-				name[len - 1] = '\0';
+				char *name = strtok(token, "-");
 //              printf(" Name is %s\n", name);
 				int h = hash(name, len - 1);
 				int changed = 0;
@@ -85,10 +83,8 @@ int part2(char *fileName) {
 					boxes[h].length = boxes[h].length - 1;
 				}
 			} else {
-				char name[256];
-				strncpy(name, token, len - 2);
-				name[len - 2] = '\0';
-				int val = token[len - 1] - 48;
+				char *name = strtok(token, "=");
+				int val = atoi(strtok(NULL, "="));
 				int h = hash(name, len - 2);
 				int changed = 0;
 //              printf("Box %d has length %d\n", h, boxes[h].length);
@@ -104,9 +100,7 @@ int part2(char *fileName) {
 				}
 				if (!changed) {
 //                  printf("Adding lens %s\n", name);
-					boxes[h].lenses[boxes[h].length].name =
-						malloc(256 * 8);
-					strcpy(boxes[h].lenses[boxes[h].length].name, name);
+					boxes[h].lenses[boxes[h].length].name = strdup(name);
 					boxes[h].lenses[boxes[h].length].value = val;
 					boxes[h].length = boxes[h].length + 1;
 //                  printf("B length is %d\n", boxes[h].length);
