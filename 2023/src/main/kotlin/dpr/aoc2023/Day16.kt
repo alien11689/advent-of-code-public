@@ -21,6 +21,15 @@ object Day16 {
     }
 
     private fun part1(lines: List<String>): Any {
+        val mirrors = readMirrors(lines)
+        val maxX = lines[0].length - 1
+        val maxY = lines.size - 1
+        val start = Current(Dir.E, Point2D(-1, 0))
+        val energized = getEnergized(start, maxX, maxY, mirrors)
+        return energized.size
+    }
+
+    private fun readMirrors(lines: List<String>): MutableMap<Point2D, Char> {
         val mirrors = mutableMapOf<Point2D, Char>()
         lines.forEachIndexed { y, line ->
             line.forEachIndexed { x, c ->
@@ -29,15 +38,22 @@ object Day16 {
                 }
             }
         }
-        val maxX = lines[0].length - 1
-        val maxY = lines.size - 1
+        return mirrors
+    }
+
+    private fun getEnergized(
+        start: Current,
+        maxX: Int,
+        maxY: Int,
+        mirrors: MutableMap<Point2D, Char>
+    ): MutableSet<Point2D> {
         val stack = Stack<Current>()
         val energized = mutableSetOf<Point2D>()
-        stack.push(Current(Dir.E, Point2D(-1, 0)))
+        stack.push(start)
         val mem = mutableSetOf<Current>()
         while (!stack.isEmpty()) {
             val cur = stack.pop()
-//            println("Checking $cur")
+            //            println("Checking $cur")
             if (cur in mem) {
                 continue
             }
@@ -91,11 +107,25 @@ object Day16 {
                 else -> throw RuntimeException("Unknown mirror $mirror")
             }
         }
-        return energized.size
+        return energized
     }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        val mirrors = readMirrors(lines)
+        val maxX = lines[0].length - 1
+        val maxY = lines.size - 1
+        val options = ((0..maxY).flatMap { y ->
+            setOf(
+                Current(Dir.E, Point2D(-1, y)),
+                Current(Dir.W, Point2D(maxX + 1, y)),
+            )
+        } + (0..maxX).flatMap { x ->
+            setOf(
+                Current(Dir.S, Point2D(x, -1)),
+                Current(Dir.N, Point2D(x, maxY + 1)),
+            )
+        }).toSet()
+        return options.maxOf { getEnergized(it, maxX, maxY, mirrors).size }
     }
 }
 
