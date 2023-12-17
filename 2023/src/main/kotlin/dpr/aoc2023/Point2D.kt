@@ -14,15 +14,15 @@ data class Point2D(val x: Int, val y: Int) {
         Point2D(x, y + 1),
     )
 
-    fun up(): Point2D = this.copy(y = y - 1)
-    fun down(): Point2D = this.copy(y = y + 1)
-    fun left(): Point2D = this.copy(x = x - 1)
-    fun right(): Point2D = this.copy(x = x + 1)
+    fun up(steps: Int = 1): Point2D = this.copy(y = y - steps)
+    fun down(steps: Int = 1): Point2D = this.copy(y = y + steps)
+    fun left(steps: Int = 1): Point2D = this.copy(x = x - steps)
+    fun right(steps: Int = 1): Point2D = this.copy(x = x + steps)
     fun manhattan(other: Point2D): Int = abs(x - other.x) + abs(y - other.y)
-    fun move(dir: Dir): Point2D = when (dir) {
-        Dir.N -> up()
-        Dir.W -> left()
-        Dir.S -> down()
-        Dir.E -> right()
+    fun move(dir: Dir, steps: Int = 1): Point2D = when (dir) {
+        Dir.N -> up(steps)
+        Dir.W -> left(steps)
+        Dir.S -> down(steps)
+        Dir.E -> right(steps)
     }
 }
