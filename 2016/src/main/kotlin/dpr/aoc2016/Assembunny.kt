@@ -77,14 +77,18 @@ class Assembunny(program: List<String>) {
         }
     }
 
-    fun run(overrideRegisters: Map<String, Int> = mapOf(), f: (registers: MutableMap<String, Int>, Int) -> Int? = { _, _ -> null }, emitLimit: Int = 20): Pair<Map<String, Int>, List<Int>> {
+    fun run(
+        overrideRegisters: Map<String, Int> = mapOf(),
+        f: (registers: MutableMap<String, Int>, Int) -> Int? = { _, _ -> null },
+        emitLimit: Int = 20
+    ): Pair<Map<String, Int>, List<Int>> {
         val registers: MutableMap<String, Int> =
-                mutableMapOf(
-                        Pair("a", 0),
-                        Pair("b", 0),
-                        Pair("c", 0),
-                        Pair("d", 0),
-                )
+            mutableMapOf(
+                Pair("a", 0),
+                Pair("b", 0),
+                Pair("c", 0),
+                Pair("d", 0),
+            )
         registers.putAll(overrideRegisters)
         val emit = mutableListOf<Int>()
         var i = 0

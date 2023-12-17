@@ -1,5 +1,8 @@
 package dpr.eulerproject
 
+import dpr.commons.MathUtil
+import dpr.commons.Util
+
 object Problem0041 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -7,8 +10,8 @@ object Problem0041 {
         val mutableMap = mutableMapOf<Pair<Set<Char>, Int>, Set<String>>()
         for (i in 9 downTo 1) {
             val value = permutations(digits.take(i).toSet(), i, mutableMap)
-                    .sortedDescending()
-                    .firstOrNull { Util.isPrime(it.toLong()) }
+                .sortedDescending()
+                .firstOrNull { MathUtil.isPrime(it.toLong()) }
             if (value != null) {
                 println(value)
                 break
@@ -16,8 +19,10 @@ object Problem0041 {
         }
     }
 
-    private fun permutations(digits: Set<Char>, size: Int,
-                             permutationsMem: MutableMap<Pair<Set<Char>, Int>, Set<String>>): Set<String> {
+    private fun permutations(
+        digits: Set<Char>, size: Int,
+        permutationsMem: MutableMap<Pair<Set<Char>, Int>, Set<String>>
+    ): Set<String> {
         if (digits to size in permutationsMem) {
             return permutationsMem[digits to size]!!
         }

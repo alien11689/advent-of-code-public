@@ -1,5 +1,7 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
+
 object Day08 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -23,6 +25,7 @@ object Day08 {
                         }
                     }
                 }
+
                 "rotate" -> {
                     val which = parts[2].toInt()
                     val by = parts[4].toInt()
@@ -36,6 +39,7 @@ object Day08 {
                                 }
                             }
                         }
+
                         "row" -> List(acc.size) { y ->
                             acc[y].mapIndexed { x, cell ->
                                 if (y == which) {
@@ -45,9 +49,11 @@ object Day08 {
                                 }
                             }
                         }
+
                         else -> acc
                     }
                 }
+
                 else -> acc
             }
         }

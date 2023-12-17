@@ -1,5 +1,7 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
+
 object Problem0024 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -26,11 +28,11 @@ object Problem0024 {
     }
 
     private fun permutations(l: MutableList<Char>): List<String> = listOf(
-            listOf(l[0], l[1], l[2]).joinToString(""),
-            listOf(l[0], l[2], l[1]).joinToString(""),
-            listOf(l[1], l[0], l[2]).joinToString(""),
-            listOf(l[1], l[2], l[0]).joinToString(""),
-            listOf(l[2], l[0], l[1]).joinToString(""),
-            listOf(l[2], l[1], l[0]).joinToString(""),
+        listOf(l[0], l[1], l[2]).joinToString(""),
+        listOf(l[0], l[2], l[1]).joinToString(""),
+        listOf(l[1], l[0], l[2]).joinToString(""),
+        listOf(l[1], l[2], l[0]).joinToString(""),
+        listOf(l[2], l[0], l[1]).joinToString(""),
+        listOf(l[2], l[1], l[0]).joinToString(""),
     )
 }

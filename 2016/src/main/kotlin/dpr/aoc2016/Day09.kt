@@ -1,5 +1,7 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
+
 object Day09 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -31,7 +33,7 @@ object Day09 {
             if (input[i] == '(') {
                 val (rule, length, times) = parseRule(input, i)
                 i += rule.length + 2
-                count +=  times * part2(input.substring(i, i + length))
+                count += times * part2(input.substring(i, i + length))
                 i += length
             } else {
                 ++i

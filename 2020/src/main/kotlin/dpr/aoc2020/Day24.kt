@@ -1,5 +1,7 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
+
 object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -42,6 +44,7 @@ object Day24 {
                         else -> throw RuntimeException("$c$nextC")
                     }
                 }
+
                 's' -> {
                     ++i
                     cur = when (val nextC = instr[i]) {
@@ -50,6 +53,7 @@ object Day24 {
                         else -> throw RuntimeException("$c$nextC")
                     }
                 }
+
                 else -> throw RuntimeException("$c")
             }
             ++i
@@ -88,12 +92,12 @@ object Day24 {
         fun northwest(): Tile = copy(y = y - 1)
         fun southeast(): Tile = copy(y = y + 1)
         fun neighbours(): Set<Tile> = setOf(
-                east(),
-                west(),
-                northeast(),
-                northwest(),
-                southeast(),
-                southwest()
+            east(),
+            west(),
+            northeast(),
+            northwest(),
+            southeast(),
+            southwest()
         )
     }
 }

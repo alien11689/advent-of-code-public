@@ -1,5 +1,7 @@
 package dpr.aoc2019
 
+import dpr.commons.Util
+
 object All {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {

@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day02 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,14 +12,14 @@ object Day02 {
 
     private fun part1(input: List<String>): Any {
         return input
-                .map { line -> Box(line.split("x").map { it.toInt() }) }
-                .sumOf { it.area() + it.smallestSideArea() }
+            .map { line -> Box(line.split("x").map { it.toInt() }) }
+            .sumOf { it.area() + it.smallestSideArea() }
     }
 
     private fun part2(input: List<String>): Any {
         return input
-                .map { line -> Box(line.split("x").map { it.toInt() }) }
-                .sumOf { it.volume() + it.dimensionsToWrap() }
+            .map { line -> Box(line.split("x").map { it.toInt() }) }
+            .sumOf { it.volume() + it.dimensionsToWrap() }
     }
 
     data class Box(val sides: List<Int>) {

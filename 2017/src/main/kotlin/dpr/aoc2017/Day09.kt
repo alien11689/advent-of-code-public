@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
+
 object Day09 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -24,6 +26,7 @@ object Day09 {
                     } else {
                         ++garbageAmount
                     }
+
                 '>' -> garbage = false
                 '}' -> if (!garbage) --score else ++garbageAmount
                 else -> if (garbage) garbageAmount++

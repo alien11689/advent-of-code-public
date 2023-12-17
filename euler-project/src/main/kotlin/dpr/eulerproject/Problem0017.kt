@@ -1,11 +1,13 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
+
 object Problem0017 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val res = generateSequence(1) { it + 1 }
-                .takeWhile { it <= 1000 }
-                .sumOf { countLetters(it) }
+            .takeWhile { it <= 1000 }
+            .sumOf { countLetters(it) }
         println(res)
     }
 

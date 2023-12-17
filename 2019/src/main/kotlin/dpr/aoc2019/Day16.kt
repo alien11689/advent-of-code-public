@@ -1,5 +1,6 @@
 package dpr.aoc2019
 
+import dpr.commons.Util
 import kotlin.math.absoluteValue
 
 object Day16 {
@@ -70,7 +71,7 @@ object Day16 {
             ++p
             var sum = nums.fold(0L) { a, b -> a + b }
             val output = mutableListOf<Long>()
-            for(i in nums.indices){
+            for (i in nums.indices) {
                 if (i > 0) {
                     sum -= nums[i - 1]
                 }

@@ -1,5 +1,7 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
+
 object Day04 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -17,8 +19,8 @@ object Day04 {
                 current = mutableSetOf()
             } else {
                 line.splitToSequence(" ")
-                        .map { it.split(":")[0] }
-                        .forEach { current.add(it) }
+                    .map { it.split(":")[0] }
+                    .forEach { current.add(it) }
             }
         }
         println(valid)
@@ -34,18 +36,20 @@ object Day04 {
                 current = mutableMapOf()
             } else {
                 line.splitToSequence(" ")
-                        .forEach { field ->
-                            val split = field.split(":")
-                            current[split[0]] = split[1]
-                        }
+                    .forEach { field ->
+                        val split = field.split(":")
+                        current[split[0]] = split[1]
+                    }
             }
         }
         println(valid)
     }
 
-    data class Id(val byr: String?, val iyr: String?, val eyr: String?,
-                  val hgt: String?, val hcl: String?, val ecl: String?,
-                  val pid: String?, val cid: String?) {
+    data class Id(
+        val byr: String?, val iyr: String?, val eyr: String?,
+        val hgt: String?, val hcl: String?, val ecl: String?,
+        val pid: String?, val cid: String?
+    ) {
         fun valid(): Boolean {
             if (byr == null) {
                 return false
@@ -117,9 +121,9 @@ object Day04 {
 
         companion object {
             fun fromMap(fields: Map<String, String>): Id = Id(
-                    fields["byr"], fields["iyr"], fields["eyr"],
-                    fields["hgt"], fields["hcl"], fields["ecl"],
-                    fields["pid"], fields["cid"]
+                fields["byr"], fields["iyr"], fields["eyr"],
+                fields["hgt"], fields["hcl"], fields["ecl"],
+                fields["pid"], fields["cid"]
             )
         }
     }

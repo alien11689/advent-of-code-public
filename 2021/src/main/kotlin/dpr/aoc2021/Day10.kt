@@ -1,5 +1,6 @@
 package dpr.aoc2021
 
+import dpr.commons.Util
 import java.util.Stack
 
 object Day10 {
@@ -32,16 +33,19 @@ object Day10 {
                     if (last != '(') return Pair(stack, it)
                     stack.pop()
                 }
+
                 '}' -> {
                     val last = stack.peek()
                     if (last != '{') return Pair(stack, it)
                     stack.pop()
                 }
+
                 '>' -> {
                     val last = stack.peek()
                     if (last != '<') return Pair(stack, it)
                     stack.pop()
                 }
+
                 ']' -> {
                     val last = stack.peek()
                     if (last != '[') return Pair(stack, it)

@@ -1,5 +1,8 @@
 package dpr.aoc2023
 
+import dpr.commons.Point2D
+import dpr.commons.Util
+
 object Day03 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {

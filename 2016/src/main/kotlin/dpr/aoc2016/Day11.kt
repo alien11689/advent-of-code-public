@@ -1,5 +1,6 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
 import java.util.LinkedList
 import java.util.Queue
 
@@ -10,19 +11,23 @@ object Day11 {
         println(part2())
     }
 
-    private fun part2() = solve(listOf(
+    private fun part2() = solve(
+        listOf(
             setOf(1, 2, -2, 3, 4, -4, 5, -5, 6, -6, 7, -7),
             setOf(-1, -3),
             setOf(),
             setOf()
-    ))
+        )
+    )
 
-    private fun part1() = solve(listOf(
+    private fun part1() = solve(
+        listOf(
             setOf(1, 2, -2, 3, 4, -4, 5, -5),
             setOf(-1, -3),
             setOf(),
             setOf()
-    ))
+        )
+    )
 
     private fun solve(input: List<Set<Int>>): Any {
         val mem = mutableSetOf<Any>()
@@ -36,9 +41,9 @@ object Day11 {
             }
             val stepCount = cur.stepCount + 1
             generateMoves(cur.stage.e, cur.stage.floors, mem)
-                    .forEach {
-                        q.offer(Move(stepCount, it))
-                    }
+                .forEach {
+                    q.offer(Move(stepCount, it))
+                }
         }
         throw RuntimeException()
     }
@@ -47,40 +52,40 @@ object Day11 {
         val currentFloor = floors[e]
         val combinations = combinationsOf2(currentFloor)
         return combinations
-                .filter { isValid(currentFloor - it) }
-                .flatMap { m ->
-                    listOf(e + 1, e - 1).filter { it in 0..3 }.map { newE ->
-                        val newFloors = floors.toMutableList()
-                        newFloors[newE] = newFloors[newE] + m
-                        newFloors[e] = newFloors[e] - m
-                        if (isValid(newFloors[newE])) {
-                            val st = Stage(newE, newFloors)
-                            val toMem = genStates(st)
-                            if (toMem in mem) {
-                                null
-                            } else {
-                                mem.add(toMem)
-                                st
-                            }
-                        } else {
+            .filter { isValid(currentFloor - it) }
+            .flatMap { m ->
+                listOf(e + 1, e - 1).filter { it in 0..3 }.map { newE ->
+                    val newFloors = floors.toMutableList()
+                    newFloors[newE] = newFloors[newE] + m
+                    newFloors[e] = newFloors[e] - m
+                    if (isValid(newFloors[newE])) {
+                        val st = Stage(newE, newFloors)
+                        val toMem = genStates(st)
+                        if (toMem in mem) {
                             null
+                        } else {
+                            mem.add(toMem)
+                            st
                         }
+                    } else {
+                        null
                     }
-                }.filterNotNull()
+                }
+            }.filterNotNull()
     }
 
     private fun genStates(stage: Stage): Pair<Int, List<List<Int>>> {
         return Pair(
-                stage.e,
-                stage.floors.map { floor ->
-                    val gs = floor.filter { it > 0 }.toSet()
-                    val ms = floor.filter { it < 0 }.map { -it }.toSet()
-                    listOf(
-                            (gs - ms).size,
-                            (ms - gs).size,
-                            gs.intersect(ms).size
-                    )
-                })
+            stage.e,
+            stage.floors.map { floor ->
+                val gs = floor.filter { it > 0 }.toSet()
+                val ms = floor.filter { it < 0 }.map { -it }.toSet()
+                listOf(
+                    (gs - ms).size,
+                    (ms - gs).size,
+                    gs.intersect(ms).size
+                )
+            })
     }
 
     private fun isValid(floor: Set<Int>): Boolean {

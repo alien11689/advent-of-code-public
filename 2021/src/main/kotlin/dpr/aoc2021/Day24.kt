@@ -1,7 +1,9 @@
 package dpr.aoc2021
 
-import java.util.LinkedList
 //import java.util.Queue
+
+import dpr.commons.Util
+import java.util.LinkedList
 import java.util.Stack
 
 object Day24 {
@@ -114,20 +116,20 @@ object Day24 {
     }
 
     private val vars = listOf(
-            listOf(1, 13, 8),
-            listOf(1, 12, 13),
-            listOf(1, 12, 8),
-            listOf(1, 10, 10),
-            listOf(26, -11, 12),
-            listOf(26, -13, 1),
-            listOf(1, 15, 13),
-            listOf(1, 10, 5),
-            listOf(26, -2, 10),
-            listOf(26, -6, 3),
-            listOf(1, 14, 2),
-            listOf(26, 0, 2),
-            listOf(26, -15, 12),
-            listOf(26, -4, 7),
+        listOf(1, 13, 8),
+        listOf(1, 12, 13),
+        listOf(1, 12, 8),
+        listOf(1, 10, 10),
+        listOf(26, -11, 12),
+        listOf(26, -13, 1),
+        listOf(1, 15, 13),
+        listOf(1, 10, 5),
+        listOf(26, -2, 10),
+        listOf(26, -6, 3),
+        listOf(1, 14, 2),
+        listOf(26, 0, 2),
+        listOf(26, -15, 12),
+        listOf(26, -4, 7),
     )
 
     private fun buildStackPairs(instructions: List<List<Int>>): List<Pair<Int, Int>> {

@@ -1,5 +1,7 @@
 package dpr.aoc2018
 
+import dpr.commons.Util
+
 object Day08 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -43,7 +45,7 @@ object Day08 {
                 metadata.sum()
             } else {
                 metadata.filter { it <= childrenCount }
-                        .sumOf { children[it - 1].calculateMeta() }
+                    .sumOf { children[it - 1].calculateMeta() }
             }
             return value!!
         }

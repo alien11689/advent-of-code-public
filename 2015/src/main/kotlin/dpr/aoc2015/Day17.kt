@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day17 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -33,7 +35,7 @@ object Day17 {
         val containerList = listContainers2(containers, 150, listOf())
         val minContainerListSize = containerList.minOf { it.size }
         return containerList
-                .count { it.size == minContainerListSize }
+            .count { it.size == minContainerListSize }
     }
 
     private fun listContainers2(containers: List<Int>, capacity: Int, history: List<Int>): List<List<Int>> {

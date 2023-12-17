@@ -1,5 +1,7 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
+
 object Day11 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -52,14 +54,14 @@ object Day11 {
             val newSeats = mutableMapOf<Seat, Boolean>()
             seats.forEach { entry ->
                 val neighbours = listOf(
-                        findValidOccupied(seats, entry.key, -1, -1, maxI, maxJ),
-                        findValidOccupied(seats, entry.key, +1, +1, maxI, maxJ),
-                        findValidOccupied(seats, entry.key, -1, +1, maxI, maxJ),
-                        findValidOccupied(seats, entry.key, +1, -1, maxI, maxJ),
-                        findValidOccupied(seats, entry.key, -1, 0, maxI, maxJ),
-                        findValidOccupied(seats, entry.key, +1, 0, maxI, maxJ),
-                        findValidOccupied(seats, entry.key, 0, -1, maxI, maxJ),
-                        findValidOccupied(seats, entry.key, 0, +1, maxI, maxJ),
+                    findValidOccupied(seats, entry.key, -1, -1, maxI, maxJ),
+                    findValidOccupied(seats, entry.key, +1, +1, maxI, maxJ),
+                    findValidOccupied(seats, entry.key, -1, +1, maxI, maxJ),
+                    findValidOccupied(seats, entry.key, +1, -1, maxI, maxJ),
+                    findValidOccupied(seats, entry.key, -1, 0, maxI, maxJ),
+                    findValidOccupied(seats, entry.key, +1, 0, maxI, maxJ),
+                    findValidOccupied(seats, entry.key, 0, -1, maxI, maxJ),
+                    findValidOccupied(seats, entry.key, 0, +1, maxI, maxJ),
                 ).count { it }
                 if (!entry.value && neighbours == 0) {
                     newSeats[entry.key] = true
@@ -97,14 +99,14 @@ object Day11 {
 
     data class Seat(val i: Int, val j: Int) {
         fun neighbours(): Set<Seat> = setOf(
-                Seat(i + 1, j),
-                Seat(i - 1, j),
-                Seat(i, j + 1),
-                Seat(i, j - 1),
-                Seat(i + 1, j + 1),
-                Seat(i + 1, j - 1),
-                Seat(i - 1, j - 1),
-                Seat(i - 1, j + 1)
+            Seat(i + 1, j),
+            Seat(i - 1, j),
+            Seat(i, j + 1),
+            Seat(i, j - 1),
+            Seat(i + 1, j + 1),
+            Seat(i + 1, j - 1),
+            Seat(i - 1, j - 1),
+            Seat(i - 1, j + 1)
         )
 
         fun isValid(maxI: Int, maxJ: Int): Boolean {

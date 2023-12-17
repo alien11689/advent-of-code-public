@@ -1,5 +1,7 @@
 package dpr.aoc2018
 
+import dpr.commons.Util
+
 object Day13 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -45,18 +47,22 @@ object Day13 {
                         drivers.add(Driver(x, y, Direction.UP))
                         cells[y][x] = Type.PIPE
                     }
+
                     '>' -> {
                         drivers.add(Driver(x, y, Direction.RIGHT))
                         cells[y][x] = Type.MINUS
                     }
+
                     'v' -> {
                         drivers.add(Driver(x, y, Direction.DOWN))
                         cells[y][x] = Type.PIPE
                     }
+
                     '<' -> {
                         drivers.add(Driver(x, y, Direction.LEFT))
                         cells[y][x] = Type.MINUS
                     }
+
                     else -> {
 
                     }
@@ -188,9 +194,11 @@ object Day13 {
                         direction = direction.turnLeft()
                         dirOnCross = DirOnCross.STRAIGHT
                     }
+
                     DirOnCross.STRAIGHT -> {
                         dirOnCross = DirOnCross.RIGHT
                     }
+
                     DirOnCross.RIGHT -> {
                         direction = direction.turnRight()
                         dirOnCross = DirOnCross.LEFT

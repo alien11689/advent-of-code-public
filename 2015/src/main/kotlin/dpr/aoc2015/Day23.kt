@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day23 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -26,14 +28,17 @@ object Day23 {
                     reg[cur[1]] = reg[cur[1]]!! + 1
                     ++i
                 }
+
                 "tpl" -> {
                     reg[cur[1]] = reg[cur[1]]!! * 3
                     ++i
                 }
+
                 "hlf" -> {
                     reg[cur[1]] = reg[cur[1]]!! / 2
                     ++i
                 }
+
                 "jie" -> if (reg[cur[1]]!! % 2 == 0) i += cur[2].toInt() else i++
                 "jio" -> if (reg[cur[1]]!! == 1) i += cur[2].toInt() else i++
                 "jmp" -> i += cur[1].toInt()

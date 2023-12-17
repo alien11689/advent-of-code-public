@@ -1,5 +1,8 @@
 package dpr.eulerproject
 
+import dpr.commons.MathUtil
+import dpr.commons.Util
+
 object Problem0023 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,7 +13,7 @@ object Problem0023 {
             if (cur !in sums) {
                 sum += cur
             }
-            if (Util.properDividers(cur).sum() > cur) {
+            if (MathUtil.properDividers(cur).sum() > cur) {
                 abundants.add(cur)
                 sums.addAll(abundants.map { it + cur })
             }

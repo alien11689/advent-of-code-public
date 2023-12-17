@@ -1,5 +1,7 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
+
 object Day06 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -11,20 +13,20 @@ object Day06 {
     private fun part1(input: List<String>): Any {
         return (0 until input[0].length).map { col ->
             input.map { it[col] }
-                    .groupingBy { it }
-                    .eachCount()
-                    .maxByOrNull { it.value }!!
-                    .key
+                .groupingBy { it }
+                .eachCount()
+                .maxByOrNull { it.value }!!
+                .key
         }.joinToString("")
     }
 
     private fun part2(input: List<String>): Any {
         return (0 until input[0].length).map { col ->
             input.map { it[col] }
-                    .groupingBy { it }
-                    .eachCount()
-                    .minByOrNull { it.value }!!
-                    .key
+                .groupingBy { it }
+                .eachCount()
+                .minByOrNull { it.value }!!
+                .key
         }.joinToString("")
     }
 }

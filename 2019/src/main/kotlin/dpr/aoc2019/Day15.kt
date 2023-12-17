@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.aoc2019.intcode.IntCodeComputer.program
 import dpr.aoc2019.intcode.IntCodeComputerState
+import dpr.commons.Util
 import java.util.PriorityQueue
 import java.util.Stack
 
@@ -48,7 +49,12 @@ object Day15 {
         return minutes
     }
 
-    private fun generateNewStates(visited: MutableSet<Pair<Long, Long>>, currentState: List<Long>, board: Map<Pair<Long, Long>, Long>, pq: PriorityQueue<List<Long>>) {
+    private fun generateNewStates(
+        visited: MutableSet<Pair<Long, Long>>,
+        currentState: List<Long>,
+        board: Map<Pair<Long, Long>, Long>,
+        pq: PriorityQueue<List<Long>>
+    ) {
         visited.add(currentState[1] to currentState[2])
         val nexts = listOf(1, 2, 3, 4).map { nextPos(currentState[1] to currentState[2], it) }.filter {
             it !in visited && it in board.keys && board[it] != 0L

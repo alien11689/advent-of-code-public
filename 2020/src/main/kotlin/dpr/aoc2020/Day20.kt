@@ -1,5 +1,7 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
+
 object Day20 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -130,21 +132,21 @@ object Day20 {
         //#    ##    ##    ###
         // #  #  #  #  #  #
         return setOf(
-                Pair(0, 18),
-                Pair(1, 0),
-                Pair(1, 5),
-                Pair(1, 6),
-                Pair(1, 11),
-                Pair(1, 12),
-                Pair(1, 17),
-                Pair(1, 18),
-                Pair(1, 19),
-                Pair(2, 1),
-                Pair(2, 4),
-                Pair(2, 7),
-                Pair(2, 10),
-                Pair(2, 13),
-                Pair(2, 16)
+            Pair(0, 18),
+            Pair(1, 0),
+            Pair(1, 5),
+            Pair(1, 6),
+            Pair(1, 11),
+            Pair(1, 12),
+            Pair(1, 17),
+            Pair(1, 18),
+            Pair(1, 19),
+            Pair(2, 1),
+            Pair(2, 4),
+            Pair(2, 7),
+            Pair(2, 10),
+            Pair(2, 13),
+            Pair(2, 16)
         )
     }
 
@@ -164,14 +166,14 @@ object Day20 {
 
     data class Tile(val id: Long, val image: List<List<Char>>) {
         val borders: List<List<Char>> = listOf(
-                image[0],
-                image[image.size - 1],
-                column(0),
-                column(image[0].size - 1),
-                image[0].reversed(),
-                image[image.size - 1].reversed(),
-                column(0).reversed(),
-                column(image[0].size - 1).reversed(),
+            image[0],
+            image[image.size - 1],
+            column(0),
+            column(image[0].size - 1),
+            image[0].reversed(),
+            image[image.size - 1].reversed(),
+            column(0).reversed(),
+            column(image[0].size - 1).reversed(),
         )
 
         fun column(col: Int): List<Char> {

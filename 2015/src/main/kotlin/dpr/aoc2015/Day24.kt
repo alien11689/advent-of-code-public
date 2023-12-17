@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -17,10 +19,10 @@ object Day24 {
     private fun bestEntanglement(numbers: List<Int>, perBucket: Int): Long {
         val mem = mutableMapOf<Pair<List<Int>, Int>, Set<List<Int>>>()
         val possibleBuckets = findPossibleBuckets(numbers, perBucket, mem)
-                .map { it.toSet() }
+            .map { it.toSet() }
         val minSize = possibleBuckets.minOf { it.size }
         return possibleBuckets.filter { it.size == minSize }
-                .minOf { it.fold(1L) { acc, a -> acc * a } }
+            .minOf { it.fold(1L) { acc, a -> acc * a } }
     }
 
     private fun findPossibleBuckets(numbers: List<Int>, perBucket: Int, mem: MutableMap<Pair<List<Int>, Int>, Set<List<Int>>>): Set<List<Int>> {
@@ -39,7 +41,7 @@ object Day24 {
             options.add(listOf(first))
         } else if (first <= perBucket) {
             findPossibleBuckets(tail, perBucket - first, mem)
-                    .forEach { options.add(it + first) }
+                .forEach { options.add(it + first) }
         }
         mem[key] = options
         return options

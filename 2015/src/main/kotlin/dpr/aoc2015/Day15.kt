@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day15 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -11,7 +13,7 @@ object Day15 {
     private fun part1(input: List<String>): Any {
         val ingredients = parseIngredients(input)
         return calculate(ingredients, 100)
-                .maxOf { score(ingredients, it) }
+            .maxOf { score(ingredients, it) }
     }
 
     private fun parseIngredients(input: List<String>): List<Ingredient> {
@@ -46,8 +48,8 @@ object Day15 {
     private fun part2(input: List<String>): Any {
         val ingredients = parseIngredients(input)
         return calculate(ingredients, 100)
-                .filter { calories(ingredients, it) == 500 }
-                .maxOf { score(ingredients, it) }
+            .filter { calories(ingredients, it) == 500 }
+            .maxOf { score(ingredients, it) }
     }
 
     private fun calories(ingredients: List<Ingredient>, amount: List<Int>): Int {

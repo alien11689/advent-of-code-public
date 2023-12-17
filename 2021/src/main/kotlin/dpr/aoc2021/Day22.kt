@@ -1,5 +1,7 @@
 package dpr.aoc2021
 
+import dpr.commons.Util
+
 object Day22 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -66,19 +68,25 @@ object Day22 {
     data class Cubicle(val xRange: IntRange, val yRange: IntRange, val zRange: IntRange) {
         fun volume(): Long =
             1L * (xRange.last - xRange.first + 1) *
-                    (yRange.last - yRange.first + 1) *
-                    (zRange.last - zRange.first + 1)
+                (yRange.last - yRange.first + 1) *
+                (zRange.last - zRange.first + 1)
 
         fun contains(other: Cubicle): Boolean {
             return this.xRange.contains(other.xRange.first) && this.xRange.contains(other.xRange.last)
-                    && this.yRange.contains(other.yRange.first) && this.yRange.contains(other.yRange.last)
-                    && this.zRange.contains(other.zRange.first) && this.zRange.contains(other.zRange.last)
+                && this.yRange.contains(other.yRange.first) && this.yRange.contains(other.yRange.last)
+                && this.zRange.contains(other.zRange.first) && this.zRange.contains(other.zRange.last)
         }
 
         private fun overLap(other: Cubicle): Boolean {
-            return (this.xRange.contains(other.xRange.first) || this.xRange.contains(other.xRange.last) || other.xRange.contains(this.xRange.first) || other.xRange.contains(this.xRange.last))
-                    && (this.yRange.contains(other.yRange.first) || this.yRange.contains(other.yRange.last) || other.yRange.contains(this.yRange.first) || other.yRange.contains(this.yRange.last))
-                    && (this.zRange.contains(other.zRange.first) || this.zRange.contains(other.zRange.last) || other.zRange.contains(this.zRange.first) || other.zRange.contains(this.zRange.last))
+            return (this.xRange.contains(other.xRange.first) || this.xRange.contains(other.xRange.last) || other.xRange.contains(this.xRange.first) || other.xRange.contains(
+                this.xRange.last
+            ))
+                && (this.yRange.contains(other.yRange.first) || this.yRange.contains(other.yRange.last) || other.yRange.contains(this.yRange.first) || other.yRange.contains(
+                this.yRange.last
+            ))
+                && (this.zRange.contains(other.zRange.first) || this.zRange.contains(other.zRange.last) || other.zRange.contains(this.zRange.first) || other.zRange.contains(
+                this.zRange.last
+            ))
         }
 
         private fun splitX(x: Int): Set<Cubicle> {

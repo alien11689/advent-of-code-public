@@ -1,5 +1,6 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
 import java.util.LinkedList
 
 object Day13 {
@@ -45,19 +46,19 @@ object Day13 {
     }
 
     private fun isOpenSpace(x: Int, y: Int, magic: Int): Boolean =
-            Integer.toBinaryString(x * x + 3 * x + 2 * x * y + y + y * y + magic).count { it == '1' } % 2 == 0
+        Integer.toBinaryString(x * x + 3 * x + 2 * x * y + y + y * y + magic).count { it == '1' } % 2 == 0
 
     data class Stage(val x: Int, val y: Int, val step: Int) {
         fun neighbours(magic: Int): List<Stage> {
             return listOf(
-                    Pair(x, y + 1),
-                    Pair(x, y - 1),
-                    Pair(x + 1, y),
-                    Pair(x - 1, y),
+                Pair(x, y + 1),
+                Pair(x, y - 1),
+                Pair(x + 1, y),
+                Pair(x - 1, y),
             )
-                    .filter { it.first >= 0 && it.second >= 0 }
-                    .filter { isOpenSpace(it.first, it.second, magic) }
-                    .map { Stage(it.first, it.second, step + 1) }
+                .filter { it.first >= 0 && it.second >= 0 }
+                .filter { isOpenSpace(it.first, it.second, magic) }
+                .map { Stage(it.first, it.second, step + 1) }
 
         }
 

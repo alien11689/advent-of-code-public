@@ -1,9 +1,9 @@
 package dpr.aoc2016
 
 import com.twmacinta.util.MD5
+import dpr.commons.Util
 import java.math.BigInteger
 import java.security.MessageDigest
-import javax.swing.text.html.parser.DTDConstants.MD
 
 object Day14 {
     @JvmStatic
@@ -98,18 +98,18 @@ object Day14 {
     }
 
     private fun hashToString(hash: ByteArray) =
-            BigInteger(1, hash).toString(16).let {
-                when (it.length) {
-                    32 -> it
-                    31 -> "0$it"
-                    30 -> "00$it"
-                    29 -> "000$it"
-                    28 -> "0000$it"
-                    27 -> "00000$it"
-                    26 -> "000000$it"
-                    else -> throw RuntimeException("${it.length}")
-                }
+        BigInteger(1, hash).toString(16).let {
+            when (it.length) {
+                32 -> it
+                31 -> "0$it"
+                30 -> "00$it"
+                29 -> "000$it"
+                28 -> "0000$it"
+                27 -> "00000$it"
+                26 -> "000000$it"
+                else -> throw RuntimeException("${it.length}")
             }
+        }
 //            String.format("%032x", BigInteger(1, hash))
 
     private val md5 = MessageDigest.getInstance("MD5")

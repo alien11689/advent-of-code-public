@@ -1,5 +1,6 @@
 package dpr.aoc2018
 
+import dpr.commons.Util
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -19,7 +20,7 @@ object Day04 {
         val m = mutableMapOf<Int, MutableList<Sleep>>()
         input.forEach { line ->
             val parts = line.split(Regex("[ #]+"))
-                    .map { it.replace(Regex("\\["), "").replace(Regex("]"), "") }
+                .map { it.replace(Regex("\\["), "").replace(Regex("]"), "") }
             if (parts[2] == "Guard") {
                 lastGuardId = parts[3].toInt()
                 m[lastGuardId!!] = m[lastGuardId!!] ?: mutableListOf()
@@ -54,7 +55,7 @@ object Day04 {
         val m = mutableMapOf<Int, MutableList<IntRange>>()
         input.forEach { line ->
             val parts = line.split(Regex("[ #]+"))
-                    .map { it.replace(Regex("\\["), "").replace(Regex("]"), "") }
+                .map { it.replace(Regex("\\["), "").replace(Regex("]"), "") }
             if (parts[2] == "Guard") {
                 lastGuardId = parts[3].toInt()
                 m[lastGuardId!!] = m[lastGuardId!!] ?: mutableListOf()
@@ -67,7 +68,7 @@ object Day04 {
             }
         }
 
-        val result: Map<Int, Pair<Int,Int>> = m.filter { it.value.isNotEmpty() }.map { entry ->
+        val result: Map<Int, Pair<Int, Int>> = m.filter { it.value.isNotEmpty() }.map { entry ->
             val minMap = mutableMapOf<Int, Int>()
             entry.value.forEach { r ->
                 r.forEach {

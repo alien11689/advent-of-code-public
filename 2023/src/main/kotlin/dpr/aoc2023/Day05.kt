@@ -1,5 +1,7 @@
 package dpr.aoc2023
 
+import dpr.commons.Util
+
 object Day05 {
     private const val INITIAL_STATE = "seed"
     private const val FINAL_STATE = "location"

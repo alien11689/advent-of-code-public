@@ -1,17 +1,19 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
+
 object Problem0047 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        val primes = mutableListOf(2L,3L)
+        val primes = mutableListOf(2L, 3L)
         var i = 3L
         var prevHavingDesiredNumberOfFactors = 0
         val desired = 4
-        while (true){
+        while (true) {
             ++i
-            if (factors(i, primes).toSet().size == desired){
+            if (factors(i, primes).toSet().size == desired) {
                 prevHavingDesiredNumberOfFactors++
-                if (prevHavingDesiredNumberOfFactors == desired){
+                if (prevHavingDesiredNumberOfFactors == desired) {
                     println(i - desired + 1)
                     break
                 }
@@ -24,16 +26,16 @@ object Problem0047 {
     private fun factors(i: Long, primes: MutableList<Long>): List<Long> {
         var num = i
         val res = mutableListOf<Long>()
-        for (p in primes){
-            while(num % p == 0L){
+        for (p in primes) {
+            while (num % p == 0L) {
                 res.add(p)
                 num /= p
             }
-            if (num == 1L){
+            if (num == 1L) {
                 return res
             }
         }
-        if (res.isEmpty()){
+        if (res.isEmpty()) {
             primes.add(i)
 //            println("Found prime $i")
         }

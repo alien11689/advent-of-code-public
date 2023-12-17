@@ -1,5 +1,6 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
 import java.util.Stack
 
 object Day18 {
@@ -21,10 +22,10 @@ object Day18 {
 
     private fun solve(expression: String): Long {
         val parts = expression
-                .flatMap { if (it in setOf('(', ')')) listOf(' ', it, ' ') else listOf(it) }
-                .joinToString(separator = "")
-                .trim()
-                .split(Regex(" +"))
+            .flatMap { if (it in setOf('(', ')')) listOf(' ', it, ' ') else listOf(it) }
+            .joinToString(separator = "")
+            .trim()
+            .split(Regex(" +"))
         return solveInternal(parts)
     }
 
@@ -77,26 +78,26 @@ object Day18 {
         Times;
 
         fun calc(prevRes: Long, res: Long): Long =
-                when (this) {
-                    None -> throw RuntimeException("Cannot apply none on $prevRes, $res")
-                    Plus -> prevRes + res
-                    Times -> prevRes * res
-                }
+            when (this) {
+                None -> throw RuntimeException("Cannot apply none on $prevRes, $res")
+                Plus -> prevRes + res
+                Times -> prevRes * res
+            }
     }
 
     private fun solve2(expression: String): Long {
         val parts = expression
-                .flatMap {
-                    when (it) {
-                        '(' -> listOf(' ', it, ' ', it, ' ')
-                        ')' -> listOf(' ', it, ' ', it, ' ')
-                        '*' -> listOf(' ', ')', ' ', '*', ' ', '(')
-                        else -> listOf(it)
-                    }
+            .flatMap {
+                when (it) {
+                    '(' -> listOf(' ', it, ' ', it, ' ')
+                    ')' -> listOf(' ', it, ' ', it, ' ')
+                    '*' -> listOf(' ', ')', ' ', '*', ' ', '(')
+                    else -> listOf(it)
                 }
-                .joinToString(separator = "", prefix = "( ", postfix = " )")
-                .trim()
-                .split(Regex(" +"))
+            }
+            .joinToString(separator = "", prefix = "( ", postfix = " )")
+            .trim()
+            .split(Regex(" +"))
         return solveInternal(parts)
     }
 

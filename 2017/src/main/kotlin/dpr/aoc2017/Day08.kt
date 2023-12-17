@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
+
 object Day08 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -11,14 +13,14 @@ object Day08 {
         val registers = mutableMapOf<String, Int>().withDefault { 0 }
         val highestEver = input.map { it.split(' ') }.map {
             Instruction(
-                    register = it[0],
-                    inc = it[1] == "inc",
-                    amount = it[2].toInt(),
-                    condition = Condition(
-                            register = it[4],
-                            sign = it[5],
-                            amount = it[6].toInt()
-                    )
+                register = it[0],
+                inc = it[1] == "inc",
+                amount = it[2].toInt(),
+                condition = Condition(
+                    register = it[4],
+                    sign = it[5],
+                    amount = it[6].toInt()
+                )
             )
         }.fold(Integer.MIN_VALUE) { acc, instruction ->
             instruction.apply(registers, acc)

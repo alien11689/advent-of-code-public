@@ -1,10 +1,12 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
+
 object Day09 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/09/input.txt")
-                .map { it.toLong() }
+            .map { it.toLong() }
         val solutionPart1 = part1(input)
         println(solutionPart1)
         part2(input, solutionPart1)

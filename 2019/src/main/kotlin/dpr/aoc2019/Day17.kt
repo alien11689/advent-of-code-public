@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.aoc2019.intcode.IntCodeComputer.program
 import dpr.aoc2019.intcode.IntCodeComputerState
+import dpr.commons.Util
 
 object Day17 {
     @JvmStatic
@@ -104,108 +105,108 @@ object Day17 {
         //  BBCACACABA
 
         listOf(
-                B,
-                coma,
-                B,
-                coma,
-                C,
-                coma,
-                A,
-                coma,
-                C,
-                coma,
-                A,
-                coma,
-                C,
-                coma,
-                A,
-                coma,
-                B,
-                coma,
-                A,
-                nl,
+            B,
+            coma,
+            B,
+            coma,
+            C,
+            coma,
+            A,
+            coma,
+            C,
+            coma,
+            A,
+            coma,
+            C,
+            coma,
+            A,
+            coma,
+            B,
+            coma,
+            A,
+            nl,
         ).forEach {
             inputQ.offer(it)
         }
 
         //A
         listOf(
-                L,
-                coma,
-                _8,
-                coma,
-                R,
-                coma,
-                _6,
-                coma,
-                L,
-                coma,
-                _1,
-                _0,
-                coma,
-                L,
-                coma,
-                _1,
-                _0,
-                nl,
+            L,
+            coma,
+            _8,
+            coma,
+            R,
+            coma,
+            _6,
+            coma,
+            L,
+            coma,
+            _1,
+            _0,
+            coma,
+            L,
+            coma,
+            _1,
+            _0,
+            nl,
         ).forEach {
             inputQ.offer(it)
         }
 
         // B
         listOf(
-                R,
-                coma,
-                _6,
-                coma,
-                L,
-                coma,
-                _8,
-                coma,
-                R,
-                coma,
-                _8,
-                nl,
+            R,
+            coma,
+            _6,
+            coma,
+            L,
+            coma,
+            _8,
+            coma,
+            R,
+            coma,
+            _8,
+            nl,
         ).forEach {
             inputQ.offer(it)
         }
 
         //C
         listOf(
-                R,
-                coma,
-                _4,
-                coma,
-                R,
-                coma,
-                _6,
-                coma,
-                R,
-                coma,
-                _6,
-                coma,
-                R,
-                coma,
-                _4,
-                coma,
-                R,
-                coma,
-                _4,
-                nl,
+            R,
+            coma,
+            _4,
+            coma,
+            R,
+            coma,
+            _6,
+            coma,
+            R,
+            coma,
+            _6,
+            coma,
+            R,
+            coma,
+            _4,
+            coma,
+            R,
+            coma,
+            _4,
+            nl,
         ).forEach {
             inputQ.offer(it)
         }
 
 //mode
         listOf(
-                n,
-                nl,
+            n,
+            nl,
         ).forEach {
             inputQ.offer(it)
         }
 
         program(state)
 
-        return state.output.last
+        return state.output.last()
     }
 }

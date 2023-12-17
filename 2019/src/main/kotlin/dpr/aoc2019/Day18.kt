@@ -1,5 +1,6 @@
 package dpr.aoc2019
 
+import dpr.commons.Util
 import java.util.PriorityQueue
 
 object Day18 {
@@ -21,7 +22,7 @@ object Day18 {
                 for (i in input[j].indices) {
                     val point = Point(i, j)
                     if (map[point] == true && keysAndDoors[point] == null &&
-                            point.neighbours().filter { map[it] != true }.size == 3
+                        point.neighbours().filter { map[it] != true }.size == 3
                     ) {
                         changed = true
                         ++changes
@@ -112,8 +113,8 @@ object Day18 {
                 for (i in input[j].indices) {
                     val point = Point(i, j)
                     if (map[point] == true && keysAndDoors[point] == null &&
-                            point.neighbours().filter { map[it] != true }.size == 3 &&
-                            point !in curPoses
+                        point.neighbours().filter { map[it] != true }.size == 3 &&
+                        point !in curPoses
                     ) {
                         changed = true
                         ++changes
@@ -168,19 +169,19 @@ object Day18 {
     data class Point(val x: Int, val y: Int) {
         fun neighbours(): List<Point> {
             return listOf(
-                    Point(x + 1, y),
-                    Point(x - 1, y),
-                    Point(x, y + 1),
-                    Point(x, y - 1),
+                Point(x + 1, y),
+                Point(x - 1, y),
+                Point(x, y + 1),
+                Point(x, y - 1),
             )
         }
 
         fun diag(): List<Point> {
             return listOf(
-                    Point(x + 1, y + 1),
-                    Point(x - 1, y + 1),
-                    Point(x + 1, y - 1),
-                    Point(x - 1, y - 1),
+                Point(x + 1, y + 1),
+                Point(x - 1, y + 1),
+                Point(x + 1, y - 1),
+                Point(x - 1, y - 1),
             )
         }
     }
@@ -192,10 +193,10 @@ object Day18 {
     }
 
     data class State1(
-            val cur: Point,
-            val toVisit: Map<Point, Char> = mapOf(),
-            var length: Int = 0,
-            val path: List<Char>
+        val cur: Point,
+        val toVisit: Map<Point, Char> = mapOf(),
+        var length: Int = 0,
+        val path: List<Char>
     ) : Comparable<State1> {
         fun ended() = toVisit.isEmpty()
 
@@ -208,8 +209,8 @@ object Day18 {
     }
 
     data class State2(
-            val localStates: List<LocalState>, val toVisit: Map<Point, Char> = mapOf(),
-            val path: List<Char>
+        val localStates: List<LocalState>, val toVisit: Map<Point, Char> = mapOf(),
+        val path: List<Char>
     ) : Comparable<State2> {
         fun ended() = toVisit.isEmpty()
 
@@ -228,7 +229,7 @@ object Day18 {
         pq.offer(LocalState(start, 0))
         val result = mutableMapOf<Char, Int>()
         while (!pq.isEmpty()) {
-            if (passages!= null && result.size == passages.size) {
+            if (passages != null && result.size == passages.size) {
                 break
             }
             val localState = pq.poll()

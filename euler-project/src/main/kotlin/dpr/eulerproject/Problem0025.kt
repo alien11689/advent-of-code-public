@@ -1,5 +1,6 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
 import java.math.BigInteger
 
 object Problem0025 {
@@ -8,8 +9,8 @@ object Problem0025 {
         val res = generateSequence(Triple(1, BigInteger.ZERO, BigInteger.ONE)) {
             Triple(it.first + 1, it.third, it.second + it.third)
         }
-                .first { it.third.toString().length >= 1000 }
-                .first
+            .first { it.third.toString().length >= 1000 }
+            .first
         println(res)
     }
 }

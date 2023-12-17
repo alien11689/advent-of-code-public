@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
+
 object Day10 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -50,8 +52,8 @@ object Day10 {
         }
 
         return inp.chunked(16)
-                .map { it.reduce { a, b -> a.xor(b) } }
-                .joinToString("") { String.format("%02x", it) }
+            .map { it.reduce { a, b -> a.xor(b) } }
+            .joinToString("") { String.format("%02x", it) }
     }
 
     private fun processLengths(lengths: List<Int>, inp: MutableList<Int>, curPos: Int, skipSize: Int): Pair<Int, Int> {

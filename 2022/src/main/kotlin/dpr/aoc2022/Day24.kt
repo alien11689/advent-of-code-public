@@ -1,5 +1,6 @@
 package dpr.aoc2022
 
+import dpr.commons.Util
 import java.util.PriorityQueue
 import kotlin.math.absoluteValue
 
@@ -36,11 +37,11 @@ object Day24 {
         }
 
         fun nextPositions() = setOf(
-                copy(x = x - 1),
-                copy(x = x + 1),
-                copy(y = y - 1),
-                copy(y = y + 1),
-                this,
+            copy(x = x - 1),
+            copy(x = x + 1),
+            copy(y = y - 1),
+            copy(y = y + 1),
+            this,
         )
     }
 
@@ -70,16 +71,16 @@ object Day24 {
                 b
             }
             cur.curPos.nextPositions()
-                    .filter { it.y in yRange }
-                    .forEach { nextPoint ->
-                        if (nextPoint !in newBoard) {
-                            val nextState = cur.copy(curPos = nextPoint, time = nextTime, distanceToTarget = nextPoint.manhattan(target))
-                            if (nextState.curPos == target) {
-                                return nextTime
-                            }
-                            pq.offer(nextState)
+                .filter { it.y in yRange }
+                .forEach { nextPoint ->
+                    if (nextPoint !in newBoard) {
+                        val nextState = cur.copy(curPos = nextPoint, time = nextTime, distanceToTarget = nextPoint.manhattan(target))
+                        if (nextState.curPos == target) {
+                            return nextTime
                         }
+                        pq.offer(nextState)
                     }
+                }
         }
         return Int.MIN_VALUE
     }

@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day07 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -69,7 +71,7 @@ object Day07 {
         abstract fun result(wires: Map<String, Int>): Map<String, Int>
 
         protected fun numberOrWire(name: String, wires: Map<String, Int>) =
-                if (name.matches(Regex("[0-9]+"))) name.toInt() else wires[name]
+            if (name.matches(Regex("[0-9]+"))) name.toInt() else wires[name]
 
         data class And(val x: String, val y: String, val target: String) : Operation() {
             override fun result(wires: Map<String, Int>): Map<String, Int> {

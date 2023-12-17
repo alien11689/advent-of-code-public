@@ -1,5 +1,7 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
+
 object Problem0044 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -22,7 +24,7 @@ object Problem0044 {
                     val expectedValue = p + it.value
 //                    println("P${it.key} = ${it.value} and P$i = $p - (score is ${i - it.key}) and waiting for pentagonal equal to $expectedValue")
                     possiblePentagonal[expectedValue] = (possiblePentagonal[expectedValue]
-                            ?: emptySet()) + (it.key to i)
+                        ?: emptySet()) + (it.key to i)
                 }
             }
             prevPentagonal[i] = p

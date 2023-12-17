@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.aoc2019.intcode.IntCodeComputer
 import dpr.aoc2019.intcode.IntCodeComputerState
+import dpr.commons.Util
 
 object Day25 {
     @JvmStatic
@@ -39,29 +40,29 @@ object Day25 {
         val output = state.output
         val inputQ = state.input
         listOf(
-                "south",
-                "west",
-                "take hologram",
-                "south",
-                "west",
-                "west",
-                "take hypercube",
-                "east",
-                "east",
-                "north",
-                "east",
-                "south",
-                "west",
-                "north",
-                "take coin",
-                "south",
-                "east",
-                "take cake",
-                "east",
-                "south",
-                "east",
-                "south",
-                "south",
+            "south",
+            "west",
+            "take hologram",
+            "south",
+            "west",
+            "west",
+            "take hypercube",
+            "east",
+            "east",
+            "north",
+            "east",
+            "south",
+            "west",
+            "north",
+            "take coin",
+            "south",
+            "east",
+            "take cake",
+            "east",
+            "south",
+            "east",
+            "south",
+            "south",
         ).forEach {
             IntCodeComputer.instruction(inputQ, it)
         }
@@ -88,7 +89,7 @@ object Day25 {
             }
         }
         return out.find { it.contains("\"Oh, hello! You should be able to get in by typing") }
-                ?: throw RuntimeException("Turn on writing")
+            ?: throw RuntimeException("Turn on writing")
     }
 
     private fun part1(input: String): String {

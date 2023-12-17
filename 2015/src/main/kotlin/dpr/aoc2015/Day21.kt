@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day21 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,8 +12,8 @@ object Day21 {
     private fun part1(): Any {
         val itemSets: MutableList<Set<Item>> = generateItemSets()
         return itemSets
-                .filter { fight(it) }
-                .minOf { item -> item.sumOf { it.cost } }
+            .filter { fight(it) }
+            .minOf { item -> item.sumOf { it.cost } }
     }
 
     private fun generateItemSets(): MutableList<Set<Item>> {
@@ -63,33 +65,33 @@ object Day21 {
     private fun part2(): Any {
         val itemSets: MutableList<Set<Item>> = generateItemSets()
         return itemSets
-                .filter { !fight(it) }
-                .maxOf { item -> item.sumOf { it.cost } }
+            .filter { !fight(it) }
+            .maxOf { item -> item.sumOf { it.cost } }
     }
 
     private fun weapons(): List<Item> = listOf(
-            Item(ItemType.WEAPON, 8, 4, 0),
-            Item(ItemType.WEAPON, 10, 5, 0),
-            Item(ItemType.WEAPON, 25, 6, 0),
-            Item(ItemType.WEAPON, 40, 7, 0),
-            Item(ItemType.WEAPON, 74, 8, 0),
+        Item(ItemType.WEAPON, 8, 4, 0),
+        Item(ItemType.WEAPON, 10, 5, 0),
+        Item(ItemType.WEAPON, 25, 6, 0),
+        Item(ItemType.WEAPON, 40, 7, 0),
+        Item(ItemType.WEAPON, 74, 8, 0),
     )
 
     private fun armors(): List<Item> = listOf(
-            Item(ItemType.ARMOR, 13, 0, 1),
-            Item(ItemType.ARMOR, 31, 0, 2),
-            Item(ItemType.ARMOR, 53, 0, 3),
-            Item(ItemType.ARMOR, 75, 0, 4),
-            Item(ItemType.ARMOR, 102, 0, 5),
+        Item(ItemType.ARMOR, 13, 0, 1),
+        Item(ItemType.ARMOR, 31, 0, 2),
+        Item(ItemType.ARMOR, 53, 0, 3),
+        Item(ItemType.ARMOR, 75, 0, 4),
+        Item(ItemType.ARMOR, 102, 0, 5),
     )
 
     private fun rings(): List<Item> = listOf(
-            Item(ItemType.RING, 25, 1, 0),
-            Item(ItemType.RING, 50, 2, 0),
-            Item(ItemType.RING, 100, 3, 0),
-            Item(ItemType.RING, 20, 0, 1),
-            Item(ItemType.RING, 40, 0, 2),
-            Item(ItemType.RING, 80, 0, 3),
+        Item(ItemType.RING, 25, 1, 0),
+        Item(ItemType.RING, 50, 2, 0),
+        Item(ItemType.RING, 100, 3, 0),
+        Item(ItemType.RING, 20, 0, 1),
+        Item(ItemType.RING, 40, 0, 2),
+        Item(ItemType.RING, 80, 0, 3),
     )
 
     enum class ItemType {

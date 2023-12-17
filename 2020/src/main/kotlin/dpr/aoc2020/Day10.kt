@@ -1,5 +1,6 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
 import java.util.Stack
 
 object Day10 {
@@ -8,7 +9,7 @@ object Day10 {
 //        val input = Util.getFileContent("/10/test.txt")
 //        val input = Util.getFileContent("/10/test2.txt")
         val input = Util.getNotEmptyLinesFromFile("/10/input.txt")
-                .map { it.toInt() }
+            .map { it.toInt() }
         part1(input)
         part2(input)
     }
@@ -43,6 +44,7 @@ object Day10 {
                     set = mutableListOf()
                     base = num
                 }
+
                 else -> {
                     set.add(num)
                 }

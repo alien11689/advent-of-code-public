@@ -1,5 +1,6 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
 import java.util.Stack
 
 object Day24Iter {
@@ -17,7 +18,13 @@ object Day24Iter {
         return findEntaglement(numbers, perBucket, listOf(setOf(), setOf(), setOf()), numbers.size)
     }
 
-    private fun findEntaglement(numbers: List<Int>, perBucket: Int, initBucket: List<Set<Int>>, initBestGroupSize: Int = numbers.size, initBestEntaglement: Long = Long.MAX_VALUE - 1): Pair<Int, Long> {
+    private fun findEntaglement(
+        numbers: List<Int>,
+        perBucket: Int,
+        initBucket: List<Set<Int>>,
+        initBestGroupSize: Int = numbers.size,
+        initBestEntaglement: Long = Long.MAX_VALUE - 1
+    ): Pair<Int, Long> {
         val stack = Stack<State>()
         stack.push(State(numbers, initBucket))
         var bestGroupSize = initBestGroupSize

@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
+
 object Day19 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -33,13 +35,13 @@ object Day19 {
 
     private fun changeDir(grid: List<String>, oldCur: Pair<Int, Int>, cur: Pair<Int, Int>): Pair<Int, Int> {
         return listOf(
-                Pair(cur.first + 1, cur.second),
-                Pair(cur.first - 1, cur.second),
-                Pair(cur.first, cur.second + 1),
-                Pair(cur.first, cur.second - 1)
+            Pair(cur.first + 1, cur.second),
+            Pair(cur.first - 1, cur.second),
+            Pair(cur.first, cur.second + 1),
+            Pair(cur.first, cur.second - 1)
         ).filter { it != oldCur }
-                .filter { grid[it.second][it.first] != ' ' }
-                .map { Pair(it.first - cur.first, it.second - cur.second) }
-                .first()
+            .filter { grid[it.second][it.first] != ' ' }
+            .map { Pair(it.first - cur.first, it.second - cur.second) }
+            .first()
     }
 }

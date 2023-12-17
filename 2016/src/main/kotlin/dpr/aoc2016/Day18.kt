@@ -1,5 +1,7 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
+
 object Day18 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -20,7 +22,7 @@ object Day18 {
         while (count < size) {
             val begin = listOf('.') + prev + listOf('.')
             prev = (begin.windowed(3, 1).filter { it.size == 3 }
-                    .map { if (isTrap(it[0], it[1], it[2])) '^' else '.' })
+                .map { if (isTrap(it[0], it[1], it[2])) '^' else '.' })
             safe += prev.count { it == '.' }
             ++count
         }
@@ -34,8 +36,8 @@ object Day18 {
 
     private fun isTrap(l: Char, c: Char, r: Char): Boolean {
         return l == '^' && c == '^' && r == '.' ||
-                l == '.' && c == '^' && r == '^' ||
-                l == '.' && c == '.' && r == '^' ||
-                l == '^' && c == '.' && r == '.'
+            l == '.' && c == '^' && r == '^' ||
+            l == '.' && c == '.' && r == '^' ||
+            l == '^' && c == '.' && r == '.'
     }
 }

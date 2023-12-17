@@ -1,5 +1,8 @@
 package dpr.eulerproject
 
+import dpr.commons.MathUtil
+import dpr.commons.Util
+
 object Problem0037 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -8,16 +11,17 @@ object Problem0037 {
         var i = 1L
         while (true) {
             ++i
-            if (!Util.isPrime(i)) {
+            if (!MathUtil.isPrime(i)) {
                 continue
             }
             primes.add(i.toString())
             if (i >= 10) {
                 val asString = i.toString()
                 if (
-                        ((0 until (asString.length)).map { asString.substring(it) } +
-                                (0 until (asString.length)).map { asString.substring(0, asString.length - it) }).toSet()
-                                .all { it in primes }) {
+                    ((0 until (asString.length)).map { asString.substring(it) } +
+                        (0 until (asString.length)).map { asString.substring(0, asString.length - it) }).toSet()
+                        .all { it in primes }
+                ) {
                     repeatablePrimes.add(i)
 //                    println("Found $i - > $repeatablePrimes")
                 }

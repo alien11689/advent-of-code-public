@@ -74,22 +74,22 @@ object IntCodeComputer {
 
                 1 -> {
                     assignTo(
-                            v,
-                            pos + 3,
-                            p3Mode(op),
-                            param(v, pos + 1, p1Mode(op), rel) + param(v, pos + 2, p2Mode(op), rel),
-                            rel
+                        v,
+                        pos + 3,
+                        p3Mode(op),
+                        param(v, pos + 1, p1Mode(op), rel) + param(v, pos + 2, p2Mode(op), rel),
+                        rel
                     )
                     pos += 4
                 }
 
                 2 -> {
                     assignTo(
-                            v,
-                            pos + 3,
-                            p3Mode(op),
-                            param(v, pos + 1, p1Mode(op), rel) * param(v, pos + 2, p2Mode(op), rel),
-                            rel
+                        v,
+                        pos + 3,
+                        p3Mode(op),
+                        param(v, pos + 1, p1Mode(op), rel) * param(v, pos + 2, p2Mode(op), rel),
+                        rel
                     )
                     pos += 4
                 }
@@ -166,12 +166,12 @@ object IntCodeComputer {
 
 
 data class IntCodeComputerState(
-        var v: MutableMap<Long, Long>,
-        var pos: Long = 0,
-        val input: LinkedList<Long> = LinkedList(),
-        val output: LinkedList<Long> = LinkedList(),
-        var ended: Boolean = false,
-        var rel: Long = 0
+    var v: MutableMap<Long, Long>,
+    var pos: Long = 0,
+    val input: LinkedList<Long> = LinkedList(),
+    val output: LinkedList<Long> = LinkedList(),
+    var ended: Boolean = false,
+    var rel: Long = 0
 ) {
     companion object {
         fun init(input: String): IntCodeComputerState {

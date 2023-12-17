@@ -1,5 +1,6 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
 import kotlin.math.absoluteValue
 
 object Day20 {
@@ -26,10 +27,10 @@ object Day20 {
         return input.mapIndexed { index, line ->
             val parts = line.split(Regex("[<>]"))
             Particle(
-                    index,
-                    p = Coord.from(parts[1]),
-                    v = Coord.from(parts[3]),
-                    a = Coord.from(parts[5])
+                index,
+                p = Coord.from(parts[1]),
+                v = Coord.from(parts[3]),
+                a = Coord.from(parts[5])
             )
         }
     }
@@ -61,17 +62,17 @@ object Day20 {
     data class Particle(val id: Int, var p: Coord, var v: Coord, val a: Coord) {
         fun updateV() {
             v = Coord(
-                    x = v.x + a.x,
-                    y = v.y + a.y,
-                    z = v.z + a.z,
+                x = v.x + a.x,
+                y = v.y + a.y,
+                z = v.z + a.z,
             )
         }
 
         fun updateP() {
             p = Coord(
-                    x = v.x + p.x,
-                    y = v.y + p.y,
-                    z = v.z + p.z,
+                x = v.x + p.x,
+                y = v.y + p.y,
+                z = v.z + p.z,
             )
         }
 

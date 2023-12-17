@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day11 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -9,29 +11,29 @@ object Day11 {
 
     private fun part1And2(input: String) {
         generateSequence({ input.toMutableList() }) { generateNext(it) }
-                .filter {
-                    var i = it.size - 1
-                    while (i > 1) {
-                        if (it[i] == it[i - 1] + 1 && it[i] == it[i - 2] + 2) {
-                            return@filter true
-                        }
-                        --i
+            .filter {
+                var i = it.size - 1
+                while (i > 1) {
+                    if (it[i] == it[i - 1] + 1 && it[i] == it[i - 2] + 2) {
+                        return@filter true
                     }
-                    false
+                    --i
                 }
-                .filter {
-                    var i = it.size - 1
-                    val pairs = mutableSetOf<Char>()
-                    while (i > 0) {
-                        if (it[i] == it[i - 1]) {
-                            pairs.add(it[i])
-                        }
-                        --i
+                false
+            }
+            .filter {
+                var i = it.size - 1
+                val pairs = mutableSetOf<Char>()
+                while (i > 0) {
+                    if (it[i] == it[i - 1]) {
+                        pairs.add(it[i])
                     }
-                    pairs.size >= 2
+                    --i
                 }
-                .take(2)
-                .forEach { println(it.joinToString(separator = "")) }
+                pairs.size >= 2
+            }
+            .take(2)
+            .forEach { println(it.joinToString(separator = "")) }
     }
 
     private fun generateNext(prev: MutableList<Char>): MutableList<Char> {

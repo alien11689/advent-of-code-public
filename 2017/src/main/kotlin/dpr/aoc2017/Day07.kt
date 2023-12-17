@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
+
 object Day07 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -21,8 +23,8 @@ object Day07 {
         input.forEach { line ->
             val parts = line.split(" ", limit = 4)
             val disc = Disc(parts[0],
-                    parts[1].removePrefix("(").removeSuffix(")").toInt(),
-                    if (parts.size > 2) parts[3].split(',').map { it.trim() } else listOf()
+                parts[1].removePrefix("(").removeSuffix(")").toInt(),
+                if (parts.size > 2) parts[3].split(',').map { it.trim() } else listOf()
             )
             discs[parts[0]] = disc
             allChildren.addAll(disc.children)

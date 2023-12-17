@@ -1,6 +1,7 @@
 package dpr.aoc2017
 
-import java.util.*
+import dpr.commons.Util
+import java.util.Stack
 
 object Day14 {
     @JvmStatic
@@ -11,22 +12,22 @@ object Day14 {
     }
 
     val map = mapOf(
-            Pair('0', "0000"),
-            Pair('1', "0001"),
-            Pair('2', "0010"),
-            Pair('3', "0011"),
-            Pair('4', "0100"),
-            Pair('5', "0101"),
-            Pair('6', "0110"),
-            Pair('7', "0111"),
-            Pair('8', "1000"),
-            Pair('9', "1001"),
-            Pair('a', "1010"),
-            Pair('b', "1011"),
-            Pair('c', "1100"),
-            Pair('d', "1101"),
-            Pair('e', "1110"),
-            Pair('f', "1111"),
+        Pair('0', "0000"),
+        Pair('1', "0001"),
+        Pair('2', "0010"),
+        Pair('3', "0011"),
+        Pair('4', "0100"),
+        Pair('5', "0101"),
+        Pair('6', "0110"),
+        Pair('7', "0111"),
+        Pair('8', "1000"),
+        Pair('9', "1001"),
+        Pair('a', "1010"),
+        Pair('b', "1011"),
+        Pair('c', "1100"),
+        Pair('d', "1101"),
+        Pair('e', "1110"),
+        Pair('f', "1111"),
     )
 
     private fun part1(input: String): Any {
@@ -38,9 +39,9 @@ object Day14 {
 
     private fun buildGrid(input: String): List<String> {
         val grid = ((0..127).map { "$input-$it" }.map { Day10.knotHash(it) })
-                .map {
-                    it.map { letter -> map[letter] }.joinToString("")
-                }
+            .map {
+                it.map { letter -> map[letter] }.joinToString("")
+            }
         return grid
     }
 
@@ -76,12 +77,12 @@ object Day14 {
     private fun neighbour(i: Int, j: Int, size: Int): List<Pair<Int, Int>> {
         val limit = 0 until size
         return listOf(
-                listOf(i - 1, j),
-                listOf(i + 1, j),
-                listOf(i, j - 1),
-                listOf(i, j + 1),
+            listOf(i - 1, j),
+            listOf(i + 1, j),
+            listOf(i, j - 1),
+            listOf(i, j + 1),
         )
-                .filter { it[0] in limit && it[1] in limit }
-                .map { Pair(it[0], it[1]) }
+            .filter { it[0] in limit && it[1] in limit }
+            .map { Pair(it[0], it[1]) }
     }
 }

@@ -1,5 +1,6 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
 import java.math.BigInteger
 
 object Day13 {
@@ -57,8 +58,8 @@ object Day13 {
         var cur: BigInteger = base
         while (true) {
             if (busToMinut.filter { it.key in keys }.all { entry ->
-                        (cur + entry.value) % entry.key == BigInteger.ZERO
-                    }) {
+                    (cur + entry.value) % entry.key == BigInteger.ZERO
+                }) {
                 return cur
             }
             cur += increment

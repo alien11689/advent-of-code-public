@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day14 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -44,11 +46,11 @@ object Day14 {
     }
 
     data class ReeinderState(
-            val score: Int = 0,
-            val isRunning: Boolean = true,
-            val resting: Int = 0,
-            val running: Int = 0,
-            val dist: Int = 0
+        val score: Int = 0,
+        val isRunning: Boolean = true,
+        val resting: Int = 0,
+        val running: Int = 0,
+        val dist: Int = 0
     )
 
     data class Reeinder(val speed: Int, val run: Int, val rest: Int) {

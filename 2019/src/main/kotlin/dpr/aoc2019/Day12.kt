@@ -1,5 +1,6 @@
 package dpr.aoc2019
 
+import dpr.commons.Util
 import kotlin.math.absoluteValue
 
 object Day12 {
@@ -63,8 +64,8 @@ object Day12 {
             val curX = xxs[i]
             val curV = vvs[i]
             vvs[i] = listOf(curV[0] + xxs.sumOf { signum(curX[0], it[0]) },
-                    curV[1] + xxs.sumOf { signum(curX[1], it[1]) },
-                    curV[2] + xxs.sumOf { signum(curX[2], it[2]) })
+                curV[1] + xxs.sumOf { signum(curX[1], it[1]) },
+                curV[2] + xxs.sumOf { signum(curX[2], it[2]) })
         }
         for (i in 0 until xxs.size) {
             val curX = xxs[i]
@@ -73,17 +74,17 @@ object Day12 {
     }
 
     private fun initVVS() = mutableListOf(
-            listOf(0, 0, 0),
-            listOf(0, 0, 0),
-            listOf(0, 0, 0),
-            listOf(0, 0, 0),
+        listOf(0, 0, 0),
+        listOf(0, 0, 0),
+        listOf(0, 0, 0),
+        listOf(0, 0, 0),
     )
 
     private fun initXXS() = mutableListOf(
-            listOf(-1, 7, 3),
-            listOf(12, 2, -13),
-            listOf(14, 18, -8),
-            listOf(17, 4, -4),
+        listOf(-1, 7, 3),
+        listOf(12, 2, -13),
+        listOf(14, 18, -8),
+        listOf(17, 4, -4),
     )
 
     private fun signum(a: Int, b: Int): Int {

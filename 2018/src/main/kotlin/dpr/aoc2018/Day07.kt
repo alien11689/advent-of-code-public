@@ -1,5 +1,6 @@
 package dpr.aoc2018
 
+import dpr.commons.Util
 import java.util.TreeSet
 
 object Day07 {
@@ -71,8 +72,8 @@ object Day07 {
 
     private fun parseInstructions(input: List<String>): MutableList<Instr> {
         val instructions = (input.map { it.split(' ')[7] }.toSet())
-                .map { Instr(it.first()) }
-                .toMutableList()
+            .map { Instr(it.first()) }
+            .toMutableList()
 
         input.forEach { l ->
             val split = l.split(' ')

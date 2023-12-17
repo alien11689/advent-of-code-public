@@ -1,5 +1,6 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
 import java.util.LinkedList
 
 object Day24 {

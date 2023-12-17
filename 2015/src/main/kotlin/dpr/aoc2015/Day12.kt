@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day12 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -119,6 +121,7 @@ object Day12 {
             } else {
                 json.elems.values.sumOf { sumNumbersFilteringRed(it) }
             }
+
             else -> 0
         }
     }

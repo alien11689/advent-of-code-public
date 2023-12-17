@@ -1,5 +1,6 @@
 package dpr.synacorchallenge
 
+import dpr.commons.Util
 import java.util.PriorityQueue
 
 object Orb {
@@ -48,32 +49,33 @@ object Orb {
         }
 
         fun add(np: Point, op: Operation): Path =
-                copy(route = route + np, operation = op)
+            copy(route = route + np, operation = op)
 
         fun addAndResult(np: Point, score: Int): Path =
-                copy(
-                        route = route + np,
-                        operation = Operation.NONE,
-                        orb = when (operation) {
-                            Operation.PLUS -> orb + score
-                            Operation.MINUS -> orb - score
-                            Operation.TIMES -> orb * score
-                            Operation.NONE -> throw RuntimeException("Invalid path...")
-                        })
+            copy(
+                route = route + np,
+                operation = Operation.NONE,
+                orb = when (operation) {
+                    Operation.PLUS -> orb + score
+                    Operation.MINUS -> orb - score
+                    Operation.TIMES -> orb * score
+                    Operation.NONE -> throw RuntimeException("Invalid path...")
+                }
+            )
     }
 
     data class Point(val x: Int, val y: Int) {
         fun neighbours(): Set<Point> =
-                setOf(
-                        Point(x + 1, y),
-                        Point(x - 1, y),
-                        Point(x, y + 1),
-                        Point(x, y - 1),
-                )
-                        .filterNot { it.x == 0 && it.y == 0 }
-                        .filter { it.x >= 0 && it.y >= 0 }
-                        .filter { it.x <= 3 && it.y <= 3 }
-                        .toSet()
+            setOf(
+                Point(x + 1, y),
+                Point(x - 1, y),
+                Point(x, y + 1),
+                Point(x, y - 1),
+            )
+                .filterNot { it.x == 0 && it.y == 0 }
+                .filter { it.x >= 0 && it.y >= 0 }
+                .filter { it.x <= 3 && it.y <= 3 }
+                .toSet()
 
     }
 

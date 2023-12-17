@@ -1,5 +1,7 @@
 package dpr.aoc2018
 
+import dpr.commons.Util
+
 object Day03 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -30,9 +32,11 @@ object Day03 {
 
     private fun createCarpets(lines: List<String>) = lines.map {
         val parts = it.split(Regex("[ #@,:x]"))
-        Carpet(id = parts[1], fromLeft = parts[4].toInt(),
-                fromTop = parts[5].toInt(), width = parts[7].toInt(),
-                height = parts[8].toInt())
+        Carpet(
+            id = parts[1], fromLeft = parts[4].toInt(),
+            fromTop = parts[5].toInt(), width = parts[7].toInt(),
+            height = parts[8].toInt()
+        )
     }
 
     private fun part2(lines: List<String>): Any {

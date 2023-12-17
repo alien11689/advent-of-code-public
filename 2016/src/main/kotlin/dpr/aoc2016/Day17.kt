@@ -1,5 +1,6 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.LinkedList
@@ -45,10 +46,10 @@ object Day17 {
             it in setOf('b', 'c', 'd', 'e', 'f')
         }
         val moves = listOfNotNull(
-                if (available[0]) 'U' else null,
-                if (available[1]) 'D' else null,
-                if (available[2]) 'L' else null,
-                if (available[3]) 'R' else null,
+            if (available[0]) 'U' else null,
+            if (available[1]) 'D' else null,
+            if (available[2]) 'L' else null,
+            if (available[3]) 'R' else null,
         )
 
         moves.map { newPos(cur, it) }.filter { it.isValid() }.forEach {
@@ -58,10 +59,10 @@ object Day17 {
 
     private fun newPos(pos: Pos, x: Char): Pos {
         return Pos(
-                x = pos.x + (if (x == 'L') -1 else if (x == 'R') 1 else 0),
-                y = pos.y + if (x == 'U') -1 else if (x == 'D') 1 else 0,
-                path = pos.path + x,
-                size = pos.size + 1
+            x = pos.x + (if (x == 'L') -1 else if (x == 'R') 1 else 0),
+            y = pos.y + if (x == 'U') -1 else if (x == 'D') 1 else 0,
+            path = pos.path + x,
+            size = pos.size + 1
         )
     }
 

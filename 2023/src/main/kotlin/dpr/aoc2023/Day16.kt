@@ -1,5 +1,8 @@
 package dpr.aoc2023
 
+import dpr.commons.Dir
+import dpr.commons.Point2D
+import dpr.commons.Util
 import java.util.Stack
 
 object Day16 {

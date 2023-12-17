@@ -1,5 +1,6 @@
 package dpr.aoc2023
 
+import dpr.commons.Util
 import kotlin.math.sqrt
 
 object Day06 {

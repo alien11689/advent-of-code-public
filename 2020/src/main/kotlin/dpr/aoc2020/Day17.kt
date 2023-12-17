@@ -1,5 +1,7 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
+
 object Day17 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -68,24 +70,24 @@ object Day17 {
     }
 
     fun cycle(points: Set<Point>): Set<Point> =
-            points.flatMap { it.neighbours() }.toSet().filter { p ->
-                if (p in points) {
-                    val n = p.neighbours()
-                    points.count { it in n } in setOf(2, 3)
-                } else {
-                    val n = p.neighbours()
-                    points.count { it in n } == 3
-                }
-            }.toSet()
+        points.flatMap { it.neighbours() }.toSet().filter { p ->
+            if (p in points) {
+                val n = p.neighbours()
+                points.count { it in n } in setOf(2, 3)
+            } else {
+                val n = p.neighbours()
+                points.count { it in n } == 3
+            }
+        }.toSet()
 
     private fun cycle2(points: Set<Point>): Set<Point> =
-            points.flatMap { it.neighbours2() }.toSet().filter { p ->
-                if (p in points) {
-                    val n = p.neighbours2()
-                    points.count { it in n } in setOf(2, 3)
-                } else {
-                    val n = p.neighbours2()
-                    points.count { it in n } == 3
-                }
-            }.toSet()
+        points.flatMap { it.neighbours2() }.toSet().filter { p ->
+            if (p in points) {
+                val n = p.neighbours2()
+                points.count { it in n } in setOf(2, 3)
+            } else {
+                val n = p.neighbours2()
+                points.count { it in n } == 3
+            }
+        }.toSet()
 }

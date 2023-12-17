@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
+
 object Day25 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -25,6 +27,7 @@ object Day25 {
                         tape.left()
                         'C'
                     }
+
                 'B' ->
                     state = if (tape.read() == 0) {
                         tape.write(1)
@@ -35,6 +38,7 @@ object Day25 {
                         tape.left()
                         'D'
                     }
+
                 'C' ->
                     state = if (tape.read() == 0) {
                         tape.write(1)
@@ -45,6 +49,7 @@ object Day25 {
                         tape.right()
                         'C'
                     }
+
                 'D' ->
                     state = if (tape.read() == 0) {
                         tape.write(0)
@@ -55,6 +60,7 @@ object Day25 {
                         tape.right()
                         'E'
                     }
+
                 'E' ->
                     state = if (tape.read() == 0) {
                         tape.write(1)
@@ -65,6 +71,7 @@ object Day25 {
                         tape.left()
                         'F'
                     }
+
                 'F' ->
                     state = if (tape.read() == 0) {
                         tape.write(1)

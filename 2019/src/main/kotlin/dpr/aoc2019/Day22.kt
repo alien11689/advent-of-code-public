@@ -1,5 +1,6 @@
 package dpr.aoc2019
 
+import dpr.commons.Util
 import java.math.BigInteger
 import kotlin.math.absoluteValue
 
@@ -50,7 +51,7 @@ object Day22 {
             // all operations are linear, so it means that their combination is also linear -> y = ax+b
         }
 
-        fun applyIteration( reversedInput:List<String>, toFind:Long, size:Long):Long {
+        fun applyIteration(reversedInput: List<String>, toFind: Long, size: Long): Long {
             return reversedInput.fold(toFind) { cur, inp ->
                 applyReversed(inp.split(" "), cur, size)
             }
@@ -91,7 +92,8 @@ object Day22 {
 // a = (x2 -x3)/(x1 -x2) => (x2 - x3) * (x1 - x2)^(-1)
 // b = x3 - ax2
 
-        val a = (xx[1]!!.toBigInteger() - xx[2]!!.toBigInteger()) * ((xx[0]!!.toBigInteger() - xx[1]!!.toBigInteger())).modInverse(size.toBigInteger()) % size.toBigInteger()
+        val a =
+            (xx[1]!!.toBigInteger() - xx[2]!!.toBigInteger()) * ((xx[0]!!.toBigInteger() - xx[1]!!.toBigInteger())).modInverse(size.toBigInteger()) % size.toBigInteger()
         val b = (xx[1]!!.toBigInteger() - a * xx[0]!!.toBigInteger()) % size.toBigInteger() + size.toBigInteger()
 //        println("a = $a")
 //        println("b = $b")

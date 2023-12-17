@@ -1,5 +1,6 @@
 package dpr.synacorchallenge
 
+import dpr.commons.Util
 import java.util.Stack
 import kotlin.math.pow
 
@@ -27,7 +28,7 @@ object Main {
     }
 
     private fun valueOrRegister(v: Int, registry: Map<Int, Int>): Int =
-            if (v >= BASE) registry[v % BASE]!! else v
+        if (v >= BASE) registry[v % BASE]!! else v
 
     private fun runProgram(program: MutableList<Int>) {
         val stack = Stack<Int>()
@@ -45,6 +46,7 @@ object Main {
                     }
                     return
                 }
+
                 Opcodes.NOOP -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "NOOP", 0)
@@ -52,6 +54,7 @@ object Main {
                     }
                     instrPointer += 1
                 }
+
                 Opcodes.OUT -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "OUT", 1)
@@ -61,6 +64,7 @@ object Main {
                     print(valueOrRegister(program[instrPointer + 1], registers).toChar())
                     instrPointer += 2
                 }
+
                 Opcodes.JMP -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "JMP", 1)
@@ -69,6 +73,7 @@ object Main {
                     if (debug) System.err.println("$instrPointer: JMP ${program[instrPointer + 1]} $registers")
                     instrPointer = valueOrRegister(program[instrPointer + 1], registers)
                 }
+
                 Opcodes.JT -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "JT", 2)
@@ -81,6 +86,7 @@ object Main {
                         instrPointer += 3
                     }
                 }
+
                 Opcodes.JF -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "JF", 2)
@@ -93,6 +99,7 @@ object Main {
                         instrPointer += 3
                     }
                 }
+
                 Opcodes.SET -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "SET", 2)
@@ -102,24 +109,29 @@ object Main {
                     registers[program[instrPointer + 1] % BASE] = valueOrRegister(program[instrPointer + 2], registers)
                     instrPointer += 3
                 }
+
                 Opcodes.ADD -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "ADD", 3)
                         continue
                     }
                     if (debug) System.err.println("$instrPointer: ADD ${program[instrPointer + 1]} ${program[instrPointer + 2]} ${program[instrPointer + 3]} $registers")
-                    registers[program[instrPointer + 1] % BASE] = (valueOrRegister(program[instrPointer + 2], registers) + valueOrRegister(program[instrPointer + 3], registers)) % BASE
+                    registers[program[instrPointer + 1] % BASE] =
+                        (valueOrRegister(program[instrPointer + 2], registers) + valueOrRegister(program[instrPointer + 3], registers)) % BASE
                     instrPointer += 4
                 }
+
                 Opcodes.EQ -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "EQ", 3)
                         continue
                     }
                     if (debug) System.err.println("$instrPointer: EQ ${program[instrPointer + 1]} ${program[instrPointer + 2]} ${program[instrPointer + 3]} $registers")
-                    registers[program[instrPointer + 1] % BASE] = if (valueOrRegister(program[instrPointer + 2], registers) == valueOrRegister(program[instrPointer + 3], registers)) 1 else 0
+                    registers[program[instrPointer + 1] % BASE] =
+                        if (valueOrRegister(program[instrPointer + 2], registers) == valueOrRegister(program[instrPointer + 3], registers)) 1 else 0
                     instrPointer += 4
                 }
+
                 Opcodes.PUSH -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "PUSH", 1)
@@ -129,6 +141,7 @@ object Main {
                     stack.push(valueOrRegister(program[instrPointer + 1], registers))
                     instrPointer += 2
                 }
+
                 Opcodes.POP -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "POP", 1)
@@ -138,45 +151,54 @@ object Main {
                     registers[program[instrPointer + 1] % BASE] = stack.pop()
                     instrPointer += 2
                 }
+
                 Opcodes.GT -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "GT", 3)
                         continue
                     }
                     if (debug) System.err.println("$instrPointer: GT ${program[instrPointer + 1]} ${program[instrPointer + 2]} ${program[instrPointer + 3]} $registers")
-                    registers[program[instrPointer + 1] % BASE] = if (valueOrRegister(program[instrPointer + 2], registers) > valueOrRegister(program[instrPointer + 3], registers)) 1 else 0
+                    registers[program[instrPointer + 1] % BASE] =
+                        if (valueOrRegister(program[instrPointer + 2], registers) > valueOrRegister(program[instrPointer + 3], registers)) 1 else 0
                     instrPointer += 4
                 }
+
                 Opcodes.AND -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "AND", 3)
                         continue
                     }
                     if (debug) System.err.println("$instrPointer: AND ${program[instrPointer + 1]} ${program[instrPointer + 2]} ${program[instrPointer + 3]} $registers")
-                    registers[program[instrPointer + 1] % BASE] = (valueOrRegister(program[instrPointer + 2], registers).and(valueOrRegister(program[instrPointer + 3], registers))) % BASE
+                    registers[program[instrPointer + 1] % BASE] =
+                        (valueOrRegister(program[instrPointer + 2], registers).and(valueOrRegister(program[instrPointer + 3], registers))) % BASE
                     instrPointer += 4
                 }
+
                 Opcodes.OR -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "OR", 3)
                         continue
                     }
                     if (debug) System.err.println("$instrPointer: OR ${program[instrPointer + 1]} ${program[instrPointer + 2]} ${program[instrPointer + 3]} $registers")
-                    registers[program[instrPointer + 1] % BASE] = (valueOrRegister(program[instrPointer + 2], registers).or(valueOrRegister(program[instrPointer + 3], registers))) % BASE
+                    registers[program[instrPointer + 1] % BASE] =
+                        (valueOrRegister(program[instrPointer + 2], registers).or(valueOrRegister(program[instrPointer + 3], registers))) % BASE
                     instrPointer += 4
                 }
+
                 Opcodes.NOT -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "NOT", 2)
                         continue
                     }
                     if (debug) System.err.println("$instrPointer: NOT ${program[instrPointer + 1]} ${program[instrPointer + 2]} $registers")
-                    registers[program[instrPointer + 1] % BASE] = Integer.parseInt(String.format("%15s", Integer.toBinaryString(valueOrRegister(program[instrPointer + 2], registers)))
+                    registers[program[instrPointer + 1] % BASE] =
+                        Integer.parseInt(String.format("%15s", Integer.toBinaryString(valueOrRegister(program[instrPointer + 2], registers)))
                             .replace(' ', '0')
                             .map { if (it == '0') '1' else '0' }
                             .joinToString(""), 2) % BASE
                     instrPointer += 3
                 }
+
                 Opcodes.CALL -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "CALL", 1)
@@ -194,24 +216,29 @@ object Main {
                     stack.push(instrPointer + 2)
                     instrPointer = valueOrRegister(program[instrPointer + 1], registers)
                 }
+
                 Opcodes.MULT -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "MULT", 3)
                         continue
                     }
                     if (debug) System.err.println("$instrPointer: MULT ${program[instrPointer + 1]} ${program[instrPointer + 2]} ${program[instrPointer + 3]} $registers")
-                    registers[program[instrPointer + 1] % BASE] = (valueOrRegister(program[instrPointer + 2], registers) * valueOrRegister(program[instrPointer + 3], registers)) % BASE
+                    registers[program[instrPointer + 1] % BASE] =
+                        (valueOrRegister(program[instrPointer + 2], registers) * valueOrRegister(program[instrPointer + 3], registers)) % BASE
                     instrPointer += 4
                 }
+
                 Opcodes.MOD -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "MOD", 3)
                         continue
                     }
                     if (debug) System.err.println("$instrPointer: MOD ${program[instrPointer + 1]} ${program[instrPointer + 2]} ${program[instrPointer + 3]} $registers")
-                    registers[program[instrPointer + 1] % BASE] = (valueOrRegister(program[instrPointer + 2], registers) % valueOrRegister(program[instrPointer + 3], registers)) % BASE
+                    registers[program[instrPointer + 1] % BASE] =
+                        (valueOrRegister(program[instrPointer + 2], registers) % valueOrRegister(program[instrPointer + 3], registers)) % BASE
                     instrPointer += 4
                 }
+
                 Opcodes.RMEM -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "RMEM", 2)
@@ -221,6 +248,7 @@ object Main {
                     registers[program[instrPointer + 1] % BASE] = program[valueOrRegister(program[instrPointer + 2], registers) % BASE]
                     instrPointer += 3
                 }
+
                 Opcodes.WMEM -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "WMEM", 2)
@@ -230,6 +258,7 @@ object Main {
                     program[valueOrRegister(program[instrPointer + 1], registers)] = valueOrRegister(program[instrPointer + 2], registers)
                     instrPointer += 3
                 }
+
                 Opcodes.RET -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "RET", 0)
@@ -238,6 +267,7 @@ object Main {
                     if (debug) System.err.println("$instrPointer: RET $registers")
                     instrPointer = stack.pop()
                 }
+
                 Opcodes.IN -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "IN", 1)
@@ -258,6 +288,7 @@ object Main {
                     registers[program[instrPointer + 1] % BASE] = read
                     instrPointer += 2
                 }
+
                 else -> {
                     if (printOnly) {
                         instrPointer += printCommand(program, instrPointer, "DATA $opcode", 0)

@@ -1,5 +1,7 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
+
 object Day03 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -29,7 +31,8 @@ object Day03 {
     }
 
     private fun part2(input: List<String>) {
-        println(countTrees(input, 1, 1) *
+        println(
+            countTrees(input, 1, 1) *
                 countTrees(input, 1, 3) *
                 countTrees(input, 1, 5) *
                 countTrees(input, 1, 7) *

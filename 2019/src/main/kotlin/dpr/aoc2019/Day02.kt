@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.aoc2019.intcode.IntCodeComputer
 import dpr.aoc2019.intcode.IntCodeComputerState
+import dpr.commons.Util
 
 object Day02 {
     @JvmStatic

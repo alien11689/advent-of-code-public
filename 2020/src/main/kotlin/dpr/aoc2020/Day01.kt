@@ -1,5 +1,7 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
+
 object Day01 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -11,17 +13,17 @@ object Day01 {
     private fun part1(input: List<String>) {
         val mem = mutableSetOf<Int>()
         println(input
-                .flatMap { s ->
-                    val n = s.toInt()
-                    val compliant = 2020 - n
-                    if (compliant in mem) {
-                        listOf(n * compliant)
-                    } else {
-                        mem.add(n)
-                        listOf()
-                    }
+            .flatMap { s ->
+                val n = s.toInt()
+                val compliant = 2020 - n
+                if (compliant in mem) {
+                    listOf(n * compliant)
+                } else {
+                    mem.add(n)
+                    listOf()
                 }
-                .take(1)[0])
+            }
+            .take(1)[0])
     }
 
     private fun part2(input: List<String>) {

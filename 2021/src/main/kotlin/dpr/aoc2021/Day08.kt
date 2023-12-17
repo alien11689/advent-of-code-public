@@ -1,5 +1,7 @@
 package dpr.aoc2021
 
+import dpr.commons.Util
+
 object Day08 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -25,8 +27,10 @@ object Day08 {
         segments[1] = clues.first { it.length == 4 }.toSet() - segments[5]
         segments[3] = clues.first { it.length == 4 }.toSet() - segments[5]
 
-        segments[4] = clues.filter { it.length == 5 || it.length == 6 }.flatMap { it.toSet() }.toSet() - segments[0] - segments[1] - segments[2] - segments[5] - segments[3]
-        segments[6] = clues.filter { it.length == 5 || it.length == 6 }.flatMap { it.toSet() }.toSet() - segments[0] - segments[1] - segments[2] - segments[5] - segments[3]
+        segments[4] = clues.filter { it.length == 5 || it.length == 6 }.flatMap { it.toSet() }
+            .toSet() - segments[0] - segments[1] - segments[2] - segments[5] - segments[3]
+        segments[6] = clues.filter { it.length == 5 || it.length == 6 }.flatMap { it.toSet() }
+            .toSet() - segments[0] - segments[1] - segments[2] - segments[5] - segments[3]
 //        val five = clues.filter { it.length == 5 }.map { it.toSet() }.toSet()
         val six = clues.filter { it.length == 6 }.map { it.toSet() }.toSet()
 //        println(six)

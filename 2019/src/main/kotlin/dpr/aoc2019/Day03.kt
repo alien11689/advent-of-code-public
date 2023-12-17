@@ -1,5 +1,6 @@
 package dpr.aoc2019
 
+import dpr.commons.Util
 import kotlin.math.absoluteValue
 
 object Day03 {
@@ -25,8 +26,8 @@ object Day03 {
 
         return intersections.minOf { inter ->
             a.filter { cur -> cur[0] to cur[1] == inter }.minOf { it[2] } +
-                    b.filter { cur -> cur[0] to cur[1] == inter }
-                            .minOf { it[2] }
+                b.filter { cur -> cur[0] to cur[1] == inter }
+                    .minOf { it[2] }
         }
     }
 
@@ -44,18 +45,21 @@ object Day03 {
                     }
                     cur = cur.first to (cur.second + dist)
                 }
+
                 'D' -> {
                     (cur.second downTo (cur.second - dist)).forEach {
                         mem.add(cur.first to it)
                     }
                     cur = cur.first to (cur.second - dist)
                 }
+
                 'L' -> {
                     (cur.first downTo (cur.first - dist)).forEach {
                         mem.add(it to cur.second)
                     }
                     cur = (cur.first - dist) to cur.second
                 }
+
                 'R' -> {
                     (cur.first..(cur.first + dist)).forEach {
                         mem.add(it to cur.second)
@@ -81,18 +85,21 @@ object Day03 {
                     }
                     cur = cur.first to cur.second + dist
                 }
+
                 'D' -> {
                     ((cur.second - 1) downTo (cur.second - dist)).forEach {
                         mem.add(listOf(cur.first, it, ++step))
                     }
                     cur = cur.first to cur.second - dist
                 }
+
                 'L' -> {
                     ((cur.first - 1) downTo (cur.first - dist)).forEach {
                         mem.add(listOf(it, cur.second, ++step))
                     }
                     cur = cur.first - dist to cur.second
                 }
+
                 'R' -> {
                     ((cur.first + 1)..(cur.first + dist)).forEach {
                         mem.add(listOf(it, cur.second, ++step))

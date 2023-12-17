@@ -1,5 +1,7 @@
 package dpr.aoc2019
 
+import dpr.commons.Util
+
 object Day14 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -33,7 +35,7 @@ object Day14 {
             r.from.forEach { c ->
                 needs[c.name] = (needs[c.name] ?: 0L) + times * c.amount
             }
-    //            println("${++iter}: Resolved ${needed.first} results $needs")
+            //            println("${++iter}: Resolved ${needed.first} results $needs")
 
         }
         return needs["ORE"]!!
@@ -63,7 +65,7 @@ object Day14 {
                 b = c
             } else {
                 a = c
-                if(bestOre < ore) {
+                if (bestOre < ore) {
                     bestOre = ore
                     best = c
                 }

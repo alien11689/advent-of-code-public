@@ -1,5 +1,6 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
 import java.util.LinkedList
 
 object Day24 {
@@ -79,20 +80,20 @@ object Day24 {
 
     private fun findNeighbours(stage: Stage, maze: List<String>): List<Stage> {
         return listOf(
-                listOf(stage.x + 1, stage.y),
-                listOf(stage.x - 1, stage.y),
-                listOf(stage.x, stage.y + 1),
-                listOf(stage.x, stage.y - 1),
+            listOf(stage.x + 1, stage.y),
+            listOf(stage.x - 1, stage.y),
+            listOf(stage.x, stage.y + 1),
+            listOf(stage.x, stage.y - 1),
         )
-                .filter { it[0] >= 0 && it[0] < maze[0].length && it[1] >= 0 && it[1] < maze.size && maze[it[1]][it[0]] != '#' }
-                .map {
-                    val cur = maze[it[1]][it[0]]
-                    Stage(
-                            x = it[0],
-                            y = it[1],
-                            visited = if (cur != '.') stage.visited + cur else stage.visited
-                    )
-                }
+            .filter { it[0] >= 0 && it[0] < maze[0].length && it[1] >= 0 && it[1] < maze.size && maze[it[1]][it[0]] != '#' }
+            .map {
+                val cur = maze[it[1]][it[0]]
+                Stage(
+                    x = it[0],
+                    y = it[1],
+                    visited = if (cur != '.') stage.visited + cur else stage.visited
+                )
+            }
     }
 
     data class Stage(val visited: Set<Char>, val x: Int, val y: Int)

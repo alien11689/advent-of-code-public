@@ -1,12 +1,15 @@
 package dpr.eulerproject
 
+import dpr.commons.MathUtil
+import dpr.commons.Util
+
 object Problem0035 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val primes = (2 until 1_000_000)
-                .filter { Util.isPrime(it.toLong()) }
-                .map { it.toString() }
-                .toSet()
+            .filter { MathUtil.isPrime(it.toLong()) }
+            .map { it.toString() }
+            .toSet()
 
         val res = mutableSetOf<String>()
 

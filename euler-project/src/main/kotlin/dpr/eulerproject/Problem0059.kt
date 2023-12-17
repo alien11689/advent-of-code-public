@@ -1,10 +1,12 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
+
 object Problem0059 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val code = Util.getFileContent("/p059_cipher.txt").trim()
-                .split(",").map { it.toInt() }
+            .split(",").map { it.toInt() }
 
         for (a in 'a'..'z') {
             for (b in 'a'..'z') {

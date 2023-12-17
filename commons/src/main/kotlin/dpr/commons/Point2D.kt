@@ -1,4 +1,4 @@
-package dpr.aoc2023
+package dpr.commons
 
 import kotlin.math.abs
 

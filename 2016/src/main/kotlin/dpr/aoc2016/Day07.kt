@@ -1,5 +1,7 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
+
 object Day07 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,14 +12,14 @@ object Day07 {
 
     private fun part1(input: List<String>): Any {
         return input.asSequence()
-                .map { Ip.from(it) }
-                .count { it.supportsTls() }
+            .map { Ip.from(it) }
+            .count { it.supportsTls() }
     }
 
     private fun part2(input: List<String>): Any {
         return input.asSequence()
-                .map { Ip.from(it) }
-                .count { it.supportsSsl() }
+            .map { Ip.from(it) }
+            .count { it.supportsSsl() }
     }
 
     data class Ip(val abba: List<String>, val bridges: List<String>) {

@@ -1,5 +1,7 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
+
 object Day02 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,15 +12,15 @@ object Day02 {
 
     private fun part1(input: List<String>): Any {
         val board: Map<Pos, Char> = mapOf(
-                Pair(Pos(0, 0), '1'),
-                Pair(Pos(1, 0), '2'),
-                Pair(Pos(2, 0), '3'),
-                Pair(Pos(0, 1), '4'),
-                Pair(Pos(1, 1), '5'),
-                Pair(Pos(2, 1), '6'),
-                Pair(Pos(0, 2), '7'),
-                Pair(Pos(1, 2), '8'),
-                Pair(Pos(2, 2), '9'),
+            Pair(Pos(0, 0), '1'),
+            Pair(Pos(1, 0), '2'),
+            Pair(Pos(2, 0), '3'),
+            Pair(Pos(0, 1), '4'),
+            Pair(Pos(1, 1), '5'),
+            Pair(Pos(2, 1), '6'),
+            Pair(Pos(0, 2), '7'),
+            Pair(Pos(1, 2), '8'),
+            Pair(Pos(2, 2), '9'),
         )
         val pos = Pos(1, 1)
         return solve(input, pos, board)
@@ -48,19 +50,19 @@ object Day02 {
 
     private fun part2(input: List<String>): Any {
         val board: Map<Pos, Char> = mapOf(
-                Pair(Pos(2, 0), '1'),
-                Pair(Pos(1, 1), '2'),
-                Pair(Pos(2, 1), '3'),
-                Pair(Pos(3, 1), '4'),
-                Pair(Pos(0, 2), '5'),
-                Pair(Pos(1, 2), '6'),
-                Pair(Pos(2, 2), '7'),
-                Pair(Pos(3, 2), '8'),
-                Pair(Pos(4, 2), '9'),
-                Pair(Pos(1, 3), 'A'),
-                Pair(Pos(2, 3), 'B'),
-                Pair(Pos(3, 3), 'C'),
-                Pair(Pos(2, 4), 'D'),
+            Pair(Pos(2, 0), '1'),
+            Pair(Pos(1, 1), '2'),
+            Pair(Pos(2, 1), '3'),
+            Pair(Pos(3, 1), '4'),
+            Pair(Pos(0, 2), '5'),
+            Pair(Pos(1, 2), '6'),
+            Pair(Pos(2, 2), '7'),
+            Pair(Pos(3, 2), '8'),
+            Pair(Pos(4, 2), '9'),
+            Pair(Pos(1, 3), 'A'),
+            Pair(Pos(2, 3), 'B'),
+            Pair(Pos(3, 3), 'C'),
+            Pair(Pos(2, 4), 'D'),
         )
         val pos = Pos(0, 2)
         return solve(input, pos, board)

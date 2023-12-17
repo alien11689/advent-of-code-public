@@ -1,5 +1,6 @@
 package dpr.aoc2021
 
+import dpr.commons.Util
 import java.math.BigInteger
 import java.util.LinkedList
 
@@ -35,11 +36,11 @@ object Day14 {
     private fun parseReactions(lines: List<String>): HashMap<Pair<Char, Char>, Char> {
         val mm = HashMap<Pair<Char, Char>, Char>()
         lines.subList(1, lines.size)
-                .map { it.split(" -> ") }
-                .map { Instr(Pair(it[0][0], it[0][1]), it[1][0]) }
-                .forEach {
-                    mm[it.pattern] = it.insert
-                }
+            .map { it.split(" -> ") }
+            .map { Instr(Pair(it[0][0], it[0][1]), it[1][0]) }
+            .forEach {
+                mm[it.pattern] = it.insert
+            }
         return mm
     }
 

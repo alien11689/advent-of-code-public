@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day24Evolutionary {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {

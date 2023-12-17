@@ -1,5 +1,7 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
+
 object Day05 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,44 +12,44 @@ object Day05 {
 
     private fun part1(input: List<String>): Any {
         return input
-                .filter { line -> line.count { it in setOf('a', 'e', 'i', 'o', 'u') } >= 3 }
-                .filter { inp -> setOf("ab", "cd", "pq", "xy").none { inp.contains(it) } }
-                .filter {
-                    var i = 0
-                    while (i < it.length - 1) {
-                        if (it[i] == it[i + 1]) {
-                            return@filter true
-                        }
-                        ++i
+            .filter { line -> line.count { it in setOf('a', 'e', 'i', 'o', 'u') } >= 3 }
+            .filter { inp -> setOf("ab", "cd", "pq", "xy").none { inp.contains(it) } }
+            .filter {
+                var i = 0
+                while (i < it.length - 1) {
+                    if (it[i] == it[i + 1]) {
+                        return@filter true
                     }
-                    return@filter false
+                    ++i
                 }
-                .count()
+                return@filter false
+            }
+            .count()
     }
 
     private fun part2(input: List<String>): Any {
         return input
-                .filter {
-                    var i = 0
-                    while (i < it.length - 2) {
-                        if (it[i] == it[i + 2]) {
-                            return@filter true
-                        }
-                        ++i
+            .filter {
+                var i = 0
+                while (i < it.length - 2) {
+                    if (it[i] == it[i + 2]) {
+                        return@filter true
                     }
-                    return@filter false
+                    ++i
                 }
-                .filter {
-                    var i = 0
-                    while (i < it.length - 2) {
-                        if (it.substring(i + 2).contains(it.substring(i, i + 2))) {
-                            return@filter true
-                        }
-                        ++i
+                return@filter false
+            }
+            .filter {
+                var i = 0
+                while (i < it.length - 2) {
+                    if (it.substring(i + 2).contains(it.substring(i, i + 2))) {
+                        return@filter true
                     }
-                    return@filter false
+                    ++i
                 }
-                .count()
+                return@filter false
+            }
+            .count()
 
     }
 }

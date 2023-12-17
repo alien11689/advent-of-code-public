@@ -1,6 +1,7 @@
 package dpr.aoc2019
 
 import dpr.aoc2019.intcode.IntCodeComputer
+import dpr.commons.Util
 
 object Day19 {
     @JvmStatic
@@ -28,7 +29,7 @@ object Day19 {
 
         while (true) {
             if (IntCodeComputer.run(input, listOf(last.first, last.second + 99L)).first() == 1L &&
-                    IntCodeComputer.run(input, listOf(last.first - 99, last.second + 99)).first() == 1L
+                IntCodeComputer.run(input, listOf(last.first - 99, last.second + 99)).first() == 1L
             ) {
 //                println("Found: ${(last.x - 99) * 10000 + last.y}")
                 return (last.first - 99) * 10000 + last.second

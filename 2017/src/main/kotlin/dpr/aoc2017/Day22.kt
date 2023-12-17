@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
+
 object Day22 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -130,6 +132,7 @@ object Day22 {
                 Status.Clean -> dir = dir.left()
                 Status.Weakened -> {
                 }
+
                 Status.Infected -> dir = dir.right()
                 Status.Flagged -> dir = dir.reverse()
             }

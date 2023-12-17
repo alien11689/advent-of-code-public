@@ -1,5 +1,7 @@
 package dpr.aoc2018
 
+import dpr.commons.Util
+
 object Day21 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -94,7 +96,7 @@ object Day21 {
         }
     }
 
-    enum class OperationName{
+    enum class OperationName {
         ADDR,
         ADDI,
         SETR,

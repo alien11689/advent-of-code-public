@@ -1,5 +1,6 @@
 package dpr.aoc2019
 
+import dpr.commons.Util
 import kotlin.math.absoluteValue
 
 object Day10 {

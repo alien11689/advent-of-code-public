@@ -10,6 +10,8 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>parent</module>
+        <module>commons</module>
         <module>synacor-challenge</module>
         <module>2015</module>
         <module>2016</module>

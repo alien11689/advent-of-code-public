@@ -1,11 +1,13 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
+
 object Problem0026 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val res = generateSequence(2) { it + 1 }
-                .takeWhile { it < 1000 }
-                .maxBy { repeatingDecimalPoints(it) }
+            .takeWhile { it < 1000 }
+            .maxBy { repeatingDecimalPoints(it) }
 
         println(res)
     }

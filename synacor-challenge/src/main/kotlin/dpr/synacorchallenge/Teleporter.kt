@@ -1,5 +1,8 @@
 package dpr.synacorchallenge
 
+import dpr.commons.Util
+
+// run with -Xss100m
 object Teleporter {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {

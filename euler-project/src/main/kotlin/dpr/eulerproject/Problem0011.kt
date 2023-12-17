@@ -1,5 +1,7 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
+
 object Problem0011 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -33,13 +35,13 @@ object Problem0011 {
             res.add(maxFromLine)
             if (i < grid.size - 3) {
                 val maxFromColumn = grid.indices
-                        .maxOf { 1L * grid[i][it] * grid[i + 1][it] * grid[i + 2][it] * grid[i + 3][it] }
+                    .maxOf { 1L * grid[i][it] * grid[i + 1][it] * grid[i + 2][it] * grid[i + 3][it] }
                 res.add(maxFromColumn)
                 val maxFromDiag1 = grid.indices.filter { it < grid.size - 3 }
-                        .maxOf { 1L * grid[i][it] * grid[i + 1][it + 1] * grid[i + 2][it + 2] * grid[i + 3][it + 3] }
+                    .maxOf { 1L * grid[i][it] * grid[i + 1][it + 1] * grid[i + 2][it + 2] * grid[i + 3][it + 3] }
                 res.add(maxFromDiag1)
                 val maxFromDiag2 = grid.indices.filter { it >= 3 }
-                        .maxOf { 1L * grid[i + 3][it - 3] * grid[i + 2][it - 2] * grid[i + 1][it - 1] * grid[i][it] }
+                    .maxOf { 1L * grid[i + 3][it - 3] * grid[i + 2][it - 2] * grid[i + 1][it - 1] * grid[i][it] }
                 res.add(maxFromDiag2)
             }
         }

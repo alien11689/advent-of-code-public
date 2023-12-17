@@ -1,5 +1,7 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
+
 object Day10 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -56,8 +58,8 @@ object Day10 {
             }
         }
         return outputs.filter { it.key in setOf("output_0", "output_1", "output_2") }
-                .values
-                .fold(1) { acc, i -> acc * i }
+            .values
+            .fold(1) { acc, i -> acc * i }
     }
 
     private fun readInput(input: List<String>): MutableMap<String, Bot> {
@@ -77,10 +79,10 @@ object Day10 {
     }
 
     data class Bot(
-            val num: String,
-            val lower: String,
-            val upper: String,
-            val values: List<Int> = listOf(),
-            val used: Boolean = false
+        val num: String,
+        val lower: String,
+        val upper: String,
+        val values: List<Int> = listOf(),
+        val used: Boolean = false
     )
 }

@@ -1,6 +1,6 @@
 package dpr.aoc2015
 
-import java.lang.RuntimeException
+import dpr.commons.Util
 
 object Day01 {
     @JvmStatic

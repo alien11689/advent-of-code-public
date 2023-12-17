@@ -1,5 +1,7 @@
 package dpr.synacorchallenge
 
+import dpr.commons.Util
+
 object Coins {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {

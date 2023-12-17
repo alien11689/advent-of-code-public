@@ -1,5 +1,6 @@
 package dpr.aoc2021
 
+import dpr.commons.Util
 import java.util.Stack
 
 object Day18 {
@@ -12,12 +13,12 @@ object Day18 {
 
     private fun part1(lines: List<String>): Any {
         val result = lines.map { line -> readSnumber(line) }
-                .reduce { first, second ->
-                    val mm = add(first.toMutableList(), second.toMutableList())
-                    val res = fullReduce(mm)
+            .reduce { first, second ->
+                val mm = add(first.toMutableList(), second.toMutableList())
+                val res = fullReduce(mm)
 //                printExpr(res)
-                    res
-                }
+                res
+            }
 //            .forEach(::println)
 
         return magnitude(result.toMutableList())
@@ -63,8 +64,8 @@ object Day18 {
             val after = snumbers.toList()
             before = if (after == before) {
                 reduceSplit(snumbers)
-    //                print("After split: ")
-    //                printExpr(snumbers)
+                //                print("After split: ")
+                //                printExpr(snumbers)
                 val afterSplit = snumbers.toList()
                 if (afterSplit == after) {
                     break

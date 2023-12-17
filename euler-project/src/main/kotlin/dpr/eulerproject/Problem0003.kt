@@ -1,5 +1,6 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
 import kotlin.math.sqrt
 
 object Problem0003 {

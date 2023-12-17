@@ -1,5 +1,7 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
+
 object Problem0018 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {

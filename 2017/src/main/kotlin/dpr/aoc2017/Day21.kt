@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
+
 object Day21 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -16,16 +18,16 @@ object Day21 {
             val input = ins.split('/').map { it.toList() }
             val output = out.split('/').map { it.toMutableList() }.toMutableList()
             val inputs = listOf(
-                    input,
-                    input.map { it.reversed() },
-                    transpose(transpose(input).map { it.reversed() }),
+                input,
+                input.map { it.reversed() },
+                transpose(transpose(input).map { it.reversed() }),
             ).flatMap {
                 listOf(it, rotate(it), rotate(rotate(it)), rotate(rotate(rotate(it))))
             }.toSet()
             Rule(
-                    output.size - 1,
-                    inputs,
-                    output
+                output.size - 1,
+                inputs,
+                output
             )
         }
 
@@ -46,12 +48,20 @@ object Day21 {
                     parts.add(rule.output)
                     j += split
                 }
-                newImage.addAll(parts.fold(if(parts[0].size == 3) mutableListOf(mutableListOf(),mutableListOf(),mutableListOf()) else mutableListOf(mutableListOf(),mutableListOf(),mutableListOf(), mutableListOf())) { acc, cur ->
-                    (0 until cur.size).forEach {
-                        acc[it].addAll(cur[it])
-                    }
-                    acc
-                })
+                newImage.addAll(
+                    parts.fold(
+                        if (parts[0].size == 3) mutableListOf(mutableListOf(), mutableListOf(), mutableListOf()) else mutableListOf(
+                            mutableListOf(),
+                            mutableListOf(),
+                            mutableListOf(),
+                            mutableListOf()
+                        )
+                    ) { acc, cur ->
+                        (0 until cur.size).forEach {
+                            acc[it].addAll(cur[it])
+                        }
+                        acc
+                    })
                 i += split
             }
 //            newImage.forEach { row ->

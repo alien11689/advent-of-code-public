@@ -1,8 +1,10 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
+
 object Problem0001 {
     @JvmStatic
-    fun main(args: Array<String>) = dpr.eulerproject.Util.measureTime {
+    fun main(args: Array<String>) = Util.measureTime {
         val res = generateSequence(3) { it + 1 }
             .takeWhile { it < 1000 }
             .filter { it % 3 == 0 || it % 5 == 0 }

@@ -1,5 +1,6 @@
 package dpr.aoc2021
 
+import dpr.commons.Util
 import java.util.*
 import kotlin.math.absoluteValue
 
@@ -36,7 +37,7 @@ object Day19 {
                             val x = m1.filter { it.key in commonDistances }.filter { (_, value) -> value.count { it.contains(cb) } > 0 }
                             val two = x.toList().take(2).toMap()
                             val matchingInSecond = m2.filter { it.key in two.keys }.map { it.value }.flatten().flatten()
-                                    .groupBy { it }.maxByOrNull { it.value.count() }!!.key
+                                .groupBy { it }.maxByOrNull { it.value.count() }!!.key
 //                            println("$cb is second set ${matchingInSecond}")
                             val fullBeacon1 = Pair(i, cb)
                             val fullBeacon2 = Pair(j, matchingInSecond)
@@ -101,8 +102,8 @@ object Day19 {
                     continue
                 }
                 val zeroAndOne = beaconsMatching.filter { theSame -> theSame.count { it.first in listOf(0, j) } == 2 }
-                        .map { pairs -> pairs.filter { it.first in listOf(0, j) } }
-                        .take(2)
+                    .map { pairs -> pairs.filter { it.first in listOf(0, j) } }
+                    .take(2)
                 val onlyFrom0 = zeroAndOne.map { pairs -> pairs.filter { it.first == 0 } }.flatten()
                 val onlyFromJ = zeroAndOne.map { pairs -> pairs.filter { it.first == j } }.flatten()
                 if (onlyFromJ.size != 2) {
@@ -112,7 +113,8 @@ object Day19 {
                 val rotations1 = onlyFromJ[0].second.allRotations()
                 val rotations2 = onlyFromJ[1].second.allRotations()
                 for (rotationId in rotations1.indices) {
-                    val vector = listOf(rotations1[rotationId], rotations2[rotationId]).reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
+                    val vector =
+                        listOf(rotations1[rotationId], rotations2[rotationId]).reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
                     if (vector == zeroExpectedVector) {
 //                        println("Rotation $rotationId matches")
 //                        println("${rotations1[rotationId]}")
@@ -124,7 +126,14 @@ object Day19 {
                     }
                 }
                 beaconsMatching = beaconsMatching.filter { pairs -> pairs.any { it.first !in centers.keys } }
-                beaconsMatching = beaconsMatching.map { pairs -> pairs.map { if (it.first in rotations.keys) Pair(0, it.second.allRotations()[rotations[it.first]!!] + centers[it.first]!!) else it }.toSet() }
+                beaconsMatching = beaconsMatching.map { pairs ->
+                    pairs.map {
+                        if (it.first in rotations.keys) Pair(
+                            0,
+                            it.second.allRotations()[rotations[it.first]!!] + centers[it.first]!!
+                        ) else it
+                    }.toSet()
+                }
             }
         }
 //        println(centers)

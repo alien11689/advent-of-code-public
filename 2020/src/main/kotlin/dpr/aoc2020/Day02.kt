@@ -1,5 +1,7 @@
 package dpr.aoc2020
 
+import dpr.commons.Util
+
 object Day02 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,15 +12,15 @@ object Day02 {
 
     private fun part1(input: List<String>) {
         val c = input
-                .map { Line.fromLine(it) }
-                .count { it.valid() }
+            .map { Line.fromLine(it) }
+            .count { it.valid() }
         println(c)
     }
 
     private fun part2(input: List<String>) {
         val c = input
-                .map { Line.fromLine(it) }
-                .count { it.valid2() }
+            .map { Line.fromLine(it) }
+            .count { it.valid2() }
         println(c)
     }
 

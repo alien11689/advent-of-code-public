@@ -1,5 +1,7 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
+
 object Day22 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,8 +12,8 @@ object Day22 {
 
     private fun part1(input: List<String>): Any {
         val nodes = input
-                .drop(2)
-                .map { Node.fromLine(it) }
+            .drop(2)
+            .map { Node.fromLine(it) }
         var count = 0
         nodes.forEach { a ->
             nodes.filter { it != a }.forEach { b ->
@@ -25,8 +27,8 @@ object Day22 {
 
     private fun part2(input: List<String>): Any {
         input
-                .drop(2)
-                .map { Node.fromLine(it) }
+            .drop(2)
+            .map { Node.fromLine(it) }
 //                .also { printNodes(it) }
         return 15 + 16 + 150
     }
@@ -50,12 +52,12 @@ object Day22 {
                 val split = line.split(Regex("\\s+"))
                 val coords = split[0].split("-")
                 return Node(
-                        x = coords[1].substring(1).toInt(),
-                        y = coords[2].substring(1).toInt(),
-                        size = split[1].take(split[1].length - 1).toInt(),
-                        used = split[2].take(split[2].length - 1).toInt(),
-                        available = split[3].take(split[3].length - 1).toInt(),
-                        percent = split[4].take(split[4].length - 1).toInt(),
+                    x = coords[1].substring(1).toInt(),
+                    y = coords[2].substring(1).toInt(),
+                    size = split[1].take(split[1].length - 1).toInt(),
+                    used = split[2].take(split[2].length - 1).toInt(),
+                    available = split[3].take(split[3].length - 1).toInt(),
+                    percent = split[4].take(split[4].length - 1).toInt(),
                 )
             }
         }

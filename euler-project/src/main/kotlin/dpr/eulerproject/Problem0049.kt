@@ -1,12 +1,15 @@
 package dpr.eulerproject
 
+import dpr.commons.MathUtil
+import dpr.commons.Util
+
 object Problem0049 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val primes = generateSequence(1000L) { it + 1 }
-                .filter { Util.isPrime(it) }
-                .takeWhile { it < 10000 }
-                .toList()
+            .filter { MathUtil.isPrime(it) }
+            .takeWhile { it < 10000 }
+            .toList()
 
         val groupedByDigits = primes.groupBy { it.toString().toList().sorted() }
         val values = groupedByDigits.filter { it.value.size >= 3 }.values

@@ -1,5 +1,6 @@
 package dpr.aoc2019
 
+import dpr.commons.Util
 import java.util.PriorityQueue
 
 object Day20 {
@@ -127,9 +128,9 @@ object Day20 {
                 if (checkedPoint in setOf(dest, start) && state.level != 0) {
                     // dest and start are walls on inner levels
                 } else if (checkedPoint in warpPoints &&
-                        state.level == 0 &&
-                        checkedPoint !in setOf(dest, start) &&
-                        checkedPoint in outerWarps
+                    state.level == 0 &&
+                    checkedPoint !in setOf(dest, start) &&
+                    checkedPoint in outerWarps
                 ) {
                     // on level 0 outers do not work
                 } else {
@@ -137,7 +138,7 @@ object Day20 {
                         val warp = betterWarps[checkedPoint]
 //                println("Using warp $warp")
                         val to =
-                                betterWarps.filter { it.value == warp && it.key != checkedPoint }.toList().first().first
+                            betterWarps.filter { it.value == warp && it.key != checkedPoint }.toList().first().first
                         val level = if (checkedPoint in outerWarps) {
                             state.level - 1
                         } else {
@@ -161,10 +162,10 @@ object Day20 {
     data class Point(val x: Int, val y: Int) {
         fun neighbours(): Set<Point> {
             return setOf(
-                    Point(x + 1, y),
-                    Point(x - 1, y),
-                    Point(x, y + 1),
-                    Point(x, y - 1),
+                Point(x + 1, y),
+                Point(x - 1, y),
+                Point(x, y + 1),
+                Point(x, y - 1),
             )
         }
     }
@@ -178,7 +179,7 @@ object Day20 {
     }
 
     data class State2(val cur: Point, val length: Int, val path: List<PathElement> = listOf(), val level: Int = 0) :
-            Comparable<State2> {
+        Comparable<State2> {
         override fun compareTo(other: State2): Int {
             return length.compareTo(other.length)
         }

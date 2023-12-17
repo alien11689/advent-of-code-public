@@ -1,5 +1,6 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
 import java.math.BigInteger
 
 object Problem0013 {
@@ -107,7 +108,7 @@ object Problem0013 {
             20849603980134001723930671666823555245252804609722
             53503534226472524250874054075591789781264330331690
         """.trimIndent().lines().sumOf { BigInteger(it) }
-                .toString().substring(0, 10)
+            .toString().substring(0, 10)
         println(res)
     }
 }

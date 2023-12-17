@@ -1,5 +1,7 @@
 package dpr.aoc2018
 
+import dpr.commons.Util
+
 object Day17 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -90,12 +92,12 @@ object Day17 {
 
 
     private fun goDown(
-            claysSet: Set<Pair<Int, Int>>,
-            filled: MutableSet<Pair<Int, Int>>,
-            x: Int,
-            initY: Int,
-            drained: MutableSet<Pair<Int, Int>>,
-            visitedDown: MutableSet<Pair<Int, Int>>
+        claysSet: Set<Pair<Int, Int>>,
+        filled: MutableSet<Pair<Int, Int>>,
+        x: Int,
+        initY: Int,
+        drained: MutableSet<Pair<Int, Int>>,
+        visitedDown: MutableSet<Pair<Int, Int>>
     ) {
         var y = initY
         visitedDown.add(x to y)
@@ -135,11 +137,11 @@ object Day17 {
     }
 
     private fun fillRight(
-            x: Int,
-            claysSet: Set<Pair<Int, Int>>,
-            y: Int,
-            filled: MutableSet<Pair<Int, Int>>,
-            visitedDown: MutableSet<Pair<Int, Int>>
+        x: Int,
+        claysSet: Set<Pair<Int, Int>>,
+        y: Int,
+        filled: MutableSet<Pair<Int, Int>>,
+        visitedDown: MutableSet<Pair<Int, Int>>
     ): Action {
         var cur = x
         while (true) {
@@ -163,11 +165,11 @@ object Day17 {
     }
 
     private fun fillLeft(
-            x: Int,
-            claysSet: Set<Pair<Int, Int>>,
-            y: Int,
-            filled: MutableSet<Pair<Int, Int>>,
-            visitedDown: MutableSet<Pair<Int, Int>>
+        x: Int,
+        claysSet: Set<Pair<Int, Int>>,
+        y: Int,
+        filled: MutableSet<Pair<Int, Int>>,
+        visitedDown: MutableSet<Pair<Int, Int>>
     ): Action {
         var cur = x
         while (true) {

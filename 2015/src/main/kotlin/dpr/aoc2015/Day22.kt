@@ -1,5 +1,6 @@
 package dpr.aoc2015
 
+import dpr.commons.Util
 import java.util.PriorityQueue
 
 object Day22 {
@@ -21,6 +22,7 @@ object Day22 {
                     nextState.boss.hitPoints <= 0 -> {
                         return nextState.usedMana
                     }
+
                     nextState.hp > 0 -> pq.offer(nextState)
                     else -> {
                     }
@@ -42,6 +44,7 @@ object Day22 {
                     nextState.boss.hitPoints <= 0 -> {
                         return nextState.usedMana
                     }
+
                     nextState.hp > 0 -> pq.offer(nextState)
                     else -> {
                     }
@@ -54,7 +57,16 @@ object Day22 {
 
     data class Boss(val hitPoints: Int = 55, val damage: Int = 8)
 
-    data class State(val rund: Int = 1, val hp: Int = 50, val mana: Int = 500, val currentEffects: Map<Action, Int> = mapOf(), val boss: Boss = Boss(), val usedMana: Int = 0, val armor: Int = 0, val usedActions: List<Action> = listOf()) : Comparable<State> {
+    data class State(
+        val rund: Int = 1,
+        val hp: Int = 50,
+        val mana: Int = 500,
+        val currentEffects: Map<Action, Int> = mapOf(),
+        val boss: Boss = Boss(),
+        val usedMana: Int = 0,
+        val armor: Int = 0,
+        val usedActions: List<Action> = listOf()
+    ) : Comparable<State> {
         override fun compareTo(other: State): Int {
             if (usedMana != other.usedMana) {
                 return usedMana - other.usedMana
@@ -72,8 +84,8 @@ object Day22 {
         }
 
         fun nextActions(): Collection<Action> = Action.values()
-                .filter { it.cost < mana }
-                .filter { it !in currentEffects }
+            .filter { it.cost < mana }
+            .filter { it !in currentEffects }
 
         fun useAction(action: Action): State {
             return applyAction(action).applyEffects().bossTurn().applyEffects()
@@ -91,11 +103,41 @@ object Day22 {
         }
 
         private fun applyAction(action: Action) = when (action) {
-            Action.MagicMissile -> copy(mana = mana - action.cost, usedMana = usedMana + action.cost, usedActions = usedActions + action, boss = boss.copy(hitPoints = boss.hitPoints - 4))
-            Action.Drain -> copy(mana = mana - action.cost, usedMana = usedMana + action.cost, usedActions = usedActions + action, boss = boss.copy(hitPoints = boss.hitPoints - 2), hp = hp + 2)
-            Action.Shield -> copy(mana = mana - action.cost, usedMana = usedMana + action.cost, usedActions = usedActions + action, currentEffects = currentEffects + Pair(action, action.time))
-            Action.Poison -> copy(mana = mana - action.cost, usedMana = usedMana + action.cost, usedActions = usedActions + action, currentEffects = currentEffects + Pair(action, action.time))
-            Action.Recharge -> copy(mana = mana - action.cost, usedMana = usedMana + action.cost, usedActions = usedActions + action, currentEffects = currentEffects + Pair(action, action.time))
+            Action.MagicMissile -> copy(
+                mana = mana - action.cost,
+                usedMana = usedMana + action.cost,
+                usedActions = usedActions + action,
+                boss = boss.copy(hitPoints = boss.hitPoints - 4)
+            )
+
+            Action.Drain -> copy(
+                mana = mana - action.cost,
+                usedMana = usedMana + action.cost,
+                usedActions = usedActions + action,
+                boss = boss.copy(hitPoints = boss.hitPoints - 2),
+                hp = hp + 2
+            )
+
+            Action.Shield -> copy(
+                mana = mana - action.cost,
+                usedMana = usedMana + action.cost,
+                usedActions = usedActions + action,
+                currentEffects = currentEffects + Pair(action, action.time)
+            )
+
+            Action.Poison -> copy(
+                mana = mana - action.cost,
+                usedMana = usedMana + action.cost,
+                usedActions = usedActions + action,
+                currentEffects = currentEffects + Pair(action, action.time)
+            )
+
+            Action.Recharge -> copy(
+                mana = mana - action.cost,
+                usedMana = usedMana + action.cost,
+                usedActions = usedActions + action,
+                currentEffects = currentEffects + Pair(action, action.time)
+            )
         }
 
         private fun bossTurn(): State {

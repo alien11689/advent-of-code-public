@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.aoc2019.intcode.IntCodeComputer.program
 import dpr.aoc2019.intcode.IntCodeComputerState
+import dpr.commons.Util
 import java.util.LinkedList
 
 object Day13 {

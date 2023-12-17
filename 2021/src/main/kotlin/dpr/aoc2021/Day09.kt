@@ -1,5 +1,6 @@
 package dpr.aoc2021
 
+import dpr.commons.Util
 import java.util.PriorityQueue
 
 object Day09 {
@@ -67,9 +68,9 @@ object Day09 {
             }
             val validN = neigh(pWithValue.p.y, pWithValue.p.x)
                 .filter { n -> n.y >= 0 && n.y < numbers.size && n.x >= 0 && n.x < numbers[0].size && n !in basin }
-    //                        println("checking $pWithValue and its neigh are $validN")
+            //                        println("checking $pWithValue and its neigh are $validN")
             if (validN.all { numbers[it.y][it.x] >= numbers[pWithValue.p.y][pWithValue.p.x] }) {
-    //                            println("Adding $pWithValue to basin")
+                //                            println("Adding $pWithValue to basin")
                 basin.add(pWithValue.p)
                 validN.forEach { pq.offer(PointWithValue(it, numbers[it.y][it.x])) }
             }

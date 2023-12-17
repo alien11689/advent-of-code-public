@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.aoc2019.intcode.IntCodeComputer
 import dpr.aoc2019.intcode.IntCodeComputerState
+import dpr.commons.Util
 
 object Day07 {
     @JvmStatic
@@ -21,7 +22,7 @@ object Day07 {
                 state.input.offer(phase)
                 state.input.offer(signal)
                 IntCodeComputer.program(state)
-                signal = state.output.last
+                signal = state.output.last()
             }
             signal
         }

@@ -4,6 +4,7 @@ import dpr.aoc2022.Day22.Direction.D
 import dpr.aoc2022.Day22.Direction.L
 import dpr.aoc2022.Day22.Direction.R
 import dpr.aoc2022.Day22.Direction.U
+import dpr.commons.Util
 import java.util.StringTokenizer
 
 object Day22 {

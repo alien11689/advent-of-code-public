@@ -1,5 +1,7 @@
 package dpr.aoc2022
 
+import dpr.commons.Util
+
 object Day08 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {

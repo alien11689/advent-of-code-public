@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.aoc2019.intcode.IntCodeComputer
 import dpr.aoc2019.intcode.IntCodeComputerState
+import dpr.commons.Util
 
 object Day09 {
     @JvmStatic
@@ -15,13 +16,13 @@ object Day09 {
         val state = IntCodeComputerState.init(input)
         state.input.offer(1L)
         IntCodeComputer.program(state)
-        return state.output.last
+        return state.output.last()
     }
 
     private fun part2(input: String): Any {
         val state = IntCodeComputerState.init(input)
         state.input.offer(2L)
         IntCodeComputer.program(state)
-        return state.output.last
+        return state.output.last()
     }
 }

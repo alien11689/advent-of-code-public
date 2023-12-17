@@ -1,5 +1,6 @@
 package dpr.aoc2021
 
+import dpr.commons.Util
 import java.util.Stack
 
 object Day11 {
@@ -64,17 +65,17 @@ object Day11 {
     private fun neigh(p: Point): Set<Point> {
         val coordLimit = 0..9
         return setOf(
-                Point(p.x, p.y + 1),
-                Point(p.x, p.y - 1),
-                Point(p.x + 1, p.y - 1),
-                Point(p.x + 1, p.y),
-                Point(p.x + 1, p.y + 1),
-                Point(p.x - 1, p.y + 1),
-                Point(p.x - 1, p.y - 1),
-                Point(p.x - 1, p.y),
+            Point(p.x, p.y + 1),
+            Point(p.x, p.y - 1),
+            Point(p.x + 1, p.y - 1),
+            Point(p.x + 1, p.y),
+            Point(p.x + 1, p.y + 1),
+            Point(p.x - 1, p.y + 1),
+            Point(p.x - 1, p.y - 1),
+            Point(p.x - 1, p.y),
         )
-                .filter { it.x in coordLimit && it.y in coordLimit }
-                .toSet()
+            .filter { it.x in coordLimit && it.y in coordLimit }
+            .toSet()
     }
 }
 

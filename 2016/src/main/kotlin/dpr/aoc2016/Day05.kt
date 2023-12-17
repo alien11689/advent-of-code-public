@@ -1,5 +1,6 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
 import java.math.BigInteger
 import java.security.MessageDigest
 
@@ -13,19 +14,19 @@ object Day05 {
 
     private fun part1(input: String): Any {
         return generateSequence(0) { it + 1 }
-                .map {
-                    md5.reset()
-                    val toHash = input + it
-                    val hash = md5.digest(toHash.toByteArray())
-                    mem[it] = hash
-                    hash
-                }
-                .filter { hash -> hash[0] == zero && hash[1] == zero && hash[2] >= zero && hash[2] <= f }
-                .map { String.format("%032x", BigInteger(1, it)) }
-                .filter { it.startsWith("00000") } // to be sure
-                .map { it[5] }
-                .take(8)
-                .joinToString("")
+            .map {
+                md5.reset()
+                val toHash = input + it
+                val hash = md5.digest(toHash.toByteArray())
+                mem[it] = hash
+                hash
+            }
+            .filter { hash -> hash[0] == zero && hash[1] == zero && hash[2] >= zero && hash[2] <= f }
+            .map { String.format("%032x", BigInteger(1, it)) }
+            .filter { it.startsWith("00000") } // to be sure
+            .map { it[5] }
+            .take(8)
+            .joinToString("")
     }
 
     private fun part2(input: String): Any {

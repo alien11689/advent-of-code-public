@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
+
 object Day03 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -49,16 +51,17 @@ object Day03 {
 
         fun sumNeighbours(mesh: Map<Cur, Int>, cur: Cur): Int {
             return listOf(
-                    cur + Dir.L,
-                    cur + Dir.L + Dir.U,
-                    cur + Dir.L + Dir.D,
-                    cur + Dir.U,
-                    cur + Dir.D,
-                    cur + Dir.R,
-                    cur + Dir.R + Dir.U,
-                    cur + Dir.R + Dir.D)
-                    .mapNotNull { mesh[it] }
-                    .sum()
+                cur + Dir.L,
+                cur + Dir.L + Dir.U,
+                cur + Dir.L + Dir.D,
+                cur + Dir.U,
+                cur + Dir.D,
+                cur + Dir.R,
+                cur + Dir.R + Dir.U,
+                cur + Dir.R + Dir.D
+            )
+                .mapNotNull { mesh[it] }
+                .sum()
         }
 
         while (last <= input) {

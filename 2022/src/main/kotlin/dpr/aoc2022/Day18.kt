@@ -1,5 +1,6 @@
 package dpr.aoc2022
 
+import dpr.commons.Util
 import java.util.Stack
 
 object Day18 {

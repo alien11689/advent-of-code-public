@@ -1,5 +1,6 @@
 package dpr.eulerproject
 
+import dpr.commons.Util
 import java.math.BigInteger
 
 object Problem0700 {

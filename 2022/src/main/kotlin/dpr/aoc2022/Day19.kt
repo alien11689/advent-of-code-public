@@ -1,5 +1,6 @@
 package dpr.aoc2022
 
+import dpr.commons.Util
 import java.util.PriorityQueue
 
 object Day19 {
@@ -26,21 +27,21 @@ object Day19 {
 
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>): List<State> {
             if (time <= 1 && (robots[Material.GEODE] ?: 0) == 0 // you have to have at least one geode factory in last turn
-                    // min geode factory cost is 7 so you need to have ready at least 1 obsidian factory
-                    // 7 turn obs: 0, obsrobot: 0
-                    // 6 turn obs: 0, obsrobot: 1
-                    // 5 turn obs: 1, obsrobot: 2
-                    // 4 turn obs: 3, obsrobot: 3
-                    // 3 turn obs: 6, obsrobot: 4
-                    // 2 turn obs: 10, obsrobot: 5
-                    || time <= 6 && (robots[Material.OBSIDIAN] ?: 0) == 0
-                    // min obsidian factory cost is 5 clay
-                    // 11 turn clay: 0, clayrobot: 0
-                    // 10 turn clay: 0, clayrobot: 1
-                    // 9 turn clay: 1, clayrobot: 2
-                    // 8 turn clay: 3, clayrobot: 3
-                    // 7 turn clay: 6, clayrobot: 4
-                    || time <= 10 && (robots[Material.CLAY] ?: 0) == 0
+                // min geode factory cost is 7 so you need to have ready at least 1 obsidian factory
+                // 7 turn obs: 0, obsrobot: 0
+                // 6 turn obs: 0, obsrobot: 1
+                // 5 turn obs: 1, obsrobot: 2
+                // 4 turn obs: 3, obsrobot: 3
+                // 3 turn obs: 6, obsrobot: 4
+                // 2 turn obs: 10, obsrobot: 5
+                || time <= 6 && (robots[Material.OBSIDIAN] ?: 0) == 0
+                // min obsidian factory cost is 5 clay
+                // 11 turn clay: 0, clayrobot: 0
+                // 10 turn clay: 0, clayrobot: 1
+                // 9 turn clay: 1, clayrobot: 2
+                // 8 turn clay: 3, clayrobot: 3
+                // 7 turn clay: 6, clayrobot: 4
+                || time <= 10 && (robots[Material.CLAY] ?: 0) == 0
             ) {
                 return emptyList()
             }
@@ -56,7 +57,13 @@ object Day19 {
                     var nextTime = time - 1
                     while (nextTime >= 1) {
                         if (cost.all { (curMaterials[it.key] ?: 0) >= it.value }) {
-                            options.add(copy(time = nextTime, materials = merge(minus(curMaterials, cost), robots), robots = merge(robots, mapOf(factory to 1))))
+                            options.add(
+                                copy(
+                                    time = nextTime,
+                                    materials = merge(minus(curMaterials, cost), robots),
+                                    robots = merge(robots, mapOf(factory to 1))
+                                )
+                            )
                             break
                         } else {
                             nextTime--
@@ -74,17 +81,17 @@ object Day19 {
         private val possibleOres: Int = calculatePossible(Material.ORE)
 
         private fun calculatePossible(material: Material) =
-                (materials[material] ?: 0) + time * ((robots[material] ?: 0) * 2 + time - 1) / 2
+            (materials[material] ?: 0) + time * ((robots[material] ?: 0) * 2 + time - 1) / 2
     }
 
     private fun merge(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
-            Material.values().associateWith { (first[it] ?: 0) + (second[it] ?: 0) }
+        Material.values().associateWith { (first[it] ?: 0) + (second[it] ?: 0) }
 
     private fun minus(first: Map<Material, Int>, second: Map<Material, Int>): Map<Material, Int> =
-            Material.values().associateWith { (first[it] ?: 0) - (second[it] ?: 0) }
+        Material.values().associateWith { (first[it] ?: 0) - (second[it] ?: 0) }
 
     private fun times(first: Map<Material, Int>, repeat: Int): Map<Material, Int> =
-            Material.values().associateWith { (first[it] ?: 0) * repeat }
+        Material.values().associateWith { (first[it] ?: 0) * repeat }
 
     data class Blueprint(val id: Int, val robotCosts: Map<Material, Map<Material, Int>>) {
         fun findMostGeode(turns: Int): Long {
@@ -141,10 +148,10 @@ object Day19 {
         return lines.map { line ->
             val parts = line.split(" ", ":")
             val costs = mapOf(
-                    Material.ORE to mapOf(Material.ORE to parts[7].toInt()),
-                    Material.CLAY to mapOf(Material.ORE to parts[13].toInt()),
-                    Material.OBSIDIAN to mapOf(Material.ORE to parts[19].toInt(), Material.CLAY to parts[22].toInt()),
-                    Material.GEODE to mapOf(Material.ORE to parts[28].toInt(), Material.OBSIDIAN to parts[31].toInt()),
+                Material.ORE to mapOf(Material.ORE to parts[7].toInt()),
+                Material.CLAY to mapOf(Material.ORE to parts[13].toInt()),
+                Material.OBSIDIAN to mapOf(Material.ORE to parts[19].toInt(), Material.CLAY to parts[22].toInt()),
+                Material.GEODE to mapOf(Material.ORE to parts[28].toInt(), Material.OBSIDIAN to parts[31].toInt()),
             )
             Blueprint(parts[1].toInt(), costs)
         }

@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.aoc2019.intcode.IntCodeComputer
 import dpr.aoc2019.intcode.IntCodeComputerState
+import dpr.commons.Util
 
 object Day11 {
     @JvmStatic
@@ -64,23 +65,23 @@ object Day11 {
         fun move(pos: Pair<Int, Int>, v: Long): Pair<Dir, Pair<Int, Int>> {
             return when (this) {
                 UP -> if (v == 0L) Pair(LEFT, Pair(pos.first - 1, pos.second)) else Pair(
-                        RIGHT,
-                        Pair(pos.first + 1, pos.second)
+                    RIGHT,
+                    Pair(pos.first + 1, pos.second)
                 )
 
                 DOWN -> if (v == 0L) Pair(RIGHT, Pair(pos.first + 1, pos.second)) else Pair(
-                        LEFT,
-                        Pair(pos.first - 1, pos.second)
+                    LEFT,
+                    Pair(pos.first - 1, pos.second)
                 )
 
                 LEFT -> if (v == 0L) Pair(DOWN, Pair(pos.first, pos.second - 1)) else Pair(
-                        UP,
-                        Pair(pos.first, pos.second + 1)
+                    UP,
+                    Pair(pos.first, pos.second + 1)
                 )
 
                 RIGHT -> if (v == 0L) Pair(UP, Pair(pos.first, pos.second + 1)) else Pair(
-                        DOWN,
-                        Pair(pos.first, pos.second - 1)
+                    DOWN,
+                    Pair(pos.first, pos.second - 1)
                 )
             }
         }

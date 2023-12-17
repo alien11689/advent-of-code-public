@@ -1,5 +1,6 @@
 package dpr.aoc2019
 
+import dpr.commons.Util
 import kotlin.math.pow
 
 object Day24 {
@@ -13,19 +14,19 @@ object Day24 {
     data class Point(val x: Int, val y: Int, val level: Int = 0) {
         fun neighbours1(): Set<Point> {
             return setOf(
-                    Point(x + 1, y),
-                    Point(x - 1, y),
-                    Point(x, y + 1),
-                    Point(x, y - 1),
+                Point(x + 1, y),
+                Point(x - 1, y),
+                Point(x, y + 1),
+                Point(x, y - 1),
             )
         }
 
         fun neighbours2(): Set<Point> {
             val base = setOf(
-                    Point(x + 1, y, level),
-                    Point(x - 1, y, level),
-                    Point(x, y + 1, level),
-                    Point(x, y - 1, level),
+                Point(x + 1, y, level),
+                Point(x - 1, y, level),
+                Point(x, y + 1, level),
+                Point(x, y - 1, level),
             )
             return base.flatMap { p ->
                 if (p.x < 0) {

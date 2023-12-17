@@ -1,5 +1,7 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
+
 object Day04 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,14 +12,14 @@ object Day04 {
 
     private fun part1(input: List<String>): Any {
         return input.map { line -> Line.from(line.split(Regex("[-\\[\\]]+")).filter { it.isNotEmpty() }) }
-                .filter { it.isValid() }
-                .sumOf { it.id }
+            .filter { it.isValid() }
+            .sumOf { it.id }
     }
 
     private fun part2(input: List<String>): Any {
         return input.map { line -> Line.from(line.split(Regex("[-\\[\\]]+")).filter { it.isNotEmpty() }) }
-                .first { it.decrypt().contains("north") }
-                .id
+            .first { it.decrypt().contains("north") }
+            .id
     }
 
     data class Line(val words: List<String>, val id: Int, val checksum: String) {
@@ -29,18 +31,18 @@ object Day04 {
 
         fun isValid(): Boolean {
             return words
-                    .asSequence()
-                    .flatMap { it.toCharArray().toList() }
-                    .fold(mapOf<Char, Int>()) { acc, c ->
-                        acc + Pair(c, if (acc.containsKey(c)) acc[c]!! + 1 else 1)
-                    }
-                    .toList()
-                    .sortedWith { o1, o2 ->
-                        if (o1.second == o2.second) o1.first - o2.first else o2.second - o1.second
-                    }
-                    .take(checksum.length)
-                    .map { it.first }
-                    .joinToString(separator = "") == checksum
+                .asSequence()
+                .flatMap { it.toCharArray().toList() }
+                .fold(mapOf<Char, Int>()) { acc, c ->
+                    acc + Pair(c, if (acc.containsKey(c)) acc[c]!! + 1 else 1)
+                }
+                .toList()
+                .sortedWith { o1, o2 ->
+                    if (o1.second == o2.second) o1.first - o2.first else o2.second - o1.second
+                }
+                .take(checksum.length)
+                .map { it.first }
+                .joinToString(separator = "") == checksum
 
         }
 

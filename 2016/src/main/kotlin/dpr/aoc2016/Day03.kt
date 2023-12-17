@@ -1,5 +1,7 @@
 package dpr.aoc2016
 
+import dpr.commons.Util
+
 object Day03 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -10,9 +12,9 @@ object Day03 {
 
     private fun part1(input: List<String>): Any {
         return input
-                .asSequence()
-                .map { line -> line.trim().split(Regex(" +")).map { it.toInt() } }
-                .count { isTriangle(it) }
+            .asSequence()
+            .map { line -> line.trim().split(Regex(" +")).map { it.toInt() } }
+            .count { isTriangle(it) }
     }
 
     private fun isTriangle(sides: List<Int>): Boolean {
@@ -24,11 +26,11 @@ object Day03 {
 
     private fun part2(input: List<String>): Any {
         val triples = input
-                .asSequence()
-                .map { line -> line.trim().split(Regex(" +")).map { it.toInt() } }
+            .asSequence()
+            .map { line -> line.trim().split(Regex(" +")).map { it.toInt() } }
         return (0..2)
-                .flatMap { col -> triples.map { it[col] } }
-                .chunked(3)
-                .count { isTriangle(it) }
+            .flatMap { col -> triples.map { it[col] } }
+            .chunked(3)
+            .count { isTriangle(it) }
     }
 }

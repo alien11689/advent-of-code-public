@@ -1,8 +1,7 @@
-package dpr.eulerproject
+package dpr.commons
 
 import java.time.Duration
 import java.util.function.Supplier
-import kotlin.math.sqrt
 
 object Util {
     fun getFileContent(fileName: String): String = javaClass.getResource(fileName).readText()
@@ -33,35 +32,4 @@ object Util {
         val end = System.currentTimeMillis();
         println("Finished in ${Duration.ofMillis(end - start)}")
     }
-
-    fun isPrime(n: Long): Boolean {
-        when {
-            n < 2L -> return false
-            n == 2L || n == 3L -> return true
-            else -> {
-                var i = 2L
-                while (i <= sqrt(n.toDouble())) {
-                    if (n % i == 0L) {
-                        return false
-                    }
-                    ++i
-                }
-            }
-        }
-        return true
-    }
-
-    fun properDividers(value: Int): Set<Int> {
-        val divs = mutableSetOf(1)
-        var i = 2
-        while (i <= sqrt(value.toDouble())) {
-            if (value % i == 0) {
-                divs.add(i)
-                divs.add(value / i)
-            }
-            ++i
-        }
-        return divs
-    }
-
 }

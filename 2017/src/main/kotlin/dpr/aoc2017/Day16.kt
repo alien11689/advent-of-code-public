@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Util
+
 object Day16 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -30,10 +32,12 @@ object Day16 {
                     val parts = params.split('/')
                     Action.Exchange(p1 = parts[0].toInt(), p2 = parts[1].toInt())
                 }
+
                 'p' -> {
                     val parts = params.split('/')
                     Action.Partner(n1 = parts[0].first(), n2 = parts[1].first())
                 }
+
                 else -> throw RuntimeException(action)
             }
         }

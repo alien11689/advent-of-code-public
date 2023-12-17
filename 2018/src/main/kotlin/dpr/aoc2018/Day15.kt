@@ -1,5 +1,6 @@
 package dpr.aoc2018
 
+import dpr.commons.Util
 import java.util.PriorityQueue
 
 object Day15 {
@@ -48,10 +49,10 @@ object Day15 {
 
         fun neighbours(): List<Position> {
             return listOf(
-                    Position(x + 1, y),
-                    Position(x - 1, y),
-                    Position(x, y - 1),
-                    Position(x, y + 1),
+                Position(x + 1, y),
+                Position(x - 1, y),
+                Position(x, y - 1),
+                Position(x, y + 1),
             )
         }
 
@@ -62,12 +63,12 @@ object Day15 {
     }
 
     data class Player(
-            var x: Int,
-            var y: Int,
-            val type: PlayerType,
-            var hitPoints: Int = 200,
-            val attackPower: Int = 3,
-            var moved: Boolean = true
+        var x: Int,
+        var y: Int,
+        val type: PlayerType,
+        var hitPoints: Int = 200,
+        val attackPower: Int = 3,
+        var moved: Boolean = true
     ) : Comparable<Player> {
 
         fun isDead(): Boolean {

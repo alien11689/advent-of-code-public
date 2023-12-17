@@ -1,5 +1,7 @@
 package dpr.aoc2018
 
+import dpr.commons.Util
+
 object Day02 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -31,7 +33,7 @@ object Day02 {
             ((i + 1) until (lines.size)).forEach { j ->
                 val b = lines[j]
                 var diff = 0
-                for(k in a.indices){
+                for (k in a.indices) {
                     if (a[k] != b[k]) {
                         ++diff
                         if (diff > 1) {

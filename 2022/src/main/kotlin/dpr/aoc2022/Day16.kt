@@ -1,5 +1,6 @@
 package dpr.aoc2022
 
+import dpr.commons.Util
 import java.util.PriorityQueue
 
 object Day16 {
@@ -154,9 +155,9 @@ object Day16 {
 //    }
 
     private fun findRealTransitions(
-            startRoom: String,
-            valves: Map<String, Int>,
-            transitions: Map<String, List<String>>,
+        startRoom: String,
+        valves: Map<String, Int>,
+        transitions: Map<String, List<String>>,
     ): Map<Set<String>, Int> {
         val keys = (listOf(startRoom) + valves.keys).sorted()
         return keys.flatMapIndexed { i, left ->
