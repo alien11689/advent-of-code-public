@@ -7,116 +7,25 @@ object Day17 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/17/input.txt")
 //        val lines = Util.getNotEmptyLinesFromFile("/17/test1.txt")
-        println(part1(lines))
-        println(part2(lines))
+        val (board, maxX, maxY) = readBoard(lines)
+        println(part1(board, maxX, maxY))
+        println(part2(board, maxX, maxY))
     }
 
-    data class Current(val pos: Point2D, val heat: Int, val dir: Dir?, val prevDirs: List<Dir>, val maxX: Int, val maxY: Int) : Comparable<Current> {
+    data class Current(val pos: Point2D, val heat: Int, val dir: Dir, val maxX: Int, val maxY: Int) : Comparable<Current> {
 
         private val score = heat + maxX + maxY - pos.x - pos.y
-        val lastPrevDirs = prevDirs.reversed().take(3)
-        val exhaustedDirection = if (lastPrevDirs.size == 3 && lastPrevDirs.toSet().size == 1) lastPrevDirs.first() else null
         override fun compareTo(other: Current): Int = score.compareTo(other.score)
-        fun nextMoves(board: Map<Point2D, Int>): List<Current> {
-            val dirs = when {
-                dir == null -> listOf(Dir.E, Dir.S)
-                exhaustedDirection != null -> listOf(dir.turnLeft(), dir.turnRight())
-                else -> listOf(dir.turnLeft(), dir, dir.turnRight())
-            }
-            return dirs.mapNotNull { nextDir ->
-                val nextPos = pos.move(nextDir)
-                val newHeat = board[nextPos]
-                if (newHeat == null) {
-                    null
-                } else {
-                    this.copy(pos = nextPos, heat = heat + newHeat, dir = nextDir, prevDirs = prevDirs + nextDir)
-                }
-            }
-        }
-
-    }
-
-    private fun part1(lines: List<String>): Any {
-        val (board, maxX, maxY) = readBoard(lines)
-        val pq = PriorityQueue<Current>()
-        pq.offer(Current(Point2D(0, 0), 0, null, emptyList(), maxX, maxY))
-        val mem = mutableSetOf<Pair<Point2D, List<Dir>>>()
-        val target = Point2D(maxX, maxY)
-        while (pq.isNotEmpty()) {
-            val cur = pq.poll()
-//            println("Checking ${cur.heat}")
-            if (cur.pos == target) {
-//                println("Found $cur")
-//                continue
-                return cur.heat
-            }
-            val memItem = cur.pos to cur.lastPrevDirs
-            if (memItem in mem) {
-                continue
-            }
-            mem.add(memItem)
-            cur.nextMoves(board).forEach { pq.offer(it) }
-        }
-        throw RuntimeException()
-        // 984 is too high
-    }
-
-    private fun readBoard(lines: List<String>): Triple<MutableMap<Point2D, Int>, Int, Int> {
-        val board = mutableMapOf<Point2D, Int>()
-        var maxX = 0
-        var maxY = 0
-        lines.forEachIndexed { y, line ->
-            line.forEachIndexed { x, c ->
-                board[Point2D(x, y)] = c.digitToInt()
-                maxX = x
-            }
-            maxY = y
-        }
-        return Triple(board, maxX, maxY)
-    }
-
-    private fun part2(lines: List<String>): Any {
-        val (board, maxX, maxY) = readBoard(lines)
-        val pq = PriorityQueue<Current2>()
-        pq.offer(Current2(Point2D(0, 0), 0, Dir.E, maxX, maxY))
-        pq.offer(Current2(Point2D(0, 0), 0, Dir.S, maxX, maxY))
-        val mem = mutableSetOf<Pair<Point2D, Dir>>()
-        val target = Point2D(maxX, maxY)
-        while (pq.isNotEmpty()) {
-            val cur = pq.poll()
-            println("Checking ${cur.heat}")
-            if (cur.pos == target) {
-//                println("Found $cur")
-//                continue
-                return cur.heat
-            }
-            val memItem = cur.pos to cur.dir
-            if (memItem in mem) {
-                continue
-            }
-            mem.add(memItem)
-            cur.nextMoves(board).forEach { pq.offer(it) }
-        }
-        throw RuntimeException()
-    }
-
-    data class Current2(val pos: Point2D, val heat: Int, val dir: Dir, val maxX: Int, val maxY: Int) : Comparable<Current2> {
-
-        private val score = heat + maxX + maxY - pos.x - pos.y
-
-        //        val lastPrevDirs = prevDirs.reversed().take(3)
-//        val exhaustedDirection = if (lastPrevDirs.size == 3 && lastPrevDirs.toSet().size == 1) lastPrevDirs.first() else null
-        override fun compareTo(other: Current2): Int = score.compareTo(other.score)
-        fun nextMoves(board: Map<Point2D, Int>): List<Current2> {
+        fun nextMoves(board: Map<Point2D, Int>, minSteps: Int, maxSteps: Int): List<Current> {
             var i = 0
-            val res = mutableListOf<Current2>()
+            val res = mutableListOf<Current>()
             var newHeat = 0
-            while (i < 10) {
+            while (i < maxSteps) {
                 ++i
                 val newPos = pos.move(dir, i)
                 val curHeat = board[newPos] ?: break
                 newHeat += curHeat
-                if (i >= 4) {
+                if (i >= minSteps) {
                     res.add(copy(pos = newPos, heat = heat + newHeat, dir = dir.turnLeft()))
                     res.add(copy(pos = newPos, heat = heat + newHeat, dir = dir.turnRight()))
                 }
@@ -124,6 +33,46 @@ object Day17 {
 //            println("From $this to $res")
             return res
         }
+
+    }
+
+    private fun part1(board: MutableMap<Point2D, Int>, maxX: Int, maxY: Int): Any {
+        return traverse(board, maxX, maxY, 1, 3)
+    }
+
+    private fun part2(board: MutableMap<Point2D, Int>, maxX: Int, maxY: Int): Any {
+        return traverse(board, maxX, maxY, 4, 10)
+    }
+
+    private fun readBoard(lines: List<String>): Triple<MutableMap<Point2D, Int>, Int, Int> {
+        val board = mutableMapOf<Point2D, Int>()
+        lines.forEachIndexed { y, line ->
+            line.forEachIndexed { x, c ->
+                board[Point2D(x, y)] = c.digitToInt()
+            }
+        }
+        return Triple(board, lines[0].length - 1, lines.size - 1)
+    }
+
+    private fun traverse(board: MutableMap<Point2D, Int>, maxX: Int, maxY: Int, minSteps: Int, maxSteps: Int): Int {
+        val pq = PriorityQueue<Current>()
+        pq.offer(Current(Point2D(0, 0), 0, Dir.E, maxX, maxY))
+        pq.offer(Current(Point2D(0, 0), 0, Dir.S, maxX, maxY))
+        val mem = mutableSetOf<Pair<Point2D, Dir>>()
+        val target = Point2D(maxX, maxY)
+        while (pq.isNotEmpty()) {
+            val cur = pq.poll()
+            if (cur.pos == target) {
+                return cur.heat
+            }
+            val memItem = cur.pos to cur.dir
+            if (memItem in mem) {
+                continue
+            }
+            mem.add(memItem)
+            cur.nextMoves(board, minSteps, maxSteps).forEach { pq.offer(it) }
+        }
+        throw RuntimeException()
     }
 }
 
