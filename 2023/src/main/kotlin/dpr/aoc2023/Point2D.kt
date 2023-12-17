@@ -19,4 +19,10 @@ data class Point2D(val x: Int, val y: Int) {
     fun left(): Point2D = this.copy(x = x - 1)
     fun right(): Point2D = this.copy(x = x + 1)
     fun manhattan(other: Point2D): Int = abs(x - other.x) + abs(y - other.y)
+    fun move(dir: Dir): Point2D = when (dir) {
+        Dir.N -> up()
+        Dir.W -> left()
+        Dir.S -> down()
+        Dir.E -> right()
+    }
 }
