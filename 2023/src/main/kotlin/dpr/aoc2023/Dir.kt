@@ -19,4 +19,11 @@ enum class Dir {
         S -> W
         E -> S
     }
+
+    fun opposite(): Dir = when (this) {
+        S -> N
+        N -> S
+        W -> E
+        E -> W
+    }
 }

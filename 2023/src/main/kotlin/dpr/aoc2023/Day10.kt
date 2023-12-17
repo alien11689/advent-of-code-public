@@ -98,20 +98,20 @@ object Day10 {
         fun canLeft() = this in setOf(_7, J, MINUS)
         fun canRight() = this in setOf(F, L, MINUS)
         fun directions(): List<Dir> = when (this) {
-            _7 -> listOf(Dir.LEFT, Dir.DOWN)
-            L -> listOf(Dir.UP, Dir.RIGHT)
-            F -> listOf(Dir.DOWN, Dir.RIGHT)
-            J -> listOf(Dir.UP, Dir.LEFT)
-            MINUS -> listOf(Dir.LEFT, Dir.RIGHT)
-            UP_DOWN -> listOf(Dir.UP, Dir.DOWN)
+            _7 -> listOf(Dir.W, Dir.N)
+            L -> listOf(Dir.S, Dir.E)
+            F -> listOf(Dir.N, Dir.E)
+            J -> listOf(Dir.S, Dir.W)
+            MINUS -> listOf(Dir.W, Dir.E)
+            UP_DOWN -> listOf(Dir.S, Dir.N)
             S, DOT -> throw RuntimeException()
         }
 
-        fun possibleInteriorDirectionSelector(): Set<Dir> = when(this){
-            _7, L -> setOf(Dir.UP, Dir.RIGHT)
-            F, J -> setOf(Dir.UP, Dir.LEFT)
-            MINUS -> setOf(Dir.UP)
-            UP_DOWN -> setOf(Dir.LEFT)
+        fun possibleInteriorDirectionSelector(): Set<Dir> = when (this) {
+            _7, L -> setOf(Dir.S, Dir.E)
+            F, J -> setOf(Dir.S, Dir.W)
+            MINUS -> setOf(Dir.S)
+            UP_DOWN -> setOf(Dir.W)
             S, DOT -> throw RuntimeException()
         }
 
@@ -137,46 +137,6 @@ object Day10 {
         }
     }
 
-    enum class Dir {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT;
-
-        fun turn(nextSign: Sign): Dir = when (this) {
-            UP -> when (nextSign) {
-                Sign._7 -> LEFT
-                Sign.F -> RIGHT
-                else -> this
-            }
-
-            DOWN -> when (nextSign) {
-                Sign.J -> LEFT
-                Sign.L -> RIGHT
-                else -> this
-            }
-
-            LEFT -> when (nextSign) {
-                Sign.F -> DOWN
-                Sign.L -> UP
-                else -> this
-            }
-
-            RIGHT -> when (nextSign) {
-                Sign.J -> UP
-                Sign._7 -> DOWN
-                else -> this
-            }
-        }
-
-        fun opposite(): Dir = when (this) {
-            UP -> DOWN
-            DOWN -> UP
-            LEFT -> RIGHT
-            RIGHT -> LEFT
-        }
-    }
-
     private fun part2(lines: List<String>): Any {
         val board = readBoard(lines)
         val start = board.filter { it.value == Sign.S }.keys.single()
@@ -194,10 +154,10 @@ object Day10 {
         while (true) {
             visited.add(cur)
             val next = when (curDir) {
-                Dir.UP -> cur.up()
-                Dir.DOWN -> cur.down()
-                Dir.LEFT -> cur.left()
-                Dir.RIGHT -> cur.right()
+                Dir.S -> cur.up()
+                Dir.N -> cur.down()
+                Dir.W -> cur.left()
+                Dir.E -> cur.right()
             }
             if (next in visited) {
                 break
@@ -205,16 +165,16 @@ object Day10 {
             val nextSign = board[next]!!
             val nextDir = curDir.turn(nextSign)
             interiorDirectionSelector = when {
-                nextSign == Sign.MINUS -> interiorDirectionSelector.filter { it in setOf(Dir.UP, Dir.DOWN) }.toSet()
-                nextSign == Sign.UP_DOWN -> interiorDirectionSelector.filter { it in setOf(Dir.LEFT, Dir.RIGHT) }.toSet()
-                curDir == Dir.RIGHT && nextSign == Sign._7 -> if (Dir.UP in interiorDirectionSelector) setOf(Dir.UP, Dir.RIGHT) else setOf(Dir.DOWN, Dir.LEFT)
-                curDir == Dir.UP && nextSign == Sign._7 -> if (Dir.RIGHT in interiorDirectionSelector) setOf(Dir.UP, Dir.RIGHT) else setOf(Dir.DOWN, Dir.LEFT)
-                curDir == Dir.RIGHT && nextSign == Sign.J -> if (Dir.UP in interiorDirectionSelector) setOf(Dir.UP, Dir.LEFT) else setOf(Dir.DOWN, Dir.RIGHT)
-                curDir == Dir.DOWN && nextSign == Sign.J -> if (Dir.LEFT in interiorDirectionSelector) setOf(Dir.UP, Dir.LEFT) else setOf(Dir.DOWN, Dir.RIGHT)
-                curDir == Dir.DOWN && nextSign == Sign.L -> if (Dir.LEFT in interiorDirectionSelector) setOf(Dir.DOWN, Dir.LEFT) else setOf(Dir.UP, Dir.RIGHT)
-                curDir == Dir.LEFT && nextSign == Sign.L -> if (Dir.DOWN in interiorDirectionSelector) setOf(Dir.DOWN, Dir.LEFT) else setOf(Dir.UP, Dir.RIGHT)
-                curDir == Dir.UP && nextSign == Sign.F -> if (Dir.RIGHT in interiorDirectionSelector) setOf(Dir.DOWN, Dir.RIGHT) else setOf(Dir.UP, Dir.LEFT)
-                curDir == Dir.LEFT && nextSign == Sign.F -> if (Dir.DOWN in interiorDirectionSelector) setOf(Dir.DOWN, Dir.RIGHT) else setOf(Dir.UP, Dir.LEFT)
+                nextSign == Sign.MINUS -> interiorDirectionSelector.filter { it in setOf(Dir.S, Dir.N) }.toSet()
+                nextSign == Sign.UP_DOWN -> interiorDirectionSelector.filter { it in setOf(Dir.W, Dir.E) }.toSet()
+                curDir == Dir.E && nextSign == Sign._7 -> if (Dir.S in interiorDirectionSelector) setOf(Dir.S, Dir.E) else setOf(Dir.N, Dir.W)
+                curDir == Dir.S && nextSign == Sign._7 -> if (Dir.E in interiorDirectionSelector) setOf(Dir.S, Dir.E) else setOf(Dir.N, Dir.W)
+                curDir == Dir.E && nextSign == Sign.J -> if (Dir.S in interiorDirectionSelector) setOf(Dir.S, Dir.W) else setOf(Dir.N, Dir.E)
+                curDir == Dir.N && nextSign == Sign.J -> if (Dir.W in interiorDirectionSelector) setOf(Dir.S, Dir.W) else setOf(Dir.N, Dir.E)
+                curDir == Dir.N && nextSign == Sign.L -> if (Dir.W in interiorDirectionSelector) setOf(Dir.N, Dir.W) else setOf(Dir.S, Dir.E)
+                curDir == Dir.W && nextSign == Sign.L -> if (Dir.N in interiorDirectionSelector) setOf(Dir.N, Dir.W) else setOf(Dir.S, Dir.E)
+                curDir == Dir.S && nextSign == Sign.F -> if (Dir.E in interiorDirectionSelector) setOf(Dir.N, Dir.E) else setOf(Dir.S, Dir.W)
+                curDir == Dir.W && nextSign == Sign.F -> if (Dir.N in interiorDirectionSelector) setOf(Dir.N, Dir.E) else setOf(Dir.S, Dir.W)
                 else -> throw RuntimeException()
             }
             cur = next
@@ -222,18 +182,18 @@ object Day10 {
             interiorDirectionSelector.forEach { dir ->
                 possibleInterior1.add(
                     when (dir) {
-                        Dir.UP -> cur.up()
-                        Dir.DOWN -> cur.down()
-                        Dir.LEFT -> cur.left()
-                        Dir.RIGHT -> cur.right()
+                        Dir.S -> cur.up()
+                        Dir.N -> cur.down()
+                        Dir.W -> cur.left()
+                        Dir.E -> cur.right()
                     }
                 )
                 possibleInterior2.add(
                     when (dir.opposite()) {
-                        Dir.UP -> cur.up()
-                        Dir.DOWN -> cur.down()
-                        Dir.LEFT -> cur.left()
-                        Dir.RIGHT -> cur.right()
+                        Dir.S -> cur.up()
+                        Dir.N -> cur.down()
+                        Dir.W -> cur.left()
+                        Dir.E -> cur.right()
                     }
                 )
             }
@@ -276,6 +236,32 @@ object Day10 {
         // 13904 is too high
         // 306 is wrong
         return knownInterior.size
+    }
+
+    fun Dir.turn(nextSign: Sign): Dir = when (this) {
+        Dir.S -> when (nextSign) {
+            Sign._7 -> Dir.W
+            Sign.F -> Dir.E
+            else -> this
+        }
+
+        Dir.N -> when (nextSign) {
+            Sign.J -> Dir.W
+            Sign.L -> Dir.E
+            else -> this
+        }
+
+        Dir.W -> when (nextSign) {
+            Sign.F -> Dir.N
+            Sign.L -> Dir.S
+            else -> this
+        }
+
+        Dir.E -> when (nextSign) {
+            Sign.J -> Dir.S
+            Sign._7 -> Dir.N
+            else -> this
+        }
     }
 }
 
