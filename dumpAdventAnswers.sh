@@ -7,8 +7,6 @@ for x in $years; do
     echo "========="
     echo Year $x
     echo "========="
-    cd $x
-    ./printAnswers.sh > extractedAnswers.txt
-    ./runAll.sh > calculatedAnswers.txt
-    cd -
+    ./printAnswers.sh $x > $x/extractedAnswers.txt
+    ./runSingle.sh $x > $x/calculatedAnswers.txt
 done
