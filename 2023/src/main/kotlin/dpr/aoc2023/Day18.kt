@@ -3,7 +3,6 @@ package dpr.aoc2023
 import dpr.commons.Dir
 import dpr.commons.Point2D
 import dpr.commons.Util
-import kotlin.math.max
 import kotlin.math.min
 
 object Day18 {
@@ -13,6 +12,7 @@ object Day18 {
 //        val lines = Util.getNotEmptyLinesFromFile("/18/test1.txt")
         println(part1(lines))
         println(part2(lines))
+        // it should be implementable with shoelace formula and pick's theorem but my solution just works
     }
 
     private fun part1(lines: List<String>): Any {
@@ -55,7 +55,7 @@ object Day18 {
         }
 
         fun minY(): Int = min(start.y, end.y)
-        fun maxY(): Int = max(start.y, end.y)
+
         fun containsY(y: Int): Boolean {
             return y in (start.y..end.y)
         }
