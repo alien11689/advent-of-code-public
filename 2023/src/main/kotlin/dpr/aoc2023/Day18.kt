@@ -17,10 +17,10 @@ object Day18 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val border = mutableMapOf<Point2D, String>()
+        val border = mutableSetOf<Point2D>()
         var cur = Point2D(0, 0)
         lines.forEach { line ->
-            val (d, size, color) = line.split(Regex("[ )(#]+"))
+            val (d, size) = line.split(Regex("[ )(#]+"))
             val dir = when (d) {
                 "R" -> Dir.E
                 "D" -> Dir.S
@@ -28,39 +28,27 @@ object Day18 {
                 "U" -> Dir.N
                 else -> throw RuntimeException(d)
             }
-            (1..size.toInt()).forEach {
+            repeat((1..size.toInt()).count()) {
                 cur = cur.move(dir)
-                border[cur] = color
+                border.add(cur)
             }
         }
-//        (border.minOf { it.key.y }..border.maxOf { it.key.y }).forEach { y ->
-//            (border.minOf { it.key.x }..border.maxOf { it.key.x }).forEach { x ->
-//                val p = Point2D(x, y)
-//                if (p in border) {
-//                    print("#")
-//                } else {
-//                    print(" ")
-//                }
-//            }
-//            println()
-//        }
-        var interior = findInterior(border)
         val s = Stack<Point2D>()
-        s.add(interior)
+        s.add(findInterior(border))
         while (s.isNotEmpty()) {
             val cur = s.pop()
             if (cur in border) {
                 continue
             }
-            border[cur] = "0"
+            border.add(cur)
             listOf(cur.up(), cur.down(), cur.left(), cur.right()).forEach { s.push(it) }
         }
-        return border.keys.size
+        return border.size
     }
 
-    private fun findInterior(border: MutableMap<Point2D, String>): Point2D {
-        (border.minOf { it.key.y }..border.maxOf { it.key.y }).forEach { y ->
-            (border.minOf { it.key.x }..border.maxOf { it.key.x }).forEach { x ->
+    private fun findInterior(border: Set<Point2D>): Point2D {
+        (border.minOf { it.y }..border.maxOf { it.y }).forEach { y ->
+            (border.minOf { it.x }..border.maxOf { it.x }).forEach { x ->
                 val p = Point2D(x, y)
                 if (p.up() in border && p.left() in border) {
                     return p
@@ -75,14 +63,8 @@ object Day18 {
             return start.x == end.x
         }
 
-        fun leftRight(): Boolean {
-            return !upDown()
-        }
-
         fun minY(): Int = min(start.y, end.y)
         fun maxY(): Int = max(start.y, end.y)
-        fun minX(): Int = min(start.x, end.x)
-        fun maxX(): Int = max(start.x, end.x)
         fun containsY(y: Int): Boolean {
             return y in (start.y..end.y)
         }
@@ -115,47 +97,45 @@ object Day18 {
         }
         val (upDown, leftRight) = border.partition { it.upDown() }
         val minY = border.minOf { it.minY() }
-        val minX = border.minOf { it.minX() }
         val maxY = border.maxOf { it.maxY() }
-        val maxX = border.maxOf { it.maxX() }
-//        println("Area x ($minX, $maxX) y ($minY, $maxY)")
+        var prevLineFill = -1
+        val yWithLines = leftRight.map { it.start.y }.toSet()
         for (y in (minY + 1)..<maxY) {
+            if (y !in yWithLines && prevLineFill >= 0) {
+                filledSize += prevLineFill
+                continue
+            }
+            var increment = 0
             val breaks = upDown.filter { it.containsY(y) }.map { it.start.x }.sorted()
             var outside = true
             var x = Int.MIN_VALUE
-//            var prevOutside = true
             breaks.forEach { breakingX ->
                 val range = Range(Point2D(x, y), Point2D(breakingX, y))
                 val isLeftRight = range in leftRight
                 if (isLeftRight) {
                     val startUpIsLine = upDown.any { it.contains(range.start.up()) }
                     val endUpIsLine = upDown.any { it.contains(range.end.up()) }
-//                    prevOutside = outside
                     if (startUpIsLine == endUpIsLine) {
+                        // when start up and end up is the same it means that we need to continue prev status of line,
+                        // but we already switched it on breaking point so let's recover
                         outside = !outside
-                    } else {
-//                        outside = !outside
                     }
                     x = breakingX
                 } else if (outside) {
-//                    prevOutside = outside
                     outside = false
                     x = breakingX
                 } else {
-//                    prevOutside = outside
-                    filledSize += breakingX - 1 - x
+                    increment += breakingX - 1 - x
                     outside = true
                     x = breakingX
                 }
             }
-            if (!outside) {
+            if (!outside) { // it
                 throw RuntimeException("Error in line $y")
             }
-//            if(containsLine) {
-//                println("$y has breaks $breaks")
-//            }
-//            break
-            println("Checking $y/$maxY")
+            prevLineFill = if (y in yWithLines) -1 else increment
+            filledSize += increment
+//            println("Checking $y/$maxY")
         }
         return filledSize
     }
