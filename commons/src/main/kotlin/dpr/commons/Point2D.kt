@@ -2,7 +2,7 @@ package dpr.commons
 
 import kotlin.math.abs
 
-data class Point2D(val x: Int, val y: Int) {
+data class Point2D(val x: Int, val y: Int) : Comparable<Point2D> {
     fun adjacentPoints(): Set<Point2D> = setOf(
         Point2D(x - 1, y - 1),
         Point2D(x + 1, y - 1),
@@ -24,5 +24,14 @@ data class Point2D(val x: Int, val y: Int) {
         Dir.W -> left(steps)
         Dir.S -> down(steps)
         Dir.E -> right(steps)
+    }
+
+    override fun compareTo(other: Point2D): Int {
+        val yComparison = y.compareTo(other.y)
+        return if (yComparison == 0) {
+            x.compareTo(other.x)
+        } else {
+            yComparison
+        }
     }
 }
