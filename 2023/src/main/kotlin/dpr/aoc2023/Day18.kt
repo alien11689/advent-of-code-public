@@ -3,7 +3,6 @@ package dpr.aoc2023
 import dpr.commons.Dir
 import dpr.commons.Point2D
 import dpr.commons.Util
-import java.util.Stack
 import kotlin.math.max
 import kotlin.math.min
 
@@ -17,8 +16,14 @@ object Day18 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val border = mutableSetOf<Point2D>()
+        val (border, borderSize) = readLines(lines)
+        return calculateWholeSize(borderSize, border)
+    }
+
+    private fun readLines(lines: List<String>): Pair<MutableSet<Range>, Long> {
+        val border = mutableSetOf<Range>()
         var cur = Point2D(0, 0)
+        var borderSize = 0L
         lines.forEach { line ->
             val (d, size) = line.split(Regex("[ )(#]+"))
             val dir = when (d) {
@@ -28,23 +33,18 @@ object Day18 {
                 "U" -> Dir.N
                 else -> throw RuntimeException(d)
             }
-            repeat((1..size.toInt()).count()) {
-                cur = cur.move(dir)
-                border.add(cur)
+            val next = cur.move(dir, size.toInt())
+            if (cur < next) {
+                border.add(Range(cur, next))
+            } else {
+                border.add(Range(next, cur))
             }
+            cur = next
+            borderSize += size.toInt()
         }
-        val s = Stack<Point2D>()
-        s.add(findInterior(border))
-        while (s.isNotEmpty()) {
-            val cur = s.pop()
-            if (cur in border) {
-                continue
-            }
-            border.add(cur)
-            listOf(cur.up(), cur.down(), cur.left(), cur.right()).forEach { s.push(it) }
-        }
-        return border.size
+        return Pair(border, borderSize)
     }
+
 
     private fun findInterior(border: Set<Point2D>): Point2D {
         (border.minOf { it.y }..border.maxOf { it.y }).forEach { y ->
@@ -73,9 +73,14 @@ object Day18 {
     }
 
     private fun part2(lines: List<String>): Any {
+        val (border, borderSize) = readLines2(lines)
+        return calculateWholeSize(borderSize, border)
+    }
+
+    private fun readLines2(lines: List<String>): Pair<MutableSet<Range>, Long> {
         val border = mutableSetOf<Range>()
-        var filledSize = 0L
         var cur = Point2D(0, 0)
+        var borderSize = 0L
         lines.forEach { line ->
             val color = line.split(Regex("[ )(#]+"))[2]
             val d = color.take(5).toInt(16)
@@ -93,8 +98,13 @@ object Day18 {
                 border.add(Range(next, cur))
             }
             cur = next
-            filledSize += d
+            borderSize += d
         }
+        return Pair(border, borderSize)
+    }
+
+    private fun calculateWholeSize(borderSize: Long, border: MutableSet<Range>): Long {
+        var filledSize = borderSize
         val (upDown, leftRight) = border.partition { it.upDown() }
         val minY = border.minOf { it.minY() }
         val maxY = border.maxOf { it.maxY() }
@@ -135,7 +145,7 @@ object Day18 {
             }
             prevLineFill = if (y in yWithLines) -1 else increment
             filledSize += increment
-//            println("Checking $y/$maxY")
+            //            println("Checking $y/$maxY")
         }
         return filledSize
     }
