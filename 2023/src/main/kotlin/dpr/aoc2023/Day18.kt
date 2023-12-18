@@ -83,46 +83,47 @@ object Day18 {
         var filledSize = borderSize
         val (upDown, leftRight) = border.partition { it.upDown() }
         val minY = border.minOf { it.minY() }
-        val maxY = border.maxOf { it.maxY() }
-        var prevLineFill = -1
-        val yWithLines = leftRight.map { it.start.y }.toSet()
-        for (y in (minY + 1)..<maxY) {
-            if (y !in yWithLines && prevLineFill >= 0) {
-                filledSize += prevLineFill
-                continue
+        val yWithLines = leftRight.map { it.start.y }.toSet().sorted()
+        var lastY = minY
+        for (y in yWithLines) {
+            filledSize += calculateLineFill(y, upDown, leftRight)
+            if (y - lastY > 1) {
+                filledSize += (y - lastY - 1) * calculateLineFill(y - 1, upDown, leftRight).toLong()
             }
-            var increment = 0
-            val breaks = upDown.filter { it.containsY(y) }.map { it.start.x }.sorted()
-            var outside = true
-            var x = Int.MIN_VALUE
-            breaks.forEach { breakingX ->
-                val range = Range(Point2D(x, y), Point2D(breakingX, y))
-                val isLeftRight = range in leftRight
-                if (isLeftRight) {
-                    val startUpIsLine = upDown.any { it.contains(range.start.up()) }
-                    val endUpIsLine = upDown.any { it.contains(range.end.up()) }
-                    if (startUpIsLine == endUpIsLine) {
-                        // when start up and end up is the same it means that we need to continue prev status of line,
-                        // but we already switched it on breaking point so let's recover
-                        outside = !outside
-                    }
-                    x = breakingX
-                } else if (outside) {
-                    outside = false
-                    x = breakingX
-                } else {
-                    increment += breakingX - 1 - x
-                    outside = true
-                    x = breakingX
-                }
-            }
-            if (!outside) { // it
-                throw RuntimeException("Error in line $y")
-            }
-            prevLineFill = if (y in yWithLines) -1 else increment
-            filledSize += increment
-            //            println("Checking $y/$maxY")
+            lastY = y
         }
         return filledSize
+    }
+
+    private fun calculateLineFill(y: Int, upDown: List<Range>, leftRight: List<Range>): Int {
+        var increment = 0
+        val breaks = upDown.filter { it.containsY(y) }.map { it.start.x }.sorted()
+        var outside = true
+        var x = Int.MIN_VALUE
+        breaks.forEach { breakingX ->
+            val range = Range(Point2D(x, y), Point2D(breakingX, y))
+            val isLeftRight = range in leftRight
+            if (isLeftRight) {
+                val startUpIsLine = upDown.any { it.contains(range.start.up()) }
+                val endUpIsLine = upDown.any { it.contains(range.end.up()) }
+                if (startUpIsLine == endUpIsLine) {
+                    // when start up and end up is the same it means that we need to continue prev status of line,
+                    // but we already switched it on breaking point so let's recover
+                    outside = !outside
+                }
+                x = breakingX
+            } else if (outside) {
+                outside = false
+                x = breakingX
+            } else {
+                increment += breakingX - 1 - x
+                outside = true
+                x = breakingX
+            }
+        }
+        if (!outside) { // it
+            throw RuntimeException("Error in line $y")
+        }
+        return increment
     }
 }
