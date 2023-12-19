@@ -8,8 +8,9 @@ object Day19 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/19/input.txt")
 //        val lines = Util.getNotEmptyLinesFromFile("/19/test1.txt")
-        println(part1(lines))
-        println(part2(lines))
+        val (ruleLists, items) = parseInput(lines)
+        println(part1(ruleLists, items))
+        println(part2(ruleLists))
     }
 
     enum class Sign {
@@ -18,24 +19,17 @@ object Day19 {
         ALWAYS;
     }
 
-    data class Rule(val part: String, val sign: Sign, val value: Long, val target: String) {
-        fun accepts(item: Map<String, Long>): Boolean {
-            if (part !in item) {
-                return true
-            }
-            return when (sign) {
-                Sign.ALWAYS -> true
-                Sign.LT -> item[part]!! < value
-                else -> item[part]!! > value
-            }
-        }
-
-        fun toCondition(): Condition = Condition(part, sign, value, false)
+    data class Rule(val condition: Condition, val target: String) {
+        fun accepts(item: Map<String, Int>): Boolean = condition.test(item)
     }
 
-    private fun part1(lines: List<String>): Any {
+    private fun part1(ruleLists: Map<String, List<Rule>>, items: List<Map<String, Int>>): Any {
+        return items.sumOf { if (pipeline(it, ruleLists)) it.values.sum() else 0 }
+    }
+
+    private fun parseInput(lines: List<String>): Pair<Map<String, List<Rule>>, List<Map<String, Int>>> {
         val ruleLists = mutableMapOf<String, List<Rule>>()
-        val items = mutableListOf<Map<String, Long>>()
+        val items = mutableListOf<Map<String, Int>>()
         lines.forEach { line ->
             if (line.startsWith("{")) {
                 items.add(parseItem(line))
@@ -44,10 +38,10 @@ object Day19 {
                 ruleLists[name] = rulesList
             }
         }
-        return items.sumOf { if (pipeline(it, ruleLists)) it.values.sum() else 0L }
+        return Pair(simplifyBasicRules(ruleLists), items)
     }
 
-    private fun pipeline(item: Map<String, Long>, ruleLists: MutableMap<String, List<Rule>>): Boolean {
+    private fun pipeline(item: Map<String, Int>, ruleLists: Map<String, List<Rule>>): Boolean {
         var cur = "in"
         while (true) {
             when (val result = applyOn(item, ruleLists[cur]!!)) {
@@ -60,7 +54,7 @@ object Day19 {
         }
     }
 
-    private fun applyOn(item: Map<String, Long>, rules: List<Rule>): String {
+    private fun applyOn(item: Map<String, Int>, rules: List<Rule>): String {
         for (r in rules) {
             if (r.accepts(item)) {
                 return r.target
@@ -69,12 +63,12 @@ object Day19 {
         throw RuntimeException("Item $item and rules $rules")
     }
 
-    private fun parseItem(line: String): Map<String, Long> {
+    private fun parseItem(line: String): Map<String, Int> {
         return line.split(Regex("[{}=,]+"))
             .drop(1)
             .chunked(2)
             .filter { it.size == 2 }
-            .associate { it[0] to it[1].toLong() }
+            .associate { it[0] to it[1].toInt() }
     }
 
     private fun parseRuleList(line: String): Pair<String, List<Rule>> {
@@ -87,50 +81,62 @@ object Day19 {
             if (ruleString.contains(":")) {
                 val sign = if (ruleString.contains("<")) Sign.LT else Sign.GT
                 val (name, value, target) = ruleString.split(Regex("[<>:]"))
-                Rule(name, sign, value.toLong(), target)
+                Rule(Condition(name, sign, value.toLong()), target)
             } else {
-                Rule("", Sign.ALWAYS, 0, ruleString)
+                Rule(Condition.ALWAYS, ruleString)
             }
         }
     }
 
-    data class Condition(val part: String, val sign: Sign, val value: Long, val negated: Boolean) {
+    data class Condition(val part: String, val sign: Sign, val value: Long, val negated: Boolean = false) {
         fun negate(): Condition = this.copy(negated = !negated)
+
         fun accepts(name: String, x: Int): Boolean = when {
             name != part -> true
             sign == Sign.LT -> if (negated) x >= value else x < value
             sign == Sign.GT -> if (negated) x <= value else x > value
             else -> throw RuntimeException()
         }
+
+        fun test(item: Map<String, Int>): Boolean {
+            if (part !in item) {
+                return true
+            }
+            return when (sign) {
+                Sign.ALWAYS -> true
+                Sign.LT -> item[part]!! < value
+                else -> item[part]!! > value
+            }
+        }
+
+        companion object {
+            val ALWAYS = Condition("", Sign.ALWAYS, 0)
+        }
     }
 
     data class Current(val ruleName: String, val conditions: Set<Condition>)
 
-    private fun part2(lines: List<String>): Any {
-        var ruleLists = readRuleLists(lines)
-        ruleLists = simplifyBasicRules(ruleLists)
+    private fun part2(ruleLists: Map<String, List<Rule>>): Any {
         val stack = Stack<Current>()
         stack.push(Current("in", emptySet()))
         val acceptingConditions = mutableListOf<Set<Condition>>()
         while (stack.isNotEmpty()) {
             val cur = stack.pop()
-            when (cur.ruleName) {
-                "A" -> acceptingConditions.add(cur.conditions)
-                "R" -> {}
-                else -> {
-                    val rules = ruleLists[cur.ruleName]!!
-                    var prevConditionsNegated = emptySet<Condition>()
-                    rules.forEach {
-                        val condition = it.toCondition()
-                        stack.push(
-                            Current(
-                                it.target,
-                                cur.conditions + prevConditionsNegated + if (condition.sign != Sign.ALWAYS) setOf(condition) else emptySet()
-                            )
+            val rules = ruleLists[cur.ruleName]!!
+            var prevConditionsNegated = emptySet<Condition>()
+            rules.forEach {
+                val condition = it.condition
+                when (it.target) {
+                    "A" -> acceptingConditions.add(cur.conditions + prevConditionsNegated + if (condition.sign != Sign.ALWAYS) setOf(condition) else emptySet())
+                    "R" -> {}
+                    else -> stack.push(
+                        Current(
+                            it.target,
+                            cur.conditions + prevConditionsNegated + if (condition.sign != Sign.ALWAYS) setOf(condition) else emptySet()
                         )
-                        prevConditionsNegated = prevConditionsNegated + condition.negate()
-                    }
+                    )
                 }
+                prevConditionsNegated = prevConditionsNegated + condition.negate()
             }
         }
         val possibleItemRating = 1..4000
@@ -150,20 +156,19 @@ object Day19 {
     }
 
     private fun simplifyBasicRules(ruleLists: Map<String, List<Rule>>): Map<String, List<Rule>> {
-        var ruleLists1 = ruleLists
+        var current = ruleLists
         while (true) {
             //            println("Simplified")
-            var simplified = ruleLists1.map { simplify(it) }.toMap()
-            if (simplified == ruleLists1) {
-                break
+            var simplified = current.map { simplify(it) }.toMap()
+            if (simplified == current) {
+                return current
             }
             val reducedRules = simplified.filter { it.value.size == 1 }
             simplified = simplified - reducedRules.keys
             simplified = replaceTarget(simplified, reducedRules)
             //            println(reducedRules)
-            ruleLists1 = simplified
+            current = simplified
         }
-        return ruleLists1
     }
 
     private fun replaceTarget(simplified: Map<String, List<Rule>>, reducedRules: Map<String, List<Rule>>): Map<String, List<Rule>> {
@@ -184,21 +189,10 @@ object Day19 {
         val rules = ruleList.value
         val size = rules.size
         return if (rules[size - 1].target == rules[size - 2].target) {
-            ruleList.key to rules.take(size - 2) + Rule("", Sign.ALWAYS, 0L, rules[size - 1].target)
+            ruleList.key to rules.take(size - 2) + Rule(Condition.ALWAYS, rules[size - 1].target)
         } else {
             ruleList.key to rules
         }
-    }
-
-    private fun readRuleLists(lines: List<String>): Map<String, List<Rule>> {
-        val ruleLists = mutableMapOf<String, List<Rule>>()
-        lines.forEach { line ->
-            if (!line.startsWith("{")) {
-                val (name, rulesList) = parseRuleList(line)
-                ruleLists[name] = rulesList
-            }
-        }
-        return ruleLists.toMap()
     }
 }
 
