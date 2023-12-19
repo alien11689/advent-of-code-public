@@ -1,6 +1,7 @@
 package dpr.aoc2023
 
 import dpr.commons.Util
+import java.util.Stack
 
 object Day19 {
     @JvmStatic
@@ -14,7 +15,13 @@ object Day19 {
     enum class Sign {
         LT,
         GT,
-        ALWAYS
+        ALWAYS;
+
+        fun negate(): Sign = when (this) {
+            LT -> GT
+            GT -> LT
+            ALWAYS -> throw RuntimeException()
+        }
     }
 
     data class Rule(val part: String, val sign: Sign, val value: Long, val target: String) {
@@ -29,6 +36,7 @@ object Day19 {
             }
         }
 
+        fun toCondition(): Condition = Condition(part, sign, value, false)
     }
 
     private fun part1(lines: List<String>): Any {
@@ -93,17 +101,77 @@ object Day19 {
         }
     }
 
+    data class Condition(val part: String, val sign: Sign, val value: Long, val negated: Boolean) {
+        fun negate(): Condition = this.copy(negated = !negated)
+        fun accepts(name: String, x: Int): Boolean = when {
+            name != part -> true
+            sign == Sign.LT -> if (negated) x >= value else x < value
+            sign == Sign.GT -> if (negated) x <= value else x > value
+            else -> throw RuntimeException()
+        }
+    }
+
+    data class Current(val ruleName: String, val conditions: Set<Condition>)
+
     private fun part2(lines: List<String>): Any {
         var ruleLists = readRuleLists(lines)
         ruleLists = simplifyBasicRules(ruleLists)
-        println(ruleLists)
+        val stack = Stack<Current>()
+        stack.push(Current("in", emptySet()))
+        val acceptingConditions = mutableListOf<Set<Condition>>()
+        while (stack.isNotEmpty()) {
+            val cur = stack.pop()
+            if (cur.ruleName == "A") {
+                acceptingConditions.add(cur.conditions)
+                println("FOUND")
+            } else if (cur.ruleName == "R") {
+                // do nothing
+            } else {
+                val rules = ruleLists[cur.ruleName]!!
+                var prevConditionsNegated = emptySet<Condition>()
+                rules.forEach {
+                    val condition = it.toCondition()
+                    stack.push(Current(it.target, cur.conditions + prevConditionsNegated + if (condition.sign != Sign.ALWAYS) setOf(condition) else emptySet()))
+                    if (it.sign != Sign.ALWAYS) {
+                        prevConditionsNegated = prevConditionsNegated + condition.negate()
+                    }
+                }
+            }
+        }
+        var allX = (1..4000).toSet()
+        var allM = (1..4000).toSet()
+        var allA = (1..4000).toSet()
+        var allS = (1..4000).toSet()
+        val res = acceptingConditions.sumOf { conditions ->
+            println(conditions)
+            val xx = (1..4000).count { x ->
+                pass(conditions, "x", x)
+            }
+            val mm = (1..4000).count { x ->
+                pass(conditions, "m", x)
+            }
+            val aa = (1..4000).count { x ->
+                pass(conditions, "a", x)
+            }
+            val ss = (1..4000).count { x ->
+                pass(conditions, "s", x)
+            }
+            println("Accepting x=$xx, m=$mm, a=$aa, s=$ss -> ${xx.toLong() * mm * aa * ss}")
+            xx.toLong() * mm * aa * ss
+        }
+        println(res)
+        println(acceptingConditions.size)
         TODO()
+    }
+
+    private fun pass(conditions: Set<Day19.Condition>, name: String, value: Int): Boolean {
+        return conditions.all { it.accepts(name, value) }
     }
 
     private fun simplifyBasicRules(ruleLists: Map<String, List<Rule>>): Map<String, List<Rule>> {
         var ruleLists1 = ruleLists
         while (true) {
-    //            println("Simplified")
+            //            println("Simplified")
             var simplified = ruleLists1.map { simplify(it) }.toMap()
             if (simplified == ruleLists1) {
                 break
@@ -111,7 +179,7 @@ object Day19 {
             val reducedRules = simplified.filter { it.value.size == 1 }
             simplified = simplified - reducedRules.keys
             simplified = replaceTarget(simplified, reducedRules)
-    //            println(reducedRules)
+            //            println(reducedRules)
             ruleLists1 = simplified
         }
         return ruleLists1
