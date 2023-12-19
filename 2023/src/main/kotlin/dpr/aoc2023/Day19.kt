@@ -16,12 +16,6 @@ object Day19 {
         LT,
         GT,
         ALWAYS;
-
-        fun negate(): Sign = when (this) {
-            LT -> GT
-            GT -> LT
-            ALWAYS -> throw RuntimeException()
-        }
     }
 
     data class Rule(val part: String, val sign: Sign, val value: Long, val target: String) {
@@ -56,8 +50,7 @@ object Day19 {
     private fun pipeline(item: Map<String, Long>, ruleLists: MutableMap<String, List<Rule>>): Boolean {
         var cur = "in"
         while (true) {
-            val result = applyOn(item, ruleLists[cur]!!)
-            when (result) {
+            when (val result = applyOn(item, ruleLists[cur]!!)) {
                 "A" -> return true
                 "R" -> return false
                 else -> {
@@ -121,50 +114,38 @@ object Day19 {
         val acceptingConditions = mutableListOf<Set<Condition>>()
         while (stack.isNotEmpty()) {
             val cur = stack.pop()
-            if (cur.ruleName == "A") {
-                acceptingConditions.add(cur.conditions)
-                println("FOUND")
-            } else if (cur.ruleName == "R") {
-                // do nothing
-            } else {
-                val rules = ruleLists[cur.ruleName]!!
-                var prevConditionsNegated = emptySet<Condition>()
-                rules.forEach {
-                    val condition = it.toCondition()
-                    stack.push(Current(it.target, cur.conditions + prevConditionsNegated + if (condition.sign != Sign.ALWAYS) setOf(condition) else emptySet()))
-                    if (it.sign != Sign.ALWAYS) {
+            when (cur.ruleName) {
+                "A" -> acceptingConditions.add(cur.conditions)
+                "R" -> {}
+                else -> {
+                    val rules = ruleLists[cur.ruleName]!!
+                    var prevConditionsNegated = emptySet<Condition>()
+                    rules.forEach {
+                        val condition = it.toCondition()
+                        stack.push(
+                            Current(
+                                it.target,
+                                cur.conditions + prevConditionsNegated + if (condition.sign != Sign.ALWAYS) setOf(condition) else emptySet()
+                            )
+                        )
                         prevConditionsNegated = prevConditionsNegated + condition.negate()
                     }
                 }
             }
         }
-        var allX = (1..4000).toSet()
-        var allM = (1..4000).toSet()
-        var allA = (1..4000).toSet()
-        var allS = (1..4000).toSet()
-        val res = acceptingConditions.sumOf { conditions ->
-            println(conditions)
-            val xx = (1..4000).count { x ->
-                pass(conditions, "x", x)
-            }
-            val mm = (1..4000).count { x ->
-                pass(conditions, "m", x)
-            }
-            val aa = (1..4000).count { x ->
-                pass(conditions, "a", x)
-            }
-            val ss = (1..4000).count { x ->
-                pass(conditions, "s", x)
-            }
-            println("Accepting x=$xx, m=$mm, a=$aa, s=$ss -> ${xx.toLong() * mm * aa * ss}")
+        val possibleItemRating = 1..4000
+        return acceptingConditions.sumOf { conditions ->
+//            println(conditions)
+            val xx = possibleItemRating.count { x -> pass(conditions, "x", x) }
+            val mm = possibleItemRating.count { x -> pass(conditions, "m", x) }
+            val aa = possibleItemRating.count { x -> pass(conditions, "a", x) }
+            val ss = possibleItemRating.count { x -> pass(conditions, "s", x) }
+//            println("Accepting x=$xx, m=$mm, a=$aa, s=$ss -> ${xx.toLong() * mm * aa * ss}")
             xx.toLong() * mm * aa * ss
         }
-        println(res)
-        println(acceptingConditions.size)
-        TODO()
     }
 
-    private fun pass(conditions: Set<Day19.Condition>, name: String, value: Int): Boolean {
+    private fun pass(conditions: Set<Condition>, name: String, value: Int): Boolean {
         return conditions.all { it.accepts(name, value) }
     }
 
