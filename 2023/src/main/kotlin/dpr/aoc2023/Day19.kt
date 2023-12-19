@@ -1,7 +1,6 @@
 package dpr.aoc2023
 
 import dpr.commons.Util
-import java.util.UUID
 
 object Day19 {
     @JvmStatic
@@ -20,6 +19,9 @@ object Day19 {
 
     data class Rule(val part: String, val sign: Sign, val value: Long, val target: String) {
         fun accepts(item: Map<String, Long>): Boolean {
+            if (part !in item) {
+                return true
+            }
             return when (sign) {
                 Sign.ALWAYS -> true
                 Sign.LT -> item[part]!! < value
@@ -59,7 +61,7 @@ object Day19 {
 
     private fun applyOn(item: Map<String, Long>, rules: List<Rule>): String {
         for (r in rules) {
-            if(r.accepts(item)){
+            if (r.accepts(item)) {
                 return r.target
             }
         }
@@ -86,13 +88,68 @@ object Day19 {
                 val (name, value, target) = ruleString.split(Regex("[<>:]"))
                 Rule(name, sign, value.toLong(), target)
             } else {
-                Rule(UUID.randomUUID().toString(), Sign.ALWAYS, 0, ruleString)
+                Rule("", Sign.ALWAYS, 0, ruleString)
             }
         }
     }
 
     private fun part2(lines: List<String>): Any {
+        var ruleLists = readRuleLists(lines)
+        ruleLists = simplifyBasicRules(ruleLists)
+        println(ruleLists)
         TODO()
+    }
+
+    private fun simplifyBasicRules(ruleLists: Map<String, List<Rule>>): Map<String, List<Rule>> {
+        var ruleLists1 = ruleLists
+        while (true) {
+    //            println("Simplified")
+            var simplified = ruleLists1.map { simplify(it) }.toMap()
+            if (simplified == ruleLists1) {
+                break
+            }
+            val reducedRules = simplified.filter { it.value.size == 1 }
+            simplified = simplified - reducedRules.keys
+            simplified = replaceTarget(simplified, reducedRules)
+    //            println(reducedRules)
+            ruleLists1 = simplified
+        }
+        return ruleLists1
+    }
+
+    private fun replaceTarget(simplified: Map<String, List<Rule>>, reducedRules: Map<String, List<Rule>>): Map<String, List<Rule>> {
+        return simplified.map { (key, value) ->
+            if (value.any { it.target in reducedRules.keys }) {
+                key to shortcut(value, reducedRules)
+            } else {
+                key to value
+            }
+        }.toMap()
+    }
+
+    private fun shortcut(rules: List<Rule>, reducedRules: Map<String, List<Rule>>): List<Rule> {
+        return rules.map { if (it.target in reducedRules) it.copy(target = reducedRules[it.target]!!.first().target) else it }
+    }
+
+    private fun simplify(ruleList: Map.Entry<String, List<Rule>>): Pair<String, List<Rule>> {
+        val rules = ruleList.value
+        val size = rules.size
+        return if (rules[size - 1].target == rules[size - 2].target) {
+            ruleList.key to rules.take(size - 2) + Rule("", Sign.ALWAYS, 0L, rules[size - 1].target)
+        } else {
+            ruleList.key to rules
+        }
+    }
+
+    private fun readRuleLists(lines: List<String>): Map<String, List<Rule>> {
+        val ruleLists = mutableMapOf<String, List<Rule>>()
+        lines.forEach { line ->
+            if (!line.startsWith("{")) {
+                val (name, rulesList) = parseRuleList(line)
+                ruleLists[name] = rulesList
+            }
+        }
+        return ruleLists.toMap()
     }
 }
 
