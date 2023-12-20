@@ -48,16 +48,21 @@ object Day20 {
         override val name: String,
         override val outputs: List<String>,
         val memory: MutableMap<String, Boolean> = mutableMapOf(),
+        val firstChangeToTrue: MutableMap<String, Int> = mutableMapOf()
     ) : Element {
         fun updateMemory(mem: Map<String, Boolean>) {
             memory.putAll(mem)
+            firstChangeToTrue.putAll(mem.map { it.key to 0 })
         }
 
         override fun send(input: Signal): List<Signal> {
             memory[input.from] = input.state
-            if (name == "rg" && memory.any { it.value }) {
-                println("rg in ${input.iter}: $memory")
+            if (name == "rg" && input.state && firstChangeToTrue[input.from] == 0) {
+                firstChangeToTrue[input.from] = input.iter
             }
+//            if (name == "rg" && memory.any { it.value }) {
+//                println("rg in ${input.iter}: $memory")
+//            }
             val allHigh = memory.values.all { it }
             return outputs.map { Signal(name, it, !allHigh, input.iter) }
         }
@@ -102,9 +107,9 @@ object Day20 {
         var high = 0L
         while (queue.isNotEmpty()) {
             val signal = queue.poll()
-            if (signal.to == "rx" && !signal.state) {
-                throw RuntimeException()
-            }
+//            if (signal.to == "rx" && !signal.state) {
+//                throw RuntimeException()
+//            }
 //            println("Processing $signal")
             if (signal.state) {
                 ++high
@@ -119,22 +124,16 @@ object Day20 {
     private fun part2(lines: List<String>): Any {
         val elements = readElements(lines)
         var i = 1
-        return 4057L * 3889L * 3779L * 3767L
         while (true) {
-            try {
-//                println("Checking $i")
-                pushTheButton(elements, i, part2 = true)
-//                elements.values.filterIsInstance<Conjunction>().filter { it.name == "rg" }.forEach {
-//                    if (it.memory.any { it.value }) {
-//                        println("$i: ${it.name} -> ${it.memory}")
-//                    }
-//                }
-            } catch (e: RuntimeException) {
-                break
+            pushTheButton(elements, i, part2 = true)
+            // in my input rx receives signal from rg and rg should have all his inputs set to true to emit false to rx
+            // By logs I found that it happens on iterations that are prime numbers
+            val rg = elements.values.filter { it.name == "rg" }.first() as Conjunction
+            if (rg.firstChangeToTrue.values.all { it > 0 }) {
+                return rg.firstChangeToTrue.values.fold(1L) { acc, cur -> acc * cur }
             }
             ++i
         }
-        return i
     }
 }
 
