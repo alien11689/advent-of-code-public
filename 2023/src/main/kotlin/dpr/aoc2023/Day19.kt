@@ -2,6 +2,8 @@ package dpr.aoc2023
 
 import dpr.commons.Util
 import java.util.Stack
+import kotlin.math.max
+import kotlin.math.min
 
 object Day19 {
     @JvmStatic
@@ -81,22 +83,15 @@ object Day19 {
             if (ruleString.contains(":")) {
                 val sign = if (ruleString.contains("<")) Sign.LT else Sign.GT
                 val (name, value, target) = ruleString.split(Regex("[<>:]"))
-                Rule(Condition(name, sign, value.toLong()), target)
+                Rule(Condition(name, sign, value.toInt()), target)
             } else {
                 Rule(Condition.ALWAYS, ruleString)
             }
         }
     }
 
-    data class Condition(val part: String, val sign: Sign, val value: Long, val negated: Boolean = false) {
+    data class Condition(val part: String, val sign: Sign, val value: Int, val negated: Boolean = false) {
         fun negate(): Condition = this.copy(negated = !negated)
-
-        fun accepts(name: String, x: Int): Boolean = when {
-            name != part -> true
-            sign == Sign.LT -> if (negated) x >= value else x < value
-            sign == Sign.GT -> if (negated) x <= value else x > value
-            else -> throw RuntimeException()
-        }
 
         fun test(item: Map<String, Int>): Boolean {
             if (part !in item) {
@@ -109,6 +104,26 @@ object Day19 {
             }
         }
 
+        fun applyOn(acc: Map<String, ItemRange>): Map<String, ItemRange> {
+            return acc.map { (key, value) ->
+                if (part == key) {
+                    key to limit(acc[key]!!)
+                } else {
+                    key to value
+                }
+            }.toMap()
+        }
+
+        private fun limit(itemRange: ItemRange): ItemRange {
+            return when {
+                sign == Sign.LT && !negated -> itemRange.copy(to = min(itemRange.to, value - 1))
+                sign == Sign.LT && negated -> itemRange.copy(from = max(itemRange.from, value))
+                sign == Sign.GT && !negated -> itemRange.copy(from = max(itemRange.from, value + 1))
+                sign == Sign.GT && negated -> itemRange.copy(to = min(itemRange.to, value))
+                else -> throw RuntimeException("$this")
+            }
+        }
+
         companion object {
             val ALWAYS = Condition("", Sign.ALWAYS, 0)
         }
@@ -116,7 +131,21 @@ object Day19 {
 
     data class Current(val ruleName: String, val conditions: Set<Condition>)
 
+    data class ItemRange(val from: Int = 1, val to: Int = 4000) {
+        fun count(): Int = if (from <= to) to - from + 1 else 0
+    }
+
     private fun part2(ruleLists: Map<String, List<Rule>>): Any {
+        val acceptingConditions = findPipelinesResolvingToAccepted(ruleLists)
+        return acceptingConditions.sumOf { conditions ->
+            val ranges = conditions.fold(listOf("x", "m", "a", "s").associateWith { ItemRange() }) { acc, cur ->
+                cur.applyOn(acc)
+            }
+            ranges.values.fold(1L) { acc, cur -> acc * cur.count() }
+        }
+    }
+
+    private fun findPipelinesResolvingToAccepted(ruleLists: Map<String, List<Rule>>): MutableList<Set<Condition>> {
         val stack = Stack<Current>()
         stack.push(Current("in", emptySet()))
         val acceptingConditions = mutableListOf<Set<Condition>>()
@@ -139,20 +168,7 @@ object Day19 {
                 prevConditionsNegated = prevConditionsNegated + condition.negate()
             }
         }
-        val possibleItemRating = 1..4000
-        return acceptingConditions.sumOf { conditions ->
-//            println(conditions)
-            val xx = possibleItemRating.count { x -> pass(conditions, "x", x) }
-            val mm = possibleItemRating.count { x -> pass(conditions, "m", x) }
-            val aa = possibleItemRating.count { x -> pass(conditions, "a", x) }
-            val ss = possibleItemRating.count { x -> pass(conditions, "s", x) }
-//            println("Accepting x=$xx, m=$mm, a=$aa, s=$ss -> ${xx.toLong() * mm * aa * ss}")
-            xx.toLong() * mm * aa * ss
-        }
-    }
-
-    private fun pass(conditions: Set<Condition>, name: String, value: Int): Boolean {
-        return conditions.all { it.accepts(name, value) }
+        return acceptingConditions
     }
 
     private fun simplifyBasicRules(ruleLists: Map<String, List<Rule>>): Map<String, List<Rule>> {
