@@ -34,4 +34,6 @@ data class Point2D(val x: Int, val y: Int) : Comparable<Point2D> {
             yComparison
         }
     }
+
+    fun neighboursCross(): List<Point2D> = listOf(up(), down(), left(), right())
 }
