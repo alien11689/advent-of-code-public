@@ -1,6 +1,7 @@
 package dpr.commons
 
 import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 data class Point2D(val x: Int, val y: Int) : Comparable<Point2D> {
     fun adjacentPoints(): Set<Point2D> = setOf(
@@ -36,4 +37,8 @@ data class Point2D(val x: Int, val y: Int) : Comparable<Point2D> {
     }
 
     fun neighboursCross(): List<Point2D> = listOf(up(), down(), left(), right())
+    fun mod(xSize: Int, ySize: Int): Point2D = copy(
+        x = if (x < 0) (x + (x.absoluteValue / xSize + 1) * xSize) % xSize else x % xSize,
+        y = if (y < 0) (y + (y.absoluteValue / ySize + 1) * ySize) % ySize else y % ySize,
+    )
 }

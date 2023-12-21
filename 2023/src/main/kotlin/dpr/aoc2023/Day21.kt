@@ -6,8 +6,8 @@ import dpr.commons.Util
 object Day21 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        val lines = Util.getNotEmptyLinesFromFile("/21/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/21/test1.txt")
+//        val lines = Util.getNotEmptyLinesFromFile("/21/input.txt")
+        val lines = Util.getNotEmptyLinesFromFile("/21/test1.txt")
         println(part1(lines))
         println(part2(lines))
     }
@@ -51,7 +51,22 @@ object Day21 {
     }
 
     private fun part2(lines: List<String>): Any {
-        TODO()
+        val (garden, start) = readGarden(lines)
+        var i = 0
+        var prev = emptySet<Point2D>()
+        var newlyAdded = setOf(start)
+        var available = setOf(start)
+        var limit = 26_501_365
+        limit = 100
+        while (i < limit) {
+            println("Checking $i")
+            newlyAdded = newlyAdded.flatMap { it.neighboursCross() }.filter { garden[it.mod(lines[0].length, lines.size)] == '.' && it !in prev }.toSet()
+            val prevBck = prev
+            prev = available
+            available = prevBck + newlyAdded
+            ++i
+        }
+        return available.size
     }
 }
 
