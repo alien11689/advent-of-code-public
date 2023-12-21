@@ -80,7 +80,8 @@ object Day21 {
                     interestingI += xSize
                 } else {
                     while (i <= limit) {
-                        curSize = mem[i - 2 * xSize]!! + 2 * (mem[i - xSize]!! - mem[i - 3 * xSize]!!) - (mem[i - 2 * xSize]!! - mem[i - 4 * xSize]!!)
+//                        curSize = mem[i - 2 * xSize]!! + 2 * (mem[i - xSize]!! - mem[i - 3 * xSize]!!) - (mem[i - 2 * xSize]!! - mem[i - 4 * xSize]!!)
+                        curSize = 2 * mem[i - xSize]!! - 2 * mem[i - 3 * xSize]!! + mem[i - 4 * xSize]!!
                         mem[i] = curSize
 //                        println("Iter $i: $curSize")
                         i += xSize
@@ -138,5 +139,8 @@ observations:
 - next after 131 iterations we are entering the next garden by SNWE
 - target limit is 65 * 202300 * 131
 - there should be function of increase between each 131 or each 2*131 = 262
-- size[0] - size[-2] == size[-1] - size[-3]
+- (size[0] - size[-2]) - (size[-1] - size[-3]) is const, so:
+-   (size[1] - size[-1]) - (size[0] - size[-2]) = (size[0] - size[-2]) - (size[-1] - size[-3])
+-   size[1] = size[0] - size[-2] - size[-1] + size[-3] + size[0] - size[-2] + size[-1]
+-   size[1] = 2*size[0] - 2*size[-2] + size[-3]
 */
