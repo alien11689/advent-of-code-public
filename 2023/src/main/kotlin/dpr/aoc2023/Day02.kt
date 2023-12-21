@@ -10,7 +10,7 @@ object Day02 {
         println(part2(lines))
     }
 
-    val limits = mapOf(
+    private val limits = mapOf(
         "green" to 13,
         "red" to 12,
         "blue" to 14,

@@ -60,24 +60,24 @@ object Day10 {
         return board
     }
 
-    private fun detectRealStartSign(mapa: MutableMap<Point2D, Sign>, start: Point2D): Sign {
+    private fun detectRealStartSign(board: MutableMap<Point2D, Sign>, start: Point2D): Sign {
         val possibleStartSign = mutableSetOf(Sign.L, Sign.J, Sign.UP_DOWN, Sign.MINUS, Sign._7, Sign.F)
-        if (mapa[start.up()]!!.canDown()) {
+        if (board[start.up()]!!.canDown()) {
             possibleStartSign.removeAll(possibleStartSign.filter { !it.canUp() })
         } else {
             possibleStartSign.removeAll(possibleStartSign.filter { it.canUp() })
         }
-        if (mapa[start.down()]!!.canUp()) {
+        if (board[start.down()]!!.canUp()) {
             possibleStartSign.removeAll(possibleStartSign.filter { !it.canDown() })
         } else {
             possibleStartSign.removeAll(possibleStartSign.filter { it.canDown() })
         }
-        if (mapa[start.left()]!!.canRight()) {
+        if (board[start.left()]!!.canRight()) {
             possibleStartSign.removeAll(possibleStartSign.filter { !it.canLeft() })
         } else {
             possibleStartSign.removeAll(possibleStartSign.filter { it.canLeft() })
         }
-        if (mapa[start.right()]!!.canLeft()) {
+        if (board[start.right()]!!.canLeft()) {
             possibleStartSign.removeAll(possibleStartSign.filter { !it.canRight() })
         } else {
             possibleStartSign.removeAll(possibleStartSign.filter { it.canRight() })
@@ -241,7 +241,7 @@ object Day10 {
         return knownInterior.size
     }
 
-    fun Dir.turn(nextSign: Sign): Dir = when (this) {
+    private fun Dir.turn(nextSign: Sign): Dir = when (this) {
         Dir.S -> when (nextSign) {
             Sign._7 -> Dir.W
             Sign.F -> Dir.E

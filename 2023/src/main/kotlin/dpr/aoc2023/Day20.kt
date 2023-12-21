@@ -94,14 +94,14 @@ object Day20 {
             }
             elements[element.name] = element
         }
-        elements.values.filterIsInstance<Conjunction>().forEach { conjuntion ->
-            conjuntion.updateMemory(elements.values.filter { conjuntion.name in it.outputs }.associate { it.name to false })
+        elements.values.filterIsInstance<Conjunction>().forEach { conjunction ->
+            conjunction.updateMemory(elements.values.filter { conjunction.name in it.outputs }.associate { it.name to false })
         }
         return elements
     }
 
     private fun pushTheButton(elements: MutableMap<String, Element>, iter: Int): Pair<Long, Long> {
-        val queue: Queue<Signal> = LinkedList<Signal>()
+        val queue: Queue<Signal> = LinkedList()
         queue.offer(Signal("button", "broadcaster", false, iter))
         var low = 0L
         var high = 0L
@@ -128,7 +128,7 @@ object Day20 {
             pushTheButton(elements, i)
             // in my input rx receives signal from rg and rg should have all his inputs set to true to emit false to rx
             // By logs I found that it happens on iterations that are prime numbers
-            val rg = elements.values.filter { it.name == "rg" }.first() as Conjunction
+            val rg = elements.values.first { it.name == "rg" } as Conjunction
             if (rg.firstChangeToTrue.values.all { it > 0 }) {
                 return rg.firstChangeToTrue.values.fold(1L) { acc, cur -> acc * cur }
             }
