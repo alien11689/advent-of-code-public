@@ -13,6 +13,23 @@ object Day21 {
     }
 
     private fun part1(lines: List<String>): Any {
+        val (garden, start) = readGarden(lines)
+        var i = 0
+        var prev = emptySet<Point2D>()
+        var newlyAdded = setOf(start)
+        var available = setOf(start)
+        while (i < 64) {
+            println("Checking $i")
+            newlyAdded = newlyAdded.flatMap { it.neighboursCross() }.filter { garden[it] == '.' && it !in prev }.toSet()
+            val prevBck = prev
+            prev = available
+            available = prevBck + newlyAdded
+            ++i
+        }
+        return available.size
+    }
+
+    private fun readGarden(lines: List<String>): Pair<MutableMap<Point2D, Char>, Point2D> {
         val garden = mutableMapOf<Point2D, Char>()
         var start = Point2D(0, 0)
         lines.forEachIndexed { y, line ->
@@ -30,14 +47,7 @@ object Day21 {
                 }
             }
         }
-        var i = 0
-        var available = setOf(start)
-        while (i < 64) {
-            println("Checking $i")
-            available = available.flatMap { it.neighboursCross() }.toSet().filter { garden[it] == '.' }.toSet()
-            ++i
-        }
-        return available.size
+        return Pair(garden, start)
     }
 
     private fun part2(lines: List<String>): Any {
