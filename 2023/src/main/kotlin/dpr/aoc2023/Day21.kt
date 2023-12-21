@@ -52,26 +52,33 @@ object Day21 {
     private fun part2(lines: List<String>): Any {
         val (garden, start) = readGarden(lines)
         var i = 0
-        var prev = emptySet<Point2D>()
         var prevSize = 0
         var prevNewlyAdded = emptySet<Point2D>()
         var newlyAdded = setOf(start)
-        var available = setOf(start)
         var curSize = 1
         var limit = 26_501_365
         limit = 5000
         val incrementMemory = mutableMapOf<Int, Int>()
+        val xSize = lines[0].length
+        val ySize = lines.size
+//        println("Garden size is $xSize x $ySize")
+        val newlyAddedCache = mutableMapOf<Set<Point2D>, Int>()
         while (i < limit) {
 //            println("Checking $i $prevSize/$curSize")
             val curSizeBck = curSize
             val prevNewlyAddedBck = prevNewlyAdded
             prevNewlyAdded = newlyAdded
             newlyAdded = newlyAdded.flatMap { it.neighboursCross() }
-                .filter { garden[it.mod(lines[0].length, lines.size)] == '.' && it !in prevNewlyAddedBck }
+                .filter { garden[it.mod(xSize, ySize)] == '.' && it !in prevNewlyAddedBck }
                 .toSet()
+            val modNewlyAdded = newlyAdded.map { it.mod(xSize, ySize) }.toSet()
+//            newlyAddedCache[modNewlyAdded]?.also {
+//                println("Newly added items of iter $i found in iteration $it (diff ${i - it})")
+//            }
+//            newlyAddedCache[modNewlyAdded] = i
             val newlyAddedSize = newlyAdded.size
 //            incrementMemory[newlyAddedSize]?.also {
-//                println("Increment $newlyAddedSize found in iteration $it (diff ${i - it})")
+//                println("Increment $newlyAddedSize of iter $i found in iteration $it (diff ${i - it})")
 //            }
 //            incrementMemory[newlyAddedSize] = i
             curSize = prevSize + newlyAddedSize
