@@ -100,7 +100,7 @@ object Day20 {
         return elements
     }
 
-    private fun pushTheButton(elements: MutableMap<String, Element>, iter: Int, part2: Boolean = false): Pair<Long, Long> {
+    private fun pushTheButton(elements: MutableMap<String, Element>, iter: Int): Pair<Long, Long> {
         val queue: Queue<Signal> = LinkedList<Signal>()
         queue.offer(Signal("button", "broadcaster", false, iter))
         var low = 0L
@@ -125,7 +125,7 @@ object Day20 {
         val elements = readElements(lines)
         var i = 1
         while (true) {
-            pushTheButton(elements, i, part2 = true)
+            pushTheButton(elements, i)
             // in my input rx receives signal from rg and rg should have all his inputs set to true to emit false to rx
             // By logs I found that it happens on iterations that are prime numbers
             val rg = elements.values.filter { it.name == "rg" }.first() as Conjunction

@@ -29,7 +29,7 @@ object Day22 {
                 }
             }
         }
-        TODO()
+        throw RuntimeException("Solution not found")
     }
 
     private fun part2(): Any {
@@ -51,14 +51,13 @@ object Day22 {
                 }
             }
         }
-        TODO()
-
+        throw RuntimeException("Solution not found")
     }
 
     data class Boss(val hitPoints: Int = 55, val damage: Int = 8)
 
     data class State(
-        val rund: Int = 1,
+        val round: Int = 1,
         val hp: Int = 50,
         val mana: Int = 500,
         val currentEffects: Map<Action, Int> = mapOf(),
@@ -80,10 +79,10 @@ object Day22 {
             if (mana != other.mana) {
                 return mana - other.mana
             }
-            return rund - other.rund
+            return round - other.round
         }
 
-        fun nextActions(): Collection<Action> = Action.values()
+        fun nextActions(): Collection<Action> = Action.entries
             .filter { it.cost < mana }
             .filter { it !in currentEffects }
 
@@ -168,7 +167,7 @@ object Day22 {
                 Action.Shield -> copy(armor = 7)
                 Action.Poison -> copy(boss = boss.copy(hitPoints = boss.hitPoints - 3))
                 Action.Recharge -> copy(mana = mana + 101)
-                else -> TODO()
+                else -> throw RuntimeException("Cannot apply action $action")
             }
         }
     }

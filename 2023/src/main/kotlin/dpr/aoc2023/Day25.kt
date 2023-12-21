@@ -11,7 +11,7 @@ object Day25 {
     }
 
     private fun part1(lines: List<String>): Any {
-        TODO()
+        return "TODO"
     }
 }
 
