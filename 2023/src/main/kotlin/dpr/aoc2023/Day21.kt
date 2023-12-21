@@ -19,7 +19,6 @@ object Day21 {
         var newlyAdded = setOf(start)
         var available = setOf(start)
         while (i < 64) {
-            println("Checking $i")
             newlyAdded = newlyAdded.flatMap { it.neighboursCross() }.filter { garden[it] == '.' && it !in prev }.toSet()
             val prevBck = prev
             prev = available
@@ -54,19 +53,32 @@ object Day21 {
         val (garden, start) = readGarden(lines)
         var i = 0
         var prev = emptySet<Point2D>()
+        var prevSize = 0
+        var prevNewlyAdded = emptySet<Point2D>()
         var newlyAdded = setOf(start)
         var available = setOf(start)
+        var curSize = 1
         var limit = 26_501_365
-        limit = 100
+        limit = 5000
+        val incrementMemory = mutableMapOf<Int, Int>()
         while (i < limit) {
-            println("Checking $i")
-            newlyAdded = newlyAdded.flatMap { it.neighboursCross() }.filter { garden[it.mod(lines[0].length, lines.size)] == '.' && it !in prev }.toSet()
-            val prevBck = prev
-            prev = available
-            available = prevBck + newlyAdded
+//            println("Checking $i $prevSize/$curSize")
+            val curSizeBck = curSize
+            val prevNewlyAddedBck = prevNewlyAdded
+            prevNewlyAdded = newlyAdded
+            newlyAdded = newlyAdded.flatMap { it.neighboursCross() }
+                .filter { garden[it.mod(lines[0].length, lines.size)] == '.' && it !in prevNewlyAddedBck }
+                .toSet()
+            val newlyAddedSize = newlyAdded.size
+//            incrementMemory[newlyAddedSize]?.also {
+//                println("Increment $newlyAddedSize found in iteration $it (diff ${i - it})")
+//            }
+//            incrementMemory[newlyAddedSize] = i
+            curSize = prevSize + newlyAddedSize
+            prevSize = curSizeBck
             ++i
         }
-        return available.size
+        return curSize
     }
 }
 
