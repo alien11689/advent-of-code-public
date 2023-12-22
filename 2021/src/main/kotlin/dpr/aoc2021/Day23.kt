@@ -2,6 +2,7 @@ package dpr.aoc2021
 
 import dpr.commons.Util
 import java.util.PriorityQueue
+import dpr.commons.Point2D as Pos
 
 object Day23 {
     @JvmStatic
@@ -154,9 +155,7 @@ object Day23 {
 
             other as State
 
-            if (amipods != other.amipods) return false
-
-            return true
+            return amipods == other.amipods
         }
 
         override fun hashCode(): Int {
@@ -166,13 +165,6 @@ object Day23 {
         companion object {
             val FULL_DEST = mapOf('A' to setOf(3), 'B' to setOf(5), 'C' to setOf(7), 'D' to setOf(9))
         }
-    }
-
-    data class Pos(val x: Int, val y: Int) {
-        fun up(): Pos = copy(y = y - 1)
-        fun down(): Pos = copy(y = y + 1)
-        fun left(): Pos = copy(x = x - 1)
-        fun right(): Pos = copy(x = x + 1)
     }
 
     data class Amipod(val name: Char, val moved: Boolean, val pos: Pos)

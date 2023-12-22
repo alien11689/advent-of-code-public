@@ -2,7 +2,7 @@ package dpr.aoc2018
 
 import dpr.commons.Util
 import java.util.PriorityQueue
-import kotlin.math.abs
+import dpr.commons.Point2D as Pos
 
 object Day22 {
     @JvmStatic
@@ -35,7 +35,7 @@ object Day22 {
 
         val pq = PriorityQueue<Here>()
         val start = Pos(0, 0)
-        pq.offer(Here(start, 0, start.dist(target), Equip.TORCH, listOf(start)))
+        pq.offer(Here(start, 0, start.manhattan(target), Equip.TORCH, listOf(start)))
 
         val transition = mapOf(
             Transition(Type.R, Equip.CLIMB_GEAR, Type.R) to (Equip.CLIMB_GEAR to 1),
@@ -83,14 +83,15 @@ object Day22 {
 //    println("Dist: ${cur.distToTarget}; minutes: ${cur.minutes}, cur: $cur.pos")
             mem.add(cur.pos to cur.equip)
             val curType = getType(cur.pos, geoIndex, target, pos2Erosion, depth)
-            cur.pos.neighbours()
+            cur.pos.neighboursCross()
+                .filter { it.x >= 0 && it.y >= 0 }
 //            .findAll { !(it in mem) }
                 .map { next ->
                     val nextType = getType(next, geoIndex, target, pos2Erosion, depth)
 //        println("Neighbour: $next")
                     val (e, dm) = transition[Transition(curType, cur.equip, nextType)]!!
 //        println("$cur.pos [$curType, $cur.equip, $nextType] -> $next [$nextType, $e, $dm]")
-                    Here(next, cur.minutes + dm, next.dist(target), e, cur.path + next)
+                    Here(next, cur.minutes + dm, next.manhattan(target), e, cur.path + next)
                 }.forEach {
                     pq.offer(it)
                 }
@@ -99,32 +100,6 @@ object Day22 {
     }
 
     data class Transition(val from: Type, val with: Equip, val to: Type)
-
-    data class Pos(val x: Int, val y: Int) : Comparable<Pos> {
-        fun left() = Pos(x - 1, y)
-        fun up() = Pos(x, y - 1)
-
-        fun neighbours(): List<Pos> {
-            return listOf(
-                Pos(x, y + 1),
-                Pos(x, y - 1),
-                Pos(x + 1, y),
-                Pos(x - 1, y),
-            ).filter {
-                it.x >= 0 && it.y >= 0
-            }
-        }
-
-        override fun compareTo(other: Pos): Int {
-            if (y == other.y) {
-                return x.compareTo(other.x)
-            }
-            return y.compareTo(other.y)
-        }
-
-        fun dist(o: Pos) = abs(x - o.x) + abs(y - o.y)
-
-    }
 
     private fun erosionLevel(
         pos: Pos,

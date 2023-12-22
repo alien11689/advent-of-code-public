@@ -2,7 +2,7 @@ package dpr.aoc2022
 
 import dpr.commons.Util
 import java.util.PriorityQueue
-import kotlin.math.absoluteValue
+import dpr.commons.Point2D as Point
 
 object Day24 {
     @JvmStatic
@@ -31,20 +31,6 @@ object Day24 {
         println(traverse(journeyToStart, start, target, boards, xRange, yRange)) // Part 2
     }
 
-    data class Point(val x: Int, val y: Int) {
-        fun manhattan(dest: Point): Int {
-            return (dest.x - x).absoluteValue + (dest.y - y).absoluteValue
-        }
-
-        fun nextPositions() = setOf(
-            copy(x = x - 1),
-            copy(x = x + 1),
-            copy(y = y - 1),
-            copy(y = y + 1),
-            this,
-        )
-    }
-
     enum class Wind {
         UP,
         DOWN,
@@ -70,7 +56,7 @@ object Day24 {
                 boards[nextTime] = b
                 b
             }
-            cur.curPos.nextPositions()
+            (cur.curPos.neighboursCross() + cur.curPos)
                 .filter { it.y in yRange }
                 .forEach { nextPoint ->
                     if (nextPoint !in newBoard) {

@@ -1,6 +1,7 @@
 package dpr.aoc2021
 
 import dpr.commons.Util
+import dpr.commons.Point2D as Point
 
 object Day13 {
     @JvmStatic
@@ -37,8 +38,6 @@ object Day13 {
         }
         return result.toSet()
     }
-
-    data class Point(val x: Int, val y: Int)
 
     data class Fold(val axis: String, val idx: Int)
 

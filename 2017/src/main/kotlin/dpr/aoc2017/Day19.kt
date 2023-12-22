@@ -21,14 +21,14 @@ object Day19 {
             ++steps
             cur = Pair(cur.first + dir.first, cur.second + dir.second)
             val sign = grid[cur.second][cur.first]
+            if (sign == ' ') {
+                return listOf(letters.joinToString(""), steps)
+            }
             if (sign !in setOf('-', '+', '|')) {
                 letters.add(sign)
             }
             if (sign == '+') {
                 dir = changeDir(grid, oldCur, cur)
-            }
-            if (sign == ' ') {
-                return listOf(letters.joinToString(""), steps)
             }
         }
     }

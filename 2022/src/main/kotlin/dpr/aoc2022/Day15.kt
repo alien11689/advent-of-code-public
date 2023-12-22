@@ -2,6 +2,7 @@ package dpr.aoc2022
 
 import dpr.commons.Util
 import kotlin.math.absoluteValue
+import dpr.commons.Point2D as Point
 
 object Day15 {
     @JvmStatic
@@ -13,10 +14,6 @@ object Day15 {
 //        println("Part 2:")
 //        println(part2(Util.getNotEmptyLinesFromFile("/15/test1.txt"), 20))
         println(part2(lines, 4000000))
-    }
-
-    data class Point(val x: Int, val y: Int) {
-        fun manhattan(other: Point): Int = (other.x - x).absoluteValue + (other.y - y).absoluteValue
     }
 
     data class SensorBeacon(val sensor: Point, val beacon: Point, val dist: Int) {

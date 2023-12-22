@@ -2,7 +2,7 @@ package dpr.aoc2021
 
 import dpr.commons.Util
 import java.util.PriorityQueue
-import kotlin.math.absoluteValue
+import dpr.commons.Point2D as Pos
 
 object Day15 {
     @JvmStatic
@@ -40,12 +40,6 @@ object Day15 {
                 }
         }
         return -1
-    }
-
-    data class Pos(val x: Int, val y: Int) {
-        fun manhattan(dest: Pos): Int {
-            return (dest.x - x).absoluteValue + (dest.y - y).absoluteValue
-        }
     }
 
     data class Path(val pos: Pos, val risk: Int = 0, val dest: Pos) : Comparable<Path> {

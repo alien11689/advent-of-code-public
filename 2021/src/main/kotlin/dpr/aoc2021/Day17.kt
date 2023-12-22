@@ -1,6 +1,7 @@
 package dpr.aoc2021
 
 import dpr.commons.Util
+import dpr.commons.Point2D as Point
 
 object Day17 {
     @JvmStatic
@@ -45,8 +46,6 @@ object Day17 {
         }
         return maxHeight
     }
-
-    data class Point(val x: Int, val y: Int)
 
     data class Target(val xRange: IntRange, val yRange: IntRange)
     data class Velocity(val dx: Int, val dy: Int) {

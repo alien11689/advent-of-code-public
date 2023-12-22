@@ -2,6 +2,7 @@ package dpr.aoc2022
 
 import dpr.commons.Util
 import java.util.PriorityQueue
+import dpr.commons.Point2D as Point
 
 object Day12 {
     @JvmStatic
@@ -45,7 +46,7 @@ object Day12 {
     data class State(val p: Point, val height: Char, val steps: Int) : Comparable<State> {
         override fun compareTo(other: State): Int = steps - other.steps
         fun neighbours(points: Map<Point, Char>): Set<State> {
-            return p.neighbours()
+            return p.neighboursCross()
                 .filter { it in points }
                 .filter {
                     val nextHeight = points[it]!!
@@ -56,15 +57,6 @@ object Day12 {
                 .map { State(it, points[it]!!, steps + 1) }
                 .toSet()
         }
-    }
-
-    data class Point(val x: Int, val y: Int) {
-        fun neighbours(): Set<Point> = setOf(
-            Point(x - 1, y),
-            Point(x + 1, y),
-            Point(x, y - 1),
-            Point(x, y + 1),
-        )
     }
 
     private fun part2(lines: List<String>): Any {

@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.commons.Util
 import java.util.PriorityQueue
+import dpr.commons.Point2D as Point
 
 object Day18 {
     @JvmStatic
@@ -22,7 +23,7 @@ object Day18 {
                 for (i in input[j].indices) {
                     val point = Point(i, j)
                     if (map[point] == true && keysAndDoors[point] == null &&
-                        point.neighbours().filter { map[it] != true }.size == 3
+                        point.neighboursCross().filter { map[it] != true }.size == 3
                     ) {
                         changed = true
                         ++changes
@@ -100,8 +101,8 @@ object Day18 {
     private fun part2(input: List<String>): Any {
         val (map, keysAndDoors, curPos) = parseInput(input)
 
-        val curPoses = curPos.diag()
-        curPos.neighbours().forEach {
+        val curPoses = curPos.neighboursDiag()
+        curPos.neighboursCross().forEach {
             map[it] = false
         }
 
@@ -113,7 +114,7 @@ object Day18 {
                 for (i in input[j].indices) {
                     val point = Point(i, j)
                     if (map[point] == true && keysAndDoors[point] == null &&
-                        point.neighbours().filter { map[it] != true }.size == 3 &&
+                        point.neighboursCross().filter { map[it] != true }.size == 3 &&
                         point !in curPoses
                     ) {
                         changed = true
@@ -166,26 +167,6 @@ object Day18 {
         throw RuntimeException()
     }
 
-    data class Point(val x: Int, val y: Int) {
-        fun neighbours(): List<Point> {
-            return listOf(
-                Point(x + 1, y),
-                Point(x - 1, y),
-                Point(x, y + 1),
-                Point(x, y - 1),
-            )
-        }
-
-        fun diag(): List<Point> {
-            return listOf(
-                Point(x + 1, y + 1),
-                Point(x - 1, y + 1),
-                Point(x + 1, y - 1),
-                Point(x - 1, y - 1),
-            )
-        }
-    }
-
     data class LocalState(val cur: Point, val length: Int) : Comparable<LocalState> {
         override fun compareTo(other: LocalState): Int {
             return length.compareTo(other.length)
@@ -235,7 +216,7 @@ object Day18 {
             val localState = pq.poll()
             val cur = localState.cur
             visited.add(cur)
-            cur.neighbours().filter { it in map && map[it] == true && it !in visited }.forEach {
+            cur.neighboursCross().filter { it in map && map[it] == true && it !in visited }.forEach {
                 val newLocalState = LocalState(it, localState.length + 1)
                 if (newLocalState.cur in keysAndDoors) {
                     val keyOrDoor = keysAndDoors[newLocalState.cur]!!

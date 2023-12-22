@@ -6,6 +6,7 @@ import dpr.aoc2022.Day22.Direction.R
 import dpr.aoc2022.Day22.Direction.U
 import dpr.commons.Util
 import java.util.StringTokenizer
+import dpr.commons.Point2D as Point
 
 object Day22 {
     @JvmStatic
@@ -19,8 +20,6 @@ object Day22 {
         println(part2(lines))
         // 132088 is too low
     }
-
-    data class Point(val x: Int, val y: Int)
 
     enum class Elem {
         WALL, EMPTY

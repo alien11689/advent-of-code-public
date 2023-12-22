@@ -3,6 +3,8 @@ package dpr.aoc2018
 import dpr.commons.Util
 import java.util.PriorityQueue
 
+import dpr.commons.Point2D as Position
+
 object Day15 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
@@ -45,23 +47,6 @@ object Day15 {
         G
     }
 
-    data class Position(val x: Int, val y: Int) : Comparable<Position> {
-
-        fun neighbours(): List<Position> {
-            return listOf(
-                Position(x + 1, y),
-                Position(x - 1, y),
-                Position(x, y - 1),
-                Position(x, y + 1),
-            )
-        }
-
-        override fun compareTo(other: Position): Int {
-            val dy = y - other.y
-            return if (dy != 0) dy else x - other.x
-        }
-    }
-
     data class Player(
         var x: Int,
         var y: Int,
@@ -85,7 +70,7 @@ object Day15 {
         }
 
         private fun neighbours(): List<Position> {
-            return Position(x, y).neighbours()
+            return Position(x, y).neighboursCross()
         }
 
         fun move(players: List<Player>, board: List<List<CellType>>) {
@@ -113,7 +98,7 @@ object Day15 {
             while (queue.isNotEmpty()) {
                 try {
                     val cur = queue.poll()
-                    val neighbours = cur.pos.neighbours()
+                    val neighbours = cur.pos.neighboursCross()
                     neighbours.forEach { n ->
 //                    println("Checking position $n")
                         if (n !in memory) {
@@ -125,7 +110,7 @@ object Day15 {
 //                                println("Neighbour $maybePlayer")
                                     if (maybePlayer.type != type) {
 //                                    println("Moving... to ${cur.road[0]}")
-                                        throw MoveOccured(Move(this, cur.road[0]))
+                                        throw MoveOccurred(Move(this, cur.road[0]))
                                     }
                                 } else {
                                     val next = PositionWithDist(n, cur.dist + 1, cur.road + n)
@@ -135,8 +120,8 @@ object Day15 {
                             }
                         }
                     }
-                } catch (e: MoveOccured) {
-                    val es = e.move.newPosition.neighbours().mapNotNull { n ->
+                } catch (e: MoveOccurred) {
+                    val es = e.move.newPosition.neighboursCross().mapNotNull { n ->
                         players.find { !it.isDead() && it.type != type && it.onPosition(n) }
                     }
                     if (es.isNotEmpty()) {
@@ -154,7 +139,7 @@ object Day15 {
         }
     }
 
-    class MoveOccured(val move: Move) : RuntimeException()
+    class MoveOccurred(val move: Move) : RuntimeException()
 
     interface Action {
         fun action()

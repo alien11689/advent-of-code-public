@@ -1,6 +1,7 @@
 package dpr.aoc2022
 
 import dpr.commons.Util
+import dpr.commons.Point2D as Point
 
 object Day14 {
     @JvmStatic
@@ -12,12 +13,6 @@ object Day14 {
 //        println("Part 2:")
 //        println(part2(Util.getNotEmptyLinesFromFile("/14/test1.txt")))
         println(part2(lines))
-    }
-
-    data class Point(val x: Int, val y: Int) {
-        fun down(): Point = copy(y = y + 1)
-        fun leftDown(): Point = copy(x = x - 1, y = y + 1)
-        fun rightDown(): Point = copy(x = x + 1, y = y + 1)
     }
 
     private fun part1(lines: List<String>): Any {

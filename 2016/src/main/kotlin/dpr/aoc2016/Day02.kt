@@ -1,6 +1,7 @@
 package dpr.aoc2016
 
 import dpr.commons.Util
+import dpr.commons.Point2D as Pos
 
 object Day02 {
     @JvmStatic
@@ -66,12 +67,5 @@ object Day02 {
         )
         val pos = Pos(0, 2)
         return solve(input, pos, board)
-    }
-
-    data class Pos(val x: Int, val y: Int) {
-        fun up(): Pos = copy(y = y - 1)
-        fun down(): Pos = copy(y = y + 1)
-        fun left(): Pos = copy(x = x - 1)
-        fun right(): Pos = copy(x = x + 1)
     }
 }

@@ -2,6 +2,7 @@ package dpr.aoc2022
 
 import dpr.commons.Util
 import java.util.Stack
+import dpr.commons.Point3D as Point
 
 object Day18 {
     @JvmStatic
@@ -16,20 +17,9 @@ object Day18 {
         println(part2(lines))
     }
 
-    data class Point(val x: Int, val y: Int, val z: Int) {
-        fun neighbours() = setOf(
-            copy(x = x - 1),
-            copy(x = x + 1),
-            copy(y = y - 1),
-            copy(y = y + 1),
-            copy(z = z - 1),
-            copy(z = z + 1),
-        )
-    }
-
     private fun part1(lines: List<String>): Any {
         val points = readPoints(lines)
-        val surface = points.flatMap { it.neighbours() - points }
+        val surface = points.flatMap { it.neighboursCross() - points }
         return surface.size
     }
 
@@ -40,7 +30,7 @@ object Day18 {
 
     private fun part2(lines: List<String>): Any {
         val points = readPoints(lines)
-        val surface = points.flatMap { it.neighbours() - points }
+        val surface = points.flatMap { it.neighboursCross() - points }
         val surfacePoints = surface.toSet()
         val origin = surface.minBy { it.x }
         val externalSurface = mutableSetOf<Point>()
@@ -54,7 +44,7 @@ object Day18 {
                 continue
             }
             checkedPoints.add(cur)
-            cur.neighbours().forEach { neighbour ->
+            cur.neighboursCross().forEach { neighbour ->
                 if (neighbour in surfacePoints) {
                     externalSurface.add(neighbour)
                     if (neighbour !in checkedPoints) {

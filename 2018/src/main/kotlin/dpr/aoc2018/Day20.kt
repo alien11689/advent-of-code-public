@@ -2,6 +2,7 @@ package dpr.aoc2018
 
 import dpr.commons.Util
 import java.util.Stack
+import dpr.commons.Point2D as Pos
 
 object Day20 {
     @JvmStatic
@@ -27,10 +28,10 @@ object Day20 {
             } else {
                 val distance = posToDist[curPos]!!
                 curPos = when (c) {
-                    'E' -> curPos.goE()
-                    'W' -> curPos.goW()
-                    'N' -> curPos.goN()
-                    'S' -> curPos.goS()
+                    'E' -> curPos.right()
+                    'W' -> curPos.left()
+                    'N' -> curPos.up()
+                    'S' -> curPos.down()
                     else -> throw RuntimeException()
                 }
                 if (posToDist[curPos] != null) {
@@ -48,23 +49,5 @@ object Day20 {
             posToDist.values.count { it >= 1000 }
         )
 
-    }
-
-    data class Pos(val x: Int, val y: Int) {
-        fun goE(): Pos {
-            return Pos(x + 1, y)
-        }
-
-        fun goW(): Pos {
-            return Pos(x - 1, y)
-        }
-
-        fun goN(): Pos {
-            return Pos(x, y - 1)
-        }
-
-        fun goS(): Pos {
-            return Pos(x, y + 1)
-        }
     }
 }

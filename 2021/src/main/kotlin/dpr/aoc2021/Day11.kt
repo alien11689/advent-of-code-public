@@ -1,6 +1,7 @@
 package dpr.aoc2021
 
 import dpr.commons.Util
+import dpr.commons.Point2D as Point
 import java.util.Stack
 
 object Day11 {
@@ -59,8 +60,6 @@ object Day11 {
             }
         }
     }
-
-    data class Point(val x: Int, val y: Int)
 
     private fun neigh(p: Point): Set<Point> {
         val coordLimit = 0..9

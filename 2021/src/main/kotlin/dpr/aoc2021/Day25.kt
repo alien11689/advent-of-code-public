@@ -1,6 +1,7 @@
 package dpr.aoc2021
 
 import dpr.commons.Util
+import dpr.commons.Point2D as Pos
 
 object Day25 {
     @JvmStatic
@@ -21,7 +22,7 @@ object Day25 {
             map = mutableMapOf()
             prev.filter { it.value == '>' }.forEach {
                 val cur = it.key
-                val right = it.key.right(xSize)
+                val right = it.key.rightModulo(xSize)
                 if (right !in prev) {
                     map[right] = it.value
                 } else {
@@ -30,7 +31,7 @@ object Day25 {
             }
             prev.filter { it.value == 'v' }.forEach {
                 val cur = it.key
-                val down = it.key.down(ySize)
+                val down = it.key.downModulo(ySize)
                 val valueDownPrev = prev[down]
 //                val valueDownCur = map[down]
                 if (down in map) { // don't move
@@ -57,17 +58,6 @@ object Day25 {
             }
         }
         return map
-    }
-
-
-    data class Pos(val x: Int, val y: Int) {
-        fun down(size: Int): Pos {
-            return Pos(x, (y + 1) % size)
-        }
-
-        fun right(size: Int): Pos {
-            return Pos((x + 1) % size, y)
-        }
     }
 
 //    fun printlnMap(map: Map<Pos, Char>, ySize: Int, xSize: Int) {

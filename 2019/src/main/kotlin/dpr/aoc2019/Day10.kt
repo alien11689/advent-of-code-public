@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.commons.Util
 import kotlin.math.absoluteValue
+import dpr.commons.Point2D as Point
 
 object Day10 {
     @JvmStatic
@@ -80,8 +81,6 @@ object Day10 {
         }
         throw RuntimeException()
     }
-
-    data class Point(val x: Int, val y: Int)
 
     enum class Ord {
         X_UP, RIGHT_UP, Y_RIGHT, RIGHT_DOWN, X_DOWN, LEFT_DOWN, Y_LEFT, LEFT_UP

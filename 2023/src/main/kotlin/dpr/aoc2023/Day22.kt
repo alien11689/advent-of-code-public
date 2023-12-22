@@ -1,5 +1,6 @@
 package dpr.aoc2023
 
+import dpr.commons.Point3D
 import dpr.commons.Util
 
 object Day22 {
@@ -10,10 +11,6 @@ object Day22 {
         val (part1, part2) = part1And2(lines)
         println(part1)
         println(part2)
-    }
-
-    data class Point3D(val x: Int, val y: Int, val z: Int) {
-        fun down(): Point3D = copy(z = z - 1)
     }
 
     data class Brick(val id: Int, val blocks: List<Point3D>) {

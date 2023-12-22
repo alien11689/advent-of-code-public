@@ -7,6 +7,8 @@ for x in $years; do
     echo "========="
     echo Year $x
     echo "========="
-    ./printSingleAdventAnswers.sh $x | tee $x/extractedAnswers.txt
+    ./printSingleAdventAnswers.sh $x > $x/extractedAnswers.txt
     ./runSingle.sh $x | tee $x/calculatedAnswers.txt
+    grep -v "Finished in" $x/calculatedAnswers.txt > $x/calculatedAnswersWithoutTime.txt
+    diff $x/calculatedAnswersWithoutTime.txt $x/extractedAnswers.txt
 done

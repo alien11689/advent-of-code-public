@@ -2,6 +2,7 @@ package dpr.aoc2019
 
 import dpr.commons.Util
 import java.util.PriorityQueue
+import dpr.commons.Point2D as Point
 
 object Day20 {
     @JvmStatic
@@ -15,7 +16,7 @@ object Day20 {
         val (map, warps) = parseInput(input)
 
         val betterWarps = warps.map { warp ->
-            val k = warp.key.flatMap { it.neighbours() }.find { map[it] == true }
+            val k = warp.key.flatMap { it.neighboursCross() }.find { map[it] == true }
             k to warp.value
         }.toMap()
 
@@ -42,7 +43,7 @@ object Day20 {
                 continue
             }
             visited.add(Visited(state.cur))
-            state.cur.neighbours().filter { map[it] == true }.forEach { checkedPoint ->
+            state.cur.neighboursCross().filter { map[it] == true }.forEach { checkedPoint ->
                 if (checkedPoint in warpPoints && checkedPoint !in setOf(dest, start)) {
                     val warp = betterWarps[checkedPoint]!!
 //            println("Using warp $warp")
@@ -74,7 +75,7 @@ object Day20 {
                     }
 
                     else -> {
-                        val m = (p.neighbours() + p).filter {
+                        val m = (p.neighboursCross() + p).filter {
                             it.x >= 0 && it.x < input[j].length && it.y >= 0 && it.y < sizeY
                         }.map { it to input[it.y][it.x] }.filter { it.second !in setOf(' ', '#', '.') }.toMap()
                         warps[m.keys] = m.values.toSet()
@@ -92,7 +93,7 @@ object Day20 {
         val sizeX = input[2].length
 
         val betterWarps = warps.map { warp ->
-            val k = warp.key.flatMap { it.neighbours() }.find { map[it] == true }
+            val k = warp.key.flatMap { it.neighboursCross() }.find { map[it] == true }
             k!! to warp.value
         }.toMap()
 
@@ -124,7 +125,7 @@ object Day20 {
             }
             visited.add(Visited(state.cur, state.level))
 
-            state.cur.neighbours().filter { map[it] == true }.forEach { checkedPoint ->
+            state.cur.neighboursCross().filter { map[it] == true }.forEach { checkedPoint ->
                 if (checkedPoint in setOf(dest, start) && state.level != 0) {
                     // dest and start are walls on inner levels
                 } else if (checkedPoint in warpPoints &&
@@ -156,17 +157,6 @@ object Day20 {
                 }
             }
 
-        }
-    }
-
-    data class Point(val x: Int, val y: Int) {
-        fun neighbours(): Set<Point> {
-            return setOf(
-                Point(x + 1, y),
-                Point(x - 1, y),
-                Point(x, y + 1),
-                Point(x, y - 1),
-            )
         }
     }
 
