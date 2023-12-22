@@ -1,5 +1,6 @@
 package dpr.aoc2022
 
+import dpr.commons.Dir
 import dpr.commons.Util
 
 object Day23 {
@@ -15,17 +16,17 @@ object Day23 {
     }
 
     data class Elf(val x: Int, val y: Int) {
-        fun proposeMove(curDirections: List<Direction>, elves: Set<Elf>): Elf {
+        fun proposeMove(curDirections: List<Dir>, elves: Set<Elf>): Elf {
             val neighbours = northRegion() + southRegion() + setOf(east(), west())
             if (neighbours.none { it in elves }) {
                 return this
             }
             for (dir in curDirections) {
                 when (dir) {
-                    Direction.N -> if (northRegion().none { it in elves }) return north()
-                    Direction.S -> if (southRegion().none { it in elves }) return south()
-                    Direction.W -> if (westRegion().none { it in elves }) return west()
-                    Direction.E -> if (eastRegion().none { it in elves }) return east()
+                    Dir.N -> if (northRegion().none { it in elves }) return north()
+                    Dir.S -> if (southRegion().none { it in elves }) return south()
+                    Dir.W -> if (westRegion().none { it in elves }) return west()
+                    Dir.E -> if (eastRegion().none { it in elves }) return east()
                 }
             }
             return this
@@ -61,16 +62,9 @@ object Day23 {
         private fun west() = copy(x = x - 1)
     }
 
-    enum class Direction {
-        N,
-        S,
-        W,
-        E,
-    }
-
     private fun part1(lines: List<String>): Any {
         var elves = parseElves(lines)
-        val directions = Direction.values() + Direction.values()
+        val directions = listOf(Dir.N, Dir.S, Dir.W, Dir.E, Dir.N, Dir.S, Dir.W, Dir.E)
         repeat(10) { round ->
             elves = nextGeneration(directions, round, elves)
 //            println("After round $round")
@@ -84,7 +78,7 @@ object Day23 {
         return (maxY - minY + 1) * (maxX - minX + 1) - elves.size
     }
 
-    private fun nextGeneration(directions: Array<Direction>, round: Int, elves: Set<Elf>): Set<Elf> {
+    private fun nextGeneration(directions: List<Dir>, round: Int, elves: Set<Elf>): Set<Elf> {
         val curDirection = directions.drop(round % 4).take(4)
 //        println("Moving Order $curDirection")
         return elves.groupBy { it.proposeMove(curDirection, elves) }
@@ -98,7 +92,7 @@ object Day23 {
 
     private fun part2(lines: List<String>): Any {
         var elves = parseElves(lines)
-        val directions = Direction.values() + Direction.values()
+        val directions = listOf(Dir.N, Dir.S, Dir.W, Dir.E, Dir.N, Dir.S, Dir.W, Dir.E)
         var round = 0
         while (true) {
 //            println("Running round ${round + 1}")
