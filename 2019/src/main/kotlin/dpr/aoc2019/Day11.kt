@@ -2,6 +2,8 @@ package dpr.aoc2019
 
 import dpr.aoc2019.intcode.IntCodeComputer
 import dpr.aoc2019.intcode.IntCodeComputerState
+import dpr.commons.Dir
+import dpr.commons.Point2D
 import dpr.commons.Util
 
 object Day11 {
@@ -19,15 +21,15 @@ object Day11 {
         return panel.size
     }
 
-    private fun createPanel(state: IntCodeComputerState, initValue: Long? = null): MutableMap<Pair<Int, Int>, Long> {
+    private fun createPanel(state: IntCodeComputerState, initValue: Long? = null): MutableMap<Point2D, Long> {
         val inputQ = state.input
         val output = state.output
-        val panel = mutableMapOf<Pair<Int, Int>, Long>()
-        var curPos = Pair(0, 0)
+        val panel = mutableMapOf<Point2D, Long>()
+        var curPos = Point2D(0, 0)
         if (initValue != null) {
             panel[curPos] = initValue
         }
-        var dir = Dir.UP
+        var dir = Dir.N
         while (!state.ended) {
             val color = panel[curPos] ?: 0L
             inputQ.offer(color)
@@ -46,44 +48,21 @@ object Day11 {
         val panel = createPanel(state, 1L)
         val whites = panel.filter { it.value == 1L }.keys
 //        println(whites)
-        val maxY = whites.maxByOrNull { it.second }!!.second
-        val minY = whites.minByOrNull { it.second }!!.second
-        val minX = whites.minByOrNull { it.first }!!.first
-        val maxX = whites.maxByOrNull { it.first }!!.first
-        for (i in maxY downTo minY) {
+        val maxY = whites.maxByOrNull { it.y }!!.y
+        val minY = whites.minByOrNull { it.y }!!.y
+        val minX = whites.minByOrNull { it.x }!!.x
+        val maxX = whites.maxByOrNull { it.x }!!.x
+        for (i in minY..maxY) {
             for (j in (minX..maxX)) {
 //                println("${Pair(j, i)} in whites: ${Pair(j, i) in whites}")
-                print(if (Pair(j, i) in whites) 'X' else ' ')
+                print(if (Point2D(j, i) in whites) 'X' else ' ')
             }
             println()
         }
     }
 
-    enum class Dir {
-        UP, LEFT, DOWN, RIGHT;
-
-        fun move(pos: Pair<Int, Int>, v: Long): Pair<Dir, Pair<Int, Int>> {
-            return when (this) {
-                UP -> if (v == 0L) Pair(LEFT, Pair(pos.first - 1, pos.second)) else Pair(
-                    RIGHT,
-                    Pair(pos.first + 1, pos.second)
-                )
-
-                DOWN -> if (v == 0L) Pair(RIGHT, Pair(pos.first + 1, pos.second)) else Pair(
-                    LEFT,
-                    Pair(pos.first - 1, pos.second)
-                )
-
-                LEFT -> if (v == 0L) Pair(DOWN, Pair(pos.first, pos.second - 1)) else Pair(
-                    UP,
-                    Pair(pos.first, pos.second + 1)
-                )
-
-                RIGHT -> if (v == 0L) Pair(UP, Pair(pos.first, pos.second + 1)) else Pair(
-                    DOWN,
-                    Pair(pos.first, pos.second - 1)
-                )
-            }
-        }
+    fun Dir.move(pos: Point2D, v: Long): Pair<Dir, Point2D> {
+        val dir = if (v == 0L) turnLeft() else turnRight()
+        return dir to pos.move(dir)
     }
 }
