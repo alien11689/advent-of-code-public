@@ -1,9 +1,10 @@
 package dpr.aoc2022
 
-import dpr.aoc2022.Day22.Direction.D
-import dpr.aoc2022.Day22.Direction.L
-import dpr.aoc2022.Day22.Direction.R
-import dpr.aoc2022.Day22.Direction.U
+import dpr.commons.Dir
+import dpr.commons.Dir.E
+import dpr.commons.Dir.N
+import dpr.commons.Dir.S
+import dpr.commons.Dir.W
 import dpr.commons.Util
 import java.util.StringTokenizer
 import dpr.commons.Point2D as Point
@@ -25,25 +26,14 @@ object Day22 {
         WALL, EMPTY
     }
 
-    enum class Direction(val num: Int, val dx: Int, val dy: Int) {
-        R(0, 1, 0), D(1, 0, 1), L(2, -1, 0), U(3, 0, -1);
-
-        fun turnLeft() = when (this) {
-            R -> U
-            D -> R
-            L -> D
-            U -> L
-        }
-
-        fun turnRight() = when (this) {
-            R -> D
-            D -> L
-            L -> U
-            U -> R
-        }
+    private fun Dir.num() = when (this) {
+        E -> 0
+        S -> 1
+        W -> 2
+        N -> 3
     }
 
-    data class Position(val point: Point, val facing: Direction) {
+    data class Position(val point: Point, val facing: Dir) {
         fun turnLeft(): Position = copy(facing = facing.turnLeft())
 
         fun turnRight(): Position = copy(facing = facing.turnRight())
@@ -67,7 +57,7 @@ object Day22 {
             return cur
         }
 
-        fun score() = 1000 * point.y + 4 * point.x + facing.num
+        fun score() = 1000 * point.y + 4 * point.x + facing.num()
 
     }
 
@@ -75,10 +65,10 @@ object Day22 {
         val map = readMap(lines)
         val handleWrap: (Position) -> Position = { cur ->
             Position(facing = cur.facing, point = when (cur.facing) {
-                R -> map.keys.filter { it.y == cur.point.y }.minBy { it.x }
-                D -> map.keys.filter { it.x == cur.point.x }.minBy { it.y }
-                L -> map.keys.filter { it.y == cur.point.y }.maxBy { it.x }
-                U -> map.keys.filter { it.x == cur.point.x }.maxBy { it.y }
+                E -> map.keys.filter { it.y == cur.point.y }.minBy { it.x }
+                S -> map.keys.filter { it.x == cur.point.x }.minBy { it.y }
+                W -> map.keys.filter { it.y == cur.point.y }.maxBy { it.x }
+                N -> map.keys.filter { it.x == cur.point.x }.maxBy { it.y }
             })
         }
         return traverseMap(map, lines, handleWrap).score()
@@ -106,7 +96,7 @@ object Day22 {
     private fun initPosition(map: MutableMap<Point, Elem>): Position {
         val minY = map.keys.minOf { it.y }
         val minX = map.keys.filter { it.y == minY }.minOf { it.x }
-        return Position(Point(minX, minY), R)
+        return Position(Point(minX, minY), E)
     }
 
     private fun part2(lines: List<String>): Any {
@@ -137,11 +127,11 @@ object Day22 {
             // ..56
             when {
                 // sector 4 R -> 6 D
-                curPoint.x == 12 && curPoint.y in 5..8 && cur.facing == R -> Position(Point(x = 12 + 9 - curPoint.y, y = 9), D)
+                curPoint.x == 12 && curPoint.y in 5..8 && cur.facing == E -> Position(Point(x = 12 + 9 - curPoint.y, y = 9), S)
                 // sector 5 D -> 2 U
-                curPoint.y == 12 && curPoint.x in 9..12 && cur.facing == D -> Position(Point(x = 0 + 13 - curPoint.x, y = 8), U)
+                curPoint.y == 12 && curPoint.x in 9..12 && cur.facing == S -> Position(Point(x = 0 + 13 - curPoint.x, y = 8), N)
                 // sector 3 U -> 1 R
-                curPoint.y == 5 && curPoint.x in 5..8 && cur.facing == U -> Position(Point(x = 9, y = curPoint.x - 4), R)
+                curPoint.y == 5 && curPoint.x in 5..8 && cur.facing == N -> Position(Point(x = 9, y = curPoint.x - 4), E)
                 else -> throw RuntimeException("Model me $cur")
             }
         } else {
@@ -152,33 +142,33 @@ object Day22 {
 //            println("Modeling $cur -> sector xx=${(curPoint.x - 1) / 50} yy=${(curPoint.y - 1) / 50}")
             when {
                 // sector 1 L -> 4 R with change indices
-                curPoint.x == 51 && curPoint.y in 1..50 && cur.facing == L -> Position(Point(x = 1, y = 151 - curPoint.y), R)
+                curPoint.x == 51 && curPoint.y in 1..50 && cur.facing == W -> Position(Point(x = 1, y = 151 - curPoint.y), E)
                 // sector 6 R -> 5 U without changing indices
-                curPoint.x == 50 && curPoint.y in 151..200 && cur.facing == R -> Position(Point(x = curPoint.y - 100, y = 150), U)
+                curPoint.x == 50 && curPoint.y in 151..200 && cur.facing == E -> Position(Point(x = curPoint.y - 100, y = 150), N)
                 // sector 3 L -> 4 D without changing indices
-                curPoint.x == 51 && curPoint.y in 51..100 && cur.facing == L -> Position(Point(x = curPoint.y - 50, y = 101), D)
+                curPoint.x == 51 && curPoint.y in 51..100 && cur.facing == W -> Position(Point(x = curPoint.y - 50, y = 101), S)
                 // sector 5 R -> 2 L with changing indices
-                curPoint.x == 100 && curPoint.y in 101..150 && cur.facing == R -> Position(Point(x = 150, y = 151 - curPoint.y), L)
+                curPoint.x == 100 && curPoint.y in 101..150 && cur.facing == E -> Position(Point(x = 150, y = 151 - curPoint.y), W)
                 // sector 2 D -> 3 L without
-                curPoint.y == 50 && curPoint.x in 101..150 && cur.facing == D -> Position(Point(x = 100, y = curPoint.x - 50), L)
+                curPoint.y == 50 && curPoint.x in 101..150 && cur.facing == S -> Position(Point(x = 100, y = curPoint.x - 50), W)
                 // sector 2 R -> 5 L with
-                curPoint.x == 150 && curPoint.y in 1..50 && cur.facing == R -> Position(Point(x = 100, y = 151 - curPoint.y), L)
+                curPoint.x == 150 && curPoint.y in 1..50 && cur.facing == E -> Position(Point(x = 100, y = 151 - curPoint.y), W)
                 // sector 3 R -> 2 U without
-                curPoint.x == 100 && curPoint.y in 51..100 && cur.facing == R -> Position(Point(x = 50 + curPoint.y, y = 50), U)
+                curPoint.x == 100 && curPoint.y in 51..100 && cur.facing == E -> Position(Point(x = 50 + curPoint.y, y = 50), N)
                 // sector 1 U -> 6 R without
-                curPoint.y == 1 && curPoint.x in 51..100 && cur.facing == U -> Position(Point(x = 1, y = 100 + curPoint.x), R)
+                curPoint.y == 1 && curPoint.x in 51..100 && cur.facing == N -> Position(Point(x = 1, y = 100 + curPoint.x), E)
                 // sector 6 D -> 2 D without
-                curPoint.y == 200 && curPoint.x in 1..50 && cur.facing == D -> Position(Point(x = 100 + curPoint.x, y = 1), D)
+                curPoint.y == 200 && curPoint.x in 1..50 && cur.facing == S -> Position(Point(x = 100 + curPoint.x, y = 1), S)
                 // sector 4 L -> 1 R with
-                curPoint.x == 1 && curPoint.y in 101..150 && cur.facing == L -> Position(Point(x = 51, y = 151 - curPoint.y), R)
+                curPoint.x == 1 && curPoint.y in 101..150 && cur.facing == W -> Position(Point(x = 51, y = 151 - curPoint.y), E)
                 // sector 6 L -> 1 D without
-                curPoint.x == 1 && curPoint.y in 151..200 && cur.facing == L -> Position(Point(x = curPoint.y - 100, y = 1), D)
+                curPoint.x == 1 && curPoint.y in 151..200 && cur.facing == W -> Position(Point(x = curPoint.y - 100, y = 1), S)
                 // sector 4 U -> 3 R without
-                curPoint.y == 101 && curPoint.x in 1..50 && cur.facing == U -> Position(Point(x = 51, y = curPoint.x + 50), R)
+                curPoint.y == 101 && curPoint.x in 1..50 && cur.facing == N -> Position(Point(x = 51, y = curPoint.x + 50), E)
                 // sector 5 D -> 6 L without
-                curPoint.y == 150 && curPoint.x in 51..100 && cur.facing == D -> Position(Point(x = 50, y = curPoint.x + 100), L)
+                curPoint.y == 150 && curPoint.x in 51..100 && cur.facing == S -> Position(Point(x = 50, y = curPoint.x + 100), W)
                 // sector 2 U -> 6 U without
-                curPoint.y == 1 && curPoint.x in 101..150 && cur.facing == U -> Position(Point(x = curPoint.x - 100, y = 200), U)
+                curPoint.y == 1 && curPoint.x in 101..150 && cur.facing == N -> Position(Point(x = curPoint.x - 100, y = 200), N)
                 else -> throw RuntimeException("Model me $cur -> sector xx=${(curPoint.x - 1) / 50} yy=${(curPoint.y - 1) / 50}")
             }
         }
