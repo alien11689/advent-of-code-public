@@ -20,13 +20,43 @@ object Day22 {
     }
 
     private fun part1(lines: List<String>): Any {
-        var bricks = readBricks(lines)
-        val ids = bricks.map { it.id }
+        val initialBricks = readBricks(lines)
+        val ids = initialBricks.map { it.id }
+        val stableBlocks = findStableBlocks(initialBricks)
+        val blocksNotToRemove = findBlocksNotToRemove(stableBlocks, ids)
+        return ids.size - blocksNotToRemove.size
+        // 563 is not right
+    }
+
+    private fun findBlocksNotToRemove(
+        stableBlocks: MutableMap<Point3D, Int>,
+        ids: List<Int>
+    ): MutableSet<Int> {
+        val ll = stableBlocks.toList()
+        val blocksNotToRemove = mutableSetOf<Int>()
+        ids.forEach { id ->
+            val blocksBelow = ll.filter { it.second == id }
+                .mapNotNull {
+                    val oneDown = it.first.down()
+                    when (val below = stableBlocks[oneDown]) {
+                        null, id -> null
+                        else -> below
+                    }
+                }.toSet()
+            if (blocksBelow.size == 1) {
+                blocksNotToRemove.addAll(blocksBelow)
+            }
+        }
+        return blocksNotToRemove
+    }
+
+    private fun findStableBlocks(initialBricks: List<Brick>): MutableMap<Point3D, Int> {
+        var bricks = initialBricks
         val stableBlocks = mutableMapOf<Point3D, Int>()
         while (bricks.isNotEmpty()) {
-            println("UNSTABLE")
+//            println("UNSTABLE")
             while (true) {
-                println(" Internal")
+//                println(" Internal")
                 val unstableBricks = mutableListOf<Brick>()
                 bricks.forEach { brick ->
                     if (brick.blocks.any { it.z == 1 || it.down() in stableBlocks }) {
@@ -44,23 +74,7 @@ object Day22 {
             }
             bricks = bricks.map { it.down() }
         }
-        val ll = stableBlocks.toList()
-        val blocksNotToRemove = mutableSetOf<Int>()
-        ids.forEach { id ->
-            val blocksBelow = ll.filter { it.second == id }
-                .mapNotNull {
-                    val oneDown = it.first.down()
-                    when (val below = stableBlocks[oneDown]) {
-                        null, id -> null
-                        else -> below
-                    }
-                }.toSet()
-            if (blocksBelow.size == 1) {
-                blocksNotToRemove.addAll(blocksBelow)
-            }
-        }
-        return ids.size - blocksNotToRemove.size
-        // 563 is not right
+        return stableBlocks
     }
 
     private fun readBricks(lines: List<String>) = lines.mapIndexed { y, line ->
@@ -76,7 +90,17 @@ object Day22 {
     }
 
     private fun part2(lines: List<String>): Any {
-        return "TODO"
+        val initialBricks = readBricks(lines)
+        val ids = initialBricks.map { it.id }
+        val stableBlocks = findStableBlocks(initialBricks)
+        val bricksNotToRemove = findBlocksNotToRemove(stableBlocks, ids)
+        return bricksNotToRemove.sumOf { brickIdToRemove ->
+//            println("Checking $brickIdToRemove")
+            val bricks = initialBricks.filter { it.id != brickIdToRemove }
+            val resAfterRemove = findStableBlocks(bricks)
+            val diff = resAfterRemove.toList().toSet() - stableBlocks.toList().toSet()
+            diff.map { it.second }.toSet().size
+        }
     }
 }
 
