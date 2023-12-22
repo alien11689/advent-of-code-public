@@ -1,5 +1,6 @@
 package dpr.aoc2018
 
+import dpr.commons.Dir
 import dpr.commons.Util
 
 object Day13 {
@@ -44,22 +45,22 @@ object Day13 {
                     '|' -> cells[y][x] = Type.PIPE
                     '+' -> cells[y][x] = Type.CROSS
                     '^' -> {
-                        drivers.add(Driver(x, y, Direction.UP))
+                        drivers.add(Driver(x, y, Dir.N))
                         cells[y][x] = Type.PIPE
                     }
 
                     '>' -> {
-                        drivers.add(Driver(x, y, Direction.RIGHT))
+                        drivers.add(Driver(x, y, Dir.E))
                         cells[y][x] = Type.MINUS
                     }
 
                     'v' -> {
-                        drivers.add(Driver(x, y, Direction.DOWN))
+                        drivers.add(Driver(x, y, Dir.S))
                         cells[y][x] = Type.PIPE
                     }
 
                     '<' -> {
-                        drivers.add(Driver(x, y, Direction.LEFT))
+                        drivers.add(Driver(x, y, Dir.W))
                         cells[y][x] = Type.MINUS
                     }
 
@@ -117,81 +118,38 @@ object Day13 {
         }
     }
 
-    enum class Direction {
-        UP {
-            override fun turnLeft(): Direction {
-                return LEFT
-            }
-
-            override fun turnRight(): Direction {
-                return RIGHT
-            }
-        },
-        DOWN {
-            override fun turnLeft(): Direction {
-                return RIGHT
-            }
-
-            override fun turnRight(): Direction {
-                return LEFT
-            }
-        },
-        LEFT {
-            override fun turnLeft(): Direction {
-                return DOWN
-            }
-
-            override fun turnRight(): Direction {
-                return UP
-            }
-        },
-        RIGHT {
-            override fun turnLeft(): Direction {
-                return UP
-            }
-
-            override fun turnRight(): Direction {
-                return DOWN
-            }
-        };
-
-        abstract fun turnLeft(): Direction
-
-        abstract fun turnRight(): Direction
-    }
-
     enum class DirOnCross {
         LEFT,
         STRAIGHT,
         RIGHT
     }
 
-    data class Driver(var x: Int, var y: Int, var direction: Direction, var dirOnCross: DirOnCross = DirOnCross.LEFT) {
+    data class Driver(var x: Int, var y: Int, var dir: Dir, var dirOnCross: DirOnCross = DirOnCross.LEFT) {
         fun move(cells: List<List<Type>>) {
-            when (direction) {
-                Direction.UP -> --y
-                Direction.RIGHT -> ++x
-                Direction.DOWN -> ++y
-                Direction.LEFT -> --x
+            when (dir) {
+                Dir.N -> --y
+                Dir.E -> ++x
+                Dir.S -> ++y
+                Dir.W -> --x
             }
             if (cells[y][x] == Type.SLASH) {
-                direction = when (direction) {
-                    Direction.UP -> Direction.RIGHT
-                    Direction.RIGHT -> Direction.UP
-                    Direction.DOWN -> Direction.LEFT
-                    Direction.LEFT -> Direction.DOWN
+                dir = when (dir) {
+                    Dir.N -> Dir.E
+                    Dir.E -> Dir.N
+                    Dir.S -> Dir.W
+                    Dir.W -> Dir.S
                 }
             } else if (cells[y][x] == Type.BACKSHLASH) {
-                direction = when (direction) {
-                    Direction.UP -> Direction.LEFT
-                    Direction.RIGHT -> Direction.DOWN
-                    Direction.DOWN -> Direction.RIGHT
-                    Direction.LEFT -> Direction.UP
+                dir = when (dir) {
+                    Dir.N -> Dir.W
+                    Dir.E -> Dir.S
+                    Dir.S -> Dir.E
+                    Dir.W -> Dir.N
                 }
             } else if (cells[y][x] == Type.CROSS) {
                 when (dirOnCross) {
                     DirOnCross.LEFT -> {
-                        direction = direction.turnLeft()
+                        dir = dir.turnLeft()
                         dirOnCross = DirOnCross.STRAIGHT
                     }
 
@@ -200,7 +158,7 @@ object Day13 {
                     }
 
                     DirOnCross.RIGHT -> {
-                        direction = direction.turnRight()
+                        dir = dir.turnRight()
                         dirOnCross = DirOnCross.LEFT
                     }
                 }
