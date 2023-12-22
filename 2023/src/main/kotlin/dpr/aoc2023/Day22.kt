@@ -28,10 +28,7 @@ object Day22 {
         // 563 is not right
     }
 
-    private fun findBlocksNotToRemove(
-        stableBlocks: MutableMap<Point3D, Int>,
-        ids: List<Int>
-    ): MutableSet<Int> {
+    private fun findBlocksNotToRemove(stableBlocks: MutableMap<Point3D, Int>, ids: List<Int>): MutableSet<Int> {
         val ll = stableBlocks.toList()
         val blocksNotToRemove = mutableSetOf<Int>()
         ids.forEach { id ->
@@ -94,11 +91,13 @@ object Day22 {
         val ids = initialBricks.map { it.id }
         val stableBlocks = findStableBlocks(initialBricks)
         val bricksNotToRemove = findBlocksNotToRemove(stableBlocks, ids)
+        val stableBlocksAsSet = stableBlocks.toList().toSet()
+        val stableBricks = stableBlocksAsSet.groupBy { it.second }.map { (id, blocks) -> Brick(id, blocks.map { it.first }) }
         return bricksNotToRemove.sumOf { brickIdToRemove ->
 //            println("Checking $brickIdToRemove")
-            val bricks = initialBricks.filter { it.id != brickIdToRemove }
+            val bricks = stableBricks.filter { it.id != brickIdToRemove }
             val resAfterRemove = findStableBlocks(bricks)
-            val diff = resAfterRemove.toList().toSet() - stableBlocks.toList().toSet()
+            val diff = resAfterRemove.toList().toSet() - stableBlocksAsSet
             diff.map { it.second }.toSet().size
         }
     }
