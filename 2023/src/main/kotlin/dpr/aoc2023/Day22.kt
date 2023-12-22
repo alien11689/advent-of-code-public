@@ -7,8 +7,9 @@ object Day22 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/22/input.txt")
 //        val lines = Util.getNotEmptyLinesFromFile("/22/test1.txt")
-        println(part1(lines))
-        println(part2(lines))
+        val (part1, part2) = part1And2(lines)
+        println(part1)
+        println(part2)
     }
 
     data class Point3D(val x: Int, val y: Int, val z: Int) {
@@ -17,15 +18,6 @@ object Day22 {
 
     data class Brick(val id: Int, val blocks: List<Point3D>) {
         fun down(): Brick = copy(blocks = blocks.map { it.down() })
-    }
-
-    private fun part1(lines: List<String>): Any {
-        val initialBricks = readBricks(lines)
-        val ids = initialBricks.map { it.id }
-        val stableBlocks = findStableBlocks(initialBricks)
-        val blocksNotToRemove = findBlocksNotToRemove(stableBlocks, ids)
-        return ids.size - blocksNotToRemove.size
-        // 563 is not right
     }
 
     private fun findBlocksNotToRemove(stableBlocks: MutableMap<Point3D, Int>, ids: List<Int>): MutableSet<Int> {
@@ -85,15 +77,16 @@ object Day22 {
         Brick(y, blocks)
     }
 
-    private fun part2(lines: List<String>): Any {
+    private fun part1And2(lines: List<String>): Pair<Any, Any> {
         val initialBricks = readBricks(lines)
         val ids = initialBricks.map { it.id }
         val stableBlocks = findStableBlocks(initialBricks)
         val bricksNotToRemove = findBlocksNotToRemove(stableBlocks, ids)
+        val part1Result = ids.size - bricksNotToRemove.size
         val stableBlocksAsSet = stableBlocks.toList().toSet()
         val stableBricks = stableBlocksAsSet.groupBy { it.second }.map { (id, blocks) -> Brick(id, blocks.map { it.first }) }
-        return bricksNotToRemove.sumOf { brickIdToRemove ->
-//            println("Checking $brickIdToRemove")
+        return part1Result to bricksNotToRemove.sumOf { brickIdToRemove ->
+//            println("Checking ${++i}/${bricksNotToRemove.size}")
             val bricks = stableBricks.filter { it.id != brickIdToRemove }
             val resAfterRemove = findStableBlocks(bricks)
             val diff = resAfterRemove.toList().toSet() - stableBlocksAsSet
