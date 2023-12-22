@@ -1,5 +1,6 @@
 package dpr.aoc2016
 
+import dpr.commons.Point2D
 import dpr.commons.Util
 import java.util.LinkedList
 
@@ -12,11 +13,11 @@ object Day24 {
     }
 
     private fun part1(maze: List<String>): Any {
-        val (initX, initY) = find0(maze)
+        val init = find0(maze)
         val expected = findNumbers(maze)
 
         val memory = mutableSetOf<Stage>()
-        val q = initQueue(initX, initY, memory)
+        val q = initQueue(init, memory)
 
         while (q.isNotEmpty()) {
             val step = q.poll()
@@ -34,12 +35,12 @@ object Day24 {
     }
 
     private fun part2(maze: List<String>): Any {
-        val (initX, initY) = find0(maze)
+        val init = find0(maze)
         val expected = findNumbers(maze)
 
         val toHomeMemory = mutableSetOf<Stage>()
         val memory = mutableSetOf<Stage>()
-        val q = initQueue(initX, initY, memory)
+        val q = initQueue(init, memory)
 
         while (q.isNotEmpty()) {
             val step = q.poll()
@@ -48,7 +49,7 @@ object Day24 {
                 q.add(Step(count = step.count, stage = step.stage, toHome = true))
                 toHomeMemory.add(step.stage)
             }
-            if (step.toHome && maze[step.stage.y][step.stage.x] == '0') {
+            if (step.toHome && maze[step.stage.p.y][step.stage.p.x] == '0') {
                 return step.count
             }
             if (!step.toHome) {
@@ -69,42 +70,36 @@ object Day24 {
 
     }
 
-    private fun initQueue(initX: Int, initY: Int, memory: MutableSet<Stage>): LinkedList<Step> {
+    private fun initQueue(init: Point2D, memory: MutableSet<Stage>): LinkedList<Step> {
         val q = LinkedList<Step>()
 
-        val initStep = Step(count = 0, stage = Stage(visited = setOf('0'), x = initX, y = initY))
+        val initStep = Step(count = 0, stage = Stage(visited = setOf('0'), p = init))
         q.add(initStep)
         memory.add(initStep.stage)
         return q
     }
 
     private fun findNeighbours(stage: Stage, maze: List<String>): List<Stage> {
-        return listOf(
-            listOf(stage.x + 1, stage.y),
-            listOf(stage.x - 1, stage.y),
-            listOf(stage.x, stage.y + 1),
-            listOf(stage.x, stage.y - 1),
-        )
-            .filter { it[0] >= 0 && it[0] < maze[0].length && it[1] >= 0 && it[1] < maze.size && maze[it[1]][it[0]] != '#' }
+        return stage.p.neighboursCross()
+            .filter { it.x >= 0 && it.x < maze[0].length && it.y >= 0 && it.y < maze.size && maze[it.y][it.x] != '#' }
             .map {
-                val cur = maze[it[1]][it[0]]
+                val cur = maze[it.y][it.x]
                 Stage(
-                    x = it[0],
-                    y = it[1],
+                    p = it,
                     visited = if (cur != '.') stage.visited + cur else stage.visited
                 )
             }
     }
 
-    data class Stage(val visited: Set<Char>, val x: Int, val y: Int)
+    data class Stage(val visited: Set<Char>, val p: Point2D)
 
     data class Step(val count: Int, val stage: Stage, val toHome: Boolean = false)
 
-    private fun find0(maze: List<String>): Pair<Int, Int> {
+    private fun find0(maze: List<String>): Point2D {
         maze.forEachIndexed { yi, row ->
             row.forEachIndexed { xi, cell ->
                 if (cell == '0') {
-                    return Pair(xi, yi)
+                    return Point2D(xi, yi)
                 }
             }
         }

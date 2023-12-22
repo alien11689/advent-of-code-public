@@ -1,5 +1,6 @@
 package dpr.aoc2015
 
+import dpr.commons.Point2D
 import dpr.commons.Util
 
 object Day18 {
@@ -17,7 +18,7 @@ object Day18 {
         repeat(100) {
             points = points.mapIndexed { y, line ->
                 line.mapIndexed { x, on ->
-                    val onNeighbours = neighbours(x, y).count { points[it.second][it.first] }
+                    val onNeighbours = neighbours(x, y).count { points[it.y][it.x] }
                     on && onNeighbours in setOf(2, 3) || !on && onNeighbours == 3
                 }
             }
@@ -25,18 +26,9 @@ object Day18 {
         return points.flatten().count { it }
     }
 
-    private fun neighbours(x: Int, y: Int): Set<Pair<Int, Int>> =
-        listOf(
-            Pair(x + 1, y),
-            Pair(x + 1, y + 1),
-            Pair(x + 1, y - 1),
-            Pair(x - 1, y - 1),
-            Pair(x - 1, y),
-            Pair(x - 1, y + 1),
-            Pair(x, y - 1),
-            Pair(x, y + 1),
-        )
-            .filter { it.first in 0..99 && it.second in 0..99 }
+    private fun neighbours(x: Int, y: Int): Set<Point2D> =
+        Point2D(x, y).adjacentPoints()
+            .filter { it.x in 0..99 && it.y in 0..99 }
             .toSet()
 
     private fun part2(input: List<String>): Any {
@@ -46,7 +38,7 @@ object Day18 {
         repeat(100) {
             points = points.mapIndexed { y, line ->
                 line.mapIndexed { x, on ->
-                    val onNeighbours = neighbours(x, y).count { points[it.second][it.first] }
+                    val onNeighbours = neighbours(x, y).count { points[it.y][it.x] }
                     x in setOf(0, 99) && y in setOf(0, 99) || on && onNeighbours in setOf(2, 3) || !on && onNeighbours == 3
                 }
             }
