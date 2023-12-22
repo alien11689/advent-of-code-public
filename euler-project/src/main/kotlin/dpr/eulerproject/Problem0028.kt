@@ -1,5 +1,6 @@
 package dpr.eulerproject
 
+import dpr.commons.Dir
 import dpr.commons.Util
 
 object Problem0028 {
@@ -12,54 +13,47 @@ object Problem0028 {
         var cur = 0 to 0
         var sumDiagonal = 0L
         var value = 1L
-        var dir = Dir.RIGHT
+        var dir = Dir.E
 
         val limit = 1001 * 1001
 //        val limit = 5*5
 
         while (value <= limit) {
             when (dir) {
-                Dir.RIGHT -> {
+                Dir.E -> {
                     val x = cur.first
                     cur = (++maxRight) to cur.second
                     value += cur.first - x
-                    dir = Dir.DOWN
+                    dir = Dir.S
                     sumDiagonal += value - 1
                 }
 
-                Dir.LEFT -> {
+                Dir.W -> {
                     val x = cur.first
                     cur = (--maxLeft) to cur.second
                     value += x - cur.first
-                    dir = Dir.UP
+                    dir = Dir.N
                     sumDiagonal += value
                 }
 
-                Dir.UP -> {
+                Dir.N -> {
                     val y = cur.second
                     cur = cur.first to (--maxUp)
                     value += y - cur.second
-                    dir = Dir.RIGHT
+                    dir = Dir.E
                     sumDiagonal += value
                 }
 
-                Dir.DOWN -> {
+                Dir.S -> {
                     val y = cur.second
                     cur = cur.first to (++maxDown)
                     value += cur.second - y
-                    dir = Dir.LEFT
+                    dir = Dir.W
                     sumDiagonal += value
                 }
             }
         }
         println(sumDiagonal)
 
-    }
-
-    enum class Dir {
-        RIGHT,
-        DOWN,
-        LEFT,
-        UP
     }
 }
