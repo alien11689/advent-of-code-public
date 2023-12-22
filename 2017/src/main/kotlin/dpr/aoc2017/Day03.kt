@@ -1,6 +1,8 @@
 package dpr.aoc2017
 
+import dpr.commons.Dir
 import dpr.commons.Util
+import dpr.commons.Point2D as Cur
 
 object Day03 {
     @JvmStatic
@@ -45,53 +47,24 @@ object Day03 {
     private fun part2(input: Int): Any {
         val mesh = mutableMapOf<Cur, Int>()
         var cur = Cur(0, 0)
-        var dir = Dir.R
+        var dir = Dir.E
         var last = 1
         mesh[cur] = last
 
         fun sumNeighbours(mesh: Map<Cur, Int>, cur: Cur): Int {
-            return listOf(
-                cur + Dir.L,
-                cur + Dir.L + Dir.U,
-                cur + Dir.L + Dir.D,
-                cur + Dir.U,
-                cur + Dir.D,
-                cur + Dir.R,
-                cur + Dir.R + Dir.U,
-                cur + Dir.R + Dir.D
-            )
+            return cur.adjacentPoints()
                 .mapNotNull { mesh[it] }
                 .sum()
         }
 
         while (last <= input) {
-            cur += dir
+            cur = cur.move(dir)
             last = sumNeighbours(mesh, cur)
             mesh[cur] = last
-            if (mesh[cur + dir.nextDir()] == null) {
-                dir = dir.nextDir()
+            if (mesh[cur.move(dir.turnLeft())] == null) {
+                dir = dir.turnLeft()
             }
         }
         return last
-    }
-
-    data class Cur(val x: Int, val y: Int) {
-        operator fun plus(d: Dir): Cur {
-            return copy(x = x + d.x, y = y + d.y)
-        }
-    }
-
-    enum class Dir(val x: Int, val y: Int) {
-        R(1, 0),
-        U(0, -1),
-        L(-1, 0),
-        D(0, 1);
-
-        fun nextDir(): Dir = when (this) {
-            R -> U
-            U -> L
-            L -> D
-            D -> R
-        }
     }
 }
