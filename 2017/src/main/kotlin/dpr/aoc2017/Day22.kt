@@ -1,5 +1,7 @@
 package dpr.aoc2017
 
+import dpr.commons.Dir
+import dpr.commons.Point2D
 import dpr.commons.Util
 
 object Day22 {
@@ -11,16 +13,15 @@ object Day22 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val grid = mutableMapOf<Pair<Int, Int>, Boolean>()
-        val curX = (lines[0].length) / 2
-        val curY = (lines.size) / 2
+        val grid = mutableMapOf<Point2D, Boolean>()
+        val cur = Point2D(lines[0].length / 2, lines.size / 2)
 
         var j = 0
         lines.forEach { row ->
             var i = 0
             row.forEach { cell ->
                 if (cell == '#') {
-                    grid[Pair(i, j)] = true
+                    grid[Point2D(i, j)] = true
                 }
                 ++i
             }
@@ -28,7 +29,7 @@ object Day22 {
 
         }
 
-        val virus = Virus(curX, curY)
+        val virus = Virus(cur)
         repeat(10000) {
             virus.burst(grid)
         }
@@ -38,16 +39,15 @@ object Day22 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val grid = mutableMapOf<Pair<Int, Int>, Status>()
-        val curX = (lines[0].length) / 2
-        val curY = (lines.size) / 2
+        val grid = mutableMapOf<Point2D, Status>()
+        val cur = Point2D(lines[0].length / 2, lines.size / 2)
 
         var j = 0
         lines.forEach { row ->
             var i = 0
             row.forEach { cell ->
                 if (cell == '#') {
-                    grid[Pair(i, j)] = Status.Infected
+                    grid[Point2D(i, j)] = Status.Infected
                 }
                 ++i
             }
@@ -55,7 +55,7 @@ object Day22 {
 
         }
 
-        val virus = Virus(curX, curY)
+        val virus = Virus(cur)
         repeat(10000000) {
             virus.burst2(grid)
         }
@@ -80,68 +80,32 @@ object Day22 {
 
     }
 
-    enum class Dir(val x: Int, val y: Int) {
-        Left(-1, 0),
-        Right(1, 0),
-        Up(0, -1),
-        Down(0, 1);
-
-        fun left(): Dir {
-            return when (this) {
-                Left -> Down
-                Up -> Left
-                Right -> Up
-                Down -> Right
-            }
-        }
-
-        fun right(): Dir {
-            return when (this) {
-                Left -> Up
-                Up -> Right
-                Right -> Down
-                Down -> Left
-            }
-        }
-
-        fun reverse(): Dir {
-            return when (this) {
-                Left -> Right
-                Up -> Down
-                Right -> Left
-                Down -> Up
-            }
-        }
-    }
-
-    data class Virus(var x: Int, var y: Int, var dir: Dir = Dir.Up, var infected: Int = 0) {
-        fun burst(grid: MutableMap<Pair<Int, Int>, Boolean>) {
-            val value = grid[Pair(x, y)] ?: false
-            dir = if (value) dir.right() else dir.left()
-            grid[Pair(x, y)] = !value
-            if (grid[Pair(x, y)]!!) {
+    data class Virus(var p: Point2D, var dir: Dir = Dir.N, var infected: Int = 0) {
+        fun burst(grid: MutableMap<Point2D, Boolean>) {
+            val value = grid[p] ?: false
+            dir = if (value) dir.turnRight() else dir.turnLeft()
+            grid[p] = !value
+            if (grid[p]!!) {
                 infected++
             }
-            x += dir.x
-            y += dir.y
+            p = p.move(dir)
         }
 
-        fun burst2(grid: MutableMap<Pair<Int, Int>, Status>) {
-            val value = grid[Pair(x, y)] ?: Status.Clean
+        fun burst2(grid: MutableMap<Point2D, Status>) {
+            val value = grid[p] ?: Status.Clean
             when (value) {
-                Status.Clean -> dir = dir.left()
+                Status.Clean -> dir = dir.turnLeft()
                 Status.Weakened -> {
                 }
 
-                Status.Infected -> dir = dir.right()
-                Status.Flagged -> dir = dir.reverse()
+                Status.Infected -> dir = dir.turnRight()
+                Status.Flagged -> dir = dir.opposite()
             }
-            grid[Pair(x, y)] = value.next()
-            if (grid[Pair(x, y)] == Status.Infected) {
+            grid[p] = value.next()
+            if (grid[p] == Status.Infected) {
                 infected++
             }
-            x += dir.x
-            y += dir.y
+            p = p.move(dir)
         }
     }
 }

@@ -1,5 +1,6 @@
 package dpr.aoc2017
 
+import dpr.commons.Point2D
 import dpr.commons.Util
 import java.util.Stack
 
@@ -11,7 +12,7 @@ object Day14 {
         println(part2(input))
     }
 
-    val map = mapOf(
+    private val map = mapOf(
         Pair('0', "0000"),
         Pair('1', "0001"),
         Pair('2', "0010"),
@@ -31,18 +32,15 @@ object Day14 {
     )
 
     private fun part1(input: String): Any {
-
         val grid = buildGrid(input)
-
         return grid.joinToString("").filter { it == '1' }.length
     }
 
     private fun buildGrid(input: String): List<String> {
-        val grid = ((0..127).map { "$input-$it" }.map { Day10.knotHash(it) })
+        return ((0..127).map { Day10.knotHash("$input-$it") })
             .map {
                 it.map { letter -> map[letter] }.joinToString("")
             }
-        return grid
     }
 
     private fun part2(input: String): Any {
@@ -50,18 +48,18 @@ object Day14 {
 
         var currentGroup = 0
 
-        (0 until grid.size).forEach { i ->
-            (0 until grid[i].size).forEach { j ->
-                if (grid[i][j] == '1') {
+        (0 until grid.size).forEach { y ->
+            (0 until grid[y].size).forEach { x ->
+                if (grid[y][x] == '1') {
                     val v = currentGroup--
-                    val mem = mutableSetOf<Pair<Int, Int>>()
-                    val neighbours = Stack<Pair<Int, Int>>()
-                    neighbours.push(Pair(i, j))
+                    val mem = mutableSetOf<Point2D>()
+                    val neighbours = Stack<Point2D>()
+                    neighbours.push(Point2D(x, y))
                     while (neighbours.isNotEmpty()) {
                         val cur = neighbours.pop()
-                        if (grid[cur.first][cur.second] == '1') {
-                            grid[cur.first][cur.second] = v.toString()[0]
-                            val n = neighbour(cur.first, cur.second, grid.size).filter { it !in mem }
+                        if (grid[cur.y][cur.x] == '1') {
+                            grid[cur.y][cur.x] = v.toString()[0]
+                            val n = neighbour(cur, grid.size).filter { it !in mem }
                             mem.addAll(n)
                             neighbours.addAll(n)
                         }
@@ -74,15 +72,9 @@ object Day14 {
         return currentGroup * (-1)
     }
 
-    private fun neighbour(i: Int, j: Int, size: Int): List<Pair<Int, Int>> {
+    private fun neighbour(p: Point2D, size: Int): List<Point2D> {
         val limit = 0 until size
-        return listOf(
-            listOf(i - 1, j),
-            listOf(i + 1, j),
-            listOf(i, j - 1),
-            listOf(i, j + 1),
-        )
-            .filter { it[0] in limit && it[1] in limit }
-            .map { Pair(it[0], it[1]) }
+        return p.neighboursCross()
+            .filter { it.x in limit && it.y in limit }
     }
 }
