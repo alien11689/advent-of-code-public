@@ -1,6 +1,7 @@
 package dpr.aoc2018
 
 import dpr.commons.Dir
+import dpr.commons.Point2D
 import dpr.commons.Util
 
 object Day13 {
@@ -19,15 +20,15 @@ object Day13 {
             ++tick
 //            println(tick)
 //            println(drivers)
-            drivers.sortedBy { it.y * 10000 + it.x }.forEach { driver ->
+            drivers.sortedBy { it.p.y * 10000 + it.p.x }.forEach { driver ->
                 driver.move(cells)
-                val positions = mutableMapOf<Pair<Int, Int>, List<Driver>>()
-                drivers.forEach { d -> positions[d.x to d.y] = (positions[d.x to d.y] ?: listOf()) + d }
+                val positions = mutableMapOf<Point2D, List<Driver>>()
+                drivers.forEach { d -> positions[d.p] = (positions[d.p] ?: listOf()) + d }
                 val crashes = positions.filter { it.value.size > 1 }.keys
 //                println(positions)
                 if (crashes.isNotEmpty()) {
 //            printBoard(cells, drivers)
-                    return crashes.map { "${it.first},${it.second}" }.first()
+                    return crashes.map { "${it.x},${it.y}" }.first()
                 }
             }
         }
@@ -45,27 +46,23 @@ object Day13 {
                     '|' -> cells[y][x] = Type.PIPE
                     '+' -> cells[y][x] = Type.CROSS
                     '^' -> {
-                        drivers.add(Driver(x, y, Dir.N))
+                        drivers.add(Driver(Point2D(x, y), Dir.N))
                         cells[y][x] = Type.PIPE
                     }
 
                     '>' -> {
-                        drivers.add(Driver(x, y, Dir.E))
+                        drivers.add(Driver(Point2D(x, y), Dir.E))
                         cells[y][x] = Type.MINUS
                     }
 
                     'v' -> {
-                        drivers.add(Driver(x, y, Dir.S))
+                        drivers.add(Driver(Point2D(x, y), Dir.S))
                         cells[y][x] = Type.PIPE
                     }
 
                     '<' -> {
-                        drivers.add(Driver(x, y, Dir.W))
+                        drivers.add(Driver(Point2D(x, y), Dir.W))
                         cells[y][x] = Type.MINUS
-                    }
-
-                    else -> {
-
                     }
                 }
             }
@@ -81,10 +78,10 @@ object Day13 {
         while (true) {
             ++tick
             val crashes = mutableListOf<Driver>()
-            drivers.sortedBy { it.y * 10000 + it.x }.forEach {
+            drivers.sortedBy { it.p.y * 10000 + it.p.x }.forEach {
                 if (it !in crashes) {
                     it.move(cells)
-                    val conflict = drivers.find { o -> it != o && o.x == it.x && o.y == it.y }
+                    val conflict = drivers.find { o -> it != o && o.p == it.p }
                     if (conflict != null) {
                         crashes.addAll(listOf(it, conflict))
                     }
@@ -96,7 +93,7 @@ object Day13 {
             }
             if (drivers.size == 1) {
                 val winner = drivers[0]
-                return "${winner.x},${winner.y}"
+                return "${winner.p.x},${winner.p.y}"
             }
         }
     }
@@ -124,44 +121,47 @@ object Day13 {
         RIGHT
     }
 
-    data class Driver(var x: Int, var y: Int, var dir: Dir, var dirOnCross: DirOnCross = DirOnCross.LEFT) {
+    data class Driver(var p: Point2D, var dir: Dir, var dirOnCross: DirOnCross = DirOnCross.LEFT) {
         fun move(cells: List<List<Type>>) {
-            when (dir) {
-                Dir.N -> --y
-                Dir.E -> ++x
-                Dir.S -> ++y
-                Dir.W -> --x
-            }
-            if (cells[y][x] == Type.SLASH) {
-                dir = when (dir) {
-                    Dir.N -> Dir.E
-                    Dir.E -> Dir.N
-                    Dir.S -> Dir.W
-                    Dir.W -> Dir.S
-                }
-            } else if (cells[y][x] == Type.BACKSHLASH) {
-                dir = when (dir) {
-                    Dir.N -> Dir.W
-                    Dir.E -> Dir.S
-                    Dir.S -> Dir.E
-                    Dir.W -> Dir.N
-                }
-            } else if (cells[y][x] == Type.CROSS) {
-                when (dirOnCross) {
-                    DirOnCross.LEFT -> {
-                        dir = dir.turnLeft()
-                        dirOnCross = DirOnCross.STRAIGHT
+            p = p.move(dir)
+            when (cells[p.y][p.x]) {
+                Type.SLASH -> {
+                    dir = when (dir) {
+                        Dir.N -> Dir.E
+                        Dir.E -> Dir.N
+                        Dir.S -> Dir.W
+                        Dir.W -> Dir.S
                     }
+                }
 
-                    DirOnCross.STRAIGHT -> {
-                        dirOnCross = DirOnCross.RIGHT
-                    }
-
-                    DirOnCross.RIGHT -> {
-                        dir = dir.turnRight()
-                        dirOnCross = DirOnCross.LEFT
+                Type.BACKSHLASH -> {
+                    dir = when (dir) {
+                        Dir.N -> Dir.W
+                        Dir.E -> Dir.S
+                        Dir.S -> Dir.E
+                        Dir.W -> Dir.N
                     }
                 }
+
+                Type.CROSS -> {
+                    when (dirOnCross) {
+                        DirOnCross.LEFT -> {
+                            dir = dir.turnLeft()
+                            dirOnCross = DirOnCross.STRAIGHT
+                        }
+
+                        DirOnCross.STRAIGHT -> {
+                            dirOnCross = DirOnCross.RIGHT
+                        }
+
+                        DirOnCross.RIGHT -> {
+                            dir = dir.turnRight()
+                            dirOnCross = DirOnCross.LEFT
+                        }
+                    }
+                }
+
+                else -> {}
             }
         }
     }
