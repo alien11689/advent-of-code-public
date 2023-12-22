@@ -1,11 +1,13 @@
 package dpr.aoc2018
 
+import dpr.commons.Point2D
 import dpr.commons.Util
 import java.util.PriorityQueue
 
-import dpr.commons.Point2D as Position
 
 object Day15 {
+    private const val MAX_HIT_POINTS = 200
+
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/15/input.txt")
@@ -14,22 +16,22 @@ object Day15 {
     }
 
     private fun part1(input: List<String>): Any {
-        val board = buildBoard(input)
-        val players = buildPlayers(input).toMutableList()
+        val (board, initPlayers) = buildBoard(input)
+        val players = initPlayers.toMutableList()
         val round = game(players, board)
         val sum = players.sumOf { it.hitPoints }
         return (round * sum)
     }
 
     private fun part2(input: List<String>): Any {
-        val board = buildBoard(input)
-        var minBound = 0
-        var maxBound = Integer.MAX_VALUE
+        val (board, initPlayers) = buildBoard(input)
+        var minBound = 1
+        var maxBound = MAX_HIT_POINTS
         var maxSum = -1
         while (minBound <= maxBound) {
 //            println("Checking $minBound $maxBound")
             val i = (minBound + maxBound) / 2
-            val players = buildPlayers(input, i).toMutableList()
+            val players = initPlayers.map { if (it.type == PlayerType.E) it.copy(attackPower = i) else it.copy() }.toMutableList()
             try {
                 val round = game(players, board, true)
                 val sum = players.sumOf { it.hitPoints }
@@ -48,10 +50,9 @@ object Day15 {
     }
 
     data class Player(
-        var x: Int,
-        var y: Int,
+        var p: Point2D,
         val type: PlayerType,
-        var hitPoints: Int = 200,
+        var hitPoints: Int = MAX_HIT_POINTS,
         val attackPower: Int = 3,
         var moved: Boolean = true
     ) : Comparable<Player> {
@@ -60,24 +61,17 @@ object Day15 {
             return hitPoints <= 0
         }
 
-        override fun compareTo(other: Player): Int {
-            val dy = y - other.y
-            return if (dy != 0) {
-                dy
-            } else {
-                x - other.x
-            }
+        override fun compareTo(other: Player): Int = p.compareTo(other.p)
+
+        private fun neighbours(): List<Point2D> {
+            return p.neighboursCross()
         }
 
-        private fun neighbours(): List<Position> {
-            return Position(x, y).neighboursCross()
-        }
-
-        fun move(players: List<Player>, board: List<List<CellType>>) {
+        fun move(players: List<Player>, board: Set<Point2D>) {
             findNextMove(players, board).forEach { it.action() }
         }
 
-        private fun findNextMove(players: List<Player>, board: List<List<CellType>>): List<Action> {
+        private fun findNextMove(players: List<Player>, board: Set<Point2D>): List<Action> {
             val enemies = neighbours().mapNotNull { n ->
                 players.find { !it.isDead() && it.type != type && it.onPosition(n) }
             }
@@ -86,15 +80,15 @@ object Day15 {
                 return listOf(Attack(enemies.sorted().minBy { it.hitPoints }, this))
             }
 //        println("I won't attack an enemy")
-            val memory = mutableSetOf<Position>()
-            memory.add(Position(x, y))
+            val memory = mutableSetOf<Point2D>()
+            memory.add(p)
             val queue = PriorityQueue<PositionWithDist> { o1, o2 ->
                 if (o1.dist == o2.dist)
                     o1.pos.compareTo(o2.pos)
                 else
                     o1.dist.compareTo(o2.dist)
             }
-            queue.add(PositionWithDist(Position(x, y)))
+            queue.add(PositionWithDist(p))
             while (queue.isNotEmpty()) {
                 try {
                     val cur = queue.poll()
@@ -102,7 +96,7 @@ object Day15 {
                     neighbours.forEach { n ->
 //                    println("Checking position $n")
                         if (n !in memory) {
-                            if (board[n.y][n.x] == CellType.CLOSED) {
+                            if (n in board) {
                                 memory.add(n)
                             } else {
                                 val maybePlayer = players.find { !it.isDead() && it.onPosition(n) }
@@ -134,8 +128,8 @@ object Day15 {
             return listOf(Nop)
         }
 
-        private fun onPosition(p: Position): Boolean {
-            return x == p.x && y == p.y
+        private fun onPosition(other: Point2D): Boolean {
+            return this.p == other
         }
     }
 
@@ -145,10 +139,9 @@ object Day15 {
         fun action()
     }
 
-    data class Move(val p: Player, val newPosition: Position) : Action {
+    data class Move(val p: Player, val newPosition: Point2D) : Action {
         override fun action() {
-            p.x = newPosition.x
-            p.y = newPosition.y
+            p.p = newPosition
         }
     }
 
@@ -163,34 +156,25 @@ object Day15 {
         }
     }
 
-    data class PositionWithDist(val pos: Position, val dist: Int = 0, val road: List<Position> = listOf())
+    data class PositionWithDist(val pos: Point2D, val dist: Int = 0, val road: List<Point2D> = listOf())
 
-    enum class CellType {
-        CLOSED,
-        FREE
-    }
-
-    private fun buildBoard(lines: List<String>): List<List<CellType>> {
-        return lines.map { line ->
-            line.map { if (it == '#') CellType.CLOSED else CellType.FREE }
-        }
-    }
-
-    private fun buildPlayers(lines: List<String>, attack: Int = 3): List<Player> {
-        val players = mutableListOf<Player>()
-        for (y in lines.indices) {
-            for (x in lines[y].indices) {
-                if (lines[y][x] == 'G') {
-                    players.add(Player(x, y, PlayerType.G))
-                } else if (lines[y][x] == 'E') {
-                    players.add(Player(x, y, PlayerType.E, attackPower = attack))
+    private fun buildBoard(lines: List<String>): Pair<Set<Point2D>, Set<Player>> {
+        val walls = mutableSetOf<Point2D>()
+        val players = mutableSetOf<Player>()
+        lines.forEachIndexed { y, line ->
+            line.forEachIndexed { x, c ->
+                val p = Point2D(x, y)
+                when (c) {
+                    'G' -> players.add(Player(p, PlayerType.G))
+                    'E' -> players.add(Player(p, PlayerType.E))
+                    '#' -> walls.add(p)
                 }
             }
         }
-        return players
+        return walls.toSet() to players.toSet()
     }
 
-    private fun game(players: MutableList<Player>, board: List<List<CellType>>, elfCannotDie: Boolean = false): Int {
+    private fun game(players: MutableList<Player>, board: Set<Point2D>, elfCannotDie: Boolean = false): Int {
         var round = 0
         try {
             while (true) {
