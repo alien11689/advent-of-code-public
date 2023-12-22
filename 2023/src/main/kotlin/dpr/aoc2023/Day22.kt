@@ -29,17 +29,16 @@ object Day22 {
     }
 
     private fun findBlocksNotToRemove(stableBlocks: MutableMap<Point3D, Int>, ids: List<Int>): MutableSet<Int> {
-        val ll = stableBlocks.toList()
+        val ll = stableBlocks.toList().groupBy({ it.second }) { it.first }
         val blocksNotToRemove = mutableSetOf<Int>()
         ids.forEach { id ->
-            val blocksBelow = ll.filter { it.second == id }
-                .mapNotNull {
-                    val oneDown = it.first.down()
-                    when (val below = stableBlocks[oneDown]) {
-                        null, id -> null
-                        else -> below
-                    }
-                }.toSet()
+            val blocksBelow = ll[id]!!.mapNotNull {
+                val oneDown = it.down()
+                when (val below = stableBlocks[oneDown]) {
+                    null, id -> null
+                    else -> below
+                }
+            }.toSet()
             if (blocksBelow.size == 1) {
                 blocksNotToRemove.addAll(blocksBelow)
             }
