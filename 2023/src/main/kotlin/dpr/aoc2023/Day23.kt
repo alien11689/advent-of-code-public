@@ -110,7 +110,8 @@ object Day23 {
         routes.offer(Route2(start, setOf(start), emptyList()))
         val crossRoads = board.filter { it.value != '#' }.keys - knownPaths.values.flatten().toSet()
         val finalPathBegin = (knownPaths.filter { end in it.key }.toList().single().first - end).single()
-        val finalCrossRoad = finalPathBegin.neighboursCross().filter { it in crossRoads }.single()
+        val finalCrossRoad = finalPathBegin.neighboursCross().single { it in crossRoads }
+        var mustVisitCrossroads = crossRoads
         var bestRoute = -1
 //        println(crossRoads.size)
 //        println(knownPaths.size)
@@ -123,15 +124,16 @@ object Day23 {
 //                } else if (point in allCheckedPaths) {
 //                    print("O")
 //                } else {
-//                    print(board[point] ?: '.')
+//                    print(' ')
+////                    print(board[point] ?: '.')
 //                }
 //            }
 //            println()
 //        }
 //        throw RuntimeException()
-//        knownPaths.forEach {
-//            println(it)
-//        }
+        knownPaths.forEach {
+            println(it)
+        }
         val crossRoadsSize = crossRoads.size
         val mem = mutableSetOf<Pair<Point2D, List<Point2D>>>()
         while (routes.isNotEmpty()) {
@@ -155,6 +157,8 @@ object Day23 {
                         bestRoute = length
                         println("Found better road - $bestRoute")
                     }
+                    mustVisitCrossroads = mustVisitCrossroads.intersect(cur.crossRoads.toSet())
+                    println("Found path of length $length, best is $bestRoute, must visit crossroads ${mustVisitCrossroads.size}")
                     continue
                 }
                 val crossRoad = secondPoint.neighboursCross().single { it in crossRoads }
@@ -180,7 +184,8 @@ object Day23 {
         // 6331 is too low
         // 6343 is wrong
         // 6391 is wrong
-        //6415
+        // 6414 is wrong
+        // 6415 is wrong
     }
 }
 
