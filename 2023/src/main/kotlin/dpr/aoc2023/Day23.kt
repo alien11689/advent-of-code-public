@@ -110,9 +110,14 @@ object Day23 {
         routes.offer(Route2(start, setOf(start), emptyList()))
         val crossRoads = board.filter { it.value != '#' }.keys - knownPaths.values.flatten().toSet()
         val finalPathBegin = (knownPaths.filter { end in it.key }.toList().single().first - end).single()
+        val finalPath = knownPaths.filter { end in it.key }.toList().single().second
         val finalCrossRoad = finalPathBegin.neighboursCross().single { it in crossRoads }
+        val knownEdges = knownPaths.map { (key, value) ->
+            val newKey = key.map { it.neighboursCross().firstOrNull { it in crossRoads } ?: it }
+            newKey to value + newKey
+        }.toMap()
         var bestRoute = -1
-        val maxSize = crossRoads.size + knownPaths.values.flatten().size // 9412 is max
+//        val maxSize = crossRoads.size + knownPaths.values.flatten().size // 9412 is max
 //        println("Max size is $maxSize")
 //        println(crossRoads.size)
 //        println(knownPaths.size)
@@ -142,37 +147,29 @@ object Day23 {
             }
             mem.add(memKey)
 //            println("Checking ${cur.point} and visited crossroads ${cur.crossRoads.size}/$crossRoadsSize, stack size ${routes.size}, finished lengths: $bestRoute")
-            val knownPath = knownPaths.filter { cur.point in it.key }
-            if (knownPath.size > 1) {
-                throw RuntimeException("$knownPath")
-            } else if (knownPath.size == 1) {
-                val (edges, all) = knownPath.toList().single()
-                val secondPoint = (edges - cur.point).single()
-                var seen = cur.seen + all
-                if (secondPoint == end) {
-                    val length = seen.size - 1  // minus start
-                    if (bestRoute < length) {
-                        bestRoute = length
-                        println("Found better road - $bestRoute")
-                    }
-                    println("Found path of length $length, best is $bestRoute")
-                    continue
+            if (cur.point == end) {
+                val length = cur.seen.size - 1  // minus start
+                if (bestRoute < length) {
+                    bestRoute = length
+                    println("Found better road - $bestRoute")
                 }
-                val crossRoad = secondPoint.neighboursCross().single { it in crossRoads }
-                if (crossRoad in cur.crossRoads) {
-                    continue
-                }
-                seen = seen + crossRoad
-                if (crossRoad == finalCrossRoad) {
+                println("Found path of length $length, best is $bestRoute")
+                continue
+            }
+            val possibleNextEdges = knownEdges.filter { cur.point in it.key }
+//            println(possibleNextEdges)
+            possibleNextEdges.forEach { (vertices, points) ->
+                val nextCrossRoad = (vertices - cur.point).single()
+//                println("Next possible crossRoad = $nextCrossRoad")
+                if (nextCrossRoad !in cur.crossRoads) {
+                    if (nextCrossRoad == finalCrossRoad) {
+                        //TODO end
+                        routes.offer(Route2(end, cur.seen + points + finalPath, cur.crossRoads + nextCrossRoad))
 //                    println("Reached final crossRoad - going on $finalPathBegin")
-                    routes.offer(Route2(finalPathBegin, seen + finalPathBegin, cur.crossRoads + crossRoad))
-                } else {
-                    crossRoad.neighboursCross().filter { it !in seen && board[it] != '#' }.forEach { next ->
-                        routes.offer(Route2(next, seen + next, cur.crossRoads + crossRoad))
+                    } else {
+                        routes.offer(Route2(nextCrossRoad, cur.seen + points, cur.crossRoads + nextCrossRoad))
                     }
                 }
-            } else {
-                throw RuntimeException("Missing path from ${cur.point}")
             }
         }
         return bestRoute
@@ -184,6 +181,7 @@ object Day23 {
         // 6414 is wrong
         // 6415 is wrong
         // 6474 is wrong
+        // 6490 is wrong
     }
 }
 
