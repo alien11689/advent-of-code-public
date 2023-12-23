@@ -164,9 +164,9 @@ object Day23 {
                 if (bestRoute < length) {
                     bestRoute = length
 //                    println("Found better road - $bestRoute")
-                    if (bestRoute == 6542) { // it's my solution checked by waiting too much
-                        break
-                    }
+//                    if (bestRoute == 6542) { // it's my solution checked by waiting too much
+//                        break
+//                    }
                 }
 //                println("Found path of length $length, best is $bestRoute")
                 continue
@@ -177,7 +177,8 @@ object Day23 {
                 continue
             }
             val possibleToAdd = knownEdges.filter { it.key.intersect(unavailable).isEmpty() }.values.flatten().toSet()
-            if ((cur.seen + possibleToAdd).size < bestRoute) {
+            val potentialScore = (cur.seen + possibleToAdd).size
+            if (potentialScore < bestRoute) {
                 continue
             }
             val possibleNextEdges = knownEdges.filter { cur.point in it.key }
@@ -185,7 +186,7 @@ object Day23 {
             possibleNextEdges.forEach { (vertices, points) ->
                 val nextCrossRoad = (vertices - cur.point).single()
 //                println("Next possible crossRoad = $nextCrossRoad")
-                if (nextCrossRoad !in cur.crossRoads) {
+                if (nextCrossRoad !in cur.crossRoads && nextCrossRoad in reachable) {
                     if (nextCrossRoad == finalCrossRoad) {
                         routes.offer(Route2(end, cur.seen + points + finalPath, cur.crossRoads + nextCrossRoad))
 //                    println("Reached final crossRoad - going on $finalPathBegin")
