@@ -150,6 +150,7 @@ object Day23 {
 //        }
 //        throw RuntimeException()
         val mem = mutableSetOf<Pair<Point2D, List<Point2D>>>()
+        val reachableMem = mutableMapOf<Set<Point2D>, Set<Point2D>>()
         while (routes.isNotEmpty()) {
             val cur = routes.poll()
             val memKey = cur.point to cur.crossRoads
@@ -170,7 +171,13 @@ object Day23 {
 //                println("Found path of length $length, best is $bestRoute")
                 continue
             }
-            if (!canReach(cur.point, finalCrossRoad, cur.crossRoads, knownEdges)) {
+            val unavailable = (cur.crossRoads - cur.point).toSet()
+            val reachable = findReachable(finalCrossRoad, unavailable, knownEdges.keys, reachableMem)
+            if (cur.point !in reachable) {
+                continue
+            }
+            val possibleToAdd = knownEdges.filter { it.key.intersect(unavailable).isEmpty() }.values.flatten().toSet()
+            if ((cur.seen + possibleToAdd).size < bestRoute) {
                 continue
             }
             val possibleNextEdges = knownEdges.filter { cur.point in it.key }
@@ -198,6 +205,33 @@ object Day23 {
         // 6415 is wrong
         // 6474 is wrong
         // 6490 is wrong
+    }
+
+    private fun findReachable(
+        finalCrossRoad: Point2D,
+        unavailable: Set<Point2D>,
+        knownEdges: Set<Set<Point2D>>,
+        reachableMem: MutableMap<Set<Point2D>, Set<Point2D>>
+    ): Set<Point2D> {
+        if (unavailable in reachableMem) {
+            return reachableMem[unavailable]!!
+        }
+        val possiblePaths = knownEdges.filter { it.intersect(unavailable).isEmpty() }.toSet()
+
+        val reachable = mutableSetOf<Point2D>()
+
+        val waitList = Stack<Point2D>()
+        waitList.push(finalCrossRoad)
+        while (waitList.isNotEmpty()) {
+            val cur = waitList.pop()
+            if (cur in reachable) {
+                continue
+            }
+            reachable.add(cur)
+            possiblePaths.filter { cur in it }.flatMap { it - cur }.filter { it !in reachable }.forEach { waitList.push(it) }
+        }
+        reachableMem[unavailable] = reachable
+        return reachable
     }
 
     private fun canReach(from: Point2D, target: Point2D, path: List<Point2D>, knownPaths: Map<Set<Point2D>, Set<Point2D>>): Boolean {
