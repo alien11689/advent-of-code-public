@@ -114,9 +114,6 @@ object Day23 {
         val routes = PriorityQueue<Route2>()
         routes.offer(Route2(start, emptyList(), 0))
         val crossRoads = board.filter { it.value != '#' }.keys - knownPaths.values.flatten().toSet()
-        val finalPathBegin = (knownPaths.filter { end in it.key }.toList().single().first - end).single()
-        val finalPath = knownPaths.filter { end in it.key }.toList().single().second.size
-        val finalCrossRoad = finalPathBegin.neighboursCross().single { it in crossRoads }
         val knownEdges = knownPaths.map { (key, value) ->
             val newKey = key.map { it.neighboursCross().firstOrNull { next -> next in crossRoads } ?: it }.toSet()
             newKey to (value + newKey).size - 1
@@ -154,7 +151,7 @@ object Day23 {
                 continue
             }
             val unavailable = (cur.crossRoads - cur.point).toSet()
-            val reachable = findReachable(finalCrossRoad, unavailable, knownEdges.keys, reachableMem)
+            val reachable = findReachable(end, unavailable, knownEdges.keys, reachableMem)
             if (cur.point !in reachable) {
                 continue
             }
@@ -171,13 +168,8 @@ object Day23 {
             possibleNextEdges.forEach { (vertices, points) ->
                 val nextCrossRoad = (vertices - cur.point).single()
 //                println("Next possible crossRoad = $nextCrossRoad")
-                if (nextCrossRoad !in cur.crossRoads && nextCrossRoad in reachable) {
-                    if (nextCrossRoad == finalCrossRoad) {
-                        routes.offer(Route2(end, cur.crossRoads + nextCrossRoad, cur.steps + points + finalPath))
-//                    println("Reached final crossRoad - going on $finalPathBegin")
-                    } else {
-                        routes.offer(Route2(nextCrossRoad, cur.crossRoads + nextCrossRoad, cur.steps + points))
-                    }
+                if ((nextCrossRoad !in cur.crossRoads || nextCrossRoad == end) && nextCrossRoad in reachable) {
+                    routes.offer(Route2(nextCrossRoad, cur.crossRoads + nextCrossRoad, cur.steps + points))
                 }
             }
         }
@@ -220,4 +212,3 @@ object Day23 {
         return reachable
     }
 }
-
