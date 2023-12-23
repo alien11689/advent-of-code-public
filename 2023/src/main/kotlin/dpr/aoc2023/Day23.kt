@@ -106,13 +106,14 @@ object Day23 {
     private fun part2(lines: List<String>, knownPaths: Map<Set<Point2D>, Set<Point2D>>): Any {
         val (board, start, end) = readBoard(lines)
 //        println("From $start to $end")
-        val routes = PriorityQueue<Route2>()
-        routes.offer(Route2(start, setOf(start), emptyList()))
+        val routes = Stack<Route2>()
+        routes.push(Route2(start, setOf(start), emptyList()))
         val crossRoads = board.filter { it.value != '#' }.keys - knownPaths.values.flatten().toSet()
         val finalPathBegin = (knownPaths.filter { end in it.key }.toList().single().first - end).single()
         val finalCrossRoad = finalPathBegin.neighboursCross().single { it in crossRoads }
-        var mustVisitCrossroads = crossRoads
         var bestRoute = -1
+        val maxSize = crossRoads.size + knownPaths.values.flatten().size // 9412 is max
+//        println("Max size is $maxSize")
 //        println(crossRoads.size)
 //        println(knownPaths.size)
 //        val allCheckedPaths = knownPaths.values.flatten()
@@ -122,7 +123,7 @@ object Day23 {
 //                if (point in crossRoads) {
 //                    print('X')
 //                } else if (point in allCheckedPaths) {
-//                    print("O")
+//                    print("#")
 //                } else {
 //                    print(' ')
 ////                    print(board[point] ?: '.')
@@ -131,13 +132,10 @@ object Day23 {
 //            println()
 //        }
 //        throw RuntimeException()
-        knownPaths.forEach {
-            println(it)
-        }
         val crossRoadsSize = crossRoads.size
         val mem = mutableSetOf<Pair<Point2D, List<Point2D>>>()
         while (routes.isNotEmpty()) {
-            val cur = routes.poll()
+            val cur = routes.pop()
             val memKey = cur.point to cur.crossRoads
             if (memKey in mem) {
                 continue
@@ -157,8 +155,7 @@ object Day23 {
                         bestRoute = length
                         println("Found better road - $bestRoute")
                     }
-                    mustVisitCrossroads = mustVisitCrossroads.intersect(cur.crossRoads.toSet())
-                    println("Found path of length $length, best is $bestRoute, must visit crossroads ${mustVisitCrossroads.size}")
+                    println("Found path of length $length, best is $bestRoute")
                     continue
                 }
                 val crossRoad = secondPoint.neighboursCross().single { it in crossRoads }
@@ -168,10 +165,10 @@ object Day23 {
                 seen = seen + crossRoad
                 if (crossRoad == finalCrossRoad) {
 //                    println("Reached final crossRoad - going on $finalPathBegin")
-                    routes.offer(Route2(finalPathBegin, seen + finalPathBegin, cur.crossRoads + crossRoads))
+                    routes.push(Route2(finalPathBegin, seen + finalPathBegin, cur.crossRoads + crossRoads))
                 } else {
                     crossRoad.neighboursCross().filter { it !in seen && board[it] != '#' }.forEach { next ->
-                        routes.offer(Route2(next, seen + next, cur.crossRoads + crossRoad))
+                        routes.push(Route2(next, seen + next, cur.crossRoads + crossRoad))
                     }
                 }
             } else {
@@ -186,6 +183,7 @@ object Day23 {
         // 6391 is wrong
         // 6414 is wrong
         // 6415 is wrong
+        // 6474 is wrong
     }
 }
 
