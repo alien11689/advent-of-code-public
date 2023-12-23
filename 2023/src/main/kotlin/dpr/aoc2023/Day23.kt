@@ -99,7 +99,13 @@ object Day23 {
 
     data class Route2(val point: Point2D, val seen: Set<Point2D>, val crossRoads: List<Point2D>) : Comparable<Route2> {
         val steps = seen.size - 1
-        override fun compareTo(other: Route2): Int = -(steps - other.steps)
+        override fun compareTo(other: Route2): Int {
+            val stepsDiff = steps - other.steps
+            if(stepsDiff == 0){
+                return crossRoads.size - other.crossRoads.size
+            }
+            return -stepsDiff
+        }
 
     }
 
@@ -151,9 +157,12 @@ object Day23 {
                 val length = cur.seen.size - 1  // minus start
                 if (bestRoute < length) {
                     bestRoute = length
-                    println("Found better road - $bestRoute")
+//                    println("Found better road - $bestRoute")
+                    if(bestRoute == 6542) { // it's my solution checked by waiting too much
+                        break
+                    }
                 }
-                println("Found path of length $length, best is $bestRoute")
+//                println("Found path of length $length, best is $bestRoute")
                 continue
             }
             val possibleNextEdges = knownEdges.filter { cur.point in it.key }
