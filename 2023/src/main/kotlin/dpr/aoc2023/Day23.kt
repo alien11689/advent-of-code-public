@@ -97,8 +97,7 @@ object Day23 {
         return Triple(board, start, end)
     }
 
-    data class Route2(val point: Point2D, val seen: Set<Point2D>, val crossRoads: List<Point2D>) : Comparable<Route2> {
-        val steps = seen.size - 1
+    data class Route2(val point: Point2D, val crossRoads: List<Point2D>, val steps: Int) : Comparable<Route2> {
         override fun compareTo(other: Route2): Int {
             val stepsDiff = steps - other.steps
             if (stepsDiff == 0) {
@@ -113,17 +112,19 @@ object Day23 {
         val (board, start, end) = readBoard(lines)
 //        println("From $start to $end")
         val routes = PriorityQueue<Route2>()
-        routes.offer(Route2(start, setOf(start), emptyList()))
+        routes.offer(Route2(start, emptyList(), 0))
         val crossRoads = board.filter { it.value != '#' }.keys - knownPaths.values.flatten().toSet()
         val finalPathBegin = (knownPaths.filter { end in it.key }.toList().single().first - end).single()
-        val finalPath = knownPaths.filter { end in it.key }.toList().single().second
+        val finalPath = knownPaths.filter { end in it.key }.toList().single().second.size
         val finalCrossRoad = finalPathBegin.neighboursCross().single { it in crossRoads }
         val knownEdges = knownPaths.map { (key, value) ->
             val newKey = key.map { it.neighboursCross().firstOrNull { next -> next in crossRoads } ?: it }.toSet()
-            newKey to value + newKey
+            // edges are enriched on both sides but crossroads overlap so we add only on to the size (on start and end there is not need to enrich it)
+            val newValue = if (end in newKey || start in newKey) value.size else value.size + 1
+            newKey to newValue
         }.toMap()
         // little speed up that some longest paths need to be taken
-        val mustHaveEdges = knownEdges.toList().sortedBy { -it.second.size }.take(knownEdges.size / 2).flatMap { it.first }.toSet() - end - start
+        val mustHaveEdges = knownEdges.toList().sortedBy { -it.second }.take(knownEdges.size / 2).flatMap { it.first }.toSet() - end - start
 //        println("strict graph {")
 //        knownEdges.forEach {
 //            val (a, b) = it.key.toList()
@@ -142,7 +143,7 @@ object Day23 {
             mem.add(memKey)
 //            println("Checking ${cur.point} and visited crossroads ${cur.crossRoads.size}, stack size ${routes.size}, finished lengths: $bestRoute")
             if (cur.point == end) {
-                val length = cur.seen.size - 1  // minus start
+                val length = cur.steps
                 if (bestRoute < length) {
                     bestRoute = length
 //                    println(cur.crossRoads.joinToString(" -> ") { "${it.x},${it.y}" })
@@ -162,8 +163,8 @@ object Day23 {
             if (mustHaveEdges.intersect(reachable + cur.crossRoads) != mustHaveEdges) {
                 continue
             }
-            val possibleToAdd = knownEdges.filter { it.key.intersect(unavailable).isEmpty() }.values.flatten().toSet()
-            val potentialScore = (cur.seen + possibleToAdd).size
+            val possibleToAdd = knownEdges.filter { it.key.intersect(unavailable).isEmpty() }.values.sum()
+            val potentialScore = cur.steps + possibleToAdd
             if (potentialScore < bestRoute) {
                 continue
             }
@@ -174,10 +175,10 @@ object Day23 {
 //                println("Next possible crossRoad = $nextCrossRoad")
                 if (nextCrossRoad !in cur.crossRoads && nextCrossRoad in reachable) {
                     if (nextCrossRoad == finalCrossRoad) {
-                        routes.offer(Route2(end, cur.seen + points + finalPath, cur.crossRoads + nextCrossRoad))
+                        routes.offer(Route2(end, cur.crossRoads + nextCrossRoad, cur.steps + points + finalPath))
 //                    println("Reached final crossRoad - going on $finalPathBegin")
                     } else {
-                        routes.offer(Route2(nextCrossRoad, cur.seen + points, cur.crossRoads + nextCrossRoad))
+                        routes.offer(Route2(nextCrossRoad, cur.crossRoads + nextCrossRoad, cur.steps + points))
                     }
                 }
             }
