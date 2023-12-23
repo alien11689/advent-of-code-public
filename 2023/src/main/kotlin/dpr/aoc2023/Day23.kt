@@ -119,7 +119,7 @@ object Day23 {
         val finalPath = knownPaths.filter { end in it.key }.toList().single().second
         val finalCrossRoad = finalPathBegin.neighboursCross().single { it in crossRoads }
         val knownEdges = knownPaths.map { (key, value) ->
-            val newKey = key.map { it.neighboursCross().firstOrNull { it in crossRoads } ?: it }
+            val newKey = key.map { it.neighboursCross().firstOrNull { it in crossRoads } ?: it }.toSet()
             newKey to value + newKey
         }.toMap()
 //        println("strict graph {")
@@ -170,6 +170,9 @@ object Day23 {
 //                println("Found path of length $length, best is $bestRoute")
                 continue
             }
+            if (!canReach(cur.point, finalCrossRoad, cur.crossRoads, knownEdges)) {
+                continue
+            }
             val possibleNextEdges = knownEdges.filter { cur.point in it.key }
 //            println(possibleNextEdges)
             possibleNextEdges.forEach { (vertices, points) ->
@@ -195,6 +198,28 @@ object Day23 {
         // 6415 is wrong
         // 6474 is wrong
         // 6490 is wrong
+    }
+
+    private fun canReach(from: Point2D, target: Point2D, path: List<Point2D>, knownPaths: Map<Set<Point2D>, Set<Point2D>>): Boolean {
+        val visited = (path - from).toSet()
+        val possiblePaths = knownPaths.filter { it.key.intersect(visited).isEmpty() }.keys
+
+        data class State(val p: Point2D, val possible: Set<Set<Point2D>>)
+
+        val waitList = Stack<State>()
+        waitList.push(State(from, possiblePaths))
+        while (waitList.isNotEmpty()) {
+            val cur = waitList.pop()
+//            println(" Checking $cur")
+            val nextMoves = cur.possible.filter { cur.p in it }.toSet()
+            for (n in nextMoves) {
+                if (n.contains(target)) {
+                    return true
+                }
+                waitList.push(State((n - cur.p).single(), cur.possible - nextMoves))
+            }
+        }
+        return false
     }
 }
 
