@@ -119,9 +119,7 @@ object Day23 {
         val finalCrossRoad = finalPathBegin.neighboursCross().single { it in crossRoads }
         val knownEdges = knownPaths.map { (key, value) ->
             val newKey = key.map { it.neighboursCross().firstOrNull { next -> next in crossRoads } ?: it }.toSet()
-            // edges are enriched on both sides but crossroads overlap so we add only on to the size (on start and end there is not need to enrich it)
-            val newValue = if (end in newKey || start in newKey) value.size else value.size + 1
-            newKey to newValue
+            newKey to (value + newKey).size - 1
         }.toMap()
         // little speed up that some longest paths need to be taken
         val mustHaveEdges = knownEdges.toList().sortedBy { -it.second }.take(knownEdges.size / 2).flatMap { it.first }.toSet() - end - start
