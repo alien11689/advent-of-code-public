@@ -122,6 +122,8 @@ object Day23 {
             val newKey = key.map { it.neighboursCross().firstOrNull { next -> next in crossRoads } ?: it }.toSet()
             newKey to value + newKey
         }.toMap()
+        // little speed up that some longest paths need to be taken
+        val mustHaveEdges = knownEdges.toList().sortedBy { -it.second.size }.take(knownEdges.size / 2).flatMap { it.first }.toSet() - end - start
 //        println("strict graph {")
 //        knownEdges.forEach {
 //            val (a, b) = it.key.toList()
@@ -143,7 +145,8 @@ object Day23 {
                 val length = cur.seen.size - 1  // minus start
                 if (bestRoute < length) {
                     bestRoute = length
-                    println("Found better road - $bestRoute using ${cur.crossRoads.size}/${crossRoads.size} crossroads")
+//                    println(cur.crossRoads.joinToString(" -> ") { "${it.x},${it.y}" })
+//                    println("Found better road - $bestRoute using ${cur.crossRoads.size}/${crossRoads.size} crossroads")
 //                    if (bestRoute == 6542) { // it's my solution checked by waiting too much
 //                        break
 //                    }
@@ -154,6 +157,9 @@ object Day23 {
             val unavailable = (cur.crossRoads - cur.point).toSet()
             val reachable = findReachable(finalCrossRoad, unavailable, knownEdges.keys, reachableMem)
             if (cur.point !in reachable) {
+                continue
+            }
+            if (mustHaveEdges.intersect(reachable + cur.crossRoads) != mustHaveEdges) {
                 continue
             }
             val possibleToAdd = knownEdges.filter { it.key.intersect(unavailable).isEmpty() }.values.flatten().toSet()
