@@ -106,8 +106,8 @@ object Day23 {
     private fun part2(lines: List<String>, knownPaths: Map<Set<Point2D>, Set<Point2D>>): Any {
         val (board, start, end) = readBoard(lines)
 //        println("From $start to $end")
-        val routes = Stack<Route2>()
-        routes.push(Route2(start, setOf(start), emptyList()))
+        val routes = PriorityQueue<Route2>()
+        routes.offer(Route2(start, setOf(start), emptyList()))
         val crossRoads = board.filter { it.value != '#' }.keys - knownPaths.values.flatten().toSet()
         val finalPathBegin = (knownPaths.filter { end in it.key }.toList().single().first - end).single()
         val finalCrossRoad = finalPathBegin.neighboursCross().single { it in crossRoads }
@@ -135,7 +135,7 @@ object Day23 {
         val crossRoadsSize = crossRoads.size
         val mem = mutableSetOf<Pair<Point2D, List<Point2D>>>()
         while (routes.isNotEmpty()) {
-            val cur = routes.pop()
+            val cur = routes.poll()
             val memKey = cur.point to cur.crossRoads
             if (memKey in mem) {
                 continue
@@ -165,10 +165,10 @@ object Day23 {
                 seen = seen + crossRoad
                 if (crossRoad == finalCrossRoad) {
 //                    println("Reached final crossRoad - going on $finalPathBegin")
-                    routes.push(Route2(finalPathBegin, seen + finalPathBegin, cur.crossRoads + crossRoads))
+                    routes.offer(Route2(finalPathBegin, seen + finalPathBegin, cur.crossRoads + crossRoad))
                 } else {
                     crossRoad.neighboursCross().filter { it !in seen && board[it] != '#' }.forEach { next ->
-                        routes.push(Route2(next, seen + next, cur.crossRoads + crossRoad))
+                        routes.offer(Route2(next, seen + next, cur.crossRoads + crossRoad))
                     }
                 }
             } else {
