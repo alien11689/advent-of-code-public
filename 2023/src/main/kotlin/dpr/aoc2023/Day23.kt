@@ -129,11 +129,11 @@ object Day23 {
 //        }
 //        println("}")
         var bestRoute = -1
-        val mem = mutableSetOf<Pair<Point2D, List<Point2D>>>()
+        val mem = mutableSetOf<List<Point2D>>()
         val reachableMem = mutableMapOf<Set<Point2D>, Set<Point2D>>()
         while (routes.isNotEmpty()) {
             val cur = routes.poll()
-            val memKey = cur.point to cur.crossRoads
+            val memKey = cur.crossRoads
             if (memKey in mem) {
                 continue
             }
@@ -143,12 +143,12 @@ object Day23 {
                 val length = cur.seen.size - 1  // minus start
                 if (bestRoute < length) {
                     bestRoute = length
-//                    println("Found better road - $bestRoute")
+                    println("Found better road - $bestRoute using ${cur.crossRoads.size}/${crossRoads.size} crossroads")
 //                    if (bestRoute == 6542) { // it's my solution checked by waiting too much
 //                        break
 //                    }
                 }
-//                println("Found path of length $length, best is $bestRoute")
+//                println("Found path of length $length using ${cur.crossRoads.size}/${crossRoads.size} crossroads, best is $bestRoute")
                 continue
             }
             val unavailable = (cur.crossRoads - cur.point).toSet()
