@@ -101,7 +101,7 @@ object Day23 {
         val steps = seen.size - 1
         override fun compareTo(other: Route2): Int {
             val stepsDiff = steps - other.steps
-            if(stepsDiff == 0){
+            if (stepsDiff == 0) {
                 return crossRoads.size - other.crossRoads.size
             }
             return -stepsDiff
@@ -122,6 +122,12 @@ object Day23 {
             val newKey = key.map { it.neighboursCross().firstOrNull { it in crossRoads } ?: it }
             newKey to value + newKey
         }.toMap()
+//        println("strict graph {")
+//        knownEdges.forEach {
+//            val (a, b) = it.key.toList()
+//            println("\"${a.x},${a.y}\" -- \"${b.x},${b.y}\" [label=\"${it.value.size}\"]")
+//        }
+//        println("}")
         var bestRoute = -1
 //        val maxSize = crossRoads.size + knownPaths.values.flatten().size // 9412 is max
 //        println("Max size is $maxSize")
@@ -143,7 +149,6 @@ object Day23 {
 //            println()
 //        }
 //        throw RuntimeException()
-        val crossRoadsSize = crossRoads.size
         val mem = mutableSetOf<Pair<Point2D, List<Point2D>>>()
         while (routes.isNotEmpty()) {
             val cur = routes.poll()
@@ -152,13 +157,13 @@ object Day23 {
                 continue
             }
             mem.add(memKey)
-//            println("Checking ${cur.point} and visited crossroads ${cur.crossRoads.size}/$crossRoadsSize, stack size ${routes.size}, finished lengths: $bestRoute")
+//            println("Checking ${cur.point} and visited crossroads ${cur.crossRoads.size}, stack size ${routes.size}, finished lengths: $bestRoute")
             if (cur.point == end) {
                 val length = cur.seen.size - 1  // minus start
                 if (bestRoute < length) {
                     bestRoute = length
 //                    println("Found better road - $bestRoute")
-                    if(bestRoute == 6542) { // it's my solution checked by waiting too much
+                    if (bestRoute == 6542) { // it's my solution checked by waiting too much
                         break
                     }
                 }
@@ -172,7 +177,6 @@ object Day23 {
 //                println("Next possible crossRoad = $nextCrossRoad")
                 if (nextCrossRoad !in cur.crossRoads) {
                     if (nextCrossRoad == finalCrossRoad) {
-                        //TODO end
                         routes.offer(Route2(end, cur.seen + points + finalPath, cur.crossRoads + nextCrossRoad))
 //                    println("Reached final crossRoad - going on $finalPathBegin")
                     } else {
