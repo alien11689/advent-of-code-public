@@ -119,7 +119,7 @@ object Day23 {
         val finalPath = knownPaths.filter { end in it.key }.toList().single().second
         val finalCrossRoad = finalPathBegin.neighboursCross().single { it in crossRoads }
         val knownEdges = knownPaths.map { (key, value) ->
-            val newKey = key.map { it.neighboursCross().firstOrNull { it in crossRoads } ?: it }.toSet()
+            val newKey = key.map { it.neighboursCross().firstOrNull { next -> next in crossRoads } ?: it }.toSet()
             newKey to value + newKey
         }.toMap()
 //        println("strict graph {")
@@ -129,26 +129,6 @@ object Day23 {
 //        }
 //        println("}")
         var bestRoute = -1
-//        val maxSize = crossRoads.size + knownPaths.values.flatten().size // 9412 is max
-//        println("Max size is $maxSize")
-//        println(crossRoads.size)
-//        println(knownPaths.size)
-//        val allCheckedPaths = knownPaths.values.flatten()
-//        lines.indices.forEach { y ->
-//            lines[y].indices.forEach { x ->
-//                val point = Point2D(x, y)
-//                if (point in crossRoads) {
-//                    print('X')
-//                } else if (point in allCheckedPaths) {
-//                    print("#")
-//                } else {
-//                    print(' ')
-////                    print(board[point] ?: '.')
-//                }
-//            }
-//            println()
-//        }
-//        throw RuntimeException()
         val mem = mutableSetOf<Pair<Point2D, List<Point2D>>>()
         val reachableMem = mutableMapOf<Set<Point2D>, Set<Point2D>>()
         while (routes.isNotEmpty()) {
@@ -233,28 +213,6 @@ object Day23 {
         }
         reachableMem[unavailable] = reachable
         return reachable
-    }
-
-    private fun canReach(from: Point2D, target: Point2D, path: List<Point2D>, knownPaths: Map<Set<Point2D>, Set<Point2D>>): Boolean {
-        val visited = (path - from).toSet()
-        val possiblePaths = knownPaths.filter { it.key.intersect(visited).isEmpty() }.keys
-
-        data class State(val p: Point2D, val possible: Set<Set<Point2D>>)
-
-        val waitList = Stack<State>()
-        waitList.push(State(from, possiblePaths))
-        while (waitList.isNotEmpty()) {
-            val cur = waitList.pop()
-//            println(" Checking $cur")
-            val nextMoves = cur.possible.filter { cur.p in it }.toSet()
-            for (n in nextMoves) {
-                if (n.contains(target)) {
-                    return true
-                }
-                waitList.push(State((n - cur.p).single(), cur.possible - nextMoves))
-            }
-        }
-        return false
     }
 }
 
