@@ -16,6 +16,7 @@
     <properties>
         <main.class>dpr.aoc${project.artifactId}.All</main.class>
         <imageName>AOC${project.artifactId}</imageName>
+        <java-smt.version>4.1.0</java-smt.version>
     </properties>
 
     <dependencies>
@@ -23,6 +24,12 @@
             <groupId>dpr.adventofcode</groupId>
             <artifactId>commons</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <!-- For day 24-->
+            <groupId>org.sosy-lab</groupId>
+            <artifactId>java-smt</artifactId>
+            <version>${java-smt.version}</version>
         </dependency>
     </dependencies>
 

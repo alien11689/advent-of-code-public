@@ -1,9 +1,15 @@
 package dpr.aoc2023
 
 import dpr.commons.Util
+import org.sosy_lab.common.ShutdownManager
+import org.sosy_lab.common.configuration.Configuration
+import org.sosy_lab.common.log.BasicLogManager
+import org.sosy_lab.java_smt.SolverContextFactory
+import org.sosy_lab.java_smt.SolverContextFactory.Solvers
+import org.sosy_lab.java_smt.api.Model
+import org.sosy_lab.java_smt.api.SolverContext.ProverOptions
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import kotlin.io.path.createTempFile
 
 object Day24 {
     @JvmStatic
@@ -76,7 +82,6 @@ object Day24 {
 
     private fun part2(lines: List<String>): Any {
         val points = readPointsAndVectors(lines)
-
         // Solve equation:
         // t1 > 0
         // t2 > 0
@@ -91,9 +96,17 @@ object Day24 {
         // z + dz * t2 == z2 + dz2 * t2
         // z + dz * t3 == z3 + dz3 * t3
 
-        // Run z3 solver from resources
+        val resultSmt = solveWithSmt(points)
+        val resultZ3 = solveWithZ3InPython(points)
+        if (resultSmt != resultZ3) {
+            throw RuntimeException("Solutions from solvers are different")
+        }
+        return resultSmt
+    }
+
+    private fun solveWithZ3InPython(points: List<PointAndVector>): String {
         val processBuilder = ProcessBuilder()
-        val tmpFile = createTempFile().toFile()
+        val tmpFile = kotlin.io.path.createTempFile().toFile()
         tmpFile.deleteOnExit()
         javaClass.getResourceAsStream("/24/day24.py").use { input ->
             tmpFile.outputStream().use { output ->
@@ -109,6 +122,76 @@ object Day24 {
         val process = processBuilder.start()
         val reader = BufferedReader(InputStreamReader(process.inputStream))
         return reader.readText().trim()
+    }
+
+    private fun solveWithSmt(points: List<PointAndVector>): String {
+        val config = Configuration.defaultConfiguration()
+        val logger = BasicLogManager.create(config)
+        val shutdown = ShutdownManager.create()
+        val context = SolverContextFactory.createSolverContext(
+            config, logger, shutdown.notifier, Solvers.PRINCESS
+        )
+
+        val fmgr = context.formulaManager
+        val bmgr = fmgr.booleanFormulaManager
+        val f = fmgr.integerFormulaManager
+
+        val x = f.makeVariable("x")
+        val y = f.makeVariable("y")
+        val z = f.makeVariable("z")
+        val dx = f.makeVariable("dx")
+        val dy = f.makeVariable("dy")
+        val dz = f.makeVariable("dz")
+        val t1 = f.makeVariable("t1")
+        val t2 = f.makeVariable("t2")
+        val t3 = f.makeVariable("t3")
+
+        val x1 = f.makeNumber(points[0].p.x)
+        val y1 = f.makeNumber(points[0].p.y)
+        val z1 = f.makeNumber(points[0].p.z)
+        val dx1 = f.makeNumber(points[0].speed.dx.toDouble())
+        val dy1 = f.makeNumber(points[0].speed.dy.toDouble())
+        val dz1 = f.makeNumber(points[0].speed.dz.toDouble())
+
+        val x2 = f.makeNumber(points[1].p.x)
+        val y2 = f.makeNumber(points[1].p.y)
+        val z2 = f.makeNumber(points[1].p.z)
+        val dx2 = f.makeNumber(points[1].speed.dx.toDouble())
+        val dy2 = f.makeNumber(points[1].speed.dy.toDouble())
+        val dz2 = f.makeNumber(points[1].speed.dz.toDouble())
+
+        val x3 = f.makeNumber(points[2].p.x)
+        val y3 = f.makeNumber(points[2].p.y)
+        val z3 = f.makeNumber(points[2].p.z)
+        val dx3 = f.makeNumber(points[2].speed.dx.toDouble())
+        val dy3 = f.makeNumber(points[2].speed.dy.toDouble())
+        val dz3 = f.makeNumber(points[2].speed.dz.toDouble())
+
+        val constraint = bmgr.and(
+            f.greaterThan(t1, f.makeNumber(0)),
+            f.greaterThan(t2, f.makeNumber(0)),
+            f.greaterThan(t3, f.makeNumber(0)),
+            f.equal(f.add(x, f.multiply(dx, t1)), f.add(x1, f.multiply(dx1, t1))),
+            f.equal(f.add(x, f.multiply(dx, t2)), f.add(x2, f.multiply(dx2, t2))),
+            f.equal(f.add(x, f.multiply(dx, t3)), f.add(x3, f.multiply(dx3, t3))),
+            f.equal(f.add(y, f.multiply(dy, t1)), f.add(y1, f.multiply(dy1, t1))),
+            f.equal(f.add(y, f.multiply(dy, t2)), f.add(y2, f.multiply(dy2, t2))),
+            f.equal(f.add(y, f.multiply(dy, t3)), f.add(y3, f.multiply(dy3, t3))),
+            f.equal(f.add(z, f.multiply(dz, t1)), f.add(z1, f.multiply(dz1, t1))),
+            f.equal(f.add(z, f.multiply(dz, t2)), f.add(z2, f.multiply(dz2, t2))),
+            f.equal(f.add(z, f.multiply(dz, t3)), f.add(z3, f.multiply(dz3, t3))),
+        )
+
+        val result = context.newProverEnvironment(ProverOptions.GENERATE_MODELS).use { prover ->
+            prover.addConstraint(constraint)
+            val isUnsat = prover.isUnsat
+            if (isUnsat) {
+                throw RuntimeException("No solution")
+            }
+            val model: Model = prover.model
+            model.evaluate(x)!!.add(model.evaluate(y)).add(model.evaluate(z))
+        }
+        return result.toString()
     }
 }
 
