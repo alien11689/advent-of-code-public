@@ -1,6 +1,9 @@
 package dpr.aoc2023
 
 import dpr.commons.Util
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import kotlin.io.path.createTempFile
 
 object Day24 {
     @JvmStatic
@@ -89,7 +92,23 @@ object Day24 {
         // z + dz * t3 == z3 + dz3 * t3
 
         // Run z3 solver from resources
-        return 722976491652740
+        val processBuilder = ProcessBuilder()
+        val tmpFile = createTempFile().toFile()
+        tmpFile.deleteOnExit()
+        javaClass.getResourceAsStream("/24/day24.py").use { input ->
+            tmpFile.outputStream().use { output ->
+                input!!.copyTo(output)
+            }
+        }
+        val command =
+            listOf("python3", tmpFile.absolutePath) +
+                points.take(3)
+                    .map { pwv -> listOf(pwv.p.x, pwv.p.y, pwv.p.z, pwv.speed.dx, pwv.speed.dy, pwv.speed.dz).map { it.toLong().toString() } }
+                    .flatten()
+        processBuilder.command(command)
+        val process = processBuilder.start()
+        val reader = BufferedReader(InputStreamReader(process.inputStream))
+        return reader.readText().trim()
     }
 }
 
