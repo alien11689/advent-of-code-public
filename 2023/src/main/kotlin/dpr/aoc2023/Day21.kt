@@ -29,23 +29,9 @@ object Day21 {
     }
 
     private fun readGarden(lines: List<String>): Pair<MutableMap<Point2D, Char>, Point2D> {
-        val garden = mutableMapOf<Point2D, Char>()
-        var start = Point2D(0, 0)
-        lines.forEachIndexed { y, line ->
-            line.forEachIndexed { x, c ->
-                val cur = Point2D(x, y)
-                when (c) {
-                    'S' -> {
-                        garden[cur] = '.'
-                        start = cur
-                    }
-
-                    else -> {
-                        garden[cur] = c
-                    }
-                }
-            }
-        }
+        val garden = Util.readBoard(lines)
+        val start = garden.filter { it.value == 'S' }.keys.single()
+        garden[start] = '.'
         return Pair(garden, start)
     }
 

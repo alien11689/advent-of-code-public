@@ -18,14 +18,7 @@ object Day11 {
     private fun part1And2(lines: List<String>): Pair<Long, Long> {
         val expandFactor1 = 2
         val expandFactor2 = 1_000_000
-        val galaxies = mutableListOf<Point2D>()
-        lines.forEachIndexed { y, line ->
-            line.forEachIndexed { x, c ->
-                if (c == '#') {
-                    galaxies.add(Point2D(x, y))
-                }
-            }
-        }
+        val galaxies = Util.readBoard(lines).filter { it.value == '#' }.keys.sorted()
         val emptyX = (galaxies.minOf { it.x }..(galaxies.maxOf { it.x })).filter { x -> galaxies.none { it.x == x } }
         val emptyY = (galaxies.minOf { it.y }..(galaxies.maxOf { it.y })).filter { y -> galaxies.none { it.y == y } }
 

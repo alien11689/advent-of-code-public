@@ -32,23 +32,15 @@ object Day16 {
         return energized.size
     }
 
-    private fun readMirrors(lines: List<String>): MutableMap<Point2D, Char> {
-        val mirrors = mutableMapOf<Point2D, Char>()
-        lines.forEachIndexed { y, line ->
-            line.forEachIndexed { x, c ->
-                if (c != '.') {
-                    mirrors[Point2D(x, y)] = c
-                }
-            }
-        }
-        return mirrors
+    private fun readMirrors(lines: List<String>): Map<Point2D, Char> {
+        return Util.readBoard(lines).filter { it.value != '.' }
     }
 
     private fun getEnergized(
         start: Current,
         maxX: Int,
         maxY: Int,
-        mirrors: MutableMap<Point2D, Char>
+        mirrors: Map<Point2D, Char>
     ): Set<Point2D> {
         val stack = Stack<Current>()
         val energized = mutableSetOf<Point2D>()

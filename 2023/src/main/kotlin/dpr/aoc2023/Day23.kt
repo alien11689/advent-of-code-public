@@ -86,12 +86,7 @@ object Day23 {
     }
 
     private fun readBoard(lines: List<String>): Triple<MutableMap<Point2D, Char>, Point2D, Point2D> {
-        val board = mutableMapOf<Point2D, Char>()
-        lines.forEachIndexed { y, line ->
-            line.forEachIndexed { x, c ->
-                board[Point2D(x, y)] = c
-            }
-        }
+        val board = Util.readBoard(lines)
         val start = Point2D(1, 0)
         val end = Point2D(lines[0].length - 2, lines.size - 1)
         return Triple(board, start, end)

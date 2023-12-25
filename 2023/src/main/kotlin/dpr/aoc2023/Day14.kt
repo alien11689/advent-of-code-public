@@ -42,18 +42,11 @@ object Day14 {
     }
 
     private fun readInput(lines: List<String>): Pair<Set<Point2D>, Set<Point2D>> {
-        val rocks = mutableSetOf<Point2D>()
-        val movableRocks = mutableSetOf<Point2D>()
-        lines.forEachIndexed { y, line ->
-            line.forEachIndexed { x, c ->
-                when (c) {
-                    '#' -> rocks.add(Point2D(x, y))
-                    'O' -> movableRocks.add(Point2D(x, y))
-                    else -> {}
-                }
-            }
-        }
-        return Pair(rocks, movableRocks)
+        val (rocks, movableRocks) = Util.readBoard(lines)
+            .toList()
+            .filter { it.second in setOf('#', 'O') }
+            .partition { it.second == '#' }
+        return rocks.map { it.first }.toSet() to movableRocks.map { it.first }.toSet()
     }
 
     private fun calculateLoad(current: Set<Point2D>, sizeY: Int): Int = current.sumOf { sizeY - it.y }

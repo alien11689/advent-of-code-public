@@ -48,12 +48,7 @@ object Day17 {
     }
 
     private fun readBoard(lines: List<String>): Pair<Map<Point2D, Int>, Point2D> {
-        val board = mutableMapOf<Point2D, Int>()
-        lines.forEachIndexed { y, line ->
-            line.forEachIndexed { x, c ->
-                board[Point2D(x, y)] = c.digitToInt()
-            }
-        }
+        val board = Util.readBoard(lines) { it.digitToInt() }
         return Pair(board, Point2D(lines[0].length - 1, lines.size - 1))
     }
 

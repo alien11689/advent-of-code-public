@@ -15,7 +15,7 @@ object Day10 {
     }
 
     private fun part1(lines: List<String>): Any {
-        val board = readBoard(lines)
+        val board = Util.readBoard(lines) { Sign.from(it) }
         val start = board.filter { it.value == Sign.S }.keys.single()
         val realStartSign = detectRealStartSign(board, start)
         board[start] = realStartSign
@@ -48,16 +48,6 @@ object Day10 {
             }
         }
         return max
-    }
-
-    private fun readBoard(lines: List<String>): MutableMap<Point2D, Sign> {
-        val board = mutableMapOf<Point2D, Sign>()
-        lines.forEachIndexed { y, line ->
-            line.forEachIndexed { x, c ->
-                board[Point2D(x, y)] = Sign.from(c)
-            }
-        }
-        return board
     }
 
     private fun detectRealStartSign(board: MutableMap<Point2D, Sign>, start: Point2D): Sign {
@@ -141,7 +131,7 @@ object Day10 {
     }
 
     private fun part2(lines: List<String>): Any {
-        val board = readBoard(lines)
+        val board = Util.readBoard(lines) { Sign.from(it) }
         val start = board.filter { it.value == Sign.S }.keys.single()
         val realStartSign = detectRealStartSign(board, start)
         board[start] = realStartSign
