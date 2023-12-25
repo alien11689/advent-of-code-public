@@ -15,7 +15,9 @@ object Day25 {
         val connections = readConnections(lines)
 
         // naive solution creating all paths and counting most used vertices works well for my input but not for test input
+        // when more than 6 most used vertices are taken (I tested with 10) than both input and test are fine
         // it needs ~2 minutes to finish
+//        val takeMostUsedVertices = 6
 //        val vertices = connections.flatten().toSet().sorted()
 //        val counts = mutableMapOf<String, Int>()
 //        vertices.forEach { counts[it] = 0 }
@@ -23,7 +25,7 @@ object Day25 {
 ////            println("Checking $v")
 //            findPaths(v, connections, counts)
 //        }
-//        val mostUsed = counts.toList().sortedBy { -it.second }.take(6)
+//        val mostUsed = counts.toList().sortedBy { -it.second }.take(takeMostUsedVertices)
 ////        mostUsed.forEach { println(it) }
 //        val mostUsedConnections = mostUsed.flatMap { v1 ->
 //            mostUsed.map { v2 -> setOf(v1.first, v2.first) }
@@ -64,7 +66,7 @@ object Day25 {
             (connections.filter { end in it }.flatten().toSet() - end).filter { it !in visited }.forEach {
                 val newPath = cur + it
                 pq.offer(newPath)
-                if (newPath.size > 4) {
+                if (newPath.size > 2) {
                     newPath.forEach {
                         counts[it] = counts[it]!! + 1
                     }
