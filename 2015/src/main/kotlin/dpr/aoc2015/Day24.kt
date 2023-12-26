@@ -6,12 +6,12 @@ object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/24/input.txt")
-        println(part1(input))
-        println(part2(input))
+        val numbers = input.map { it.toInt() }.sortedBy { -it }
+        println(part1(numbers))
+        println(part2(numbers))
     }
 
-    private fun part1(input: List<String>): Any {
-        val numbers = input.map { it.toInt() }.sortedBy { -it }
+    private fun part1(numbers: List<Int>): Any {
         val perBucket = numbers.sum() / 3
         return bestEntanglement(numbers, perBucket)
     }
@@ -47,8 +47,7 @@ object Day24 {
         return options
     }
 
-    private fun part2(input: List<String>): Any {
-        val numbers = input.map { it.toInt() }.sortedBy { -it }
+    private fun part2(numbers: List<Int>): Any {
         val perBucket = numbers.sum() / 4
         return bestEntanglement(numbers, perBucket)
     }

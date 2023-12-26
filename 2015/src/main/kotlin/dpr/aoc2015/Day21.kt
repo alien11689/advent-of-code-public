@@ -5,18 +5,18 @@ import dpr.commons.Util
 object Day21 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        println(part1())
-        println(part2())
+        val itemSets = generateItemSets()
+        println(part1(itemSets))
+        println(part2(itemSets))
     }
 
-    private fun part1(): Any {
-        val itemSets: MutableList<Set<Item>> = generateItemSets()
+    private fun part1(itemSets: List<Set<Item>>): Any {
         return itemSets
             .filter { fight(it) }
             .minOf { item -> item.sumOf { it.cost } }
     }
 
-    private fun generateItemSets(): MutableList<Set<Item>> {
+    private fun generateItemSets(): List<Set<Item>> {
         val itemSets = mutableListOf<Set<Item>>()
         weapons().forEach { weapon ->
             armors().forEach { armor ->
@@ -62,8 +62,7 @@ object Day21 {
         }
     }
 
-    private fun part2(): Any {
-        val itemSets: MutableList<Set<Item>> = generateItemSets()
+    private fun part2(itemSets: List<Set<Item>>): Any {
         return itemSets
             .filter { !fight(it) }
             .maxOf { item -> item.sumOf { it.cost } }

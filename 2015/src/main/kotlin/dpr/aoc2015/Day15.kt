@@ -6,12 +6,12 @@ object Day15 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/15/input.txt")
-        println(part1(input))
-        println(part2(input))
+        val ingredients = parseIngredients(input)
+        println(part1(ingredients))
+        println(part2(ingredients))
     }
 
-    private fun part1(input: List<String>): Any {
-        val ingredients = parseIngredients(input)
+    private fun part1(ingredients: List<Ingredient>): Any {
         return calculate(ingredients, 100)
             .maxOf { score(ingredients, it) }
     }
@@ -45,8 +45,7 @@ object Day15 {
         }
     }
 
-    private fun part2(input: List<String>): Any {
-        val ingredients = parseIngredients(input)
+    private fun part2(ingredients: List<Ingredient>): Any {
         return calculate(ingredients, 100)
             .filter { calories(ingredients, it) == 500 }
             .maxOf { score(ingredients, it) }

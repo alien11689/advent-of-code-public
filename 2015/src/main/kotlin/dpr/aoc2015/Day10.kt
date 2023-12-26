@@ -11,9 +11,10 @@ object Day10 {
 
     private fun part1And2(input: String) {
         var cur = input.toList()
+        val interestingIterations = setOf(40, 50)
         (1..50).forEach { iter ->
             cur = next(cur)
-            if (iter in setOf(40, 50)) {
+            if (iter in interestingIterations) {
                 println(cur.size)
             }
         }

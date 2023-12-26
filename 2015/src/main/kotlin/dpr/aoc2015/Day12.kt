@@ -6,12 +6,12 @@ object Day12 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/12/input.txt")
-        println(part1(input))
-        println(part2(input))
+        val (json, _) = parseJson(input.first())
+        println(part1(json))
+        println(part2(json))
     }
 
-    private fun part1(input: List<String>): Int {
-        val (json, _) = parseJson(input.first())
+    private fun part1(json: Json): Int {
         return sumNumbers(json)
     }
 
@@ -107,8 +107,7 @@ object Day12 {
         throw RuntimeException("Invalid end $i")
     }
 
-    private fun part2(input: List<String>): Any {
-        val (json, _) = parseJson(input.first())
+    private fun part2(json: Json): Any {
         return sumNumbersFilteringRed(json)
     }
 

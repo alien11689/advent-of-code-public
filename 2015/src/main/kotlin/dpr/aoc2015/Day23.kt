@@ -6,12 +6,12 @@ object Day23 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/23/input.txt")
-        println(part1(input))
-        println(part2(input))
+        val instr = readInput(input)
+        println(part1(instr))
+        println(part2(instr))
     }
 
-    private fun part1(input: List<String>): Any {
-        val instr = readInput(input)
+    private fun part1(instr: List<List<String>>): Any {
         val reg = mutableMapOf(Pair("a", 0), Pair("b", 0))
         runProgram(instr, reg)
         return reg["b"]!!
@@ -47,8 +47,7 @@ object Day23 {
         }
     }
 
-    private fun part2(input: List<String>): Any {
-        val instr = readInput(input)
+    private fun part2(instr: List<List<String>>): Any {
         val reg = mutableMapOf(Pair("a", 1), Pair("b", 0))
         runProgram(instr, reg)
         return reg["b"]!!

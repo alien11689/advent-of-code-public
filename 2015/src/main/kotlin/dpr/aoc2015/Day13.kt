@@ -6,12 +6,12 @@ object Day13 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/13/input.txt")
-        println(part1(input))
-        println(part2(input))
+        val paths = readPaths(input)
+        println(part1(paths))
+        println(part2(paths))
     }
 
-    private fun part1(input: List<String>): Int {
-        val paths = readPaths(input)
+    private fun part1(paths: Map<Set<String>, Int>): Int {
         return generateRoutes(paths.keys.flatten().toSet(), paths).maxOf { it.second + paths[setOf(it.first.first(), it.first.last())]!! }
     }
 
@@ -43,8 +43,7 @@ object Day13 {
         }.toSet()
     }
 
-    private fun part2(input: List<String>): Any {
-        val paths = readPaths(input)
+    private fun part2(paths: MutableMap<Set<String>, Int>): Any {
         paths.keys.flatten().toSet().forEach {
             paths[setOf("me", it)] = 0
         }

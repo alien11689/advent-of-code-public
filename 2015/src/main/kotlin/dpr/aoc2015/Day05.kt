@@ -14,42 +14,45 @@ object Day05 {
         return input
             .filter { line -> line.count { it in setOf('a', 'e', 'i', 'o', 'u') } >= 3 }
             .filter { inp -> setOf("ab", "cd", "pq", "xy").none { inp.contains(it) } }
-            .filter {
+            .count {
                 var i = 0
+                var res = false
                 while (i < it.length - 1) {
                     if (it[i] == it[i + 1]) {
-                        return@filter true
+                        res = true
+                        break
                     }
                     ++i
                 }
-                return@filter false
+                res
             }
-            .count()
     }
 
     private fun part2(input: List<String>): Any {
         return input
             .filter {
                 var i = 0
+                var res = false
                 while (i < it.length - 2) {
                     if (it[i] == it[i + 2]) {
-                        return@filter true
+                        res = true
+                        break
                     }
                     ++i
                 }
-                return@filter false
+                res
             }
-            .filter {
+            .count {
                 var i = 0
+                var res = false
                 while (i < it.length - 2) {
                     if (it.substring(i + 2).contains(it.substring(i, i + 2))) {
-                        return@filter true
+                        res = true
+                        break
                     }
                     ++i
                 }
-                return@filter false
+                res
             }
-            .count()
-
     }
 }
