@@ -88,6 +88,7 @@ fn solve_part2(lines: &Vec<String>) -> i32 {
     res
 }
 
+#[cfg(not(tarpaulin_include))]
 pub fn main(path: &String) {
     let full_path = format!("{path}/resources/2023/02/input.txt");
     let lines = read_file_lines(&full_path);

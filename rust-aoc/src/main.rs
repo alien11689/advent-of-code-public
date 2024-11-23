@@ -4,6 +4,7 @@ mod year2023;
 
 use std::env;
 
+#[cfg(not(tarpaulin_include))]
 fn main() {
     let params: Vec<String> = env::args().skip(1).collect();
     let default_path_prefix = String::from(".");

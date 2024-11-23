@@ -31,6 +31,7 @@ fn solve_part2(input: &str) -> i32 {
     panic!("No basement for {input}")
 }
 
+#[cfg(not(tarpaulin_include))]
 pub fn main(path: &String) {
     let full_path = format!("{path}/resources/2015/01/input.txt");
     let lines = read_file_lines(&full_path);

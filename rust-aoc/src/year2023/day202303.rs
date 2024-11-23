@@ -70,6 +70,7 @@ fn solve_part2(lines: &[String]) -> u32 {
         .unwrap()
 }
 
+#[cfg(not(tarpaulin_include))]
 pub fn main(path: &String) {
     let full_path = format!("{path}/resources/2023/03/input.txt");
     let lines = read_file_lines(&full_path);
