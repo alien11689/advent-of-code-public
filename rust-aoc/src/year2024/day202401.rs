@@ -18,7 +18,7 @@ fn read_locations(lines: &Vec<String>) -> (Vec<i32>, Vec<i32>) {
     (lefts, rights)
 }
 
-fn solve_part1(lefts: &Vec<i32>, rights: &Vec<i32>) -> i32 {
+fn solve_part1(lefts: &[i32], rights: &[i32]) -> i32 {
     lefts
         .iter()
         .zip(rights.iter())
@@ -26,7 +26,7 @@ fn solve_part1(lefts: &Vec<i32>, rights: &Vec<i32>) -> i32 {
         .sum()
 }
 
-fn solve_part2(lefts: &Vec<i32>, rights: &Vec<i32>) -> i32 {
+fn solve_part2(lefts: &[i32], rights: &[i32]) -> i32 {
     let mut res = 0;
     for left in lefts {
         let count = rights.iter().filter(|&right| *right == *left).count() as i32;
