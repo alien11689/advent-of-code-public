@@ -2,11 +2,6 @@ use crate::helper::read_file_lines;
 use regex::Regex;
 use std::vec::Vec;
 
-fn solve_part1(lines: &Vec<String>) -> i32 {
-    let (lefts, rights) = read_locations(lines);
-    lefts.iter().zip(rights.iter()).map(|(a,b) | (a-b).abs() ).sum()
-}
-
 fn read_locations(lines: &Vec<String>) -> (Vec<i32>, Vec<i32>) {
     let regex = Regex::new(r" +").expect("Invalid regex");
     let mut lefts: Vec<i32> = Vec::new();
@@ -23,11 +18,14 @@ fn read_locations(lines: &Vec<String>) -> (Vec<i32>, Vec<i32>) {
     (lefts, rights)
 }
 
-fn solve_part2(lines: &Vec<String>) -> i32 {
-    let (lefts, rights) = read_locations(lines);
+fn solve_part1(lefts: &Vec<i32>, rights: &Vec<i32>) -> i32 {
+    lefts.iter().zip(rights.iter()).map(|(a,b) | (a-b).abs() ).sum()
+}
+
+fn solve_part2(lefts: &Vec<i32>, rights: &Vec<i32>) -> i32 {
     let mut res = 0;
     for left in lefts {
-        let count = rights.iter().filter(|&right | *right == left).count() as i32;
+        let count = rights.iter().filter(|&right | *right == *left).count() as i32;
         res += left * count;
     }
     res
@@ -37,11 +35,12 @@ fn solve_part2(lines: &Vec<String>) -> i32 {
 pub fn main(path: &String) {
     let full_path = format!("{path}/resources/2024/01/input.txt");
     let lines = read_file_lines(&full_path);
+    let (lefts, rights) = read_locations(&lines);
     println!("Day 01");
     println!("Part 1");
-    println!("{}", solve_part1(&lines));
+    println!("{}", solve_part1(&lefts, &rights));
     println!("Part 2");
-    println!("{}", solve_part2(&lines));
+    println!("{}", solve_part2(&lefts, &rights));
 }
 
 #[cfg(test)]
@@ -51,12 +50,14 @@ mod tests {
     #[test]
     fn should_part1_pass_test_input1() {
         let lines = read_file_lines("./resources/2024/01/test1.txt");
-        assert_eq!(solve_part1(&lines), 11);
+        let (lefts, rights) = read_locations(&lines);
+        assert_eq!(solve_part1(&lefts, &rights), 11);
     }
 
     #[test]
     fn should_part2_pass_test_input2() {
         let lines = read_file_lines("./resources/2024/01/test1.txt");
-        assert_eq!(solve_part2(&lines), 31);
+        let (lefts, rights) = read_locations(&lines);
+        assert_eq!(solve_part2(&lefts, &rights), 31);
     }
 }
