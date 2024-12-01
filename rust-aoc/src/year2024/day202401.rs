@@ -3,6 +3,11 @@ use regex::Regex;
 use std::vec::Vec;
 
 fn solve_part1(lines: &Vec<String>) -> i32 {
+    let (lefts, rights) = read_locations(lines);
+    lefts.iter().zip(rights.iter()).map(|(a,b) | (a-b).abs() ).sum()
+}
+
+fn read_locations(lines: &Vec<String>) -> (Vec<i32>, Vec<i32>) {
     let regex = Regex::new(r" +").expect("Invalid regex");
     let mut lefts: Vec<i32> = Vec::new();
     let mut rights: Vec<i32> = Vec::new();
@@ -15,11 +20,17 @@ fn solve_part1(lines: &Vec<String>) -> i32 {
     }
     lefts.sort();
     rights.sort();
-    lefts.iter().zip(rights.iter()).map(|(a,b) | (a-b).abs() ).sum()
+    (lefts, rights)
 }
 
-fn solve_part2(lines: &Vec<String>) -> u32 {
-    todo!()
+fn solve_part2(lines: &Vec<String>) -> i32 {
+    let (lefts, rights) = read_locations(lines);
+    let mut res = 0;
+    for left in lefts {
+        let count = rights.iter().filter(|&right | *right == left).count() as i32;
+        res += left * count;
+    }
+    res
 }
 
 #[cfg(not(tarpaulin_include))]
