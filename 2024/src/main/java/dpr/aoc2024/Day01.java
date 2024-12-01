@@ -1,10 +1,11 @@
 package dpr.aoc2024;
 
 import dpr.commons.Util;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 class Day01 implements Day {
@@ -17,8 +18,9 @@ class Day01 implements Day {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
-            System.out.println(part1(lines));
-            System.out.println(part2(lines));
+            Locations result = getLocations(lines);
+            System.out.println(part1(result));
+            System.out.println(part2(result));
         });
     }
 
@@ -27,26 +29,20 @@ class Day01 implements Day {
         return 1;
     }
 
-    private Object part1(List<String> lines) {
-        var lefts = new ArrayList<Integer>();
-        var rights = new ArrayList<Integer>();
-        lines.forEach(line -> {
-            var parts = line.split(" +");
-            int left = Integer.parseInt(parts[0]);
-            int right = Integer.parseInt(parts[1]);
-            lefts.add(left);
-            rights.add(right);
-        });
-        Collections.sort(lefts);
-        Collections.sort(rights);
+    record Locations(List<Integer> lefts, List<Integer> rights) {}
+
+    private static int part1(Locations result) {
+        Collections.sort(result.lefts());
+        Collections.sort(result.rights());
         var res = 0;
-        for(int i = 0; i < lefts.size(); i++) {
-            res += Math.abs(lefts.get(i) - rights.get(i));
+        for(int i = 0; i < result.lefts().size(); i++) {
+            res += Math.abs(result.lefts().get(i) - result.rights().get(i));
         }
         return res;
     }
 
-    private Object part2(List<String> lines) {
+    @NotNull
+    private static Locations getLocations(List<String> lines) {
         var lefts = new ArrayList<Integer>();
         var rights = new ArrayList<Integer>();
         lines.forEach(line -> {
@@ -56,10 +52,15 @@ class Day01 implements Day {
             lefts.add(left);
             rights.add(right);
         });
+        return new Locations(lefts, rights);
+    }
+
+    private static long part2(Locations result) {
         var res = 0L;
-        for (int left : lefts) {
-            long count = rights.stream().filter(r -> r.equals(left)).count();
-            res += left * count;
+        var mem = new HashMap<Integer, Long>();
+        for (int left : result.lefts) {
+            mem.computeIfAbsent(left, l-> result.rights.stream().filter(r -> r.equals(l)).count());
+            res += left * mem.get(left);
         }
         return res;
     }
