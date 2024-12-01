@@ -19,13 +19,17 @@ fn read_locations(lines: &Vec<String>) -> (Vec<i32>, Vec<i32>) {
 }
 
 fn solve_part1(lefts: &Vec<i32>, rights: &Vec<i32>) -> i32 {
-    lefts.iter().zip(rights.iter()).map(|(a,b) | (a-b).abs() ).sum()
+    lefts
+        .iter()
+        .zip(rights.iter())
+        .map(|(a, b)| (a - b).abs())
+        .sum()
 }
 
 fn solve_part2(lefts: &Vec<i32>, rights: &Vec<i32>) -> i32 {
     let mut res = 0;
     for left in lefts {
-        let count = rights.iter().filter(|&right | *right == *left).count() as i32;
+        let count = rights.iter().filter(|&right| *right == *left).count() as i32;
         res += left * count;
     }
     res
