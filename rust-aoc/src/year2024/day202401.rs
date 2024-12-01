@@ -36,10 +36,8 @@ pub fn main(path: &String) {
     let full_path = format!("{path}/resources/2024/01/input.txt");
     let lines = read_file_lines(&full_path);
     let (lefts, rights) = read_locations(&lines);
-    println!("Day 01");
-    println!("Part 1");
+    println!("Day01");
     println!("{}", solve_part1(&lefts, &rights));
-    println!("Part 2");
     println!("{}", solve_part2(&lefts, &rights));
 }
 
