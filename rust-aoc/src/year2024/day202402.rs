@@ -4,29 +4,33 @@ use std::collections::HashSet;
 use std::vec::Vec;
 
 fn solve_part1(lines: &Vec<String>) -> i32 {
-    let regex = Regex::new(r" +").unwrap();
-    let numbers: Vec<Vec<i32>> = lines
-        .iter()
-        .map(|line| {
-            regex
-                .split(line)
-                .map(|n| n.parse::<i32>().expect("valid number"))
-                .collect::<Vec<i32>>()
-        })
-        .collect();
+    let numbers = read_input(lines);
     let mut count = 0;
     for set in numbers {
         // println!("{:?}", set);
-        if is_safe(set) {
+        if is_safe(&set) {
             count += 1;
         }
     }
     count
 }
 
-fn is_safe(vec: Vec<i32>) -> bool {
+fn read_input(lines: &Vec<String>) -> Vec<Vec<i32>> {
+    let regex = Regex::new(r" +").unwrap();
+    lines
+            .iter()
+            .map(|line| {
+                regex
+                        .split(line)
+                        .map(|n| n.parse::<i32>().expect("valid number"))
+                        .collect::<Vec<i32>>()
+            })
+            .collect()
+}
+
+fn is_safe(vec: &Vec<i32>) -> bool {
     let mut diffs: Vec<i32> = Vec::new();
-    let mut prev: Option<i32> = None;
+    let mut prev: Option<&i32> = None;
     for cur in vec {
         match prev {
             None => {
@@ -38,11 +42,8 @@ fn is_safe(vec: Vec<i32>) -> bool {
             }
         }
     }
+    let valid: HashSet<i32> = HashSet::from([1,2,3]);
     // println!("{:?}", diffs);
-    let mut valid: HashSet<i32> = HashSet::new();
-    valid.insert(1);
-    valid.insert(2);
-    valid.insert(3);
     let correct = (diffs.iter().all(|i| *i > 0) || diffs.iter().all(|i| *i < 0))
         && diffs.iter().map(|i| i.abs()).all(|i| valid.contains(&i));
     // println!("{:?}", correct);
@@ -50,7 +51,33 @@ fn is_safe(vec: Vec<i32>) -> bool {
 }
 
 fn solve_part2(lines: &Vec<String>) -> i32 {
-    0 // TODO
+    let numbers = read_input(lines);
+    let mut count = 0;
+    for set in numbers {
+        // println!("{:?}", set);
+        if is_safe_with_damper(set) {
+            count += 1;
+        }
+    }
+    count
+}
+
+fn is_safe_with_damper(vec: Vec<i32>) -> bool {
+    if is_safe(&vec) {
+        return true
+    }
+    for (idx, _) in vec.iter().enumerate() {
+        let mut cur:Vec<i32> = Vec::new();
+        for (i, v) in vec.iter().enumerate() {
+            if i != idx {
+                cur.push(vec[i]);
+            }
+        }
+        if (is_safe(&cur)){
+            return true;
+        }
+    }
+    false
 }
 
 #[cfg(not(tarpaulin_include))]
