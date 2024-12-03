@@ -45,7 +45,6 @@ fn solve_part2(lines: &[String]) -> i32 {
             sum += calculate_sum(part);
         }
     }
-    // TODO
     sum
 }
 
