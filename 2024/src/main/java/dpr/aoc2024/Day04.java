@@ -2,6 +2,7 @@ package dpr.aoc2024;
 
 import dpr.commons.Point2D;
 import dpr.commons.Util;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,17 @@ class Day04 implements Day {
     }
 
     private Object part1(List<String> lines) {
+        var map = readMap(lines);
+        return map.entrySet()
+                .stream()
+                .filter(e -> x.equals(e.getValue()))
+                .map(e -> e.getKey())
+                .flatMap(p -> continueAfterX(p, map).stream())
+                .count();
+    }
+
+    @NotNull
+    private static Map<Point2D, Character> readMap(List<String> lines) {
         var map = new HashMap<Point2D, Character>();
         for (int y = 0; y < lines.size(); y++) {
             var line = lines.get(y).toCharArray();
@@ -41,12 +53,7 @@ class Day04 implements Day {
                 map.put(new Point2D(x, y), line[x]);
             }
         }
-        return map.entrySet()
-                .stream()
-                .filter(e -> x.equals(e.getValue()))
-                .map(e -> e.getKey())
-                .flatMap(p -> continueAfterX(p, map).stream())
-                .count();
+        return map;
     }
 
     private List<Set<Point2D>> continueAfterX(Point2D p, Map<Point2D, Character> map) {
@@ -66,6 +73,26 @@ class Day04 implements Day {
     }
 
     private Object part2(List<String> lines) {
-        return null;
+        var map = readMap(lines);
+        var count = 0;
+        for(int y =0; y< lines.size() - 2; ++y) {
+            for(int x =0; x< lines.get(y).length() - 2; ++x) {
+                if (a.equals(map.get(new Point2D(x+1, y+1)))) {
+                    if (m.equals(map.get(new Point2D(x, y))) && m.equals(map.get(new Point2D(x + 2, y))) && s.equals(map.get(new Point2D(x, y + 2))) && s.equals(map.get(new Point2D(x + 2, y + 2)))) {
+                        ++count;
+                    }
+                    if (m.equals(map.get(new Point2D(x, y))) && m.equals(map.get(new Point2D(x, y + 2))) && s.equals(map.get(new Point2D(x + 2, y))) && s.equals(map.get(new Point2D(x + 2, y + 2)))) {
+                        ++count;
+                    }
+                    if (s.equals(map.get(new Point2D(x, y))) && s.equals(map.get(new Point2D(x + 2, y))) && m.equals(map.get(new Point2D(x, y + 2))) && m.equals(map.get(new Point2D(x + 2, y + 2)))) {
+                        ++count;
+                    }
+                    if (s.equals(map.get(new Point2D(x, y))) && s.equals(map.get(new Point2D(x, y + 2))) && m.equals(map.get(new Point2D(x + 2, y))) && m.equals(map.get(new Point2D(x + 2, y + 2)))) {
+                        ++count;
+                    }
+                }
+            }
+        }
+        return count;
     }
 }
