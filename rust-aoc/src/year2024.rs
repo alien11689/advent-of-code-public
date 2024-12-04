@@ -2,6 +2,7 @@ mod day202401;
 mod day202402;
 mod day202403;
 mod day202404;
+mod day202405;
 
 #[cfg(not(tarpaulin_include))]
 pub fn main(path_prefix: &String) {
@@ -10,6 +11,7 @@ pub fn main(path_prefix: &String) {
         day202402::main,
         day202403::main,
         day202404::main,
+        day202405::main,
     ];
     println!("Year 2024");
     for day in days {
