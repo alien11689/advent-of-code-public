@@ -57,4 +57,6 @@ data class Point2D(val x: Int, val y: Int) : Comparable<Point2D> {
         x = if (x < 0) (x + (x.absoluteValue / xSize + 1) * xSize) % xSize else x % xSize,
         y = if (y < 0) (y + (y.absoluteValue / ySize + 1) * ySize) % ySize else y % ySize,
     )
+
+    fun move(dx: Int, dy: Int): Point2D = copy(x = x + dx, y = y + dy)
 }
