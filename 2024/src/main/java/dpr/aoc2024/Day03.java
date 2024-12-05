@@ -35,7 +35,7 @@ class Day03 implements Day {
         Pattern pattern = Pattern.compile("mul\\((\\d{1,3}),(\\d{1,3})\\)");
         Matcher matcher = pattern.matcher(program);
         var sum = 0L;
-        while(matcher.find()) {
+        while (matcher.find()) {
             long left = Integer.parseInt(matcher.group(1));
             long right = Integer.parseInt(matcher.group(2));
             sum += left * right;
@@ -48,12 +48,12 @@ class Day03 implements Day {
         String[] split = program.split("((?=do(n't|)\\(\\))|(?<=do(n't|)\\(\\)))");
         boolean enabled = true;
         long sum = 0L;
-        for(String cur : split) {
-            if(cur.equals("do()")) {
+        for (String cur : split) {
+            if (cur.equals("do()")) {
                 enabled = true;
-            }else if (cur.equals("don't()")) {
+            } else if (cur.equals("don't()")) {
                 enabled = false;
-            }else if (enabled) {
+            } else if (enabled) {
                 sum += calculateSum(cur);
             }
         }

@@ -58,13 +58,13 @@ class Day04 implements Day {
 
     private List<Set<Point2D>> continueAfterX(Point2D p, Map<Point2D, Character> map) {
         List<Set<Point2D>> xmas = new ArrayList<>();
-        for (Point2D possibleM : p.adjacentPoints()){
-            if (m.equals(map.get(possibleM))){
-               int dx = possibleM.getX() - p.getX();
-               int dy = possibleM.getY() - p.getY();
+        for (Point2D possibleM : p.adjacentPoints()) {
+            if (m.equals(map.get(possibleM))) {
+                int dx = possibleM.getX() - p.getX();
+                int dy = possibleM.getY() - p.getY();
                 Point2D possibleA = possibleM.move(dx, dy);
                 Point2D possibleS = possibleA.move(dx, dy);
-                if(a.equals(map.get(possibleA)) && s.equals(map.get(possibleS))){
+                if (a.equals(map.get(possibleA)) && s.equals(map.get(possibleS))) {
                     xmas.add(Set.of(p, possibleM, possibleA, possibleS));
                 }
             }
@@ -75,9 +75,9 @@ class Day04 implements Day {
     private Object part2(List<String> lines) {
         var map = readMap(lines);
         var count = 0;
-        for(int y =0; y< lines.size() - 2; ++y) {
-            for(int x =0; x< lines.get(y).length() - 2; ++x) {
-                if (a.equals(map.get(new Point2D(x+1, y+1)))) {
+        for (int y = 0; y < lines.size() - 2; ++y) {
+            for (int x = 0; x < lines.get(y).length() - 2; ++x) {
+                if (a.equals(map.get(new Point2D(x + 1, y + 1)))) {
                     if (m.equals(map.get(new Point2D(x, y))) && m.equals(map.get(new Point2D(x + 2, y))) && s.equals(map.get(new Point2D(x, y + 2))) && s.equals(map.get(new Point2D(x + 2, y + 2)))) {
                         ++count;
                     }

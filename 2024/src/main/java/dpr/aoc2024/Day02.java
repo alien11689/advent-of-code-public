@@ -44,20 +44,20 @@ class Day02 implements Day {
     }
 
     private Object part2(List<String> lines) {
-       return lines.stream()
+        return lines.stream()
                 .map(line -> Arrays.stream(line.split(" +")).map(Integer::parseInt).toList())
                 .filter(line -> isSafeWithDamper(line))
                 .count();
     }
 
     private boolean isSafeWithDamper(List<Integer> numbers) {
-        if(isSafe(numbers)) {
+        if (isSafe(numbers)) {
             return true;
         }
-        for(int i = 0; i < numbers.size(); i++) {
+        for (int i = 0; i < numbers.size(); i++) {
             var cur = new ArrayList<Integer>(numbers);
             cur.remove(i);
-            if(isSafe(cur)) {
+            if (isSafe(cur)) {
                 return true;
             }
         }

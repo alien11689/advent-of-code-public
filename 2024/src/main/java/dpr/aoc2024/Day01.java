@@ -29,13 +29,14 @@ class Day01 implements Day {
         return 1;
     }
 
-    record Locations(List<Integer> lefts, List<Integer> rights) {}
+    record Locations(List<Integer> lefts, List<Integer> rights) {
+    }
 
     private static int part1(Locations result) {
         Collections.sort(result.lefts());
         Collections.sort(result.rights());
         var res = 0;
-        for(int i = 0; i < result.lefts().size(); i++) {
+        for (int i = 0; i < result.lefts().size(); i++) {
             res += Math.abs(result.lefts().get(i) - result.rights().get(i));
         }
         return res;
@@ -59,7 +60,7 @@ class Day01 implements Day {
         var res = 0L;
         var mem = new HashMap<Integer, Long>();
         for (int left : result.lefts) {
-            mem.computeIfAbsent(left, l-> result.rights.stream().filter(r -> r.equals(l)).count());
+            mem.computeIfAbsent(left, l -> result.rights.stream().filter(r -> r.equals(l)).count());
             res += left * mem.get(left);
         }
         return res;
