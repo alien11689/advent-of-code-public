@@ -50,7 +50,7 @@ class Day06 implements Day {
         Set<Point2D> visited = travel(lines, current, blocks);
         System.out.println(visited.size());
         Set<Point2D> possibleObstacle = visited.stream()
-                .filter(p -> !p.equals(starting.point) && !blocks.contains(p))
+                .filter(p -> !p.equals(starting.point))
                 .collect(Collectors.toSet());
         int count = 0;
         for (Point2D obstacle : possibleObstacle) {
