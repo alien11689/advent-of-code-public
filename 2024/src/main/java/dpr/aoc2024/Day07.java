@@ -29,6 +29,7 @@ class Day07 implements Day {
 
     private Object part1(List<String> lines) {
         return lines.stream()
+                .parallel()
                 .mapToLong(l -> calculatePart1(l, false))
                 .sum();
     }
@@ -70,6 +71,7 @@ class Day07 implements Day {
 
     private Object part2(List<String> lines) {
         return lines.stream()
+                .parallel()
                 .mapToLong(l -> calculatePart1(l, true))
                 .sum();
     }

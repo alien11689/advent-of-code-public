@@ -52,16 +52,15 @@ class Day06 implements Day {
         Set<Point2D> possibleObstacle = visited.stream()
                 .filter(p -> !p.equals(starting.point))
                 .collect(Collectors.toSet());
-        int count = 0;
-        for (Point2D obstacle : possibleObstacle) {
-            HashSet<Point2D> newBlocks = new HashSet<>(blocks);
-            newBlocks.add(obstacle);
-            Set<Point2D> newVisited = travel(lines, current, newBlocks);
-            if (newVisited.isEmpty()) {
-                ++count;
-//                System.out.println("Obstacle: " + obstacle);
-            }
-        }
+        long count = possibleObstacle.stream()
+                .parallel()
+                .filter(obstacle -> {
+                    Set<Point2D> newBlocks = new HashSet<>(blocks);
+                    newBlocks.add(obstacle);
+                    Set<Point2D> newVisited = travel(lines, starting.point, newBlocks);
+                    return newVisited.isEmpty();
+                })
+                .count();
         System.out.println(count);
     }
 
