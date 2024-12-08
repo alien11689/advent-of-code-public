@@ -30,14 +30,14 @@ class Day07 implements Day {
     private Object part1(List<String> lines) {
         return lines.stream()
                 .parallel()
-                .mapToLong(l -> calculatePart1(l, false))
+                .mapToLong(l -> calculate(l, false))
                 .sum();
     }
 
-    record Partial(long first, List<Long> rest) {
+    record Partial(long first, int idx) {
     }
 
-    private long calculatePart1(String line, boolean part2) {
+    private long calculate(String line, boolean part2) {
 //        System.out.println("Checking "+ line);
         String[] parts = line.split(": ");
         long target = Long.parseLong(parts[0]);
@@ -45,25 +45,24 @@ class Day07 implements Day {
                 .map(Long::parseLong)
                 .toList();
         Queue<Partial> q = new LinkedList<>();
-        q.offer(new Partial(values.getFirst(), values.stream().skip(1).toList()));
+        q.offer(new Partial(values.getFirst(), 1));
         while (!q.isEmpty()) {
             Partial p = q.poll();
 //            System.out.println("Checking "+ p + " for " + target);
             if (p.first > target) {
                 continue;
             }
-            if (p.rest.isEmpty()) {
+            if (p.idx >= values.size()) {
                 if (p.first == target) {
                     return target;
                 }
                 continue;
             }
-            long next = p.rest.getFirst();
-            List<Long> nextRest = p.rest.stream().skip(1).toList();
-            q.offer(new Partial(p.first + next, nextRest));
-            q.offer(new Partial(p.first * next, nextRest));
+            long next = values.get(p.idx);
+            q.offer(new Partial(p.first + next, p.idx + 1));
+            q.offer(new Partial(p.first * next, p.idx + 1));
             if (part2) {
-                q.offer(new Partial(Long.parseLong(p.first + "" + next), nextRest));
+                q.offer(new Partial(Long.parseLong(p.first + "" + next), p.idx + 1));
             }
         }
         return 0L;
@@ -72,7 +71,7 @@ class Day07 implements Day {
     private Object part2(List<String> lines) {
         return lines.stream()
                 .parallel()
-                .mapToLong(l -> calculatePart1(l, true))
+                .mapToLong(l -> calculate(l, true))
                 .sum();
     }
 
