@@ -2,8 +2,7 @@ out
 .sdkmanrc
 a.out
 *.c~
-test*.txt
-input.txt
+*.txt
 *.html
 *.js
 *.css
