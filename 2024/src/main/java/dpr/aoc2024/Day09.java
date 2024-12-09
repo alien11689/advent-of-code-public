@@ -89,11 +89,9 @@ class Day09 implements Day {
                 Elem checked = elems.get(i);
                 if (checked.empty && checked.count >= current.count) {
                     // remove current
-                    elems.remove(current);
-                    elems.add(currentIdx, new Elem(--lowestFileId, current.count, true));
+                    elems.set(currentIdx, new Elem(--lowestFileId, current.count, true));
                     // place current in new place
-                    elems.remove(checked);
-                    elems.add(i, current);
+                    elems.set(i, current);
                     if (checked.count > current.count) {
                         elems.add(i + 1, new Elem(checked.fileId, checked.count - current.count, true));
                     }
