@@ -1,10 +1,12 @@
 package dpr.aoc2024;
 
 import dpr.commons.Util;
+import kotlin.Pair;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Stack;
+import java.util.Map;
 
 class Day11 implements Day {
     public static void main(String... args) {
@@ -45,29 +47,32 @@ class Day11 implements Day {
     }
 
     private Object part1(List<String> lines) {
-        Stack<Item> q = new Stack<>();
-        Arrays.stream(lines.get(0).split(" ")).forEach(s -> q.push(new Item(Long.parseLong(s), 0)));
-        return countItems(q, 25);
-    }
-
-    private static long countItems(Stack<Item> q, int max) {
-        long count = 0;
-        while (!q.isEmpty()) {
-            Item cur = q.pop();
-            for (Item item : cur.next()) {
-                if (item.iteration == max) {
-                    ++count;
-                } else {
-                    q.push(item);
-                }
-            }
-        }
-        return count;
+        return calculate(lines, 25);
     }
 
     private Object part2(List<String> lines) {
-        Stack<Item> q = new Stack<>();
-        Arrays.stream(lines.get(0).split(" ")).forEach(s -> q.push(new Item(Long.parseLong(s), 0)));
-        return countItems(q, 75);
+        return calculate(lines, 75);
+    }
+
+    private static long calculate(List<String> lines, int max) {
+        Map<Pair<Long, Integer>, Long> memory = new HashMap<>();
+        return Arrays.stream(lines.get(0).split(" "))
+                .mapToLong(s -> countItems(new Item(Long.parseLong(s), 0), max, memory))
+                .sum();
+    }
+
+    private static long countItems(Item item, int max, Map<Pair<Long, Integer>, Long> memory) {
+        if (item.iteration == max) {
+            return 1;
+        } else {
+            Pair<Long, Integer> key = new Pair<>(item.num, item.iteration);
+            if (memory.containsKey(key)) {
+//                System.out.println("Cached used for key " + key);
+                return memory.get(key);
+            }
+            long sum = item.next().stream().mapToLong(i -> countItems(i, max, memory)).sum();
+            memory.put(key, sum);
+            return sum;
+        }
     }
 }
