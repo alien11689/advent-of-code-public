@@ -1,5 +1,6 @@
 package dpr.aoc2024;
 
+import dpr.commons.Dir;
 import dpr.commons.Point2D;
 import dpr.commons.Util;
 import org.jetbrains.annotations.NotNull;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 class Day12 implements Day {
     public static void main(String... args) {
@@ -86,6 +88,49 @@ class Day12 implements Day {
     }
 
     private Object part2(List<String> lines) {
-        return null;
+        Map<Point2D, Character> map = readMap(lines);
+        Map<Point2D, Character> mapDuplicate = new HashMap<>(map);
+        long result = 0;
+        while (!mapDuplicate.isEmpty()) {
+            Map.Entry<Point2D, Character> root = mapDuplicate.entrySet().stream().findAny().get();
+            Character type = root.getValue();
+            Set<Point2D> points = findSingleRegion(root.getKey(), type, map);
+            points.forEach(mapDuplicate::remove);
+            long area = points.size();
+            long sides = 0;
+            for (Dir d : Dir.getEntries()) {
+                Set<Point2D> border = points.stream().map(p -> p.move(d, 1)).filter(p -> !points.contains(p)).collect(Collectors.toSet());
+                sides += clustersCross(border).size();
+            }
+//            System.out.println("For " + type + " area is " + area + " and sides are " + sides);
+            result += area * sides;
+        }
+        return result;
+    }
+
+    private Set<Set<Point2D>> clustersCross(Set<Point2D> borderUp) {
+        Set<Set<Point2D>> result = new HashSet<>();
+        Set<Point2D> copy = new HashSet<>(borderUp);
+        while (!copy.isEmpty()) {
+            Point2D root = copy.stream().findAny().get();
+            Queue<Point2D> q = new LinkedList<>();
+            q.offer(root);
+            Set<Point2D> visited = new HashSet<>();
+            while (!q.isEmpty()) {
+                Point2D cur = q.poll();
+                if (visited.contains(cur)) {
+                    continue;
+                }
+                visited.add(cur);
+                cur.neighboursCross().forEach(n -> {
+                    if (copy.contains(n) && !visited.contains(n)) {
+                        q.offer(n);
+                    }
+                });
+            }
+            copy.removeAll(visited);
+            result.add(visited);
+        }
+        return result;
     }
 }

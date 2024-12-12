@@ -15,6 +15,8 @@ data class Point2D(val x: Int, val y: Int) : Comparable<Point2D> {
         Point2D(x, y + 1),
     )
 
+    fun neighbours(): Set<Point2D> = adjacentPoints();
+
     fun up(steps: Int = 1): Point2D = this.copy(y = y - steps)
     fun down(steps: Int = 1): Point2D = this.copy(y = y + steps)
     fun left(steps: Int = 1): Point2D = this.copy(x = x - steps)
