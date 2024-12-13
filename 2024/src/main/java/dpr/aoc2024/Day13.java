@@ -26,40 +26,14 @@ class Day13 implements Day {
     }
 
     private Object part1(List<String> lines) {
-        long res = 0;
-        for (int i = 0; i < lines.size(); i += 3) {
-            String[] split1 = lines.get(i).split("[+,]");
-            int ax = Integer.parseInt(split1[1]);
-            int ay = Integer.parseInt(split1[3]);
-            String[] split2 = lines.get(i + 1).split("[+,]");
-            int bx = Integer.parseInt(split2[1]);
-            int by = Integer.parseInt(split2[3]);
-            String[] split3 = lines.get(i + 2).split("[=,]");
-            int cx = Integer.parseInt(split3[1]);
-            int cy = Integer.parseInt(split3[3]);
-//            System.out.println("ax=" + ax + ", ay=" + ay + ", " + "bx=" + bx + ", by=" + by + ", " + "cx=" + cx + ", cy=" + cy);
-            res += getPartialResultIterative(cx, bx, cy, by, ax, ay);
-        }
-        return res;
-    }
-
-    private static long getPartialResultIterative(long cx, int bx, long cy, int by, int ax, int ay) {
-        for (long b = 100; b >= 0; --b) {
-            long resX = cx - b * bx;
-            long resY = cy - b * by;
-            if (resX % ax == 0 && resY % ay == 0) {
-                long a1 = resX / ax;
-                long a2 = resY / ay;
-                if (a1 == a2 && a1 <= 100) {
-//                    System.out.println("For b = " + b + " possible a = " + a1);
-                    return a1 * 3 + b;
-                }
-            }
-        }
-        return 0L;
+        return calculateWithBisect(lines, 0L);
     }
 
     private Object part2(List<String> lines) {
+        return calculateWithBisect(lines, 10000000000000L);
+    }
+
+    private static long calculateWithBisect(List<String> lines, long resultIncrement) {
         long res = 0;
         for (int i = 0; i < lines.size(); i += 3) {
             String[] split1 = lines.get(i).split("[+,]");
@@ -69,8 +43,8 @@ class Day13 implements Day {
             int bx = Integer.parseInt(split2[1]);
             int by = Integer.parseInt(split2[3]);
             String[] split3 = lines.get(i + 2).split("[=,]");
-            long cx = Integer.parseInt(split3[1]) + 10000000000000L;
-            long cy = Integer.parseInt(split3[3]) + 10000000000000L;
+            long cx = Integer.parseInt(split3[1]) + resultIncrement;
+            long cy = Integer.parseInt(split3[3]) + resultIncrement;
             long partialResult = 0L;
 //            System.out.println("ax=" + ax + ", ay=" + ay + ", " + "bx=" + bx + ", by=" + by + ", " + "cx=" + cx + ", cy=" + cy);
             long bmax = Math.min(cx / bx, cy / by);
@@ -111,24 +85,9 @@ class Day13 implements Day {
                     }
                 }
             }
-            // Checking iterative approach with bisect approach
-//            System.out.println("bmin " + bmin + ", bmax " + bmax);
-//            long partialResultIterative = getPartialResultIterative(cx, bx, cy, by, ax, ay);
-//            if (partialResultIterative != partialResult) {
-//                System.out.println("Expected " + partialResultIterative + " in " + i);
-//                throw new RuntimeException();
-//            }
             res += partialResult;
         }
         return res;
-
-        // 2359254444024 too low
-        // 2426218729726 too low
-        // 4852437459452 too low
-        // 64845514279255 not right
-        // 87341741353952 wrong
-        // 75118593608943 wrong
-        // 57883786554742 wrong
     }
 
     private static double calculateAdiff(long cx, long b, int bx, long cy, int by, int ax, int ay) {
