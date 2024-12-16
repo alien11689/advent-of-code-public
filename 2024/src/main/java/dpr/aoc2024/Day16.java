@@ -24,8 +24,7 @@ class Day16 implements Day {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test2.txt", dayNum()));
-            System.out.println(part1(lines));
-            System.out.println(part2(lines));
+            part1And2(lines);
         });
     }
 
@@ -34,13 +33,25 @@ class Day16 implements Day {
         return 16;
     }
 
-    record Pos(Point2D p, Dir d, int points) {
+    private void draw(Set<Point2D> blocks, Set<Point2D> bestPaths) {
+        List<Point2D> list = blocks.stream().sorted().toList();
+        Point2D last = list.getLast();
+        for (int y = 0; y <= last.getY(); ++y) {
+            for (int x = 0; x <= last.getX(); x++) {
+                Point2D cur = new Point2D(x, y);
+                System.out.print(blocks.contains(cur) ? '#' : bestPaths.contains(cur) ? 'O' : '.');
+            }
+            System.out.println();
+        }
+    }
+
+    record Position(Point2D p, Dir d, int points, Set<Point2D> visited) {
         Pair<Point2D, Dir> key() {
             return new Pair<>(p, d);
         }
     }
 
-    private Object part1(List<String> lines) {
+    private void part1And2(List<String> lines) {
         Point2D start = null;
         Point2D end = null;
         Set<Point2D> blocks = new HashSet<>();
@@ -59,9 +70,9 @@ class Day16 implements Day {
         }
 
         Point2D finalEnd = end;
-        PriorityQueue<Pos> q = new PriorityQueue<>(new Comparator<Pos>() {
+        PriorityQueue<Position> q = new PriorityQueue<>(new Comparator<Position>() {
             @Override
-            public int compare(Pos o1, Pos o2) {
+            public int compare(Position o1, Position o2) {
                 int manhattan1 = o1.p.manhattan(finalEnd);
                 int manhattan2 = o2.p.manhattan(finalEnd);
                 if (manhattan1 == manhattan2) {
@@ -73,15 +84,16 @@ class Day16 implements Day {
 
         Map<Pair<Point2D, Dir>, Integer> memory = new HashMap<>();
 
-        q.offer(new Pos(start, Dir.E, 0));
-        q.offer(new Pos(start, Dir.N, 1000));
-        q.offer(new Pos(start, Dir.S, 1000));
-        q.offer(new Pos(start, Dir.W, 2000));
+        q.offer(new Position(start, Dir.E, 0, Set.of(start)));
+        q.offer(new Position(start, Dir.N, 1000, Set.of(start)));
+        q.offer(new Position(start, Dir.S, 1000, Set.of(start)));
+        q.offer(new Position(start, Dir.W, 2000, Set.of(start)));
 
         Integer bestScore = Integer.MAX_VALUE;
+        Set<Point2D> bestPaths = new HashSet<>();
         while (!q.isEmpty()) {
 //            System.out.println("Q size is " + q.size());
-            Pos cur = q.poll();
+            Position cur = q.poll();
             Pair<Point2D, Dir> key = cur.key();
             if (memory.getOrDefault(key, Integer.MAX_VALUE) < cur.points) {
                 continue;
@@ -92,38 +104,48 @@ class Day16 implements Day {
             memory.put(key, cur.points);
             Point2D point = cur.p;
             int newScore = cur.points;
+            Set<Point2D> localVisited = new HashSet<>();
             while (true) {
                 Point2D np = point.move(cur.d, 1);
 //                System.out.println("Checking " + np);
                 if (blocks.contains(np)) {
-//                    if (newScore != cur.points) {
-//                        q.offer(new Pos(np, cur.d, newScore));
-//                    }
                     break;
                 }
                 ++newScore;
+                localVisited.add(np);
                 if (np.equals(end)) {
                     if (newScore < bestScore) {
-                        System.out.println("Found better score: " + newScore);
+//                        System.out.println("Found better score: " + newScore);
                         bestScore = newScore;
+                        Set<Point2D> newBestPaths = new HashSet<>(cur.visited);
+                        newBestPaths.addAll(localVisited);
+                        bestPaths = newBestPaths;
+//                        System.out.println("Local visited size is " + localVisited.size());
+//                        System.out.println("Best size is " + bestPaths.size());
+                    } else if (newScore == bestScore) {
+//                        System.out.println("Found the same score: " + newScore);
+                        bestPaths.addAll(cur.visited);
+                        bestPaths.addAll(localVisited);
+//                        System.out.println("Best size is " + bestPaths.size());
+//                        System.out.println("Local visited size is " + localVisited.size());
                     }
                     break;
                 }
                 Dir left = cur.d.turnLeft();
                 Dir right = cur.d.turnRight();
+                Set<Point2D> bestPathsForSplit = new HashSet<>(cur.visited);
+                bestPathsForSplit.addAll(localVisited);
                 if (!blocks.contains(np.move(left, 1))) {
-                    q.offer(new Pos(np, left, newScore + 1000));
+                    q.offer(new Position(np, left, newScore + 1000, bestPathsForSplit));
                 }
                 if (!blocks.contains(np.move(right, 1))) {
-                    q.offer(new Pos(np, right, newScore + 1000));
+                    q.offer(new Position(np, right, newScore + 1000, bestPathsForSplit));
                 }
                 point = np;
             }
         }
-        return bestScore;
-    }
-
-    private Object part2(List<String> lines) {
-        return null;
+//        draw(blocks, bestPaths);
+        System.out.println(bestScore); // part 1
+        System.out.println(bestPaths.size()); // part 2
     }
 }
