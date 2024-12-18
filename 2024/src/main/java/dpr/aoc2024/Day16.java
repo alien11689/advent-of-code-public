@@ -45,7 +45,7 @@ class Day16 implements Day {
         }
     }
 
-    record Position(Point2D p, Dir d, int points, Set<Point2D> visited) {
+    record Position(Point2D p, Dir d, int points, Set<Point2D> visited, int fitness) {
         Pair<Point2D, Dir> key() {
             return new Pair<>(p, d);
         }
@@ -69,25 +69,23 @@ class Day16 implements Day {
             }
         }
 
-        Point2D finalEnd = end;
         PriorityQueue<Position> q = new PriorityQueue<>(new Comparator<Position>() {
             @Override
             public int compare(Position o1, Position o2) {
-                int manhattan1 = o1.p.manhattan(finalEnd);
-                int manhattan2 = o2.p.manhattan(finalEnd);
-                if (manhattan1 == manhattan2) {
+                if (o1.fitness == o2.fitness) {
                     return Integer.compare(o1.points, o2.points);
                 }
-                return Integer.compare(manhattan1, manhattan2);
+                return Integer.compare(o1.fitness, o2.fitness);
             }
         });
 
         Map<Pair<Point2D, Dir>, Integer> memory = new HashMap<>();
 
-        q.offer(new Position(start, Dir.E, 0, Set.of(start)));
-        q.offer(new Position(start, Dir.N, 1000, Set.of(start)));
-        q.offer(new Position(start, Dir.S, 1000, Set.of(start)));
-        q.offer(new Position(start, Dir.W, 2000, Set.of(start)));
+        int initialFitness = start.manhattan(end);
+        q.offer(new Position(start, Dir.E, 0, Set.of(start), initialFitness));
+        q.offer(new Position(start, Dir.N, 1000, Set.of(start), initialFitness));
+        q.offer(new Position(start, Dir.S, 1000, Set.of(start), initialFitness));
+        q.offer(new Position(start, Dir.W, 2000, Set.of(start), initialFitness));
 
         Integer bestScore = Integer.MAX_VALUE;
         Set<Point2D> bestPaths = new HashSet<>();
@@ -135,11 +133,12 @@ class Day16 implements Day {
                 Dir right = cur.d.turnRight();
                 Set<Point2D> bestPathsForSplit = new HashSet<>(cur.visited);
                 bestPathsForSplit.addAll(localVisited);
+                int fitness = start.manhattan(end);
                 if (!blocks.contains(np.move(left, 1))) {
-                    q.offer(new Position(np, left, newScore + 1000, bestPathsForSplit));
+                    q.offer(new Position(np, left, newScore + 1000, bestPathsForSplit, fitness));
                 }
                 if (!blocks.contains(np.move(right, 1))) {
-                    q.offer(new Position(np, right, newScore + 1000, bestPathsForSplit));
+                    q.offer(new Position(np, right, newScore + 1000, bestPathsForSplit, fitness));
                 }
                 point = np;
             }
