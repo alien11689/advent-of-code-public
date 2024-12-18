@@ -61,4 +61,5 @@ data class Point2D(val x: Int, val y: Int) : Comparable<Point2D> {
     )
 
     fun move(dx: Int, dy: Int): Point2D = copy(x = x + dx, y = y + dy)
+    fun inRange(min: Int, max: Int): Boolean = x in min..max && y in min..max
 }
