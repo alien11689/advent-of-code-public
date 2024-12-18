@@ -35,7 +35,7 @@ class Day18 implements Day {
         return 18;
     }
 
-    record Position(Point2D p, int steps, int fitness, Set<Point2D> visited) {
+    record Position(Point2D p, int steps, int fitness, Position prev) {
     }
 
     private void part1And2(List<String> lines, int max, int take) {
@@ -54,6 +54,13 @@ class Day18 implements Day {
 //        }
         Position currentPath = iterate(max, start, target, blocks);
         System.out.println(currentPath.steps);
+
+        Set<Point2D> bestPath = new HashSet<>();
+        while (currentPath != null) {
+            bestPath.add(currentPath.p);
+            currentPath = currentPath.prev;
+        }
+
         List<Point2D> newBlocks = lines.stream().skip(take).map(line -> {
             String[] parts = line.split(",");
             return new Point2D(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
@@ -61,7 +68,7 @@ class Day18 implements Day {
         for (Point2D newBlock : newBlocks) {
 //            System.out.println("Checking " + newBlock);
             blocks.add(newBlock);
-            if (!currentPath.visited.contains(newBlock)) {
+            if (!bestPath.contains(newBlock)) {
                 continue;
             }
             Position result = iterate(max, start, target, blocks);
@@ -69,7 +76,11 @@ class Day18 implements Day {
                 System.out.println(newBlock.getX() + "," + newBlock.getY());
                 break;
             }
-            currentPath = result;
+            bestPath = new HashSet<>();
+            while (result != null) {
+                bestPath.add(result.p);
+                result = result.prev;
+            }
         }
     }
 
@@ -85,13 +96,13 @@ class Day18 implements Day {
                 return Integer.compare(o1.steps, o2.steps);
             }
         });
-        pq.offer(new Position(start, 0, start.manhattan(target), Set.of(start)));
+        pq.offer(new Position(start, 0, start.manhattan(target), null));
         int minimal = Integer.MAX_VALUE;
         Position best = null;
         while (!pq.isEmpty()) {
             Position cur = pq.poll();
 //            System.out.println("Pq size is " + pq.size() + " mem size is " + memory.size() + " cur " + cur);
-            if (memory.getOrDefault(cur.p, Integer.MAX_VALUE) < cur.steps) {
+            if (memory.getOrDefault(cur.p, Integer.MAX_VALUE) <= cur.steps) {
                 continue;
             }
             memory.put(cur.p, cur.steps);
@@ -108,11 +119,7 @@ class Day18 implements Day {
                     .stream()
                     .filter(p -> !blocks.contains(p) && p.inRange(0, max))
                     .filter(p -> memory.getOrDefault(p, Integer.MAX_VALUE) > cur.steps + 1)
-                    .forEach(next -> {
-                                Set<Point2D> visited = new HashSet<>(cur.visited);
-                                visited.add(next);
-                                pq.offer(new Position(next, cur.steps + 1, next.manhattan(target), visited));
-                            }
+                    .forEach(next -> pq.offer(new Position(next, cur.steps + 1, next.manhattan(target), cur))
                     );
         }
         return best;
