@@ -2,10 +2,10 @@ package dpr.aoc2024;
 
 import dpr.commons.Point2D;
 import dpr.commons.Util;
-import kotlin.Pair;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -35,7 +35,7 @@ class Day18 implements Day {
         return 18;
     }
 
-    record Position(Point2D p, int steps, int fitness) {
+    record Position(Point2D p, int steps, int fitness, Set<Point2D> visited) {
     }
 
     private void part1And2(List<String> lines, int max, int take) {
@@ -52,24 +52,28 @@ class Day18 implements Day {
 //            }
 //            System.out.println();
 //        }
-        int part1 = iterate(max, start, target, blocks);
-        System.out.println(part1);
-        String part2 = lines.stream().skip(take).map(line -> {
-                    String[] parts = line.split(",");
-                    return new Point2D(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
-                }).map(newBlock -> {
-                            blocks.add(newBlock);
-                            int minimal = iterate(max, start, target, blocks);
-                            return new Pair<>(newBlock, minimal);
-                        }
-                ).filter(p -> p.getSecond() == Integer.MAX_VALUE)
-                .findFirst()
-                .map(p -> p.getFirst().getX() + "," + p.getFirst().getY())
-                .get();
-        System.out.println(part2);
+        Position currentPath = iterate(max, start, target, blocks);
+        System.out.println(currentPath.steps);
+        List<Point2D> newBlocks = lines.stream().skip(take).map(line -> {
+            String[] parts = line.split(",");
+            return new Point2D(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+        }).toList();
+        for (Point2D newBlock : newBlocks) {
+//            System.out.println("Checking " + newBlock);
+            blocks.add(newBlock);
+            if (!currentPath.visited.contains(newBlock)) {
+                continue;
+            }
+            Position result = iterate(max, start, target, blocks);
+            if (result == null) {
+                System.out.println(newBlock.getX() + "," + newBlock.getY());
+                break;
+            }
+            currentPath = result;
+        }
     }
 
-    private static int iterate(int max, Point2D start, Point2D target, Set<Point2D> blocks) {
+    private static Position iterate(int max, Point2D start, Point2D target, Set<Point2D> blocks) {
         Map<Point2D, Integer> memory = new HashMap<>();
         PriorityQueue<Position> pq = new PriorityQueue<>(new Comparator<Position>() {
             @Override
@@ -81,8 +85,9 @@ class Day18 implements Day {
                 return Integer.compare(o1.steps, o2.steps);
             }
         });
-        pq.offer(new Position(start, 0, start.manhattan(target)));
+        pq.offer(new Position(start, 0, start.manhattan(target), Set.of(start)));
         int minimal = Integer.MAX_VALUE;
+        Position best = null;
         while (!pq.isEmpty()) {
             Position cur = pq.poll();
 //            System.out.println("Pq size is " + pq.size() + " mem size is " + memory.size() + " cur " + cur);
@@ -96,15 +101,20 @@ class Day18 implements Day {
             if (cur.p.equals(target)) {
 //                System.out.println("Setting minimal to " + cur.steps);
                 minimal = cur.steps;
+                best = cur;
                 continue;
             }
             cur.p.neighboursCross()
                     .stream()
                     .filter(p -> !blocks.contains(p) && p.inRange(0, max))
                     .filter(p -> memory.getOrDefault(p, Integer.MAX_VALUE) > cur.steps + 1)
-                    .forEach(next ->
-                            pq.offer(new Position(next, cur.steps + 1, next.manhattan(target))));
+                    .forEach(next -> {
+                                Set<Point2D> visited = new HashSet<>(cur.visited);
+                                visited.add(next);
+                                pq.offer(new Position(next, cur.steps + 1, next.manhattan(target), visited));
+                            }
+                    );
         }
-        return minimal;
+        return best;
     }
 }
