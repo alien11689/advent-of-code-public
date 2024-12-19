@@ -4,7 +4,6 @@ import dpr.commons.Util;
 import kotlin.Pair;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -23,8 +22,7 @@ class Day19 implements Day {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
-            System.out.println(part1(lines));
-            System.out.println(part2(lines));
+            part1And2(lines);
         });
     }
 
@@ -33,72 +31,29 @@ class Day19 implements Day {
         return 19;
     }
 
-    private Object part1(List<String> lines) {
+    private void part1And2(List<String> lines) {
         List<String> towels = Arrays.stream(lines.get(0).split(", ")).sorted().toList();
-        int count = 0;
+        int part1 = 0;
+        long part2 = 0;
         for (int i = 1; i < lines.size(); ++i) {
             String design = lines.get(i);
-//            System.out.println("Checking " + design);
-            if (findMatch(towels, design)) {
-                ++count;
+            long possible = findPossible(towels, design);
+            if (possible > 0) {
+                ++part1;
             }
+            part2 += possible;
         }
-        return count;
-    }
-
-    private static boolean findMatch(List<String> towels, String design) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o2.compareTo(o1);
-            }
-        });
-        pq.offer(0);
-        Set<Integer> checked = new HashSet<>();
-        Set<String> possibleTowels = towels.stream().filter(t -> design.contains(t)).collect(Collectors.toSet());
-        while (!pq.isEmpty()) {
-            int cur = pq.poll();
-            if (checked.contains(cur)) {
-                continue;
-            }
-            checked.add(cur);
-//            System.out.println(design + ": " + pq.size() + ", cur is " + cur + "/" + design.length());
-            for (String t : possibleTowels) {
-                if (design.startsWith(t, cur)) {
-                    int next = cur + t.length();
-                    if (next == design.length()) {
-                        return true;
-                    }
-                    if (!checked.contains(next)) {
-                        pq.offer(next);
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    private Object part2(List<String> lines) {
-        List<String> towels = Arrays.stream(lines.get(0).split(", ")).sorted().toList();
-        long count = 0;
-        for (int i = 1; i < lines.size(); ++i) {
-            String design = lines.get(i);
-//            System.out.println("Checking " + design);
-            count += findPossible(towels, design);
-        }
-        return count;
-    }
-
-    record Match(int idx, int count) {
+        System.out.println(part1);
+        System.out.println(part2);
     }
 
     private static long findPossible(List<String> towels, String design) {
-        Set<String> possibleTowels = towels.stream().filter(t -> design.contains(t)).collect(Collectors.toSet());
+        Set<String> possibleTowels = towels.stream().filter(design::contains).collect(Collectors.toSet());
         Set<Pair<Integer, Integer>> passes = new HashSet<>();
         for (int i = 0; i < design.length(); ++i) {
             for (String t : possibleTowels) {
                 if (design.startsWith(t, i)) {
-                    passes.add(new Pair<Integer, Integer>(i, i + t.length()));
+                    passes.add(new Pair<>(i, i + t.length()));
                 }
             }
         }
@@ -116,7 +71,7 @@ class Day19 implements Day {
             min = cur;
             long ways = targetToWays.get(cur);
             Set<Pair<Integer, Integer>> available = passes.stream().filter(p -> p.getFirst() == cur).collect(Collectors.toSet());
-            available.stream().map(p -> p.getSecond()).forEach(target -> {
+            available.stream().map(Pair::getSecond).forEach(target -> {
                 targetToWays.compute(target, (k, v) -> v == null ? ways : (v + ways));
                 pq.offer(target);
             });
