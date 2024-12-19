@@ -5,8 +5,10 @@ import dpr.commons.Util;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,9 +30,6 @@ class Day19 implements Day {
     @Override
     public int dayNum() {
         return 19;
-    }
-
-    record Match(int idx) {
     }
 
     private Object part1(List<String> lines) {
@@ -79,6 +78,47 @@ class Day19 implements Day {
     }
 
     private Object part2(List<String> lines) {
-        return null;
+        List<String> towels = Arrays.stream(lines.get(0).split(", ")).sorted().toList();
+        int count = 0;
+        for (int i = 1; i < lines.size(); ++i) {
+            String design = lines.get(i);
+            System.out.println("Checking " + design);
+            count += findPossible(towels, design);
+        }
+        return count;
+    }
+
+    record Match(int idx, String m, Match prev) {
+    }
+
+    private static int findPossible(List<String> towels, String design) {
+        Queue<Match> q = new LinkedList<>();
+        q.offer(new Match(0, "", null));
+        Set<Integer> checked = new HashSet<>();
+        Set<String> possibleTowels = towels.stream().filter(t -> design.contains(t)).collect(Collectors.toSet());
+        int count = 0;
+        while (!q.isEmpty()) {
+            Match cur = q.poll();
+//            System.out.println(cur);
+//            if (checked.contains(cur)) {
+//                continue;
+//            }
+//            checked.add(cur);
+//            System.out.println(design + ": " + pq.size() + ", cur is " + cur + "/" + design.length());
+            for (String t : possibleTowels) {
+                if (design.startsWith(t, cur.idx)) {
+                    int next = cur.idx + t.length();
+                    if (next == design.length()) {
+//                        System.out.println("matching " + cur + " with " + t);
+                        ++count;
+                        continue;
+                    }
+//                    if (!checked.contains(next)) {
+                    q.add(new Match(next, t, cur));
+//                    }
+                }
+            }
+        }
+        return count;
     }
 }
