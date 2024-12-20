@@ -96,6 +96,58 @@ class Day20 implements Day {
     }
 
     private Object part2(List<String> lines) {
-        return null;
+        Set<Point2D> blocks = new HashSet<>();
+        Point2D start = new Point2D(0, 0);
+        Point2D end = new Point2D(0, 0);
+        for (int y = 0; y < lines.size(); y++) {
+            String line = lines.get(y);
+            for (int x = 0; x < line.length(); x++) {
+                Point2D p = new Point2D(x, y);
+                char c = line.charAt(x);
+                if (c == '#') {
+                    blocks.add(p);
+                } else if (c == 'S') {
+                    start = p;
+                } else if (c == 'E') {
+                    end = p;
+                }
+            }
+        }
+
+        Map<Point2D, Integer> path = new HashMap<>();
+        int length = 0;
+        path.put(start, length);
+        Queue<Point2D> q = new LinkedList<>();
+        q.offer(start);
+        while (!q.isEmpty()) {
+            if (q.size() > 1) {
+                throw new RuntimeException();
+            }
+            Point2D cur = q.poll();
+            path.put(cur, length++);
+            List<Point2D> neighbours = cur.neighboursCross();
+            for (Point2D n : neighbours) {
+                if (!blocks.contains(n) && !path.containsKey(n)) {
+                    q.offer(n);
+                }
+            }
+        }
+
+        long count = 0;
+        for (Map.Entry<Point2D, Integer> pos : path.entrySet()) {
+            for (Map.Entry<Point2D, Integer> other : path.entrySet()) {
+                if (other.getValue() <= pos.getValue()) {
+                    continue;
+                }
+                int manhattan = other.getKey().manhattan(pos.getKey());
+                if(manhattan > 20) {
+                    continue;
+                }
+                if(other.getValue() - pos.getValue() - manhattan >= 100) {
+                    ++count;
+                }
+            }
+        }
+        return count;
     }
 }
