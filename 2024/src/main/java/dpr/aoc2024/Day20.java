@@ -4,11 +4,9 @@ import dpr.commons.Point2D;
 import dpr.commons.Util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -59,9 +57,8 @@ class Day20 implements Day {
             }
         }
 
-        Map<Point2D, Integer> path = new HashMap<>();
-        int length = 0;
-        path.put(start, length);
+        List<Point2D> path = new ArrayList<>();
+        Set<Point2D> visited = new HashSet<>();
         Queue<Point2D> q = new LinkedList<>();
         q.offer(start);
         while (!q.isEmpty()) {
@@ -69,26 +66,26 @@ class Day20 implements Day {
                 throw new RuntimeException();
             }
             Point2D cur = q.poll();
-            path.put(cur, length++);
+            visited.add(cur);
+            path.add(cur);
             List<Point2D> neighbours = cur.neighboursCross();
             for (Point2D n : neighbours) {
-                if (!blocks.contains(n) && !path.containsKey(n)) {
+                if (!blocks.contains(n) && !visited.contains(n)) {
                     q.offer(n);
                 }
             }
         }
 
         long count = 0;
-        for (Map.Entry<Point2D, Integer> pos : path.entrySet()) {
-            for (Map.Entry<Point2D, Integer> other : path.entrySet()) {
-                if (other.getValue() <= pos.getValue()) {
-                    continue;
-                }
-                int manhattan = other.getKey().manhattan(pos.getKey());
+        for (int i = 0; i < path.size(); i++) {
+            Point2D pos = path.get(i);
+            for (int j = i + 1; j < path.size(); j++) {
+                Point2D other = path.get(j);
+                int manhattan = other.manhattan(pos);
                 if (manhattan > limit) {
                     continue;
                 }
-                if (other.getValue() - pos.getValue() - manhattan >= 100) {
+                if (j - i - manhattan >= 100) {
                     ++count;
                 }
             }
