@@ -3,6 +3,7 @@ package dpr.aoc2024;
 import dpr.commons.Dir;
 import dpr.commons.Point2D;
 import dpr.commons.Util;
+import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 class Day21 implements Day {
     public static void main(String... args) {
@@ -86,53 +88,77 @@ class Day21 implements Day {
     record Position(Point2D cur, int idx, List<Click> clicks) {
     }
 
+    record SubPath(Point2D start, Point2D end, List<Character> clicks) {
+    }
+
     private Object part1(List<String> lines) {
         long score = 0;
+        int limit = 2;
+        Map<Pair<SubPath, Integer>, Long> memo = new HashMap<>();
         for (String line : lines) {
             System.out.println("Line: " + line);
             List<Character> chars = line.chars()
                     .mapToObj(c -> (char) c)
                     .toList();
             Point2D level0Initial = new Point2D(2, 3); // A on numerical
-            Point2D level1Initial = new Point2D(2, 0);
-            Point2D level2Initial = new Point2D(2, 0);
-            Set<List<Character>> paths0 = findPossiblePaths(level0Initial, chars, numeric);
-            Set<List<Character>> paths1 = new HashSet<>();
-            Set<List<Character>> paths2 = new HashSet<>();
-            for (List<Character> path0 : paths0) {
-//                System.out.println("Checking path0: " + path0);
-                paths1.addAll(findPossiblePaths(level1Initial, path0, directional));
+            Set<List<SubPath>> paths0 = findPossiblePaths(level0Initial, chars, numeric);
+            long best = Long.MAX_VALUE;
+            int level = 0;
+            for (List<SubPath> path0 : paths0) {
+//                System.out.println(path0);
+                long localBest = findBestLength(path0, level + 1, limit, memo);
+//                System.out.println(localBest);
+                if (localBest < best) {
+                    best = localBest;
+                }
             }
-            for (List<Character> path1 : paths1) {
-//                System.out.println("Checking path1: " + path1);
-                paths2.addAll(findPossiblePaths(level2Initial, path1, directional));
-            }
-            long best = paths2.stream().mapToInt(p2 -> p2.size()).min().getAsInt();
-//            System.out.println(best);
             score += best * Integer.parseInt(line.substring(0, 3));
         }
+        System.out.println("Cache 1 - miss " + cache1Miss + ", hit " + cache1Hit);
+        System.out.println("Cache 2 - miss " + cache2Miss + ", hit " + cache2Hit);
         return score;
     }
 
+    private long findBestLength(List<SubPath> path, int level, int limit, Map<Pair<SubPath, Integer>, Long> memo) {
+        long best = 0;
+        for (SubPath subPath : path) {
+            Set<List<SubPath>> possiblePaths = findPossiblePaths(new Point2D(2, 0), subPath.clicks, directional);
+            if (level == limit) {
+                int asInt = possiblePaths.stream().mapToInt(list -> list.stream().mapToInt(c -> c.clicks.size()).sum()).min().getAsInt();
+                best += asInt;
+            } else {
+                best += possiblePaths.stream().mapToLong(pp -> findBestLength(pp, level + 1, limit, memo)).min().getAsLong();
+            }
+        }
+        return best;
+    }
+
+    private static final Map<Pair<SubPath, Integer>, Long> directionalCache1 = new HashMap<>();
+    private static int cache1Miss = 0;
+    private static int cache1Hit = 0;
+
+    record PositionNumeric(Point2D cur, int idx, List<SubPath> subPaths) {
+    }
+
     @NotNull
-    private Set<List<Character>> findPossiblePaths(Point2D initial, List<Character> chars, Map<Point2D, Character> board) {
-        Set<List<Character>> paths = new HashSet<>();
-        Queue<Position> level0Queue = new LinkedList<>();
-        level0Queue.offer(new Position(initial, 0, new ArrayList<>()));
+    private Set<List<SubPath>> findPossiblePaths(Point2D initial, List<Character> chars, Map<Point2D, Character> board) {
+        Set<List<SubPath>> paths = new HashSet<>();
+        Queue<PositionNumeric> level0Queue = new LinkedList<>();
+        level0Queue.offer(new PositionNumeric(initial, 0, new ArrayList<>()));
         while (!level0Queue.isEmpty()) {
-            Position pos = level0Queue.poll();
+            PositionNumeric pos = level0Queue.poll();
             if (pos.idx == chars.size()) {
-                List<Character> clicks = pos.clicks.stream().map(Click::toSymbol).toList();
-                paths.add(clicks);
+                paths.add(pos.subPaths);
                 continue;
             }
             char n = chars.get(pos.idx);
             Point2D targetPos = board.entrySet().stream().filter(e -> e.getValue() == n).findFirst().get().getKey();
             findPaths(pos.cur, targetPos, board).forEach(path -> {
-                List<Click> newClicks = new ArrayList<>(pos.clicks);
-                path.stream().map(Move::new).forEach(newClicks::add);
-                newClicks.add(new Ack());
-                level0Queue.offer(new Position(targetPos, pos.idx + 1, newClicks));
+                List<SubPath> subPaths = new ArrayList<>(pos.subPaths);
+                List<Character> newClicks = path.stream().map(dir -> new Move(dir).toSymbol()).collect(Collectors.toList());
+                newClicks.add('A');
+                subPaths.add(new SubPath(pos.cur, targetPos, newClicks));
+                level0Queue.offer(new PositionNumeric(targetPos, pos.idx + 1, subPaths));
             });
         }
         return paths;
@@ -141,7 +167,18 @@ class Day21 implements Day {
     record Path(Point2D cur, List<Dir> moves) {
     }
 
+    private static final Map<Pair<Point2D, Point2D>, List<List<Dir>>> directionalCache2 = new HashMap<>();
+    private static int cache2Miss = 0;
+    private static int cache2Hit = 0;
+
     private Collection<List<Dir>> findPaths(Point2D start, Point2D targetPos, Map<Point2D, Character> board) {
+        Pair<Point2D, Point2D> key = new Pair<>(start, targetPos);
+        if (board == directional) {
+            if (directionalCache2.containsKey(key)) {
+                ++cache2Hit;
+                return directionalCache2.get(key);
+            }
+        }
         List<List<Dir>> result = new ArrayList<>();
         PriorityQueue<Path> q = new PriorityQueue<>(new Comparator<Path>() {
             @Override
@@ -173,6 +210,10 @@ class Day21 implements Day {
                     }
                 });
             }
+        }
+        if (board == directional) {
+            ++cache2Miss;
+            directionalCache2.put(key, result);
         }
         return result;
     }
