@@ -62,12 +62,7 @@ class Day21 implements Day {
         return 21;
     }
 
-    interface Click {
-        char toSymbol();
-    }
-
-    record Move(Dir dir) implements Click {
-        @Override
+    record Move(Dir dir) {
         public char toSymbol() {
             return switch (dir) {
                 case E -> '>';
@@ -78,25 +73,26 @@ class Day21 implements Day {
         }
     }
 
-    record Ack() implements Click {
-        @Override
-        public char toSymbol() {
-            return 'A';
-        }
-    }
-
-    record Position(Point2D cur, int idx, List<Click> clicks) {
-    }
-
     record SubPath(Point2D start, Point2D end, List<Character> clicks) {
     }
 
     private Object part1(List<String> lines) {
+        return solve(lines, 2);
+    }
+
+    private Object part2(List<String> lines) {
+        return solve(lines, 25);
+    }
+
+    private long solve(List<String> lines, int limit) {
+        cache1Miss = 0;
+        cache1Hit = 0;
+        cache2Miss = 0;
+        cache2Hit = 0;
         long score = 0;
-        int limit = 2;
-        Map<Pair<SubPath, Integer>, Long> memo = new HashMap<>();
+        Map<Pair<List<SubPath>, Integer>, Long> memo = new HashMap<>();
         for (String line : lines) {
-            System.out.println("Line: " + line);
+//            System.out.println("Line: " + line);
             List<Character> chars = line.chars()
                     .mapToObj(c -> (char) c)
                     .toList();
@@ -114,13 +110,18 @@ class Day21 implements Day {
             }
             score += best * Integer.parseInt(line.substring(0, 3));
         }
-        System.out.println("Cache 1 - miss " + cache1Miss + ", hit " + cache1Hit);
-        System.out.println("Cache 2 - miss " + cache2Miss + ", hit " + cache2Hit);
+//        System.out.println("Cache 1 - miss " + cache1Miss + ", hit " + cache1Hit);
+//        System.out.println("Cache 2 - miss " + cache2Miss + ", hit " + cache2Hit);
         return score;
     }
 
-    private long findBestLength(List<SubPath> path, int level, int limit, Map<Pair<SubPath, Integer>, Long> memo) {
+    private long findBestLength(List<SubPath> path, int level, int limit, Map<Pair<List<SubPath>, Integer>, Long> memo) {
         long best = 0;
+        Pair<List<SubPath>, Integer> key = new Pair<>(path, level);
+        if (memo.containsKey(key)) {
+            ++cache1Hit;
+            return memo.get(key);
+        }
         for (SubPath subPath : path) {
             Set<List<SubPath>> possiblePaths = findPossiblePaths(new Point2D(2, 0), subPath.clicks, directional);
             if (level == limit) {
@@ -130,14 +131,18 @@ class Day21 implements Day {
                 best += possiblePaths.stream().mapToLong(pp -> findBestLength(pp, level + 1, limit, memo)).min().getAsLong();
             }
         }
+        memo.put(key, best);
+        ++cache1Miss;
         return best;
     }
 
     private static final Map<Pair<SubPath, Integer>, Long> directionalCache1 = new HashMap<>();
     private static int cache1Miss = 0;
+
     private static int cache1Hit = 0;
 
     record PositionNumeric(Point2D cur, int idx, List<SubPath> subPaths) {
+
     }
 
     @NotNull
@@ -216,9 +221,5 @@ class Day21 implements Day {
             directionalCache2.put(key, result);
         }
         return result;
-    }
-
-    private Object part2(List<String> lines) {
-        return null;
     }
 }
