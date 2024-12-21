@@ -85,10 +85,10 @@ class Day21 implements Day {
     }
 
     private long solve(List<String> lines, int limit) {
-        cache1Miss = 0;
-        cache1Hit = 0;
-        cache2Miss = 0;
-        cache2Hit = 0;
+        memoMiss = 0;
+        memoHit = 0;
+        lowestLevelCacheMiss = 0;
+        lowestLevelCacheHit = 0;
         long score = 0;
         Map<Pair<List<SubPath>, Integer>, Long> memo = new HashMap<>();
         for (String line : lines) {
@@ -110,8 +110,8 @@ class Day21 implements Day {
             }
             score += best * Integer.parseInt(line.substring(0, 3));
         }
-//        System.out.println("Cache 1 - miss " + cache1Miss + ", hit " + cache1Hit);
-//        System.out.println("Cache 2 - miss " + cache2Miss + ", hit " + cache2Hit);
+//        System.out.println("Memo cache - miss " + memoMiss + ", hit " + memoHit);
+//        System.out.println("Lowest level cache - miss " + lowestLevelCacheMiss + ", hit " + lowestLevelCacheHit);
         return score;
     }
 
@@ -119,7 +119,7 @@ class Day21 implements Day {
         long best = 0;
         Pair<List<SubPath>, Integer> key = new Pair<>(path, level);
         if (memo.containsKey(key)) {
-            ++cache1Hit;
+            ++memoHit;
             return memo.get(key);
         }
         for (SubPath subPath : path) {
@@ -132,17 +132,14 @@ class Day21 implements Day {
             }
         }
         memo.put(key, best);
-        ++cache1Miss;
+        ++memoMiss;
         return best;
     }
 
-    private static final Map<Pair<SubPath, Integer>, Long> directionalCache1 = new HashMap<>();
-    private static int cache1Miss = 0;
-
-    private static int cache1Hit = 0;
+    private static int memoMiss = 0;
+    private static int memoHit = 0;
 
     record PositionNumeric(Point2D cur, int idx, List<SubPath> subPaths) {
-
     }
 
     @NotNull
@@ -172,16 +169,16 @@ class Day21 implements Day {
     record Path(Point2D cur, List<Dir> moves) {
     }
 
-    private static final Map<Pair<Point2D, Point2D>, List<List<Dir>>> directionalCache2 = new HashMap<>();
-    private static int cache2Miss = 0;
-    private static int cache2Hit = 0;
+    private static final Map<Pair<Point2D, Point2D>, List<List<Dir>>> lowestLevelCache = new HashMap<>();
+    private static int lowestLevelCacheMiss = 0;
+    private static int lowestLevelCacheHit = 0;
 
     private Collection<List<Dir>> findPaths(Point2D start, Point2D targetPos, Map<Point2D, Character> board) {
         Pair<Point2D, Point2D> key = new Pair<>(start, targetPos);
         if (board == directional) {
-            if (directionalCache2.containsKey(key)) {
-                ++cache2Hit;
-                return directionalCache2.get(key);
+            if (lowestLevelCache.containsKey(key)) {
+                ++lowestLevelCacheHit;
+                return lowestLevelCache.get(key);
             }
         }
         List<List<Dir>> result = new ArrayList<>();
@@ -217,8 +214,8 @@ class Day21 implements Day {
             }
         }
         if (board == directional) {
-            ++cache2Miss;
-            directionalCache2.put(key, result);
+            ++lowestLevelCacheMiss;
+            lowestLevelCache.put(key, result);
         }
         return result;
     }
