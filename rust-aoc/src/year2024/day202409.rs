@@ -1,6 +1,6 @@
 use crate::helper::read_file_lines;
 
-const DAY: u8 = 5;
+const DAY: u8 = 9;
 
 fn solve_part1(lines: &[String]) -> i32 {
     0
