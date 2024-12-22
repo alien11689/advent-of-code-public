@@ -1,0 +1,50 @@
+name: Rust
+
+on:
+  push:
+    branches:
+      - main
+  
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build-rust.yml'
+      - 'rust-aoc/**'
+    
+
+env:
+  # Disable incremental compilation for faster from-scratch builds
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get private repo
+        uses: actions/checkout@v4
+        with:
+          repository: alien11689/advent-of-code
+          ref: master
+          token: ${{ secrets.ADVENT_OF_CODE_PAT}}
+          path: private
+
+      - name: Get files
+        run: |
+          mkdir -p rust-aoc/resources/2015 rust-aoc/resources/2023 rust-aoc/resources/2024
+          cp -r private/2015/src/main/resources/* rust-aoc/resources/2015
+          cp -r private/2023/src/main/resources/* rust-aoc/resources/2023
+          cp -r private/2024/src/main/resources/* rust-aoc/resources/2024
+
+      - run: rustup update
+      - run: | 
+          cd rust-aoc
+          cargo test
+      - run: | 
+          cd rust-aoc
+          cargo run --release
+
+        
