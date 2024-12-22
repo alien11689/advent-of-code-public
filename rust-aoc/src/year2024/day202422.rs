@@ -1,10 +1,11 @@
 use crate::helper::read_file_lines;
 use std::collections::{HashMap, HashSet, LinkedList};
+use std::time::Instant;
 
 const DAY: u8 = 22;
 
 fn solve(lines: &[String]) -> (i64, i64) {
-    let mut map: HashMap<String, i64> = HashMap::new();
+    let mut map = HashMap::new();
     let part1 = lines
         .iter()
         .map(|line| calculate(line, 2000, &mut map))
@@ -17,7 +18,7 @@ fn calculate(init: &String, iter: usize, map: &mut HashMap<String, i64>) -> i64 
     let mut cur: i64 = init.parse().unwrap();
     let mut last = cur % 10;
     let mut q = LinkedList::new();
-    let mut seen: HashSet<String> = HashSet::new();
+    let mut seen = HashSet::new();
     for _ in 0..iter {
         cur = (cur ^ (cur << 6)) % 16777216;
         cur = (cur ^ (cur >> 5)) % 16777216;
@@ -43,12 +44,15 @@ fn calculate(init: &String, iter: usize, map: &mut HashMap<String, i64>) -> i64 
 
 #[cfg(not(tarpaulin_include))]
 pub fn main(path: &String) {
+    let start = Instant::now();
     let full_path = format!("{path}/resources/2024/{:0>2}/input.txt", DAY);
     let lines = read_file_lines(&full_path);
     println!("Day{:0>2}", DAY);
     let (part1, part2) = solve(&lines);
     println!("{part1}");
     println!("{part2}");
+    let duration = start.elapsed();
+    println!("Time: {:?}", duration);
 }
 
 #[cfg(test)]
