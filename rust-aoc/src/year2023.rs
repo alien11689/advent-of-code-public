@@ -1,3 +1,5 @@
+use crate::helper::measure_time;
+
 mod day202301;
 mod day202302;
 mod day202303;
@@ -13,6 +15,8 @@ pub fn main(path_prefix: &String) {
     ];
     println!("Year 2023");
     for day in days {
-        day(path_prefix);
+        measure_time(|| {
+            day(path_prefix);
+        });
     }
 }

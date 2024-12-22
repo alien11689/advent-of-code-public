@@ -1,6 +1,5 @@
 use crate::helper::read_file_lines;
 use std::collections::{HashMap, HashSet, LinkedList};
-use std::time::Instant;
 
 const DAY: u8 = 22;
 
@@ -44,15 +43,12 @@ fn calculate(init: &String, iter: usize, map: &mut HashMap<String, i64>) -> i64 
 
 #[cfg(not(tarpaulin_include))]
 pub fn main(path: &String) {
-    let start = Instant::now();
     let full_path = format!("{path}/resources/2024/{:0>2}/input.txt", DAY);
     let lines = read_file_lines(&full_path);
     println!("Day{:0>2}", DAY);
     let (part1, part2) = solve(&lines);
     println!("{part1}");
     println!("{part2}");
-    let duration = start.elapsed();
-    println!("Time: {:?}", duration);
 }
 
 #[cfg(test)]
