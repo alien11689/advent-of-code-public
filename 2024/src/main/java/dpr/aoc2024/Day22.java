@@ -2,14 +2,13 @@ package dpr.aoc2024;
 
 import dpr.commons.Util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 class Day22 implements Day {
     public static void main(String... args) {
@@ -23,8 +22,7 @@ class Day22 implements Day {
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test2.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test3.txt", dayNum()));
-            System.out.println(part1(lines));
-            System.out.println(part2(lines));
+            part1And2(lines);
         });
     }
 
@@ -33,50 +31,24 @@ class Day22 implements Day {
         return 22;
     }
 
-    private Object part1(List<String> lines) {
-        long sum = 0;
+    private void part1And2(List<String> lines) {
+        long part1 = 0;
+        Map<String, Integer> prices = new HashMap<>();
         for (String line : lines) {
             long init = Long.parseLong(line);
-            long secret = calculatePseudo(init, 2000);
-            sum += secret;
+            part1 += calculate(init, 2000, prices);
         }
-        return sum;
+        System.out.println(part1);
+        long part2 = prices.values().stream().mapToLong(l -> l).max().orElse(Long.MIN_VALUE);
+        System.out.println(part2);
+        ;
     }
 
-    private long calculatePseudo(long init, int iter) {
-        long cur = init;
-        for (int i = 1; i <= iter; i++) {
-            cur = (cur ^ (cur << 6)) % 16777216;
-            cur = (cur ^ (cur >> 5)) % 16777216;
-            cur = (cur ^ (cur << 11)) % 16777216;
-        }
-        return cur;
-    }
-
-    private Object part2(List<String> lines) {
-        Set<String> keys = new HashSet<>();
-        List<Map<String, Integer>> pricesList = new ArrayList<>();
-        for (String line : lines) {
-            long init = Long.parseLong(line);
-            Map<String, Integer> prices = calculatePseudo2(init, 2000);
-            pricesList.add(prices);
-            keys.addAll(prices.keySet());
-        }
-        long best = Long.MIN_VALUE;
-        for (String key : keys) {
-            long sum = pricesList.stream().mapToLong(prices -> prices.getOrDefault(key, 0)).sum();
-            if (sum > best) {
-                best = sum;
-            }
-        }
-        return best;
-    }
-
-    private Map<String, Integer> calculatePseudo2(long init, int iter) {
+    private long calculate(long init, int iter, Map<String, Integer> prices) {
         long cur = init;
         long last = cur % 10;
-        BlockingQueue<Long> q = new ArrayBlockingQueue<>(4);
-        Map<String, Integer> prices = new HashMap<>();
+        Queue<Long> q = new LinkedList<>();
+        Set<String> seen = new HashSet<>();
         for (int i = 1; i <= iter; i++) {
             cur = (cur ^ (cur << 6)) % 16777216;
             cur = (cur ^ (cur >> 5)) % 16777216;
@@ -87,12 +59,13 @@ class Day22 implements Day {
             }
             q.add(newlast - last);
             String key = q.toString();
-            if (!prices.containsKey(key)) {
-                prices.put(key, (int) newlast);
+            if (!seen.contains(key) && q.size() == 4) {
+                prices.put(key, prices.getOrDefault(key, 0) + (int) newlast);
+                seen.add(key);
             }
 //            System.out.println(init + " in iteration " + i + " " + key + " -> " + newlast);
             last = newlast;
         }
-        return prices;
+        return cur;
     }
 }
