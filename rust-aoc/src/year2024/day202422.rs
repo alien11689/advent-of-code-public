@@ -1,5 +1,5 @@
 use crate::helper::read_file_lines;
-use std::collections::{HashMap, HashSet, LinkedList};
+use std::collections::{HashMap, HashSet};
 
 const DAY: u8 = 22;
 
@@ -13,28 +13,23 @@ fn solve(lines: &[String]) -> (i64, i64) {
     (part1, part2)
 }
 
-fn calculate(init: &String, iter: usize, map: &mut HashMap<String, i64>) -> i64 {
+fn calculate(init: &String, iter: usize, map: &mut HashMap<(i64, i64, i64, i64), i64>) -> i64 {
     let mut cur: i64 = init.parse().unwrap();
     let mut last = cur % 10;
-    let mut q = LinkedList::new();
+    let mut diffs = Vec::new();
     let mut seen = HashSet::new();
-    for _ in 0..iter {
+    for i in 0..iter {
         cur = (cur ^ (cur << 6)) % 16777216;
         cur = (cur ^ (cur >> 5)) % 16777216;
         cur = (cur ^ (cur << 11)) % 16777216;
         let new_last = cur % 10;
-        if q.len() == 4 {
-            q.pop_front();
-        }
-        q.push_back(new_last - last);
-        let key = format!("{:?}", q);
-        if !seen.contains(&key) && q.len() == 4 {
-            if let Some(value) = map.get_mut(&key) {
-                *value += new_last;
-            } else {
-                map.insert(key.to_owned(), new_last);
+        diffs.push(new_last - last);
+        if diffs.len() >= 4 {
+            let key = (diffs[i - 3], diffs[i - 2], diffs[i - 1], diffs[i]);
+            if !seen.contains(&key) {
+                *map.entry(key).or_insert(0) += new_last;
+                seen.insert(key);
             }
-            seen.insert(key);
         }
         last = new_last;
     }
