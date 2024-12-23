@@ -3,7 +3,6 @@ package dpr.aoc2024;
 import dpr.commons.Util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,24 +31,30 @@ class Day23 implements Day {
 
     private void part1And2(List<String> lines) {
         Set<String> edges = new HashSet<>();
-        Set<List<String>> connections = lines.stream().map(line -> {
+        Set<Set<String>> connections = lines.stream().map(line -> {
             String[] parts = line.split("-");
-            List<String> list = Arrays.asList(parts);
-            Collections.sort(list);
-            edges.addAll(list);
-            return list;
+            Set<String> con = Set.of(parts[0], parts[1]);
+            edges.addAll(con);
+            return con;
         }).collect(Collectors.toSet());
         Set<List<String>> lans = new HashSet<>();
         edges.forEach(edge -> {
 //            System.out.println(edge);
-            List<String> connected = connections.stream().filter(c -> c.contains(edge)).flatMap(Collection::stream).filter(e -> !e.equals(edge)).sorted().toList();
+            List<String> connected = connections.stream()
+                    .filter(c -> c.contains(edge))
+                    .flatMap(Collection::stream)
+                    .filter(e -> !e.equals(edge))
+                    .sorted()
+                    .toList();
             for (int i = 0; i < connected.size() - 1; i++) {
                 for (int j = i + 1; j < connected.size(); j++) {
                     String a = connected.get(i);
                     String b = connected.get(j);
 //                    System.out.println("Checking " + a + " and " + b);
-                    List<String> list = new ArrayList<>(Arrays.asList(a, b));
-                    if (connections.contains(list)) {
+                    Set<String> pair = Set.of(a, b);
+                    if (connections.contains(pair)) {
+                        List<String> list = new ArrayList<>();
+                        list.addAll(pair);
                         list.add(edge);
                         Collections.sort(list);
                         lans.add(list);
@@ -65,7 +70,7 @@ class Day23 implements Day {
         String bestName = "";
         while (!lans.isEmpty()) {
             Set<String> cur = lans.stream().limit(1).flatMap(Collection::stream).collect(Collectors.toSet());
-            lans.remove(cur);
+//            lans.remove(cur);
             while (true) {
                 int prevSize = cur.size();
                 Set<List<String>> toRemove = new HashSet<>();
@@ -97,6 +102,8 @@ class Day23 implements Day {
                 best = size;
                 bestName = cur.stream().sorted().collect(Collectors.joining(","));
             }
+            lans.removeIf(lan -> lan.stream().anyMatch(cur::contains));
+            connectionsSet.removeIf(con -> con.stream().anyMatch(cur::contains));
         }
         System.out.println(bestName);
     }
