@@ -97,10 +97,10 @@ object Day24 {
         // z + dz * t3 == z3 + dz3 * t3
 
         val resultSmt = solveWithSmt(points)
-        val resultZ3 = solveWithZ3InPython(points)
-        if (resultSmt != resultZ3) {
-            throw RuntimeException("Solutions from solvers are different - SMT: $resultSmt, Z3: $resultZ3")
-        }
+//        val resultZ3 = solveWithZ3InPython(points)
+//        if (resultSmt != resultZ3) {
+//            throw RuntimeException("Solutions from solvers are different - SMT: $resultSmt, Z3: $resultZ3")
+//        }
         return resultSmt
     }
 
