@@ -47,5 +47,7 @@ jobs:
         run: |
           mkdir -p ${{matrix.year}}/src/main/resources
           cp -r private/${{matrix.year}}/src/main/resources/* ${{matrix.year}}/src/main/resources
-          ./runSingle.sh ${{matrix.year}} >> "$GITHUB_STEP_SUMMARY"
- 
+          echo '```' > out
+          ./runSingle.sh ${{matrix.year}} >> out
+          echo '```' >> out
+          cat out >> "$GITHUB_STEP_SUMMARY"

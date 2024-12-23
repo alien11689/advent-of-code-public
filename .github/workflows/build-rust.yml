@@ -39,11 +39,16 @@ jobs:
           cp -r private/2023/src/main/resources/* rust-aoc/resources/2023
           cp -r private/2024/src/main/resources/* rust-aoc/resources/2024
 
-      - run: rustup update
-      - run: | 
+      - name: Rust update
+        run: rustup update
+      - name: Test
+        run: |
           cd rust-aoc
           cargo test
-      - run: | 
+      - name: Run
+        run: |
           cd rust-aoc
-          cargo run --release >> "$GITHUB_STEP_SUMMARY"
-
+          echo '```' > out
+          cargo run --release >> out
+          echo '```' >> out
+          cat out >> "$GITHUB_STEP_SUMMARY"
