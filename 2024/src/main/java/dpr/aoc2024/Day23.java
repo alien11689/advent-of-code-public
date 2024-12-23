@@ -58,11 +58,76 @@ class Day23 implements Day {
                 }
             }
         });
-
         return lans.size();
     }
 
     private Object part2(List<String> lines) {
-        return null;
+        Set<String> edges = new HashSet<>();
+        Set<List<String>> connections = lines.stream().map(line -> {
+            String[] parts = line.split("-");
+            List<String> list = Arrays.asList(parts);
+            Collections.sort(list);
+            edges.addAll(list);
+            return list;
+        }).collect(Collectors.toSet());
+        Set<List<String>> lans = new HashSet<>();
+        edges.forEach(edge -> {
+//            System.out.println(edge);
+            List<String> connected = connections.stream().filter(c -> c.contains(edge)).flatMap(Collection::stream).filter(e -> !e.equals(edge)).sorted().toList();
+            for (int i = 0; i < connected.size() - 1; i++) {
+                for (int j = i + 1; j < connected.size(); j++) {
+                    String a = connected.get(i);
+                    String b = connected.get(j);
+//                    System.out.println("Checking " + a + " and " + b);
+                    List<String> list = new ArrayList<>(Arrays.asList(a, b));
+                    if (connections.contains(list)) {
+                        list.add(edge);
+                        Collections.sort(list);
+                        lans.add(list);
+//                        System.out.println("connected: " + list);
+                    }
+                }
+            }
+        });
+        Set<Set<String>> connectionsSet = connections.stream().map(HashSet::new).collect(Collectors.toSet());
+        int best = Integer.MIN_VALUE;
+        String bestName = "";
+        while (!lans.isEmpty()) {
+            Set<String> cur = lans.stream().limit(1).flatMap(Collection::stream).collect(Collectors.toSet());
+            lans.remove(cur);
+            while (true) {
+                int prevSize = cur.size();
+                Set<List<String>> toRemove = new HashSet<>();
+                lans.forEach(l -> {
+                    Set<String> intersection = new HashSet<>(l);
+                    Set<String> left = new HashSet<>(l);
+                    intersection.retainAll(cur);
+                    if (intersection.size() == 3) {
+                        toRemove.add(l);
+                    } else if (intersection.size() == 2) {
+                        left.removeAll(intersection);
+                        String toCheck = left.stream().findAny().get();
+                        if (cur.stream().allMatch(c -> {
+                            Set<String> con = Set.of(c, toCheck);
+                            return connectionsSet.contains(con);
+                        })) {
+                            cur.add(toCheck);
+                            toRemove.add(l);
+                        }
+                    }
+                });
+                lans.removeAll(toRemove);
+                if (prevSize == cur.size()) {
+                    break;
+                }
+            }
+            int size = cur.size();
+            if (size > best) {
+                best = size;
+                bestName = cur.stream().sorted().collect(Collectors.joining(","));
+            }
+        }
+        return bestName;
+
     }
 }
