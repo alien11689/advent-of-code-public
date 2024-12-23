@@ -45,6 +45,5 @@ jobs:
           cargo test
       - run: | 
           cd rust-aoc
-          cargo run --release
+          cargo run --release >> "$GITHUB_STEP_SUMMARY"
 
-        

@@ -7,6 +7,15 @@ on:
   pull_request:
     paths:
       - '.github/workflows/build-jvm.yml'
+      - '2015/**'
+      - '2016/**'
+      - '2017/**'
+      - '2018/**'
+      - '2019/**'
+      - '2020/**'
+      - '2021/**'
+      - '2022/**'
+      - '2023/**'
       - '2024/**'
       - 'commons/**'
 
@@ -15,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        year: [2024]
+        year: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -38,5 +47,5 @@ jobs:
         run: |
           mkdir -p ${{matrix.year}}/src/main/resources
           cp -r private/${{matrix.year}}/src/main/resources/* ${{matrix.year}}/src/main/resources
-          ./runSingle.sh ${{matrix.year}}
-        
+          ./runSingle.sh ${{matrix.year}} >> "$GITHUB_STEP_SUMMARY"
+ 
