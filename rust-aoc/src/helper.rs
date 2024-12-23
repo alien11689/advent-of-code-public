@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 use std::fs;
+use std::ops::Add;
 use std::time::Instant;
 
 fn read_file(file_name: &str) -> String {
@@ -18,7 +19,7 @@ pub(crate) fn reverse_string(input: &str) -> String {
     input.chars().rev().collect::<String>()
 }
 
-#[derive(PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub(crate) struct Point2D {
     pub x: i32,
     pub y: i32,
@@ -74,6 +75,19 @@ impl Point2D {
     }
 }
 
+impl Add<&Dir> for Point2D {
+    type Output = Point2D;
+
+    fn add(self, rhs: &Dir) -> Self::Output {
+        match rhs {
+            Dir::N => Point2D::new(self.x, self.y - 1),
+            Dir::W => Point2D::new(self.x - 1, self.y),
+            Dir::S => Point2D::new(self.x, self.y + 1),
+            Dir::E => Point2D::new(self.x + 1, self.y),
+        }
+    }
+}
+
 pub(crate) fn measure_time<F>(f: F)
 where
     F: Fn() -> (),
@@ -82,4 +96,23 @@ where
     f();
     let duration = start.elapsed();
     println!("Time: {:?}", duration);
+}
+
+#[derive(Debug, Hash, PartialEq, Eq, Clone)]
+pub(crate) enum Dir {
+    N,
+    W,
+    S,
+    E,
+}
+
+impl Dir {
+    pub(crate) fn right(&self) -> Dir {
+        match self {
+            Dir::N => Dir::E,
+            Dir::W => Dir::N,
+            Dir::S => Dir::W,
+            Dir::E => Dir::S,
+        }
+    }
 }

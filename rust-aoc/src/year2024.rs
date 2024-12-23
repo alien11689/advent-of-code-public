@@ -34,7 +34,7 @@ pub fn main(path_prefix: &String) {
         day202403::main,
         day202404::main,
         day202405::main,
-        // day202406::main,
+        day202406::main,
         // day202407::main,
         // day202408::main,
         // day202409::main,
