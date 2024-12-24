@@ -20,6 +20,9 @@ env:
 jobs:
   run:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        type: ['', '--release']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,6 +52,6 @@ jobs:
         run: |
           cd rust-aoc
           echo '```' > out
-          cargo run --release >> out
+          cargo run ${{matrix.type}} >> out
           echo '```' >> out
           cat out >> "$GITHUB_STEP_SUMMARY"
