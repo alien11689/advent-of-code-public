@@ -109,7 +109,7 @@ class Day24 implements Day {
         Set<Apply> rules = new HashSet<>();
         Map<String, Boolean> inputs = new HashMap<>();
         Set<String> zTargets = new HashSet<>();
-        System.out.println("strict digraph {");
+//        System.out.println("strict digraph {");
         lines.forEach(line -> {
             if (line.contains(":")) {
                 String[] parts = line.split(": ");
@@ -142,22 +142,21 @@ class Day24 implements Day {
                     case "XOR" -> new Xor(left, right, target);
                     default -> throw new IllegalStateException("Unexpected value: " + parts[1]);
                 };
-                System.out.println(left + " -> " + parts[1] + "_" + left + "_" + right);
-                System.out.println(right + " -> " + parts[1] + "_" + left + "_" + right);
-                System.out.println(parts[1] + "_" + left + "_" + right + " -> " + target);
+//                System.out.println(left + " -> " + parts[1] + "_" + left + "_" + right);
+//                System.out.println(right + " -> " + parts[1] + "_" + left + "_" + right);
+//                System.out.println(parts[1] + "_" + left + "_" + right + " -> " + target);
                 if (target.startsWith("z")) {
                     zTargets.add(target);
                 }
                 rules.add(rule);
             }
         });
-        System.out.println("}");
+//        System.out.println("}");
         calculate(rules, inputs);
-        System.out.println("Rules size: " + rules.size());
         long y = readNum(inputs, "y");
         long x = readNum(inputs, "x");
         long z = readNum(inputs, "z");
-        show(x, y, z);
+//        show(x, y, z);
         List<String> list = Arrays.asList(
                 "z07",
                 "vmv",
@@ -185,7 +184,7 @@ class Day24 implements Day {
         x = readNum(inputs2, "x");
         y = readNum(inputs2, "y");
         z = readNum(inputs2, "z");
-        show(x, y, z);
+//        show(x, y, z);
 
         // input 3
         Map<String, Boolean> inputs3 = new HashMap<>();
@@ -201,7 +200,7 @@ class Day24 implements Day {
         x = readNum(inputs3, "x");
         y = readNum(inputs3, "y");
         z = readNum(inputs3, "z");
-        show(x, y, z);
+//        show(x, y, z);
         return list.stream().sorted().collect(Collectors.joining(","));
     }
 
