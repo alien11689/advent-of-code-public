@@ -38,11 +38,7 @@ impl Point2D {
     }
 
     pub(crate) fn neighbours(&self) -> HashSet<Point2D> {
-        let mut neighbours = HashSet::new();
-        neighbours.insert(Point2D {
-            x: self.x + 1,
-            y: self.y,
-        });
+        let mut neighbours = self.neighbours_cross();
         neighbours.insert(Point2D {
             x: self.x + 1,
             y: self.y - 1,
@@ -50,18 +46,6 @@ impl Point2D {
         neighbours.insert(Point2D {
             x: self.x + 1,
             y: self.y + 1,
-        });
-        neighbours.insert(Point2D {
-            x: self.x,
-            y: self.y + 1,
-        });
-        neighbours.insert(Point2D {
-            x: self.x,
-            y: self.y - 1,
-        });
-        neighbours.insert(Point2D {
-            x: self.x - 1,
-            y: self.y,
         });
         neighbours.insert(Point2D {
             x: self.x - 1,
@@ -72,6 +56,34 @@ impl Point2D {
             y: self.y + 1,
         });
         neighbours
+    }
+
+    pub(crate) fn neighbours_cross(&self) -> HashSet<Point2D> {
+        let mut neighbours = HashSet::new();
+        neighbours.insert(Point2D {
+            x: self.x + 1,
+            y: self.y,
+        });
+        neighbours.insert(Point2D {
+            x: self.x,
+            y: self.y + 1,
+        });
+        neighbours.insert(Point2D {
+            x: self.x,
+            y: self.y - 1,
+        });
+        neighbours.insert(Point2D {
+            x: self.x - 1,
+            y: self.y,
+        });
+        neighbours
+    }
+
+    pub(crate) fn in_range(&self, left_up: Point2D, right_down: Point2D) -> bool {
+        self.x >= left_up.x
+            && self.x <= right_down.x
+            && self.y >= left_up.y
+            && self.y <= right_down.y
     }
 }
 
