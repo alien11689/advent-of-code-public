@@ -85,6 +85,10 @@ impl Point2D {
             && self.y >= left_up.y
             && self.y <= right_down.y
     }
+
+    pub(crate) fn manhattan(&self, other: &Point2D) -> i32 {
+        (self.x - other.x).abs() + (self.y - other.y).abs()
+    }
 }
 
 impl Add<&Dir> for Point2D {
