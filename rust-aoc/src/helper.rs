@@ -106,7 +106,7 @@ impl Add<&Dir> for Point2D {
 
 pub(crate) fn measure_time<F>(f: F)
 where
-    F: Fn() -> (),
+    F: Fn(),
 {
     let start = Instant::now();
     f();

@@ -13,7 +13,7 @@ fn solve(lines: &[String]) -> (i64, i64) {
     (part1, part2)
 }
 
-fn calculate(init: &String, iter: usize, map: &mut HashMap<(i64, i64, i64, i64), i64>) -> i64 {
+fn calculate(init: &str, iter: usize, map: &mut HashMap<(i64, i64, i64, i64), i64>) -> i64 {
     let mut cur: i64 = init.parse().unwrap();
     let mut last = cur % 10;
     let mut diffs = Vec::new();
@@ -52,10 +52,7 @@ mod tests {
 
     #[test]
     fn should_part1_pass_test_input2() {
-        assert_eq!(
-            calculate(&"123".to_string(), 10, &mut HashMap::new()),
-            5908254
-        );
+        assert_eq!(calculate("123", 10, &mut HashMap::new()), 5908254);
     }
 
     #[test]

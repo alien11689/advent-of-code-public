@@ -7,18 +7,10 @@ const DAY: u8 = 18;
 fn solve_part1_and_2(lines: &[String], max: i32, take: usize) -> (i32, String) {
     let start = Point2D::new(0, 0);
     let target = Point2D::new(max, max);
-    let mut blocks: HashSet<Point2D> = lines
-        .iter()
-        .take(take)
-        .map(|line| cords_to_point(line))
-        .collect();
+    let mut blocks: HashSet<Point2D> = lines.iter().take(take).map(|s| cords_to_point(s)).collect();
     let part1 = iterate(start, target, &blocks);
     let mut best_path = create_path(&part1);
-    let new_blocks: Vec<Point2D> = lines
-        .iter()
-        .skip(take)
-        .map(|line| cords_to_point(line))
-        .collect();
+    let new_blocks: Vec<Point2D> = lines.iter().skip(take).map(|s| cords_to_point(s)).collect();
     for nb in new_blocks {
         blocks.insert(nb);
         if !best_path.contains(&nb) {
@@ -36,7 +28,7 @@ fn solve_part1_and_2(lines: &[String], max: i32, take: usize) -> (i32, String) {
     panic!()
 }
 
-fn cords_to_point(line: &String) -> Point2D {
+fn cords_to_point(line: &str) -> Point2D {
     let vec: Vec<i32> = line.split(",").map(|v| v.parse().unwrap()).collect();
     Point2D::new(vec[0], vec[1])
 }
@@ -47,7 +39,7 @@ fn create_path(position: &Position) -> HashSet<Point2D> {
     while let Some(c) = cur {
         match c {
             Position::Exist(p, _, prev) => {
-                best_path.insert(p.clone());
+                best_path.insert(*p);
                 cur = Some(prev.as_ref());
             }
             Nil => {
@@ -86,7 +78,7 @@ fn iterate(start: Point2D, target: Point2D, blocks: &HashSet<Point2D>) -> Positi
         if visited.contains(&p) {
             continue;
         }
-        visited.insert(p.clone());
+        visited.insert(p);
         if p == target {
             return cur;
         }

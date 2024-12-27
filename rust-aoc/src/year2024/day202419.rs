@@ -1,5 +1,5 @@
-use std::cmp::Reverse;
 use crate::helper::read_file_lines;
+use std::cmp::Reverse;
 use std::collections::{BinaryHeap, HashMap, HashSet};
 
 const DAY: u8 = 19;
@@ -8,8 +8,7 @@ fn solve_part1_and_2(lines: &[String]) -> (i32, i64) {
     let towels: Vec<String> = lines[0].split(", ").map(String::from).collect();
     let mut part1 = 0;
     let mut part2 = 0;
-    for i in 1..lines.len() {
-        let design = &lines[i];
+    for design in lines.iter().skip(1) {
         if !design.is_empty() {
             let possible = find_possible(design, &towels);
             // println!("For {design} is {possible}");
@@ -22,7 +21,7 @@ fn solve_part1_and_2(lines: &[String]) -> (i32, i64) {
     (part1, part2)
 }
 
-fn find_possible(design: &String, towels: &Vec<String>) -> i64 {
+fn find_possible(design: &str, towels: &[String]) -> i64 {
     let possible_towels: HashSet<&String> = towels.iter().filter(|t| design.contains(*t)).collect();
     let mut passes: HashSet<(usize, usize)> = HashSet::new();
     for i in 0..design.len() {
@@ -43,7 +42,7 @@ fn find_possible(design: &String, towels: &Vec<String>) -> i64 {
         }
         min = cur as i32;
         // println!("Checking {} from q", cur);
-        let ways = target_to_ways.get(&cur).unwrap().clone();
+        let ways = *target_to_ways.get(&cur).unwrap();
         let mut to_remove = HashSet::new();
         for v in &passes {
             if v.0 == cur {
@@ -51,7 +50,7 @@ fn find_possible(design: &String, towels: &Vec<String>) -> i64 {
                 let target = v.1;
                 *target_to_ways.entry(target).or_insert(0) += ways;
                 q.push(Reverse(target));
-                to_remove.insert(v.clone());
+                to_remove.insert(*v);
             }
         }
         for r in to_remove {

@@ -60,7 +60,6 @@ fn solve_part1(lines: &[String]) -> usize {
 
 fn heights(block: &HashSet<Point2D>) -> Vec<usize> {
     (0..5)
-        .into_iter()
         .map(|c| block.iter().filter(|p| p.x == c).count() - 1)
         .collect()
 }

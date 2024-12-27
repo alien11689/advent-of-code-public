@@ -16,7 +16,7 @@ fn iterate(blocks: &HashSet<Point2D>, start: &Point2D, max: &Point2D) -> HashSet
     let mut dir = Dir::N;
     let mut visited_v2: HashSet<(Point2D, Dir)> = HashSet::new();
     while cur.x >= 0 && cur.y >= 0 && cur.x < max.x && cur.y < max.y {
-        let key = (cur.clone(), dir.clone());
+        let key = (cur, dir.clone());
         if visited_v2.contains(&key) {
             return HashSet::new();
         }
@@ -55,7 +55,7 @@ fn solve_part2(lines: &[String]) -> usize {
         .iter()
         .par_bridge()
         .filter(|obstacle| {
-            let mut new_blocks = HashSet::from(blocks.clone());
+            let mut new_blocks = blocks.clone();
             new_blocks.insert(**obstacle);
             iterate(&new_blocks, &start, &max).is_empty()
         })

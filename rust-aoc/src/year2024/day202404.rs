@@ -40,12 +40,12 @@ fn count_xmas_starting_from(p: &Point2D, map: &HashMap<Point2D, char>) -> i32 {
 fn solve_part2(lines: &[String]) -> i32 {
     let map = read_map(lines);
     let mut count = 0;
-    for y in 0..lines.len() - 2 {
-        for x in 0..lines[y].len() - 2 {
+    for (y, line) in lines.iter().take(lines.len() - 2).enumerate() {
+        for (x, c) in line.chars().take(line.len() - 2).enumerate() {
             let x = x as i32;
             let y = y as i32;
             if map[&Point2D::new(x + 1, y + 1)] == 'A' {
-                let left_up = map[&Point2D::new(x, y)];
+                let left_up = c;
                 let left_down = map[&Point2D::new(x, y + 2)];
                 let right_up = map[&Point2D::new(x + 2, y)];
                 let right_down = map[&Point2D::new(x + 2, y + 2)];

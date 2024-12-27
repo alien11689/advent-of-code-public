@@ -6,7 +6,7 @@ fn solve_part1(lines: &[String]) -> i32 {
     let (rules, updates) = read_input(lines);
     updates
         .iter()
-        .filter(|u| match_rules(*u, &rules))
+        .filter(|u| match_rules(u, &rules))
         .map(|u| u[(u.len() - 1) / 2])
         .sum()
 }
@@ -26,11 +26,11 @@ fn read_input(lines: &[String]) -> (Vec<Vec<i32>>, Vec<Vec<i32>>) {
     (rules, updates)
 }
 
-fn match_rules(update: &Vec<i32>, rules: &Vec<Vec<i32>>) -> bool {
+fn match_rules(update: &[i32], rules: &[Vec<i32>]) -> bool {
     rules.iter().all(|rule| match_rule(rule, update))
 }
 
-fn match_rule(rule: &Vec<i32>, update: &Vec<i32>) -> bool {
+fn match_rule(rule: &[i32], update: &[i32]) -> bool {
     if let Some(a) = update.iter().position(|x| *x == rule[0]) {
         if let Some(b) = update.iter().position(|x| *x == rule[1]) {
             return a < b;
@@ -43,14 +43,14 @@ fn solve_part2(lines: &[String]) -> i32 {
     let (rules, updates) = read_input(lines);
     updates
         .iter()
-        .filter(|u| !match_rules(*u, &rules))
+        .filter(|u| !match_rules(u, &rules))
         .map(|u| fix(u, &rules))
         .map(|u| u[(u.len() - 1) / 2])
         .sum()
 }
 
-fn fix(update: &Vec<i32>, rules: &Vec<Vec<i32>>) -> Vec<i32> {
-    let mut update = update.clone();
+fn fix(update: &[i32], rules: &[Vec<i32>]) -> Vec<i32> {
+    let mut update = update.to_owned();
     let interesting_rules: Vec<&Vec<i32>> = rules
         .iter()
         .filter(|r| r.iter().all(|a| update.contains(a)))

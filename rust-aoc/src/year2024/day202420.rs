@@ -35,7 +35,7 @@ fn solve_part1_and_2(lines: &[String], threshold: i32, limit: i32) -> i32 {
         for n in c.neighbours_cross() {
             if n.in_range(left_up, right_down) && !visited.contains(&n) && !blocks.contains(&n) {
                 cur = Some(n);
-                break
+                break;
             }
         }
     }
@@ -82,7 +82,11 @@ mod tests {
     #[case(76, 20, 3)]
     #[case(74, 20, 7)]
     #[case(72, 20, 29)]
-    fn should_part1_and_2_pass_test_input1(#[case] threshold: i32, #[case] limit: i32, #[case] res: i32) {
+    fn should_part1_and_2_pass_test_input1(
+        #[case] threshold: i32,
+        #[case] limit: i32,
+        #[case] res: i32,
+    ) {
         let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test1.txt", DAY));
         assert_eq!(solve_part1_and_2(&lines, threshold, limit), res);
     }
