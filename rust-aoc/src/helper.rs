@@ -114,7 +114,7 @@ where
     println!("Time: {:?}", duration);
 }
 
-#[derive(Debug, Hash, PartialEq, Eq, Clone)]
+#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy)]
 pub(crate) enum Dir {
     N,
     W,
@@ -123,6 +123,15 @@ pub(crate) enum Dir {
 }
 
 impl Dir {
+    pub(crate) fn left(&self) -> Dir {
+        match self {
+            Dir::N => Dir::W,
+            Dir::W => Dir::S,
+            Dir::S => Dir::E,
+            Dir::E => Dir::N,
+        }
+    }
+
     pub(crate) fn right(&self) -> Dir {
         match self {
             Dir::N => Dir::E,

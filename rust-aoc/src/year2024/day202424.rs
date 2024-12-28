@@ -88,10 +88,7 @@ fn parse_input(lines: &[String]) -> (HashSet<Rule>, HashMap<String, bool>) {
     lines.iter().for_each(|line| {
         if line.contains(":") {
             let parts: Vec<&str> = line.split(": ").collect();
-            inputs.insert(
-                parts[0].to_string(),
-                parts[1] == "1",
-            );
+            inputs.insert(parts[0].to_string(), parts[1] == "1");
         } else if line.contains(">") {
             let parts: Vec<&str> = regex.split(line).collect();
             rules.insert(Rule::new(
