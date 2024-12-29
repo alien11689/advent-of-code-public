@@ -65,7 +65,6 @@ class Day23 implements Day {
         });
         long part1 = lans.stream().filter(lan -> lan.stream().anyMatch(e -> e.startsWith("t"))).count();
         System.out.println(part1);
-        Set<Set<String>> connectionsSet = connections.stream().map(HashSet::new).collect(Collectors.toSet());
         int best = Integer.MIN_VALUE;
         String bestName = "";
         while (!lans.isEmpty()) {
@@ -85,7 +84,7 @@ class Day23 implements Day {
                         String toCheck = left.stream().findAny().get();
                         if (cur.stream().allMatch(c -> {
                             Set<String> con = Set.of(c, toCheck);
-                            return connectionsSet.contains(con);
+                            return connections.contains(con);
                         })) {
                             cur.add(toCheck);
                             toRemove.add(l);
@@ -103,7 +102,7 @@ class Day23 implements Day {
                 bestName = cur.stream().sorted().collect(Collectors.joining(","));
             }
             lans.removeIf(lan -> lan.stream().anyMatch(cur::contains));
-            connectionsSet.removeIf(con -> con.stream().anyMatch(cur::contains));
+            connections.removeIf(con -> con.stream().anyMatch(cur::contains));
         }
         System.out.println(bestName);
     }

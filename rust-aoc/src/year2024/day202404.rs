@@ -1,4 +1,4 @@
-use crate::helper::{read_file_lines, Point2D};
+use crate::helper::{read_file_lines, read_map, Point2D};
 use std::collections::HashMap;
 
 fn solve_part1(lines: &[String]) -> i32 {
@@ -9,16 +9,6 @@ fn solve_part1(lines: &[String]) -> i32 {
         .map(|(p, _)| p)
         .collect();
     xs.iter().map(|p| count_xmas_starting_from(p, &map)).sum()
-}
-
-fn read_map(lines: &[String]) -> HashMap<Point2D, char> {
-    let mut map: HashMap<Point2D, char> = HashMap::new();
-    for (y, line) in lines.iter().enumerate() {
-        for (x, c) in line.chars().enumerate() {
-            map.insert(Point2D::new(x as i32, y as i32), c);
-        }
-    }
-    map
 }
 
 fn count_xmas_starting_from(p: &Point2D, map: &HashMap<Point2D, char>) -> i32 {

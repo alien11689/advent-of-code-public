@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::ops::Add;
 use std::time::Instant;
@@ -140,4 +140,14 @@ impl Dir {
             Dir::E => Dir::S,
         }
     }
+}
+
+pub(crate) fn read_map(lines: &[String]) -> HashMap<Point2D, char> {
+    let mut map: HashMap<Point2D, char> = HashMap::new();
+    for (y, line) in lines.iter().enumerate() {
+        for (x, c) in line.chars().enumerate() {
+            map.insert(Point2D::new(x as i32, y as i32), c);
+        }
+    }
+    map
 }
