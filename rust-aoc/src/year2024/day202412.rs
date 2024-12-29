@@ -1,4 +1,4 @@
-use crate::helper::{read_file_lines, read_map, Dir, Point2D};
+use crate::helper::{clusters_cross, read_file_lines, read_map, Dir, Point2D};
 use std::collections::{HashMap, HashSet, VecDeque};
 
 const DAY: u8 = 12;
@@ -36,32 +36,6 @@ fn solve_part1_and_2(lines: &[String]) -> (usize, usize) {
         part2 += area * sides;
     }
     (part1, part2)
-}
-
-fn clusters_cross(points: &HashSet<Point2D>) -> Vec<HashSet<Point2D>> {
-    let mut result = Vec::new();
-    let mut points = points.clone();
-    while let Some(root) = points.iter().next() {
-        let mut q = VecDeque::new();
-        q.push_back(*root);
-        let mut visited = HashSet::new();
-        while let Some(cur) = q.pop_front() {
-            if visited.contains(&cur) {
-                continue;
-            }
-            cur.neighbours_cross().iter().for_each(|n| {
-                if points.contains(n) && !visited.contains(n) {
-                    q.push_back(*n);
-                }
-            });
-            visited.insert(cur);
-        }
-        visited.iter().for_each(|p| {
-            points.remove(p);
-        });
-        result.push(visited);
-    }
-    result
 }
 
 fn find_single_region(map: &HashMap<Point2D, char>, point: &Point2D, c: &char) -> HashSet<Point2D> {

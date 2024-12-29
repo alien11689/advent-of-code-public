@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap, HashSet, VecDeque};
 use std::fs;
 use std::ops::Add;
 use std::time::Instant;
@@ -150,4 +150,56 @@ pub(crate) fn read_map(lines: &[String]) -> HashMap<Point2D, char> {
         }
     }
     map
+}
+
+pub(crate) fn clusters_cross(points: &HashSet<Point2D>) -> Vec<HashSet<Point2D>> {
+    let mut result = Vec::new();
+    let mut points = points.clone();
+    while let Some(root) = points.iter().next() {
+        let mut q = VecDeque::new();
+        q.push_back(*root);
+        let mut visited = HashSet::new();
+        while let Some(cur) = q.pop_front() {
+            if visited.contains(&cur) {
+                continue;
+            }
+            cur.neighbours_cross().iter().for_each(|n| {
+                if points.contains(n) && !visited.contains(n) {
+                    q.push_back(*n);
+                }
+            });
+            visited.insert(cur);
+        }
+        visited.iter().for_each(|p| {
+            points.remove(p);
+        });
+        result.push(visited);
+    }
+    result
+}
+
+pub(crate) fn clusters_full(points: &HashSet<Point2D>) -> Vec<HashSet<Point2D>> {
+    let mut result = Vec::new();
+    let mut points = points.clone();
+    while let Some(root) = points.iter().next() {
+        let mut q = VecDeque::new();
+        q.push_back(*root);
+        let mut visited = HashSet::new();
+        while let Some(cur) = q.pop_front() {
+            if visited.contains(&cur) {
+                continue;
+            }
+            cur.neighbours().iter().for_each(|n| {
+                if points.contains(n) && !visited.contains(n) {
+                    q.push_back(*n);
+                }
+            });
+            visited.insert(cur);
+        }
+        visited.iter().for_each(|p| {
+            points.remove(p);
+        });
+        result.push(visited);
+    }
+    result
 }
