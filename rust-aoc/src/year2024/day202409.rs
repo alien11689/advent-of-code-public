@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 
 const DAY: u8 = 9;
 
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 struct Elem {
     file_id: i64,
     count: usize,
@@ -100,7 +100,7 @@ fn solve_part2(lines: &[String]) -> i64 {
                 let mut new_elems = Vec::new();
                 for (j, elem) in elems.iter().enumerate() {
                     if j == i {
-                        new_elems.push(current.clone());
+                        new_elems.push(*current);
                         if checked.count > current.count {
                             new_elems.push(Elem {
                                 file_id: checked.file_id,
@@ -115,7 +115,7 @@ fn solve_part2(lines: &[String]) -> i64 {
                             empty: true,
                         });
                     } else {
-                        new_elems.push(elem.clone());
+                        new_elems.push(*elem);
                     }
                 }
                 elems = new_elems;

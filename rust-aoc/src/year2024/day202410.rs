@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet, VecDeque};
 
 const DAY: u8 = 10;
 
-#[derive(Eq, PartialEq, Hash, Clone)]
+#[derive(Eq, PartialEq, Hash, Clone, Copy)]
 struct Position {
     loc: Point2D,
     num: u32,
@@ -35,8 +35,8 @@ fn solve_part1_and_2(lines: &[String]) -> (usize, usize) {
     let mut part2 = Vec::new();
     while let Some(position) = q.pop_front() {
         if position.num == 9 {
-            part1.insert(position.clone());
-            part2.push(position.clone());
+            part1.insert(position);
+            part2.push(position);
             continue;
         }
         let next_num = position.num + 1;

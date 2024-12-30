@@ -163,8 +163,7 @@ fn solve_part2(lines: &[String]) -> i32 {
                 let next_boxes_to_move: HashSet<Box> = boxes_copy
                     .iter()
                     .filter(|b| {
-                        new_boxes_flatten.contains(&b.left)
-                            || new_boxes_flatten.contains(&b.right)
+                        new_boxes_flatten.contains(&b.left) || new_boxes_flatten.contains(&b.right)
                     })
                     .copied()
                     .collect();
