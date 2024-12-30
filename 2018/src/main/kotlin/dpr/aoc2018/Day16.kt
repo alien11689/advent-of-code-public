@@ -6,10 +6,12 @@ object Day16 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getLinesFromFile("/16/input.txt")
-        part1And2(input)
+        val (part1, part2) = part1And2(input)
+        println(part1)
+        println(part2)
     }
 
-    private fun part1And2(lines: List<String>) {
+    private fun part1And2(lines: List<String>):Pair<Any, Any> {
         var i = 0
         val availableOperations = mutableListOf(
             Operation.Addi,
@@ -53,7 +55,7 @@ object Day16 {
 
             i += 4
         }
-        println(countWhenMultipleMatch)
+        val part1 = countWhenMultipleMatch
 
         val mapping = mutableMapOf<Int, Operation>()
         unknownOperations.removeAll { it.matches.isEmpty() }
@@ -82,7 +84,7 @@ object Day16 {
             registers = mapping[operands[0]]!!.apply(operands[1], operands[2], operands[3], registers).toMutableList()
             ++i
         }
-        println(registers[0])
+        return Pair(part1, registers[0])
     }
 
     sealed class Operation {
