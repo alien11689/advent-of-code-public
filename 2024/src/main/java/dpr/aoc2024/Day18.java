@@ -2,6 +2,7 @@ package dpr.aoc2024;
 
 import dpr.commons.Point2D;
 import dpr.commons.Util;
+import kotlin.Pair;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -26,7 +27,9 @@ class Day18 implements Day {
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
 //            int max = 6;
 //            int take = 12;
-            part1And2(lines, max, take);
+            Pair<Object, Object> solution1And2 = part1And2(lines, max, take);
+            System.out.println(solution1And2.getFirst());
+            System.out.println(solution1And2.getSecond());
         });
     }
 
@@ -38,7 +41,7 @@ class Day18 implements Day {
     record Position(Point2D p, int steps, int fitness, Position prev) {
     }
 
-    private void part1And2(List<String> lines, int max, int take) {
+    private Pair<Object, Object> part1And2(List<String> lines, int max, int take) {
         Point2D start = new Point2D(0, 0);
         Point2D target = new Point2D(max, max);
         Set<Point2D> blocks = lines.stream().limit(take).map(line -> {
@@ -53,7 +56,7 @@ class Day18 implements Day {
 //            System.out.println();
 //        }
         Position currentPath = iterate(max, start, target, blocks);
-        System.out.println(currentPath.steps);
+        int part1 = currentPath.steps;
 
         Set<Point2D> bestPath = new HashSet<>();
         while (currentPath != null) {
@@ -61,6 +64,7 @@ class Day18 implements Day {
             currentPath = currentPath.prev;
         }
 
+        String part2 = "";
         List<Point2D> newBlocks = lines.stream().skip(take).map(line -> {
             String[] parts = line.split(",");
             return new Point2D(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
@@ -73,7 +77,7 @@ class Day18 implements Day {
             }
             Position result = iterate(max, start, target, blocks);
             if (result == null) {
-                System.out.println(newBlock.getX() + "," + newBlock.getY());
+                part2 = newBlock.getX() + "," + newBlock.getY();
                 break;
             }
             bestPath = new HashSet<>();
@@ -82,6 +86,7 @@ class Day18 implements Day {
                 result = result.prev;
             }
         }
+        return new Pair<>(part1, part2);
     }
 
     private static Position iterate(int max, Point2D start, Point2D target, Set<Point2D> blocks) {

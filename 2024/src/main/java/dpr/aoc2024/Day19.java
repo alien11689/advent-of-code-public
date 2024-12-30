@@ -22,7 +22,9 @@ class Day19 implements Day {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
-            part1And2(lines);
+            Pair<Object, Object> solution1And2 = part1And2(lines);
+            System.out.println(solution1And2.getFirst());
+            System.out.println(solution1And2.getSecond());
         });
     }
 
@@ -31,8 +33,8 @@ class Day19 implements Day {
         return 19;
     }
 
-    private void part1And2(List<String> lines) {
-        List<String> towels = Arrays.stream(lines.get(0).split(", ")).sorted().toList();
+    private Pair<Object, Object> part1And2(List<String> lines) {
+        List<String> towels = Arrays.stream(lines.getFirst().split(", ")).sorted().toList();
         int part1 = 0;
         long part2 = 0;
         for (int i = 1; i < lines.size(); ++i) {
@@ -43,8 +45,7 @@ class Day19 implements Day {
             }
             part2 += possible;
         }
-        System.out.println(part1);
-        System.out.println(part2);
+        return new Pair<>(part1, part2);
     }
 
     private static long findPossible(List<String> towels, String design) {

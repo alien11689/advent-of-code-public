@@ -24,7 +24,9 @@ class Day16 implements Day {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test2.txt", dayNum()));
-            part1And2(lines);
+            Pair<Object, Object> solution1And2 = part1And2(lines);
+            System.out.println(solution1And2.getFirst());
+            System.out.println(solution1And2.getSecond());
         });
     }
 
@@ -51,7 +53,7 @@ class Day16 implements Day {
         }
     }
 
-    private void part1And2(List<String> lines) {
+    private Pair<Object, Object> part1And2(List<String> lines) {
         Point2D start = null;
         Point2D end = null;
         Set<Point2D> blocks = new HashSet<>();
@@ -150,7 +152,6 @@ class Day16 implements Day {
             }
         }
 //        draw(blocks, bestPaths);
-        System.out.println(bestScore); // part 1
-        System.out.println(bestPaths.size()); // part 2
+        return new Pair<>(bestScore, bestPaths.size());
     }
 }

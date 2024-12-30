@@ -1,6 +1,7 @@
 package dpr.aoc2024;
 
 import dpr.commons.Util;
+import kotlin.Pair;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -22,7 +23,9 @@ class Day22 implements Day {
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test2.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test3.txt", dayNum()));
-            part1And2(lines);
+            Pair<Object, Object> solution1And2 = part1And2(lines);
+            System.out.println(solution1And2.getFirst());
+            System.out.println(solution1And2.getSecond());
         });
     }
 
@@ -31,12 +34,11 @@ class Day22 implements Day {
         return 22;
     }
 
-    private void part1And2(List<String> lines) {
+    private Pair<Object, Object> part1And2(List<String> lines) {
         Map<String, Integer> prices = new ConcurrentHashMap<>();
         long part1 = lines.stream().parallel().mapToLong(line -> calculate(Long.parseLong(line), 2000, prices)).sum();
-        System.out.println(part1);
         int part2 = prices.values().stream().mapToInt(l -> l).max().orElse(Integer.MIN_VALUE);
-        System.out.println(part2);
+        return new Pair<>(part1, part2);
     }
 
     private long calculate(long init, int iter, Map<String, Integer> prices) {

@@ -3,6 +3,7 @@ package dpr.aoc2024;
 import dpr.commons.Dir;
 import dpr.commons.Point2D;
 import dpr.commons.Util;
+import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -21,7 +22,9 @@ class Day06 implements Day {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
-            part1And2(lines);
+            Pair<Object, Object> solution1And2 = part1And2(lines);
+            System.out.println(solution1And2.getFirst());
+            System.out.println(solution1And2.getSecond());
         });
     }
 
@@ -33,7 +36,7 @@ class Day06 implements Day {
     record Position(Point2D point, Dir dir) {
     }
 
-    private void part1And2(List<String> lines) {
+    private Pair<Object, Object> part1And2(List<String> lines) {
         Point2D current = null;
         Set<Point2D> blocks = new HashSet<>();
         for (int y = 0; y < lines.size(); y++) {
@@ -48,7 +51,7 @@ class Day06 implements Day {
         }
         Position starting = new Position(current, Dir.N);
         Set<Point2D> visited = travel(lines, current, blocks);
-        System.out.println(visited.size());
+        int part1 = visited.size();
         Set<Point2D> possibleObstacle = visited.stream()
                 .filter(p -> !p.equals(starting.point))
                 .collect(Collectors.toSet());
@@ -61,7 +64,7 @@ class Day06 implements Day {
                     return newVisited.isEmpty();
                 })
                 .count();
-        System.out.println(count);
+        return new Pair<>(part1, count);
     }
 
     @NotNull

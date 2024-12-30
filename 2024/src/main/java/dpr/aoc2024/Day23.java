@@ -1,6 +1,7 @@
 package dpr.aoc2024;
 
 import dpr.commons.Util;
+import kotlin.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +21,9 @@ class Day23 implements Day {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
-            part1And2(lines);
+            Pair<Object, Object> solution1And2 = part1And2(lines);
+            System.out.println(solution1And2.getFirst());
+            System.out.println(solution1And2.getSecond());
         });
     }
 
@@ -29,7 +32,7 @@ class Day23 implements Day {
         return 23;
     }
 
-    private void part1And2(List<String> lines) {
+    private Pair<Object, Object> part1And2(List<String> lines) {
         Set<String> edges = new HashSet<>();
         Set<Set<String>> connections = lines.stream().map(line -> {
             String[] parts = line.split("-");
@@ -64,7 +67,6 @@ class Day23 implements Day {
             }
         });
         long part1 = lans.stream().filter(lan -> lan.stream().anyMatch(e -> e.startsWith("t"))).count();
-        System.out.println(part1);
         int best = Integer.MIN_VALUE;
         String bestName = "";
         while (!lans.isEmpty()) {
@@ -104,6 +106,6 @@ class Day23 implements Day {
             lans.removeIf(lan -> lan.stream().anyMatch(cur::contains));
             connections.removeIf(con -> con.stream().anyMatch(cur::contains));
         }
-        System.out.println(bestName);
+        return new Pair<>(part1, bestName);
     }
 }
