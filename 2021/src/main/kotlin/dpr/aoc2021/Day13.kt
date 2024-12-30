@@ -8,7 +8,7 @@ object Day13 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/13/input.txt")
         println(part1(lines))
-        part2(lines)
+        println(part2(lines))
     }
 
     private fun part1(lines: List<String>): Any {
@@ -47,13 +47,16 @@ object Day13 {
         val newPaper = instructions.fold(paper.toSet()) { acc, it -> fold(acc, it) }
         val maxY = newPaper.maxOf { it.y }
         val maxX = newPaper.maxOf { it.x }
+        val sb = StringBuilder()
         for (i in 0..maxY) {
             for (j in 0..maxX) {
-                print(if (Point(j, i) in newPaper) '#' else ' ')
+                sb.append(if (Point(j, i) in newPaper) '#' else ' ')
             }
-            println()
+            if (i < maxY) {
+                sb.append('\n')
+            }
         }
-        return -1
+        return sb.toString()
     }
 
     private fun readInput(lines: List<String>): Pair<List<Fold>, Set<Point>> {
