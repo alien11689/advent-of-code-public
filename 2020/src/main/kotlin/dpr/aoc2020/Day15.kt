@@ -13,7 +13,7 @@ object Day15 {
 //        Util.test(part1And2("3,2,1"), listOf(438, 18))
 //        Util.test(part1And2("3,1,2"), listOf(1836, 362))
         val input = "1,2,16,19,18,0"
-        println(part1And2(input).joinToString("\n"))
+        part1And2(input).forEach(::println)
     }
 
     private fun part1And2(input: String): List<Int> {

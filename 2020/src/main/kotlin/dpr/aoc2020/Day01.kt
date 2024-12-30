@@ -6,13 +6,13 @@ object Day01 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/01/input.txt")
-        part1(input)
-        part2(input)
+        println(part1(input))
+        println(part2(input))
     }
 
-    private fun part1(input: List<String>) {
+    private fun part1(input: List<String>): Any {
         val mem = mutableSetOf<Int>()
-        println(input
+        return input
             .flatMap { s ->
                 val n = s.toInt()
                 val compliant = 2020 - n
@@ -23,21 +23,21 @@ object Day01 {
                     listOf()
                 }
             }
-            .take(1)[0])
+            .take(1)[0]
     }
 
-    private fun part2(input: List<String>) {
+    private fun part2(input: List<String>): Any {
         val nums = input.map { it.toInt() }
-        nums.forEachIndexed { i, a ->
-            nums.withIndex().filter { it.index > i }.forEach { (ii, b) ->
-                nums.withIndex().filter { it.index > ii }.forEach { (_, c) ->
+        for ((i, a) in nums.withIndex()) {
+            for ((ii, b) in nums.withIndex().filter { it.index > i }) {
+                for ((_, c) in nums.withIndex().filter { it.index > ii }) {
                     if (a + b + c == 2020) {
-                        println(a * b * c)
-                        return
+                        return a * b * c
                     }
                 }
             }
         }
+        throw RuntimeException("No solution")
     }
 
 }

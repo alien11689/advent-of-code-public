@@ -10,11 +10,11 @@ object Day10 {
 //        val input = Util.getFileContent("/10/test2.txt")
         val input = Util.getNotEmptyLinesFromFile("/10/input.txt")
             .map { it.toInt() }
-        part1(input)
-        part2(input)
+        println(part1(input))
+        println(part2(input))
     }
 
-    private fun part1(input: List<Int>) {
+    private fun part1(input: List<Int>): Any {
         val sorted = input.sorted() + (input.maxOrNull()!! + 3)
         var current = 0
         var difference1 = 0
@@ -28,10 +28,10 @@ object Day10 {
             }
             current = num
         }
-        println(difference1 * difference3)
+        return difference1 * difference3
     }
 
-    private fun part2(input: List<Int>) {
+    private fun part2(input: List<Int>): Any {
         val sorted = input.sorted() + (input.maxOrNull()!! + 3)
         var base = 0
         var current = 0
@@ -52,8 +52,7 @@ object Day10 {
             current = num
         }
 
-        val res = groups.map { it.calculate() }.fold(1L) { acc, l -> acc * l }
-        println(res)
+        return groups.map { it.calculate() }.fold(1L) { acc, l -> acc * l }
     }
 
     data class Group(val from: Int, val to: Int, val adapters: List<Int>) {

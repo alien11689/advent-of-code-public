@@ -9,7 +9,7 @@ object Day09 {
             .map { it.toLong() }
         val solutionPart1 = part1(input)
         println(solutionPart1)
-        part2(input, solutionPart1)
+        println(part2(input, solutionPart1))
     }
 
     private fun part1(input: List<Long>): Long {
@@ -41,15 +41,14 @@ object Day09 {
         throw RuntimeException("No solution for part 1")
     }
 
-    private fun part2(input: List<Long>, targetValue: Long) {
+    private fun part2(input: List<Long>, targetValue: Long): Any {
         var i = 0
         var j = 1
         while (j < input.size) {
             val sublist = input.subList(i, j + 1)
             val sum = sublist.sum()
             if (sum == targetValue) {
-                println(sublist.maxOrNull()!! + sublist.minOrNull()!!)
-                return
+                return sublist.maxOrNull()!! + sublist.minOrNull()!!
             } else if (sum < targetValue) {
                 ++j
             } else {
@@ -59,5 +58,6 @@ object Day09 {
                 throw RuntimeException("Set size cannot be 1")
             }
         }
+        throw RuntimeException("No solution")
     }
 }

@@ -8,22 +8,22 @@ object Day12 {
     fun main(args: Array<String>) = Util.measureTime {
 //        val input = Util.getNotEmptyLinesFromFile("/12/test.txt")
         val input = Util.getNotEmptyLinesFromFile("/12/input.txt")
-        part1(input)
-        part2(input)
+        println(part1(input))
+        println(part2(input))
     }
 
-    private fun part1(input: List<String>) {
+    private fun part1(input: List<String>): Any {
         val ship = input.fold(Ship(0, 0, Dir.E, Waypoint(10, 1))) { acc, command ->
             acc.move(Command.of(command))
         }
-        println(ship.manhattan())
+        return ship.manhattan()
     }
 
-    private fun part2(input: List<String>) {
+    private fun part2(input: List<String>): Any {
         val ship = input.fold(Ship(0, 0, Dir.E, Waypoint(10, 1))) { acc, command ->
             acc.move2(Command.of(command))
         }
-        println(ship.manhattan())
+        return ship.manhattan()
     }
 
     enum class Dir(val x: Int) {

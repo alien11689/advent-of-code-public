@@ -7,15 +7,15 @@ object Day05 {
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/05/input.txt")
         val seats = input.map { Seat.from(it) }
-        part1(seats)
-        part2(seats)
+        println(part1(seats))
+        println(part2(seats))
     }
 
-    private fun part1(input: List<Seat>) {
-        println(input.maxOf { it.toId() })
+    private fun part1(input: List<Seat>): Any {
+        return input.maxOf { it.toId() }
     }
 
-    private fun part2(input: List<Seat>) {
+    private fun part2(input: List<Seat>): Any {
         val sortedSeats = input.sortedBy { it.toId() }
         var previous = sortedSeats.first()
         sortedSeats.forEach {
@@ -23,11 +23,11 @@ object Day05 {
                 if (it == previous.next()) {
                     previous = it
                 } else {
-                    println(it.toId() - 1)
-                    return
+                    return it.toId() - 1
                 }
             }
         }
+        throw RuntimeException("No solution")
     }
 
     data class Seat(val row: Int, val column: Int) {

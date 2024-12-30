@@ -6,11 +6,11 @@ object Day08 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/08/input.txt")
-        part1(input)
-        part2(input)
+        println(part1(input))
+        println(part2(input))
     }
 
-    private fun part1(instr: List<String>) {
+    private fun part1(instr: List<String>): Any {
         val usedInstructions = mutableSetOf<Int>()
         var pointer = 0
         var acc = 0
@@ -23,10 +23,10 @@ object Day08 {
             acc = pair.first
             pointer = pair.second
         }
-        println(acc)
+        return acc
     }
 
-    private fun part2(instr: List<String>) {
+    private fun part2(instr: List<String>): Any {
         var i = 0
         while (i < instr.size) {
             if (instr[i].contains("nop") || instr[i].contains("jmp")) {
@@ -41,12 +41,12 @@ object Day08 {
                 }
                 val (acc, loop) = runProgram(newInstr)
                 if (!loop) {
-                    println(acc)
-                    break
+                    return acc
                 }
             }
             ++i
         }
+        throw RuntimeException("No solution")
     }
 
     private fun runProgram(instr: List<String>): Pair<Int, Boolean> {

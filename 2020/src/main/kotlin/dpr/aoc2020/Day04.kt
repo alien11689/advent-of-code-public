@@ -6,11 +6,11 @@ object Day04 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getLinesFromFile("/04/input.txt")
-        part1(input)
-        part2(input)
+        println(part1(input))
+        println(part2(input))
     }
 
-    private fun part1(input: List<String>) {
+    private fun part1(input: List<String>): Any {
         var valid = 0
         var current = mutableSetOf<String>()
         input.forEach { line ->
@@ -23,10 +23,10 @@ object Day04 {
                     .forEach { current.add(it) }
             }
         }
-        println(valid)
+        return valid
     }
 
-    private fun part2(input: List<String>) {
+    private fun part2(input: List<String>): Any {
         var valid = 0
         var current = mutableMapOf<String, String>()
         input.forEach { line ->
@@ -42,7 +42,7 @@ object Day04 {
                     }
             }
         }
-        println(valid)
+        return valid
     }
 
     data class Id(

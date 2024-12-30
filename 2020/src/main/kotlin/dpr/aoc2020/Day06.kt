@@ -6,11 +6,11 @@ object Day06 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getLinesFromFile("/06/input.txt")
-        part1(input)
-        part2(input)
+        println(part1(input))
+        println(part2(input))
     }
 
-    private fun part1(input: List<String>) {
+    private fun part1(input: List<String>): Any {
         var sum = 0
         var current = setOf<Char>()
         input.forEach { line ->
@@ -21,10 +21,10 @@ object Day06 {
                 current = current + line.toCharArray().toSet()
             }
         }
-        println(sum)
+        return sum
     }
 
-    private fun part2(input: List<String>) {
+    private fun part2(input: List<String>): Any {
         var sum = 0
         var current = ('a'..'z').toSet()
         input.forEach { line ->
@@ -36,6 +36,6 @@ object Day06 {
                 current = current.intersect(inLine)
             }
         }
-        println(sum)
+        return sum
     }
 }

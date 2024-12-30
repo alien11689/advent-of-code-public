@@ -6,22 +6,20 @@ object Day02 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/02/input.txt")
-        part1(input)
-        part2(input)
+        println(part1(input))
+        println(part2(input))
     }
 
-    private fun part1(input: List<String>) {
-        val c = input
+    private fun part1(input: List<String>): Any {
+        return input
             .map { Line.fromLine(it) }
             .count { it.valid() }
-        println(c)
     }
 
-    private fun part2(input: List<String>) {
-        val c = input
+    private fun part2(input: List<String>): Any {
+        return input
             .map { Line.fromLine(it) }
             .count { it.valid2() }
-        println(c)
     }
 
     data class Line(val min: Int, val max: Int, val c: Char, val s: String) {

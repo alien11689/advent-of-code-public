@@ -6,11 +6,11 @@ object Day11 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/11/input.txt")
-        part1(input)
-        part2(input)
+        println(part1(input))
+        println(part2(input))
     }
 
-    private fun part1(input: List<String>) {
+    private fun part1(input: List<String>): Any {
         var seats = readSeats(input)
         while (true) {
             val newSeats = mutableMapOf<Seat, Boolean>()
@@ -29,7 +29,7 @@ object Day11 {
             }
             seats = newSeats
         }
-        println(seats.count { it.value })
+        return seats.count { it.value }
     }
 
     private fun readSeats(input: List<String>): MutableMap<Seat, Boolean> {
@@ -44,7 +44,7 @@ object Day11 {
         return seats
     }
 
-    private fun part2(input: List<String>) {
+    private fun part2(input: List<String>): Any {
         var seats = readSeats(input)
         val maxI = input.size
         val maxJ = input[0].length
@@ -76,8 +76,7 @@ object Day11 {
             }
             seats = newSeats
         }
-        println(seats.count { it.value })
-
+        return seats.count { it.value }
     }
 
     private fun findValidOccupied(seats: MutableMap<Seat, Boolean>, current: Seat, changeI: Int, changeJ: Int, maxI: Int, maxJ: Int): Boolean {

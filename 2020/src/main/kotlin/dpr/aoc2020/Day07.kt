@@ -7,11 +7,11 @@ object Day07 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/07/input.txt")
-        part1(input)
-        part2(input)
+        println(part1(input))
+        println(part2(input))
     }
 
-    private fun part1(input: List<String>) {
+    private fun part1(input: List<String>): Any {
         val rules = input.map { Rule.parse(it) }
         val target = Bag("shiny", "gold")
         val stack = Stack<Bag>()
@@ -26,10 +26,10 @@ object Day07 {
             val foundIn = rules.filter { it.to.keys.contains(current) }.map { it.from }
             foundIn.forEach { stack.push(it) }
         }
-        println(needed.size - 1)
+        return needed.size - 1
     }
 
-    private fun part2(input: List<String>) {
+    private fun part2(input: List<String>): Any {
         val rules = input.map { Rule.parse(it) }
         val target = Bag("shiny", "gold")
         var count = 0
@@ -46,7 +46,7 @@ object Day07 {
             }
         }
         // 121 is too low
-        println(count)
+        return count
     }
 
     data class Bag(val type: String, val color: String)
