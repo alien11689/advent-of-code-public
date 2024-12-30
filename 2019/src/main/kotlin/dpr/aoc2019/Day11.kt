@@ -11,7 +11,7 @@ object Day11 {
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getFileContent("/11/input.txt").trim()
         println(part1(input))
-        part2(input)
+        println(part2(input))
     }
 
     private fun part1(input: String): Any {
@@ -42,7 +42,7 @@ object Day11 {
         return panel
     }
 
-    private fun part2(input: String) {
+    private fun part2(input: String): String {
         val state = IntCodeComputerState.init(input)
 
         val panel = createPanel(state, 1L)
@@ -52,13 +52,17 @@ object Day11 {
         val minY = whites.minByOrNull { it.y }!!.y
         val minX = whites.minByOrNull { it.x }!!.x
         val maxX = whites.maxByOrNull { it.x }!!.x
+        val sb = StringBuilder()
         for (i in minY..maxY) {
             for (j in (minX..maxX)) {
 //                println("${Pair(j, i)} in whites: ${Pair(j, i) in whites}")
-                print(if (Point2D(j, i) in whites) 'X' else ' ')
+                sb.append(if (Point2D(j, i) in whites) 'X' else ' ')
             }
-            println()
+            if (i < maxY) {
+                sb.append('\n')
+            }
         }
+        return sb.toString()
     }
 
     fun Dir.move(pos: Point2D, v: Long): Pair<Dir, Point2D> {

@@ -7,7 +7,7 @@ object Day08 {
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getFileContent("/08/input.txt").trim()
         println(part1(input))
-        part2(input)
+        println(part2(input))
     }
 
     private fun part1(input: String): Any {
@@ -18,7 +18,7 @@ object Day08 {
         return sol.filter { it == '1' }.length * sol.filter { it == '2' }.length
     }
 
-    private fun part2(input: String) {
+    private fun part2(input: String): String {
         val row = 25
         val tall = 6
         val black = '0'
@@ -27,12 +27,16 @@ object Day08 {
 
         val layers = input.chunked(row * tall)
 
+        val sb = StringBuilder()
         for (high in 0 until tall) {
             for (r in 0 until row) {
                 val cur = layers.map { it[high * row + r] }.find { it != transparent }
-                print(if (cur == black) ' ' else 'X')
+                sb.append(if (cur == black) ' ' else 'X')
             }
-            println()
+            if (high < tall - 1) {
+                sb.append("\n")
+            }
         }
+        return sb.toString()
     }
 }
