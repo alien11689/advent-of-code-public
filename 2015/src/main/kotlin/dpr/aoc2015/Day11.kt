@@ -6,11 +6,13 @@ object Day11 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = "cqjxjnds"
-        part1And2(input)
+        val part1And2 = part1And2(input)
+        println(part1And2[0]);
+        println(part1And2[1]);
     }
 
-    private fun part1And2(input: String) {
-        generateSequence({ input.toMutableList() }) { generateNext(it) }
+    private fun part1And2(input: String): List<String> {
+        return generateSequence({ input.toMutableList() }) { generateNext(it) }
             .filter {
                 var i = it.size - 1
                 while (i > 1) {
@@ -33,7 +35,8 @@ object Day11 {
                 pairs.size >= 2
             }
             .take(2)
-            .forEach { println(it.joinToString(separator = "")) }
+            .map { it.joinToString(separator = "") }
+            .toList()
     }
 
     private fun generateNext(prev: MutableList<Char>): MutableList<Char> {

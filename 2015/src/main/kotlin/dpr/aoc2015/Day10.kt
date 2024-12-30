@@ -6,18 +6,22 @@ object Day10 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = "1321131112"
-        part1And2(input)
+        val (part1, part2) = part1And2(input)
+        println(part1)
+        println(part2)
     }
 
-    private fun part1And2(input: String) {
+    private fun part1And2(input: String): Pair<Int?, Int?> {
         var cur = input.toList()
         val interestingIterations = setOf(40, 50)
+        val m = mutableMapOf<Int, Int>();
         (1..50).forEach { iter ->
             cur = next(cur)
             if (iter in interestingIterations) {
-                println(cur.size)
+                m[iter] = cur.size
             }
         }
+        return Pair(m[40], m[50]);
     }
 
     private fun next(input: List<Char>): List<Char> {
