@@ -6,7 +6,7 @@ object Day15 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         println(
-            part1(
+            part1And2(
                 listOf(
                     Disk(17, 1, 1),
                     Disk(7, 0, 2),
@@ -18,7 +18,7 @@ object Day15 {
             )
         )
         println(
-            part2(
+            part1And2(
                 listOf(
                     Disk(17, 1, 1),
                     Disk(7, 0, 2),
@@ -32,7 +32,7 @@ object Day15 {
         )
     }
 
-    private fun part1(input: List<Disk>): Any {
+    private fun part1And2(input: List<Disk>): Any {
         val biggest = input.maxByOrNull { it.positions }!!
         var time = biggest.first()
         val step = biggest.positions
@@ -42,10 +42,6 @@ object Day15 {
             }
             time += step
         }
-    }
-
-    private fun part2(input: List<Disk>): Any {
-        return part1(input)
     }
 
     data class Disk(val positions: Int, val start: Int, val num: Int) {

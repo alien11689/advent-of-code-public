@@ -6,10 +6,12 @@ object Day08 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/08/input.txt")
-        part1And2(input)
+        val (part1, part2) = part1And2(input)
+        println(part1)
+        println(part2)
     }
 
-    private fun part1And2(input: List<String>) {
+    private fun part1And2(input: List<String>): Pair<Any, Any> {
         val board = (0..5).map {
             (0..49).map { false }
         }
@@ -57,12 +59,16 @@ object Day08 {
                 else -> acc
             }
         }
-        println(res.flatten().count { it })
+        val part1 = res.flatten().count { it }
+        val part2 = StringBuilder()
         (0..5).forEach { y ->
             (0..49).forEach { x ->
-                print(if (res[y][x]) '#' else ' ')
+                part2.append(if (res[y][x]) '#' else ' ')
             }
-            println()
+            if (y < 5) {
+                part2.append("\n")
+            }
         }
+        return Pair(part1, part2.toString())
     }
 }
