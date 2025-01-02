@@ -1,7 +1,7 @@
 package dpr.aoc2024;
 
+import dpr.commons.Pair;
 import dpr.commons.Util;
-import kotlin.Pair;
 
 import java.util.Arrays;
 import java.util.HashMap;

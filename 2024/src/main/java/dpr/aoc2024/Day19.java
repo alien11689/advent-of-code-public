@@ -1,7 +1,7 @@
 package dpr.aoc2024;
 
+import dpr.commons.Pair;
 import dpr.commons.Util;
-import kotlin.Pair;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,8 +23,8 @@ class Day19 implements Day {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
             Pair<Object, Object> solution1And2 = part1And2(lines);
-            System.out.println(solution1And2.getFirst());
-            System.out.println(solution1And2.getSecond());
+            System.out.println(solution1And2.first());
+            System.out.println(solution1And2.second());
         });
     }
 
@@ -71,8 +71,8 @@ class Day19 implements Day {
             }
             min = cur;
             long ways = targetToWays.get(cur);
-            Set<Pair<Integer, Integer>> available = passes.stream().filter(p -> p.getFirst() == cur).collect(Collectors.toSet());
-            available.stream().map(Pair::getSecond).forEach(target -> {
+            Set<Pair<Integer, Integer>> available = passes.stream().filter(p -> p.first() == cur).collect(Collectors.toSet());
+            available.stream().map(Pair::second).forEach(target -> {
                 targetToWays.compute(target, (k, v) -> v == null ? ways : (v + ways));
                 pq.offer(target);
             });

@@ -1,9 +1,9 @@
 package dpr.aoc2024;
 
 import dpr.commons.Dir;
+import dpr.commons.Pair;
 import dpr.commons.Point2D;
 import dpr.commons.Util;
-import kotlin.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

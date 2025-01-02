@@ -1,8 +1,8 @@
 package dpr.aoc2024;
 
+import dpr.commons.Pair;
 import dpr.commons.Point2D;
 import dpr.commons.Util;
-import kotlin.Pair;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,8 +28,8 @@ class Day18 implements Day {
 //            int max = 6;
 //            int take = 12;
             Pair<Object, Object> solution1And2 = part1And2(lines, max, take);
-            System.out.println(solution1And2.getFirst());
-            System.out.println(solution1And2.getSecond());
+            System.out.println(solution1And2.first());
+            System.out.println(solution1And2.second());
         });
     }
 

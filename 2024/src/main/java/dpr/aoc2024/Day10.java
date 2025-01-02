@@ -1,8 +1,8 @@
 package dpr.aoc2024;
 
+import dpr.commons.Pair;
 import dpr.commons.Point2D;
 import dpr.commons.Util;
-import kotlin.Pair;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,8 +22,8 @@ class Day10 implements Day {
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
             Pair<Object, Object> solution1And2 = part1And2(lines);
-            System.out.println(solution1And2.getFirst());
-            System.out.println(solution1And2.getSecond());
+            System.out.println(solution1And2.first());
+            System.out.println(solution1And2.second());
         });
     }
 
@@ -35,7 +35,7 @@ class Day10 implements Day {
     record Position(Point2D loc, int num, Point2D start) {
     }
 
-    private Pair<Object,Object> part1And2(List<String> lines) {
+    private Pair<Object, Object> part1And2(List<String> lines) {
         List<List<Integer>> map = lines.stream().map(line -> {
                     List<Integer> l = new ArrayList<>();
                     char[] chars = line.toCharArray();

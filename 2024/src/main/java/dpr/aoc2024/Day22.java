@@ -1,7 +1,7 @@
 package dpr.aoc2024;
 
+import dpr.commons.Pair;
 import dpr.commons.Util;
-import kotlin.Pair;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -24,8 +24,8 @@ class Day22 implements Day {
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test2.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test3.txt", dayNum()));
             Pair<Object, Object> solution1And2 = part1And2(lines);
-            System.out.println(solution1And2.getFirst());
-            System.out.println(solution1And2.getSecond());
+            System.out.println(solution1And2.first());
+            System.out.println(solution1And2.second());
         });
     }
 
