@@ -113,6 +113,6 @@ class Day08 implements Day {
     }
 
     private static boolean inBound(List<String> lines, Point2D p) {
-        return p.getX() >= 0 && p.getY() >= 0 && p.getX() < lines.get(0).length() && p.getY() < lines.size();
+        return p.getX() >= 0 && p.getY() >= 0 && p.getX() < lines.getFirst().length() && p.getY() < lines.size();
     }
 }

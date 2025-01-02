@@ -182,12 +182,7 @@ class Day21 implements Day {
             }
         }
         List<List<Dir>> result = new ArrayList<>();
-        PriorityQueue<Path> q = new PriorityQueue<>(new Comparator<Path>() {
-            @Override
-            public int compare(Path o1, Path o2) {
-                return o1.cur.manhattan(targetPos) - o2.cur.manhattan(targetPos);
-            }
-        });
+        PriorityQueue<Path> q = new PriorityQueue<>(Comparator.comparingInt(o -> o.cur.manhattan(targetPos)));
         q.offer(new Path(start, new ArrayList<>()));
         int best = Integer.MAX_VALUE;
         while (!q.isEmpty()) {

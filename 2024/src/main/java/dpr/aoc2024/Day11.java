@@ -56,7 +56,7 @@ class Day11 implements Day {
 
     private static long calculate(List<String> lines, int max) {
         Map<Pair<Long, Integer>, Long> memory = new HashMap<>();
-        return Arrays.stream(lines.get(0).split(" "))
+        return Arrays.stream(lines.getFirst().split(" "))
                 .mapToLong(s -> countItems(new Item(Long.parseLong(s), 0), max, memory))
                 .sum();
     }

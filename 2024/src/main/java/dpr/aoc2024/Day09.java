@@ -64,7 +64,7 @@ class Day09 implements Day {
 
     @NotNull
     private static LinkedList<Elem> parseElements(List<String> lines) {
-        char[] line = lines.get(0).toCharArray();
+        char[] line = lines.getFirst().toCharArray();
         LinkedList<Elem> elems = new LinkedList<>();
         for (int i = 0; i < line.length; i++) {
             int count = line[i] - '0';

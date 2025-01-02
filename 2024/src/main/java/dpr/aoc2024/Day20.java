@@ -41,7 +41,6 @@ class Day20 implements Day {
     private static long countCheats(List<String> lines, int limit) {
         Set<Point2D> blocks = new HashSet<>();
         Point2D start = new Point2D(0, 0);
-        Point2D end = new Point2D(0, 0);
         for (int y = 0; y < lines.size(); y++) {
             String line = lines.get(y);
             for (int x = 0; x < line.length(); x++) {
@@ -51,8 +50,6 @@ class Day20 implements Day {
                     blocks.add(p);
                 } else if (c == 'S') {
                     start = p;
-                } else if (c == 'E') {
-                    end = p;
                 }
             }
         }

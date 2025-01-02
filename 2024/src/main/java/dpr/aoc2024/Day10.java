@@ -66,7 +66,7 @@ class Day10 implements Day {
             }
             position.loc.neighboursCross()
                     .stream()
-                    .filter(n -> n.getX() >= 0 && n.getY() >= 0 && n.getY() < map.size() && n.getX() < map.get(0).size())
+                    .filter(n -> n.getX() >= 0 && n.getY() >= 0 && n.getY() < map.size() && n.getX() < map.getFirst().size())
                     .filter(n -> map.get(n.getY()).get(n.getX()) == position.num + 1)
                     .forEach(p -> q.offer(new Position(p, position.num + 1, position.start)));
         }

@@ -56,8 +56,7 @@ class Day23 implements Day {
 //                    System.out.println("Checking " + a + " and " + b);
                     Set<String> pair = Set.of(a, b);
                     if (connections.contains(pair)) {
-                        List<String> list = new ArrayList<>();
-                        list.addAll(pair);
+                        List<String> list = new ArrayList<>(pair);
                         list.add(edge);
                         Collections.sort(list);
                         lans.add(list);

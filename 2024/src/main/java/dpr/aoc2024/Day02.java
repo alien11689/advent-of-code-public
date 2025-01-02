@@ -28,7 +28,7 @@ class Day02 implements Day {
     private Object part1(List<String> lines) {
         return lines.stream()
                 .map(line -> Arrays.stream(line.split(" +")).map(Integer::parseInt).toList())
-                .filter(line -> isSafe(line))
+                .filter(this::isSafe)
                 .count();
     }
 
@@ -46,7 +46,7 @@ class Day02 implements Day {
     private Object part2(List<String> lines) {
         return lines.stream()
                 .map(line -> Arrays.stream(line.split(" +")).map(Integer::parseInt).toList())
-                .filter(line -> isSafeWithDamper(line))
+                .filter(this::isSafeWithDamper)
                 .count();
     }
 
@@ -55,7 +55,7 @@ class Day02 implements Day {
             return true;
         }
         for (int i = 0; i < numbers.size(); i++) {
-            var cur = new ArrayList<Integer>(numbers);
+            var cur = new ArrayList<>(numbers);
             cur.remove(i);
             if (isSafe(cur)) {
                 return true;

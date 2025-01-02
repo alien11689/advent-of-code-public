@@ -5,7 +5,6 @@ import dpr.commons.Point2D;
 import dpr.commons.Util;
 import kotlin.Pair;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -71,14 +70,11 @@ class Day16 implements Day {
             }
         }
 
-        PriorityQueue<Position> q = new PriorityQueue<>(new Comparator<Position>() {
-            @Override
-            public int compare(Position o1, Position o2) {
-                if (o1.fitness == o2.fitness) {
-                    return Integer.compare(o1.points, o2.points);
-                }
-                return Integer.compare(o1.fitness, o2.fitness);
+        PriorityQueue<Position> q = new PriorityQueue<>((o1, o2) -> {
+            if (o1.fitness == o2.fitness) {
+                return Integer.compare(o1.points, o2.points);
             }
+            return Integer.compare(o1.fitness, o2.fitness);
         });
 
         Map<Pair<Point2D, Dir>, Integer> memory = new HashMap<>();
@@ -89,7 +85,7 @@ class Day16 implements Day {
         q.offer(new Position(start, Dir.S, 1000, Set.of(start), null, initialFitness));
         q.offer(new Position(start, Dir.W, 2000, Set.of(start), null, initialFitness));
 
-        Integer bestScore = Integer.MAX_VALUE;
+        int bestScore = Integer.MAX_VALUE;
         Set<Point2D> bestPaths = new HashSet<>();
         while (!q.isEmpty()) {
 //            System.out.println("Q size is " + q.size());

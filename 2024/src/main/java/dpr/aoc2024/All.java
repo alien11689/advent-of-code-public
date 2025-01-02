@@ -2,11 +2,10 @@ package dpr.aoc2024;
 
 import dpr.commons.Util;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.stream.Stream;
 
 class All {
-    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static void main(String[] args) {
         var days = Stream.of(
                 new Day01(),
                 new Day02(),

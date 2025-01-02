@@ -39,9 +39,9 @@ class Day04 implements Day {
         return map.entrySet()
                 .stream()
                 .filter(e -> x.equals(e.getValue()))
-                .map(e -> e.getKey())
-                .flatMap(p -> continueAfterX(p, map).stream())
-                .count();
+                .map(Map.Entry::getKey)
+                .mapToLong(p -> continueAfterX(p, map).size())
+                .sum();
     }
 
     @NotNull

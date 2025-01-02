@@ -91,16 +91,7 @@ class Day18 implements Day {
 
     private static Position iterate(int max, Point2D start, Point2D target, Set<Point2D> blocks) {
         Map<Point2D, Integer> memory = new HashMap<>();
-        PriorityQueue<Position> pq = new PriorityQueue<>(new Comparator<Position>() {
-            @Override
-            public int compare(Position o1, Position o2) {
-                int fitness = Integer.compare(o1.fitness, o2.fitness);
-                if (fitness != 0) {
-                    return fitness;
-                }
-                return Integer.compare(o1.steps, o2.steps);
-            }
-        });
+        PriorityQueue<Position> pq = new PriorityQueue<>(Comparator.comparingInt((Position o) -> o.fitness).thenComparingInt(o -> o.steps));
         pq.offer(new Position(start, 0, start.manhattan(target), null));
         int minimal = Integer.MAX_VALUE;
         Position best = null;
