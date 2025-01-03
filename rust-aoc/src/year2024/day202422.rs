@@ -1,7 +1,13 @@
 use crate::helper::read_file_lines;
+use crate::Day;
 use std::collections::{HashMap, HashSet};
 
+const YEAR: u16 = 2024;
 const DAY: u8 = 22;
+
+pub fn day() -> Day {
+    Day::new(YEAR, DAY, main)
+}
 
 fn solve(lines: &[String]) -> (i64, i64) {
     let mut map = HashMap::new();
@@ -37,10 +43,8 @@ fn calculate(init: &str, iter: usize, map: &mut HashMap<(i64, i64, i64, i64), i6
 }
 
 #[cfg(not(tarpaulin_include))]
-pub fn main(path: &String) {
-    let full_path = format!("{path}/resources/2024/{:0>2}/input.txt", DAY);
-    let lines = read_file_lines(&full_path);
-    println!("Day{:0>2}", DAY);
+fn main() {
+    let lines = read_file_lines(YEAR, DAY, "input.txt");
     let (part1, part2) = solve(&lines);
     println!("{part1}");
     println!("{part2}");
@@ -57,13 +61,13 @@ mod tests {
 
     #[test]
     fn should_part1_pass_test_input1() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test1.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve(&lines).0, 37327623);
     }
 
     #[test]
     fn should_part2_pass_test_input3() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test3.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test3.txt");
         assert_eq!(solve(&lines).1, 23);
     }
 }

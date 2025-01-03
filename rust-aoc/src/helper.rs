@@ -7,8 +7,8 @@ fn read_file(file_name: &str) -> String {
     fs::read_to_string(file_name).expect("File should exist")
 }
 
-pub(crate) fn read_file_lines(file_name: &str) -> Vec<String> {
-    read_file(file_name)
+pub(crate) fn read_file_lines(year: u16, day: u8, file_name: &str) -> Vec<String> {
+    read_file(&format!("./resources/{year}/{day:0>2}/{file_name}"))
         .trim()
         .lines()
         .map(String::from)
@@ -104,14 +104,14 @@ impl Add<&Dir> for Point2D {
     }
 }
 
-pub(crate) fn measure_time<F>(f: F)
+pub(crate) fn measure_time<F>(title: String, f: F)
 where
     F: Fn(),
 {
     let start = Instant::now();
     f();
     let duration = start.elapsed();
-    println!("Time: {:?}", duration);
+    println!("Time {}: {:?}", title, duration);
 }
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, Copy)]

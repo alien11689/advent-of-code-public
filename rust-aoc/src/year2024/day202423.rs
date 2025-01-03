@@ -1,7 +1,13 @@
 use crate::helper::read_file_lines;
+use crate::Day;
 use std::collections::{BTreeSet, HashSet};
 
+const YEAR: u16 = 2024;
 const DAY: u8 = 23;
+
+pub fn day() -> Day {
+    Day::new(YEAR, DAY, main)
+}
 
 fn solve_part1_and_2(lines: &[String]) -> (usize, String) {
     let mut edges: Vec<String> = Vec::new();
@@ -100,10 +106,8 @@ fn solve_part1_and_2(lines: &[String]) -> (usize, String) {
 }
 
 #[cfg(not(tarpaulin_include))]
-pub fn main(path: &String) {
-    let full_path = format!("{path}/resources/2024/{:0>2}/input.txt", DAY);
-    let lines = read_file_lines(&full_path);
-    println!("Day{:0>2}", DAY);
+fn main() {
+    let lines = read_file_lines(YEAR, DAY, "input.txt");
     let (part1, part2) = solve_part1_and_2(&lines);
     println!("{part1}");
     println!("{part2}");
@@ -115,13 +119,13 @@ mod tests {
 
     #[test]
     fn should_part1_pass_test_input1() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test1.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve_part1_and_2(&lines).0, 7);
     }
 
     #[test]
     fn should_part2_pass_test_input1() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test1.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve_part1_and_2(&lines).1, "co,de,ka,ta");
     }
 }

@@ -1,7 +1,13 @@
 use crate::helper::{read_file_lines, Point2D};
+use crate::Day;
 use std::collections::{HashMap, HashSet};
 
+const YEAR: u16 = 2024;
 const DAY: u8 = 20;
+
+pub fn day() -> Day {
+    Day::new(YEAR, DAY, main)
+}
 
 fn solve_part1_and_2(lines: &[String], threshold: i32, limit: i32) -> i32 {
     let mut blocks = HashSet::new();
@@ -60,10 +66,8 @@ fn solve_part1_and_2(lines: &[String], threshold: i32, limit: i32) -> i32 {
 }
 
 #[cfg(not(tarpaulin_include))]
-pub fn main(path: &String) {
-    let full_path = format!("{path}/resources/2024/{:0>2}/input.txt", DAY);
-    let lines = read_file_lines(&full_path);
-    println!("Day{:0>2}", DAY);
+fn main() {
+    let lines = read_file_lines(YEAR, DAY, "input.txt");
     println!("{}", solve_part1_and_2(&lines, 100, 2));
     println!("{}", solve_part1_and_2(&lines, 100, 20));
 }
@@ -87,7 +91,7 @@ mod tests {
         #[case] limit: i32,
         #[case] res: i32,
     ) {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test1.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve_part1_and_2(&lines, threshold, limit), res);
     }
 }

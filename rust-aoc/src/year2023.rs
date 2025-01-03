@@ -1,4 +1,4 @@
-use crate::helper::measure_time;
+use crate::Year;
 
 mod day202301;
 mod day202302;
@@ -6,17 +6,12 @@ mod day202303;
 mod day202304;
 
 #[cfg(not(tarpaulin_include))]
-pub fn main(path_prefix: &String) {
+pub fn year() -> Year {
     let days = vec![
-        day202301::main,
-        day202302::main,
-        day202303::main,
-        day202304::main,
+        day202301::day(),
+        day202302::day(),
+        day202303::day(),
+        day202304::day(),
     ];
-    println!("Year 2023");
-    for day in days {
-        measure_time(|| {
-            day(path_prefix);
-        });
-    }
+    Year::new(2023, days)
 }

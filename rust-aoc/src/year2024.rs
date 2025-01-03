@@ -1,4 +1,4 @@
-use crate::helper::measure_time;
+use crate::Year;
 
 mod day202401;
 mod day202402;
@@ -27,38 +27,33 @@ mod day202424;
 mod day202425;
 
 #[cfg(not(tarpaulin_include))]
-pub fn main(path_prefix: &String) {
+pub fn year() -> Year {
     let days = vec![
-        day202401::main,
-        day202402::main,
-        day202403::main,
-        day202404::main,
-        day202405::main,
-        day202406::main,
-        day202407::main,
-        day202408::main,
-        day202409::main,
-        day202410::main,
-        day202411::main,
-        day202412::main,
-        day202413::main,
-        day202414::main,
-        day202415::main,
-        day202416::main,
-        day202417::main,
-        day202418::main,
-        day202419::main,
-        day202420::main,
-        day202421::main,
-        day202422::main,
-        day202423::main,
-        day202424::main,
-        day202425::main,
+        day202401::day(),
+        day202402::day(),
+        day202403::day(),
+        day202404::day(),
+        day202405::day(),
+        day202406::day(),
+        day202407::day(),
+        day202408::day(),
+        day202409::day(),
+        day202410::day(),
+        day202411::day(),
+        day202412::day(),
+        day202413::day(),
+        day202414::day(),
+        day202415::day(),
+        day202416::day(),
+        day202417::day(),
+        day202418::day(),
+        day202419::day(),
+        day202420::day(),
+        day202421::day(),
+        day202422::day(),
+        day202423::day(),
+        day202424::day(),
+        day202425::day(),
     ];
-    println!("Year 2024");
-    for day in days {
-        measure_time(|| {
-            day(path_prefix);
-        });
-    }
+    Year::new(2024, days)
 }

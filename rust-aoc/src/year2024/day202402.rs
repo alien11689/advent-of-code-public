@@ -1,7 +1,15 @@
 use crate::helper::read_file_lines;
+use crate::Day;
 use regex::Regex;
 use std::collections::HashSet;
 use std::vec::Vec;
+
+const YEAR: u16 = 2024;
+const DAY: u8 = 2;
+
+pub fn day() -> Day {
+    Day::new(YEAR, DAY, main)
+}
 
 fn solve_part1(lines: &[String]) -> usize {
     let numbers = read_input(lines);
@@ -69,10 +77,8 @@ fn is_safe_with_damper(vec: &Vec<i32>) -> bool {
 }
 
 #[cfg(not(tarpaulin_include))]
-pub fn main(path: &String) {
-    let full_path = format!("{path}/resources/2024/02/input.txt");
-    let lines = read_file_lines(&full_path);
-    println!("Day02");
+fn main() {
+    let lines = read_file_lines(YEAR, DAY, "input.txt");
     println!("{}", solve_part1(&lines));
     println!("{}", solve_part2(&lines));
 }
@@ -83,13 +89,13 @@ mod tests {
 
     #[test]
     fn should_part1_pass_test_input1() {
-        let lines = read_file_lines("./resources/2024/02/test1.txt");
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve_part1(&lines), 2);
     }
 
     #[test]
     fn should_part2_pass_test_input2() {
-        let lines = read_file_lines("./resources/2024/02/test1.txt");
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve_part2(&lines), 4);
     }
 }

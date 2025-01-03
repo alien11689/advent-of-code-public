@@ -1,7 +1,14 @@
+use crate::helper::read_file_lines;
+use crate::Day;
 use std::collections::HashMap;
 use std::vec::Vec;
 
-use crate::helper::read_file_lines;
+const YEAR: u16 = 2023;
+const DAY: u8 = 2;
+
+pub fn day() -> Day {
+    Day::new(YEAR, DAY, main)
+}
 
 #[derive(PartialEq, Eq, Hash)]
 enum Colour {
@@ -89,10 +96,8 @@ fn solve_part2(lines: &Vec<String>) -> i32 {
 }
 
 #[cfg(not(tarpaulin_include))]
-pub fn main(path: &String) {
-    let full_path = format!("{path}/resources/2023/02/input.txt");
-    let lines = read_file_lines(&full_path);
-    println!("Day02");
+fn main() {
+    let lines = read_file_lines(YEAR, DAY, "input.txt");
     println!("{}", solve_part1(&lines));
     println!("{}", solve_part2(&lines));
 }
@@ -103,13 +108,13 @@ mod tests {
 
     #[test]
     fn should_part1_pass_test() {
-        let lines = read_file_lines("./resources/2023/02/test1.txt");
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve_part1(&lines), 8);
     }
 
     #[test]
     fn should_part2_pass_test() {
-        let lines = read_file_lines("./resources/2023/02/test1.txt");
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve_part2(&lines), 2286);
     }
 }

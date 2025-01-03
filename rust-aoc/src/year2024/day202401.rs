@@ -1,6 +1,14 @@
 use crate::helper::read_file_lines;
+use crate::Day;
 use regex::Regex;
 use std::vec::Vec;
+
+const YEAR: u16 = 2024;
+const DAY: u8 = 1;
+
+pub fn day() -> Day {
+    Day::new(YEAR, DAY, main)
+}
 
 fn read_locations(lines: &Vec<String>) -> (Vec<i32>, Vec<i32>) {
     let regex = Regex::new(r" +").expect("Invalid regex");
@@ -36,11 +44,9 @@ fn solve_part2(lefts: &[i32], rights: &[i32]) -> i32 {
 }
 
 #[cfg(not(tarpaulin_include))]
-pub fn main(path: &String) {
-    let full_path = format!("{path}/resources/2024/01/input.txt");
-    let lines = read_file_lines(&full_path);
+fn main() {
+    let lines = read_file_lines(YEAR, DAY, "input.txt");
     let (lefts, rights) = read_locations(&lines);
-    println!("Day01");
     println!("{}", solve_part1(&lefts, &rights));
     println!("{}", solve_part2(&lefts, &rights));
 }
@@ -51,14 +57,14 @@ mod tests {
 
     #[test]
     fn should_part1_pass_test_input1() {
-        let lines = read_file_lines("./resources/2024/01/test1.txt");
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         let (lefts, rights) = read_locations(&lines);
         assert_eq!(solve_part1(&lefts, &rights), 11);
     }
 
     #[test]
     fn should_part2_pass_test_input2() {
-        let lines = read_file_lines("./resources/2024/01/test1.txt");
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         let (lefts, rights) = read_locations(&lines);
         assert_eq!(solve_part2(&lefts, &rights), 31);
     }

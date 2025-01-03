@@ -1,7 +1,13 @@
 use crate::helper::{clusters_cross, read_file_lines, read_map, Dir, Point2D};
+use crate::Day;
 use std::collections::{HashMap, HashSet, VecDeque};
 
+const YEAR: u16 = 2024;
 const DAY: u8 = 12;
+
+pub fn day() -> Day {
+    Day::new(YEAR, DAY, main)
+}
 
 fn solve_part1_and_2(lines: &[String]) -> (usize, usize) {
     let map = read_map(lines);
@@ -56,10 +62,8 @@ fn find_single_region(map: &HashMap<Point2D, char>, point: &Point2D, c: &char) -
 }
 
 #[cfg(not(tarpaulin_include))]
-pub fn main(path: &String) {
-    let full_path = format!("{path}/resources/2024/{:0>2}/input.txt", DAY);
-    let lines = read_file_lines(&full_path);
-    println!("Day{:0>2}", DAY);
+fn main() {
+    let lines = read_file_lines(YEAR, DAY, "input.txt");
     let (part1, part2) = solve_part1_and_2(&lines);
     println!("{part1}");
     println!("{part2}");
@@ -71,49 +75,49 @@ mod tests {
 
     #[test]
     fn should_part1_pass_test_input1() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test1.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve_part1_and_2(&lines).0, 140);
     }
 
     #[test]
     fn should_part1_pass_test_input2() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test2.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test2.txt");
         assert_eq!(solve_part1_and_2(&lines).0, 772);
     }
 
     #[test]
     fn should_part1_pass_test_input3() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test3.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test3.txt");
         assert_eq!(solve_part1_and_2(&lines).0, 1930);
     }
 
     #[test]
     fn should_part2_pass_test_input1() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test1.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve_part1_and_2(&lines).1, 80);
     }
 
     #[test]
     fn should_part2_pass_test_input2() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test2.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test2.txt");
         assert_eq!(solve_part1_and_2(&lines).1, 436);
     }
 
     #[test]
     fn should_part2_pass_test_input3() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test3.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test3.txt");
         assert_eq!(solve_part1_and_2(&lines).1, 1206);
     }
 
     #[test]
     fn should_part2_pass_test_input4() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test4.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test4.txt");
         assert_eq!(solve_part1_and_2(&lines).1, 236);
     }
 
     #[test]
     fn should_part2_pass_test_input5() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test5.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test5.txt");
         assert_eq!(solve_part1_and_2(&lines).1, 368);
     }
 }

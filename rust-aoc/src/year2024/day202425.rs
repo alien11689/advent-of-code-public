@@ -1,7 +1,13 @@
 use crate::helper::{read_file_lines, Point2D};
+use crate::Day;
 use std::collections::HashSet;
 
+const YEAR: u16 = 2024;
 const DAY: u8 = 25;
+
+pub fn day() -> Day {
+    Day::new(YEAR, DAY, main)
+}
 
 fn solve_part1(lines: &[String]) -> usize {
     let mut y = 0;
@@ -65,10 +71,8 @@ fn heights(block: &HashSet<Point2D>) -> Vec<usize> {
 }
 
 #[cfg(not(tarpaulin_include))]
-pub fn main(path: &String) {
-    let full_path = format!("{path}/resources/2024/{:0>2}/input.txt", DAY);
-    let lines = read_file_lines(&full_path);
-    println!("Day{:0>2}", DAY);
+fn main() {
+    let lines = read_file_lines(YEAR, DAY, "input.txt");
     println!("{}", solve_part1(&lines));
 }
 
@@ -78,7 +82,7 @@ mod tests {
 
     #[test]
     fn should_part1_pass_test_input1() {
-        let lines = read_file_lines(&format!("./resources/2024/{:0>2}/test1.txt", DAY));
+        let lines = read_file_lines(YEAR, DAY, "test1.txt");
         assert_eq!(solve_part1(&lines), 3);
     }
 }
