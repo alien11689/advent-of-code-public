@@ -1,7 +1,6 @@
 package dpr.commons
 
 import java.time.Duration
-import java.util.function.Supplier
 
 object Util {
     @JvmStatic
@@ -26,26 +25,6 @@ object Util {
 
     @JvmStatic
     fun readBoard(lines: List<String>): MutableMap<Point2D, Char> = readBoard(lines) { it }
-
-    @JvmStatic
-    fun <A> test(given: A, expected: A) {
-        if (given != expected) {
-            throw RuntimeException("$given != $expected")
-        } else {
-            println("Passed $given == $expected")
-        }
-    }
-
-    @JvmStatic
-    fun measureTimeAndPrint(r: Supplier<Any?>) {
-        val start = System.currentTimeMillis();
-        val res = r.get()
-        val end = System.currentTimeMillis();
-        if (res != null) {
-            println(res)
-        }
-        println("Finished in ${Duration.ofMillis(end - start)}")
-    }
 
     @JvmStatic
     fun measureTime(r: Runnable) {
