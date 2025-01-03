@@ -1,16 +1,17 @@
 package dpr.aoc2024;
 
+import dpr.commons.Day;
 import dpr.commons.Util;
 
 import java.util.List;
 
 class Day13 implements Day {
     public static void main(String... args) {
-        new Day13().execute(args);
+        new Day13().execute();
     }
 
     @Override
-    public void execute(String... args) {
+    public void execute() {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));

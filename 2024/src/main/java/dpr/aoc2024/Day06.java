@@ -1,5 +1,6 @@
 package dpr.aoc2024;
 
+import dpr.commons.Day;
 import dpr.commons.Dir;
 import dpr.commons.Pair;
 import dpr.commons.Point2D;
@@ -14,11 +15,11 @@ import java.util.stream.Collectors;
 
 class Day06 implements Day {
     public static void main(String... args) {
-        new Day06().execute(args);
+        new Day06().execute();
     }
 
     @Override
-    public void execute(String... args) {
+    public void execute() {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));

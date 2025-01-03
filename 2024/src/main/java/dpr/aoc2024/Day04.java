@@ -1,5 +1,6 @@
 package dpr.aoc2024;
 
+import dpr.commons.Day;
 import dpr.commons.Point2D;
 import dpr.commons.Util;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +13,7 @@ import java.util.Set;
 
 class Day04 implements Day {
     public static void main(String... args) {
-        new Day04().execute(args);
+        new Day04().execute();
     }
 
     private static final Character x = 'X';
@@ -21,7 +22,7 @@ class Day04 implements Day {
     private static final Character s = 'S';
 
     @Override
-    public void execute(String... args) {
+    public void execute() {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
             System.out.println(part1(lines));

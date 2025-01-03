@@ -1,5 +1,6 @@
 package dpr.aoc2024;
 
+import dpr.commons.Day;
 import dpr.commons.Util;
 
 import java.util.stream.Stream;
@@ -40,7 +41,7 @@ class All {
         Util.measureTime(() -> finalDays
                 .forEach(d -> {
                     System.out.printf("Day%02d%n", d.dayNum());
-                    d.execute(args);
+                    d.execute();
                 }));
     }
 }

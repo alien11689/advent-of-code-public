@@ -1,5 +1,6 @@
 package dpr.aoc2024;
 
+import dpr.commons.Day;
 import dpr.commons.Util;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,11 +10,11 @@ import java.util.List;
 
 class Day09 implements Day {
     public static void main(String... args) {
-        new Day09().execute(args);
+        new Day09().execute();
     }
 
     @Override
-    public void execute(String... args) {
+    public void execute() {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
 //            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
