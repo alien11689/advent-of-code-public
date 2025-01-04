@@ -24,11 +24,6 @@ class Day12 implements Day {
     public void execute() {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
-//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test1.txt");
-//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test2.txt");
-//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test3.txt");
-//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test4.txt");
-//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test5.txt");
             System.out.println(part1(lines));
             System.out.println(part2(lines));
         });

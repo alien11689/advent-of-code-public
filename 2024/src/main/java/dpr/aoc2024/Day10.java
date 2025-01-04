@@ -20,7 +20,6 @@ class Day10 implements Day {
     @Override
     public void execute() {
         Util.measureTime(() -> {
-//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test1.txt");
             var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
             Pair<Object, Object> solution1And2 = part1And2(lines);
             System.out.println(solution1And2.first());

@@ -18,7 +18,6 @@ class Day25 implements Day {
     public void execute() {
         Util.measureTime(() -> {
             var lines = Util.getLinesFromFile(dayNum(), "input.txt");
-//            var lines = Util.getLinesFromFile(dayNum(), "test1.txt");
             System.out.println(part1(lines));
         });
     }

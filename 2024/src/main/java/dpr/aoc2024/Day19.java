@@ -22,7 +22,6 @@ class Day19 implements Day {
     public void execute() {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
-//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test1.txt");
             Pair<Object, Object> solution1And2 = part1And2(lines);
             System.out.println(solution1And2.first());
             System.out.println(solution1And2.second());

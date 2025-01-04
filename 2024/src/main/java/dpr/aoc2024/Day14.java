@@ -24,9 +24,6 @@ class Day14 implements Day {
             var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
             var X = 101;
             var Y = 103;
-//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test1.txt");
-//            var X = 11;
-//            var Y = 7;
             System.out.println(part1(lines, X, Y));
             System.out.println(part2(lines, X, Y));
         });
