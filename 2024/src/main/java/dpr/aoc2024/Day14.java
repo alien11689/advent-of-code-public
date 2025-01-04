@@ -21,10 +21,10 @@ class Day14 implements Day {
     @Override
     public void execute() {
         Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
+            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
             var X = 101;
             var Y = 103;
-//            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
+//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test1.txt");
 //            var X = 11;
 //            var Y = 7;
             System.out.println(part1(lines, X, Y));

@@ -4,13 +4,22 @@ import java.time.Duration
 
 object Util {
     @JvmStatic
-    fun getFileContent(fileName: String): String = javaClass.getResource(fileName).readText()
+    fun getFileContent(fileName: String): String = javaClass.getResource(fileName)!!.readText()
+
+    @JvmStatic
+    fun getFileContent(day: Int, fileName: String): String = javaClass.getResource("/%02d/%s".format(day, fileName))!!.readText()
 
     @JvmStatic
     fun getLinesFromFile(fileName: String): List<String> = getFileContent(fileName).lines()
 
     @JvmStatic
+    fun getLinesFromFile(day: Int, fileName: String): List<String> = getFileContent(day, fileName).lines()
+
+    @JvmStatic
     fun getNotEmptyLinesFromFile(fileName: String): List<String> = getLinesFromFile(fileName).filter { it.isNotEmpty() }
+
+    @JvmStatic
+    fun getNotEmptyLinesFromFile(day: Int, fileName: String): List<String> = getLinesFromFile(day, fileName).filter { it.isNotEmpty() }
 
     @JvmStatic
     fun <T> readBoard(lines: List<String>, valueMapper: (Char) -> T): MutableMap<Point2D, T> {

@@ -15,7 +15,7 @@ class Day02 implements Day {
     @Override
     public void execute() {
         Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
+            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
             System.out.println(part1(lines));
             System.out.println(part2(lines));
         });

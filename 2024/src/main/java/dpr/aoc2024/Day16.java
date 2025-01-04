@@ -21,9 +21,9 @@ class Day16 implements Day {
     @Override
     public void execute() {
         Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
-//            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
-//            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test2.txt", dayNum()));
+            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
+//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test1.txt");
+//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test2.txt");
             Pair<Object, Object> solution1And2 = part1And2(lines);
             System.out.println(solution1And2.first());
             System.out.println(solution1And2.second());

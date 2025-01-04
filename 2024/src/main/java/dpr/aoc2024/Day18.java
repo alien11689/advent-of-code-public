@@ -22,10 +22,10 @@ class Day18 implements Day {
     @Override
     public void execute() {
         Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/input.txt", dayNum()));
+            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
             int max = 70;
             int take = 1024;
-//            var lines = Util.getNotEmptyLinesFromFile(String.format("/%02d/test1.txt", dayNum()));
+//            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test1.txt");
 //            int max = 6;
 //            int take = 12;
             Pair<Object, Object> solution1And2 = part1And2(lines, max, take);
