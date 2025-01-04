@@ -27,7 +27,7 @@ class Day03 implements Day {
         return 3;
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         String program = String.join("", lines);
         return calculateSum(program);
     }
@@ -44,7 +44,7 @@ class Day03 implements Day {
         return sum;
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         String program = String.join("", lines);
         String[] split = program.split("((?=do(n't|)\\(\\))|(?<=do(n't|)\\(\\)))");
         boolean enabled = true;

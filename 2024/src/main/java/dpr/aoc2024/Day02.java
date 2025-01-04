@@ -26,7 +26,7 @@ class Day02 implements Day {
         return 2;
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         return lines.stream()
                 .map(line -> Arrays.stream(line.split(" +")).map(Integer::parseInt).toList())
                 .filter(this::isSafe)
@@ -44,7 +44,7 @@ class Day02 implements Day {
         });
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         return lines.stream()
                 .map(line -> Arrays.stream(line.split(" +")).map(Integer::parseInt).toList())
                 .filter(this::isSafeWithDamper)

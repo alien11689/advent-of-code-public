@@ -77,11 +77,11 @@ class Day21 implements Day {
     record SubPath(Point2D start, Point2D end, List<Character> clicks) {
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         return solve(lines, 2);
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         return solve(lines, 25);
     }
 

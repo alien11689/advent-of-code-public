@@ -53,7 +53,7 @@ class Day16 implements Day {
         }
     }
 
-    private Pair<Object, Object> part1And2(List<String> lines) {
+    Pair<Object, Object> part1And2(List<String> lines) {
         Point2D start = null;
         Point2D end = null;
         Set<Point2D> blocks = new HashSet<>();

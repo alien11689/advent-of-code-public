@@ -42,7 +42,7 @@ class Day18 implements Day {
     record Position(Point2D p, int steps, int fitness, Position prev) {
     }
 
-    private Pair<Object, Object> part1And2(List<String> lines, int max, int take) {
+    Pair<Object, Object> part1And2(List<String> lines, int max, int take) {
         Point2D start = new Point2D(0, 0);
         Point2D target = new Point2D(max, max);
         Set<Point2D> blocks = lines.stream().limit(take).map(line -> {

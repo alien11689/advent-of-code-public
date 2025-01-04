@@ -35,7 +35,7 @@ class Day15 implements Day {
         return 15;
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         Set<Point2D> blocks = new HashSet<>();
         Set<Point2D> boxes = new HashSet<>();
         Point2D robot = null;
@@ -108,7 +108,7 @@ class Day15 implements Day {
         }
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         Set<Point2D> blocks = new HashSet<>();
         Set<Box> boxes = new HashSet<>();
         Point2D robot = null;

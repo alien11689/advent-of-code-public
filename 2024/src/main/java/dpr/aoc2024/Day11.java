@@ -47,7 +47,7 @@ class Day11 implements Day {
         }
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         return calculate(lines, 25);
     }
 

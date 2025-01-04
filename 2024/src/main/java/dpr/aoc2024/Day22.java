@@ -35,7 +35,7 @@ class Day22 implements Day {
         return 22;
     }
 
-    private Pair<Object, Object> part1And2(List<String> lines) {
+    Pair<Object, Object> part1And2(List<String> lines) {
         Map<String, Integer> prices = new ConcurrentHashMap<>();
         long part1 = lines.stream().parallel().mapToLong(line -> calculate(Long.parseLong(line), 2000, prices)).sum();
         int part2 = prices.values().stream().mapToInt(l -> l).max().orElse(Integer.MIN_VALUE);

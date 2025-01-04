@@ -35,7 +35,7 @@ class Day04 implements Day {
         return 4;
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         var map = readMap(lines);
         return map.entrySet()
                 .stream()
@@ -73,7 +73,7 @@ class Day04 implements Day {
         return xmas;
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         var map = readMap(lines);
         var count = 0;
         for (int y = 0; y < lines.size() - 2; ++y) {

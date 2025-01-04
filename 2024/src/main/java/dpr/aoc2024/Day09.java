@@ -31,7 +31,7 @@ class Day09 implements Day {
     record Elem(int fileId, int count, boolean empty) {
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         LinkedList<Elem> elems = parseElements(lines);
 //        elems.forEach(System.out::println);
         long checksum = 0;
@@ -77,7 +77,7 @@ class Day09 implements Day {
         return elems;
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         LinkedList<Elem> initial = parseElements(lines);
         List<Elem> elems = new ArrayList<>(initial);
         int currentFileId = elems.stream().mapToInt(e -> e.fileId).max().getAsInt();

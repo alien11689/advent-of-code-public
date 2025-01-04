@@ -21,8 +21,8 @@ class Day20 implements Day {
         Util.measureTime(() -> {
             var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
 //            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "test1.txt");
-            System.out.println(part1(lines));
-            System.out.println(part2(lines));
+            System.out.println(part1And2(lines, 100, 2));
+            System.out.println(part1And2(lines, 100, 20));
         });
     }
 
@@ -31,15 +31,7 @@ class Day20 implements Day {
         return 20;
     }
 
-    private Object part1(List<String> lines) {
-        return countCheats(lines, 2);
-    }
-
-    private Object part2(List<String> lines) {
-        return countCheats(lines, 20);
-    }
-
-    private static long countCheats(List<String> lines, int limit) {
+    long part1And2(List<String> lines, int threshold, int limit) {
         Set<Point2D> blocks = new HashSet<>();
         Point2D start = new Point2D(0, 0);
         for (int y = 0; y < lines.size(); y++) {
@@ -83,7 +75,7 @@ class Day20 implements Day {
                 if (manhattan > limit) {
                     continue;
                 }
-                if (j - i - manhattan >= 100) {
+                if (j - i - manhattan >= threshold) {
                     ++count;
                 }
             }

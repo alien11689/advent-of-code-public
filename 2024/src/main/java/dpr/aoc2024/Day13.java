@@ -26,11 +26,11 @@ class Day13 implements Day {
         return 13;
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         return calculateWithBisect(lines, 0L);
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         return calculateWithBisect(lines, 10000000000000L);
     }
 

@@ -33,7 +33,7 @@ class Day01 implements Day {
     record Locations(List<Integer> lefts, List<Integer> rights) {
     }
 
-    private static int part1(Locations result) {
+    int part1(Locations result) {
         Collections.sort(result.lefts());
         Collections.sort(result.rights());
         var res = 0;
@@ -44,7 +44,7 @@ class Day01 implements Day {
     }
 
     @NotNull
-    private static Locations getLocations(List<String> lines) {
+    Locations getLocations(List<String> lines) {
         var lefts = new ArrayList<Integer>();
         var rights = new ArrayList<Integer>();
         lines.forEach(line -> {
@@ -57,7 +57,7 @@ class Day01 implements Day {
         return new Locations(lefts, rights);
     }
 
-    private static long part2(Locations result) {
+    long part2(Locations result) {
         var res = 0L;
         var mem = new HashMap<Integer, Long>();
         for (int left : result.lefts) {

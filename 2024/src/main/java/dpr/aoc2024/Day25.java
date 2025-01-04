@@ -28,7 +28,7 @@ class Day25 implements Day {
         return 25;
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         Set<List<Integer>> keys = new HashSet<>();
         Set<List<Integer>> locks = new HashSet<>();
 

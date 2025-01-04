@@ -37,7 +37,7 @@ class Day05 implements Day {
     record Input(Set<List<String>> updates, Set<Rule> rules) {
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         Input input = parseInput(lines);
         return input.updates.stream()
                 .filter(u -> matches(u, input.rules))
@@ -75,7 +75,7 @@ class Day05 implements Day {
         return true;
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         var input = parseInput(lines);
         List<List<String>> toFix = input.updates.stream()
                 .filter(u -> !matches(u, input.rules))

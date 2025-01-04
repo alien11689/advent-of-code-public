@@ -36,7 +36,7 @@ class Day10 implements Day {
     record Position(Point2D loc, int num, Point2D start) {
     }
 
-    private Pair<Object, Object> part1And2(List<String> lines) {
+    Pair<Object, Object> part1And2(List<String> lines) {
         List<List<Integer>> map = lines.stream().map(line -> {
                     List<Integer> l = new ArrayList<>();
                     char[] chars = line.toCharArray();

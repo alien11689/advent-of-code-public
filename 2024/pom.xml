@@ -20,6 +20,7 @@
         <main.class>dpr.aoc2024.All</main.class>
         <native-maven-plugin.version>0.10.3</native-maven-plugin.version>
         <imageName>AOC${project.artifactId}</imageName>
+        <junit5.version>5.11.4</junit5.version>
     </properties>
 
     <dependencies>
@@ -27,6 +28,18 @@
             <groupId>dpr.adventofcode</groupId>
             <artifactId>commons</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit5.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

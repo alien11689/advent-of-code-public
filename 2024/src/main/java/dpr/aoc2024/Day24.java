@@ -61,7 +61,7 @@ class Day24 implements Day {
         AND, OR, XOR
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         Set<Rule> rules = new HashSet<>();
         Map<String, Boolean> inputs = new HashMap<>();
         parseInput(lines, inputs, rules);
@@ -98,7 +98,7 @@ class Day24 implements Day {
         return Long.parseLong(new StringBuilder(numString).reverse().toString(), 2);
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         Set<Rule> rules = new HashSet<>();
         Map<String, Boolean> inputs = new HashMap<>();
         parseInput(lines, inputs, rules);

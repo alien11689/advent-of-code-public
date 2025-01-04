@@ -37,7 +37,7 @@ class Day06 implements Day {
     record Position(Point2D point, Dir dir) {
     }
 
-    private Pair<Object, Object> part1And2(List<String> lines) {
+    Pair<Object, Object> part1And2(List<String> lines) {
         Point2D current = null;
         Set<Point2D> blocks = new HashSet<>();
         for (int y = 0; y < lines.size(); y++) {

@@ -39,7 +39,7 @@ class Day12 implements Day {
         return 12;
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         Map<Point2D, Character> map = readMap(lines);
         Map<Point2D, Character> mapDuplicate = new HashMap<>(map);
         long result = 0;
@@ -88,7 +88,7 @@ class Day12 implements Day {
         return map;
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         Map<Point2D, Character> map = readMap(lines);
         Map<Point2D, Character> mapDuplicate = new HashMap<>(map);
         long result = 0;

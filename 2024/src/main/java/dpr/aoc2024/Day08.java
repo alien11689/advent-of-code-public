@@ -32,7 +32,7 @@ class Day08 implements Day {
         return 8;
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         Map<Character, List<Point2D>> namedAntenas = readNamedAntenas(lines);
 //        System.out.println(namedAntenas);
         Set<Point2D> antinodes = new HashSet<>();
@@ -73,7 +73,7 @@ class Day08 implements Day {
         return namedAntenas;
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
         Map<Character, List<Point2D>> namedAntenas = readNamedAntenas(lines);
 //        System.out.println(namedAntenas);
         Set<Point2D> antinodes = new HashSet<>();

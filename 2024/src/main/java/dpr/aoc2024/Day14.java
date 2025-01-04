@@ -56,7 +56,7 @@ class Day14 implements Day {
         }
     }
 
-    private Object part1(List<String> lines, int X, int Y) {
+    Object part1(List<String> lines, int X, int Y) {
         List<Robot> robots = new ArrayList<>();
         lines.forEach(line -> {
             String[] parts = line.split("[=, ]");

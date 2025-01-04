@@ -33,7 +33,7 @@ class Day23 implements Day {
         return 23;
     }
 
-    private Pair<Object, Object> part1And2(List<String> lines) {
+    Pair<Object, Object> part1And2(List<String> lines) {
         Set<String> edges = new HashSet<>();
         Set<Set<String>> connections = lines.stream().map(line -> {
             String[] parts = line.split("-");

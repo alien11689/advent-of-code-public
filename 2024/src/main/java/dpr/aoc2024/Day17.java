@@ -30,7 +30,7 @@ class Day17 implements Day {
         return 17;
     }
 
-    private Object part1(List<String> lines) {
+    Object part1(List<String> lines) {
         int a = Integer.parseInt(lines.get(0).split(": ")[1]);
         int b = Integer.parseInt(lines.get(1).split(": ")[1]);
         int c = Integer.parseInt(lines.get(2).split(": ")[1]);
@@ -40,7 +40,7 @@ class Day17 implements Day {
         return result.stream().map(String::valueOf).collect(Collectors.joining(","));
     }
 
-    private Object part2(List<String> lines) {
+    Object part2(List<String> lines) {
 //        int a = Integer.parseInt(lines.get(0).split(": ")[1]);
         long initB = Integer.parseInt(lines.get(1).split(": ")[1]);
         long initC = Integer.parseInt(lines.get(2).split(": ")[1]);

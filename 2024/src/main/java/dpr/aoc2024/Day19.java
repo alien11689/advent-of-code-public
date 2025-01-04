@@ -34,7 +34,7 @@ class Day19 implements Day {
         return 19;
     }
 
-    private Pair<Object, Object> part1And2(List<String> lines) {
+    Pair<Object, Object> part1And2(List<String> lines) {
         List<String> towels = Arrays.stream(lines.getFirst().split(", ")).sorted().toList();
         int part1 = 0;
         long part2 = 0;
