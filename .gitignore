@@ -8,3 +8,5 @@ a.out
 *.css
 css
 resources
+
+Cargo.lock
