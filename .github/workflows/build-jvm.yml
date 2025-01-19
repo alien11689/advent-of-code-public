@@ -28,7 +28,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
       - name: Get private repo
         uses: actions/checkout@v4
         with:
@@ -36,18 +35,50 @@ jobs:
           ref: master
           token: ${{ secrets.ADVENT_OF_CODE_PAT}}
           path: private
-      
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-      
-      - name: Run
+      - name: Prepare resources
         run: |
           mkdir -p ${{matrix.year}}/src/main/resources
           cp -r private/${{matrix.year}}/src/main/resources/* ${{matrix.year}}/src/main/resources
+      - name: Run
+        run: |
           echo '```' > out
           ./runSingle.sh ${{matrix.year}} >> out
           echo '```' >> out
           cat out >> "$GITHUB_STEP_SUMMARY"
+
+  Coverage:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        year: [2024]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get private repo
+        uses: actions/checkout@v4
+        with:
+          repository: alien11689/advent-of-code
+          ref: master
+          token: ${{ secrets.ADVENT_OF_CODE_PAT}}
+          path: private
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Prepare resources
+        run: |
+          mkdir -p ${{matrix.year}}/src/main/resources
+          cp -r private/${{matrix.year}}/src/main/resources/* ${{matrix.year}}/src/main/resources
+      - name: Run
+        run: ./mvnw clean test -Pcoverage -am -pl ${{ matrix.year }}
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
