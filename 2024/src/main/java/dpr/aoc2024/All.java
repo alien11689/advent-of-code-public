@@ -41,7 +41,7 @@ class All {
         Util.measureTime(() -> finalDays
                 .forEach(d -> {
                     System.out.printf("Day%02d%n", d.dayNum());
-                    d.execute();
+                    Util.measureTime(d::execute);
                 }));
     }
 }

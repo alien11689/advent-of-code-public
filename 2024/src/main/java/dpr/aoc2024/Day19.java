@@ -14,18 +14,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 class Day19 implements Day {
-    public static void main(String... args) {
-        new Day19().execute();
-    }
-
     @Override
     public void execute() {
-        Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
-            Pair<Object, Object> solution1And2 = part1And2(lines);
-            System.out.println(solution1And2.first());
-            System.out.println(solution1And2.second());
-        });
+        var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
+        Pair<Object, Object> solution1And2 = part1And2(lines);
+        System.out.println(solution1And2.first());
+        System.out.println(solution1And2.second());
     }
 
     @Override

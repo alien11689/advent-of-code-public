@@ -10,17 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 class Day17 implements Day {
-    public static void main(String... args) {
-        new Day17().execute();
-    }
-
     @Override
     public void execute() {
-        Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
-            System.out.println(part1(lines));
-            System.out.println(part2(lines));
-        });
+        var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
+        System.out.println(part1(lines));
+        System.out.println(part2(lines));
     }
 
     @Override

@@ -10,16 +10,10 @@ import java.util.List;
 import java.util.Set;
 
 class Day25 implements Day {
-    public static void main(String... args) {
-        new Day25().execute();
-    }
-
     @Override
     public void execute() {
-        Util.measureTime(() -> {
-            var lines = Util.getLinesFromFile(dayNum(), "input.txt");
-            System.out.println(part1(lines));
-        });
+        var lines = Util.getLinesFromFile(dayNum(), "input.txt");
+        System.out.println(part1(lines));
     }
 
     @Override

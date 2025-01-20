@@ -12,10 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 class Day04 implements Day {
-    public static void main(String... args) {
-        new Day04().execute();
-    }
-
     private static final Character x = 'X';
     private static final Character m = 'M';
     private static final Character a = 'A';
@@ -23,11 +19,9 @@ class Day04 implements Day {
 
     @Override
     public void execute() {
-        Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
-            System.out.println(part1(lines));
-            System.out.println(part2(lines));
-        });
+        var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
+        System.out.println(part1(lines));
+        System.out.println(part2(lines));
     }
 
     @Override

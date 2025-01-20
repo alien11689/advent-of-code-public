@@ -14,18 +14,12 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 class Day16 implements Day {
-    public static void main(String... args) {
-        new Day16().execute();
-    }
-
     @Override
     public void execute() {
-        Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
-            Pair<Object, Object> solution1And2 = part1And2(lines);
-            System.out.println(solution1And2.first());
-            System.out.println(solution1And2.second());
-        });
+        var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
+        Pair<Object, Object> solution1And2 = part1And2(lines);
+        System.out.println(solution1And2.first());
+        System.out.println(solution1And2.second());
     }
 
     @Override

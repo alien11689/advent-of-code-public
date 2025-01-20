@@ -10,18 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 
 class Day01 implements Day {
-    public static void main(String... args) {
-        new Day01().execute();
-    }
-
     @Override
     public void execute() {
-        Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
-            Locations result = getLocations(lines);
-            System.out.println(part1(result));
-            System.out.println(part2(result));
-        });
+        var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
+        Locations result = getLocations(lines);
+        System.out.println(part1(result));
+        System.out.println(part2(result));
     }
 
     @Override

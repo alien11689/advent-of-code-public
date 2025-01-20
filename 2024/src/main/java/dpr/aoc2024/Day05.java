@@ -13,17 +13,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class Day05 implements Day {
-    public static void main(String... args) {
-        new Day05().execute();
-    }
-
     @Override
     public void execute() {
-        Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
-            System.out.println(part1(lines));
-            System.out.println(part2(lines));
-        });
+        var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
+        System.out.println(part1(lines));
+        System.out.println(part2(lines));
     }
 
     @Override

@@ -15,20 +15,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 class Day18 implements Day {
-    public static void main(String... args) {
-        new Day18().execute();
-    }
-
     @Override
     public void execute() {
-        Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
-            int max = 70;
-            int take = 1024;
-            Pair<Object, Object> solution1And2 = part1And2(lines, max, take);
-            System.out.println(solution1And2.first());
-            System.out.println(solution1And2.second());
-        });
+        var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
+        Pair<Object, Object> solution1And2 = part1And2(lines, 70, 1024);
+        System.out.println(solution1And2.first());
+        System.out.println(solution1And2.second());
     }
 
     @Override

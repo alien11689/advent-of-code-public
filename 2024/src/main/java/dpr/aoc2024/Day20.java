@@ -12,17 +12,11 @@ import java.util.Queue;
 import java.util.Set;
 
 class Day20 implements Day {
-    public static void main(String... args) {
-        new Day20().execute();
-    }
-
     @Override
     public void execute() {
-        Util.measureTime(() -> {
-            var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
-            System.out.println(part1And2(lines, 100, 2));
-            System.out.println(part1And2(lines, 100, 20));
-        });
+        var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
+        System.out.println(part1And2(lines, 100, 2));
+        System.out.println(part1And2(lines, 100, 20));
     }
 
     @Override
