@@ -50,7 +50,7 @@ impl Rule {
                 "AND" => And,
                 "OR" => Or,
                 "XOR" => Xor,
-                _ => panic!(),
+                _ => unreachable!(),
             },
         }
     }

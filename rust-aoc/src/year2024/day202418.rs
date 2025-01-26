@@ -31,7 +31,7 @@ fn solve_part1_and_2(lines: &[String], max: i32, take: usize) -> (i32, String) {
             Nil => return (part1.steps(), format!("{},{}", nb.x, nb.y)),
         }
     }
-    panic!()
+    unreachable!()
 }
 
 fn cords_to_point(line: &str) -> Point2D {
@@ -78,7 +78,7 @@ fn iterate(start: Point2D, target: Point2D, blocks: &HashSet<Point2D>) -> Positi
     while let Some(cur) = q.pop_front() {
         let (p, steps) = match cur {
             Position::Exist(p, steps, _) => (p, steps),
-            Nil => panic!(),
+            Nil => unreachable!(),
         };
         // println!("Checking {:?}", cur);
         if visited.contains(&p) {

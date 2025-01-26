@@ -57,7 +57,7 @@ fn run_program(a: u64, b: u64, c: u64, program: &[u64]) -> Vec<u64> {
             4 => a,
             5 => b,
             6 => c,
-            7 => panic!(),
+            7 => unreachable!(),
             other => other,
         };
         match cmd {
@@ -91,7 +91,7 @@ fn run_program(a: u64, b: u64, c: u64, program: &[u64]) -> Vec<u64> {
                 let denom = 2_u64.pow(real_operand as u32);
                 c = a / denom;
             }
-            _ => panic!(),
+            _ => unreachable!(),
         }
         i += 2;
     }

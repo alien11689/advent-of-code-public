@@ -38,7 +38,7 @@ fn solve_part1(lines: &Vec<String>) -> i32 {
                     "red" => Colour::Red,
                     "blue" => Colour::Blue,
                     "green" => Colour::Green,
-                    c => panic!("Unknown colour {c}"),
+                    c => unreachable!("Unknown colour {c}"),
                 };
                 let value: i32 = orb_and_value.first().unwrap().parse().unwrap();
                 if *limits.get(&orb).unwrap() < value {
@@ -77,7 +77,7 @@ fn solve_part2(lines: &Vec<String>) -> i32 {
                     "red" => Colour::Red,
                     "blue" => Colour::Blue,
                     "green" => Colour::Green,
-                    c => panic!("Unknown colour {c}"),
+                    c => unreachable!("Unknown colour {c}"),
                 };
                 let value: i32 = orb_and_value.first().unwrap().parse().unwrap();
                 let cur_limit = limits.get(&orb).unwrap();

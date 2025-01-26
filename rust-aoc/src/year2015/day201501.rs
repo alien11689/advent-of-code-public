@@ -15,7 +15,7 @@ fn solve_part1(input: &str) -> i32 {
             '(' => pos += 1,
             ')' => pos -= 1,
             _ => {
-                panic!("Unknown char {cur}")
+                unreachable!("Unknown char {cur}")
             }
         }
     }
@@ -29,14 +29,14 @@ fn solve_part2(input: &str) -> i32 {
             '(' => pos += 1,
             ')' => pos -= 1,
             _ => {
-                panic!("Unknown char {cur}")
+                unreachable!("Unknown char {cur}")
             }
         }
         if pos < 0 {
             return (idx as i32) + 1;
         }
     }
-    panic!("No basement for {input}")
+    unreachable!("No basement for {input}")
 }
 
 #[cfg(not(tarpaulin_include))]

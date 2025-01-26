@@ -65,7 +65,7 @@ fn read_input(lines: &[String]) -> (HashSet<Point2D>, HashSet<Point2D>, VecDeque
                     '^' => Dir::N,
                     '>' => Dir::E,
                     'v' => Dir::S,
-                    _ => panic!(),
+                    _ => unreachable!(),
                 })
                 .for_each(|d| q.push_back(d));
         }
@@ -129,7 +129,7 @@ fn read_input2(lines: &[String]) -> (HashSet<Point2D>, HashSet<Box>, VecDeque<Di
                     '^' => Dir::N,
                     '>' => Dir::E,
                     'v' => Dir::S,
-                    _ => panic!(),
+                    _ => unreachable!(),
                 })
                 .for_each(|d| q.push_back(d));
         }
