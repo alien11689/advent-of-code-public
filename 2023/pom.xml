@@ -16,7 +16,7 @@
     <properties>
         <main.class>dpr.aoc${project.artifactId}.All</main.class>
         <imageName>AOC${project.artifactId}</imageName>
-        <java-smt.version>5.0.1</java-smt.version>
+        <java-smt.version>5.0.1-362-g3846f26ca</java-smt.version>
     </properties>
 
     <dependencies>
