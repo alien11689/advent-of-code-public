@@ -21,7 +21,7 @@
         <native-maven-plugin.version>0.10.6</native-maven-plugin.version>
         <imageName>AOC${project.artifactId}</imageName>
         <junit5.version>5.12.1</junit5.version>
-        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
     </properties>
 
     <dependencies>
