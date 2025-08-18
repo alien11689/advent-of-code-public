@@ -27,9 +27,9 @@ jobs:
         year: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Get private repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: alien11689/advent-of-code
           ref: master
@@ -58,9 +58,9 @@ jobs:
         year: [2024]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Get private repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: alien11689/advent-of-code
           ref: master

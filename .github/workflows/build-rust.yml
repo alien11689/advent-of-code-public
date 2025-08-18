@@ -25,10 +25,10 @@ jobs:
         type: ['', '--release']
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Get private repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: alien11689/advent-of-code
           ref: master
@@ -59,9 +59,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Get private repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: alien11689/advent-of-code
           ref: master
