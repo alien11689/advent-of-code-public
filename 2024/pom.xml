@@ -20,7 +20,7 @@
         <main.class>dpr.aoc2024.All</main.class>
         <native-maven-plugin.version>0.11.2</native-maven-plugin.version>
         <imageName>AOC${project.artifactId}</imageName>
-        <junit5.version>6.0.0</junit5.version>
+        <junit5.version>6.0.1</junit5.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
     </properties>
 
