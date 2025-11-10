@@ -17,14 +17,16 @@ on:
       - '2022/**'
       - '2023/**'
       - '2024/**'
+      - '2025/**'
       - 'commons/**'
 
 jobs:
   Build-And-Test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        year: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+        year: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
     steps:
       - name: Checkout
         uses: actions/checkout@v5
