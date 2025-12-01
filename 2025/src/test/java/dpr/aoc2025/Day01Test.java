@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import dpr.commons.Util;
 
-@Disabled
 class Day01Test {
 
     private final Day01 day = new Day01();
@@ -15,13 +14,13 @@ class Day01Test {
     @Test
     void part1() {
         var lines = Util.getNotEmptyLinesFromFile(day.dayNum(), "test1.txt");
-        assertEquals(-1, day.part1(lines));
+        assertEquals(3, day.part1(lines));
     }
 
     @Test
     void part2() {
         var lines = Util.getNotEmptyLinesFromFile(day.dayNum(), "test1.txt");
-        assertEquals(-1, day.part2(lines));
+        assertEquals(6, day.part2(lines));
     }
 
 }

@@ -19,11 +19,42 @@ class Day01 implements Day {
     }
 
     int part1(List<String> lines) {
-        return 0;
+        return calculateZeroOccurrences(lines, false);
     }
 
     int part2(List<String> lines) {
-        return 0;
+        return calculateZeroOccurrences(lines, true);
+    }
+
+    private static int calculateZeroOccurrences(List<String> lines, boolean countPassing) {
+        int pos = 50;
+        int count = 0;
+        int limit = 100;
+        for (String line : lines) {
+            var dir = line.charAt(0);
+            var move = Integer.parseInt(line.substring(1));
+            if (countPassing) {
+                count += move / limit;
+            }
+            move %= limit;
+            if (dir == 'L') {
+                int intermediate = pos - move;
+                if (countPassing && pos != 0 && intermediate < 0) {
+                    ++count;
+                }
+                pos = (pos - move + limit) % limit;
+            } else {
+                int intermediate = pos + move;
+                if (countPassing && intermediate > limit) {
+                    ++count;
+                }
+                pos = (pos + move + limit) % limit;
+            }
+            if (pos == 0) {
+                ++count;
+            }
+        }
+        return count;
     }
 
     public static void main(String[] args) {
