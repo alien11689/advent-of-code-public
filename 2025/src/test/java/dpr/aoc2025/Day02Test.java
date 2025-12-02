@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import dpr.commons.Util;
 
-@Disabled
 class Day02Test {
 
     private final Day02 day = new Day02();
