@@ -66,12 +66,11 @@ class Day02 implements Day {
         int maxDigits = String.valueOf(right).length();
         while (cur <= right) {
             String s = String.valueOf(cur);
-            int substringSize = 1;
-            while (substringSize * 2 <= maxDigits) {
+            int substringSize = s.length() / 2;
+            while (substringSize > 0) {
                 var begin = s.substring(0, substringSize);
                 if (checkedPrefix.contains(begin)) {
-                    ++substringSize;
-                    continue;
+                    break;
                 }
                 checkedPrefix.add(begin);
                 StringBuilder sb = new StringBuilder(begin);
@@ -85,7 +84,7 @@ class Day02 implements Day {
                     }
                     sb.append(begin);
                 }
-                ++substringSize;
+                --substringSize;
             }
             ++cur;
         }
