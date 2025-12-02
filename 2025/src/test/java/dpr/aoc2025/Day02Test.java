@@ -15,13 +15,13 @@ class Day02Test {
     @Test
     void part1() {
         var lines = Util.getNotEmptyLinesFromFile(day.dayNum(), "test1.txt");
-        assertEquals(-1, day.part1(lines));
+        assertEquals(1227775554L, day.part1(lines));
     }
 
     @Test
     void part2() {
         var lines = Util.getNotEmptyLinesFromFile(day.dayNum(), "test1.txt");
-        assertEquals(-1, day.part2(lines));
+        assertEquals(4174379265L, day.part2(lines));
     }
 
 }
