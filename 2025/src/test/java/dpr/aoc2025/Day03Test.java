@@ -2,7 +2,6 @@ package dpr.aoc2025;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import dpr.commons.Util;

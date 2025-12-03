@@ -6,11 +6,6 @@ import dpr.commons.Day;
 import dpr.commons.Util;
 
 class Day04 implements Day {
-    private static final Character x = 'X';
-    private static final Character m = 'M';
-    private static final Character a = 'A';
-    private static final Character s = 'S';
-
     @Override
     public void execute() {
         var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");

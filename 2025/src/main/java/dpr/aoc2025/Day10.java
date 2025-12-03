@@ -3,7 +3,6 @@ package dpr.aoc2025;
 import java.util.List;
 
 import dpr.commons.Day;
-import dpr.commons.Pair;
 import dpr.commons.Util;
 
 class Day10 implements Day {
