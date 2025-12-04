@@ -3,7 +3,7 @@
 module=$1
 
 for x in `seq -w 1 25`; do
-  if [ -d "$module/src/main/resources/$x"]; then
+  if [ ! -d "$module/src/main/resources/$x" ]; then
     break
   fi
   echo "Day$x"
