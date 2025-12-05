@@ -2,3 +2,27 @@ codecov:
   require_ci_to_pass: yes
   notify:
     wait_for_ci: yes
+
+comment:
+  layout: "header, diff, flags, components" 
+
+component_management:
+  default_rules:
+    statuses:
+      - type: project
+        target: auto
+        branches:
+          - "!main"
+  individual_components:
+    - component_id: AoC_2024
+      name: AoC 2024
+      paths:
+        - 2024/**
+    - component_id: AoC_2025
+      name: AoC 2025
+      paths:
+        - 2025/**
+    - component_id: AoC_Rust
+      name: AoC Rust
+      paths:
+        - rust-aoc/**
