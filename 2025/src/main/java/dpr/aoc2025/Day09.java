@@ -18,11 +18,11 @@ class Day09 implements Day {
         return 9;
     }
 
-    int part1(List<String> lines) {
+    long part1(List<String> lines) {
         return 0;
     }
 
-    int part2(List<String> lines) {
+    long part2(List<String> lines) {
         return 0;
     }
 
