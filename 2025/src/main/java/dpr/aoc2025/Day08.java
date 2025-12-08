@@ -35,22 +35,15 @@ class Day08 implements Day {
             var parts = line.split(",");
             points.add(new Point3D(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2])));
         }
-        var distances = new HashMap<List<Point3D>, Double>();
+        var connections = new ArrayList<Connection>();
         for (int i = 0; i < points.size(); i++) {
             for (int j = i + 1; j < points.size(); j++) {
                 var point1 = points.get(i);
                 var point2 = points.get(j);
-                List<Point3D> key = List.of(point1, point2);
-                distances.put(key, euclidean(point1, point2));
-
+                List<Point3D> pair = List.of(point1, point2);
+                connections.add(new Connection(pair, euclidean(point1, point2)));
             }
         }
-
-        var connections = new ArrayList<Connection>();
-        distances.forEach((p, dist) -> {
-            var connection = new Connection(p, dist);
-            connections.add(connection);
-        });
 
         Collections.sort(connections);
 
@@ -68,14 +61,11 @@ class Day08 implements Day {
                 Set<Point3D> set1 = maybeSet1.get();
                 Set<Point3D> set2 = maybeSet2.get();
                 if (set1.equals(set2)) {
-//                    System.out.println("Already connected : " + connection);
                     ++connectionsMade;
                     continue;
                 }
                 var del1 = connected.remove(set1);
                 var del2 = connected.remove(set2);
-//                System.out.println("removing set " + set1 + ", result " + del1);
-//                System.out.println("removing set " + set2 + ", result " + del2);
                 if (!del1 || !del2) {
                     throw new RuntimeException("Invalid remove from set");
                 }
@@ -99,10 +89,6 @@ class Day08 implements Day {
                 connected.add(new HashSet<>(connection.points));
                 ++connectionsMade;
             }
-//            System.out.println("After processing " + connection + " and current connections made is " + connectionsMade);
-//            for (var connect : connected) {
-//                System.out.println(connect + " has size " + connect.size());
-//            }
 
             if (connectionsMade == limit) {
                 solutionPart1 = connected.stream().map(s -> s.size()).sorted((o1, o2) -> o2 - o1).limit(3).reduce(1, Math::multiplyExact);
