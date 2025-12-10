@@ -3,6 +3,8 @@ package dpr.aoc2025;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import dpr.commons.Util;
 
@@ -16,10 +18,11 @@ class Day10Test {
         assertEquals(7, day.part1(lines));
     }
 
-    @Test
-    void part2() {
+    @ParameterizedTest
+    @EnumSource(Day10.SolverAlgorithm.class)
+    void part2(Day10.SolverAlgorithm solverAlgorithm) {
         var lines = Util.getNotEmptyLinesFromFile(day.dayNum(), "test1.txt");
-        assertEquals(33, day.part2(lines));
+        assertEquals(33, day.part2(lines, solverAlgorithm));
     }
 
 }

@@ -13,6 +13,7 @@
 
     <properties>
         <main.class>dpr.aoc2025.All</main.class>
+        <z3-turnkey.version>4.14.0</z3-turnkey.version>
     </properties>
 
     <dependencies>
@@ -28,6 +29,11 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tools.aqua</groupId>
+            <artifactId>z3-turnkey</artifactId>
+            <version>${z3-turnkey.version}</version>
         </dependency>
     </dependencies>
 

@@ -2,17 +2,19 @@ package dpr.aoc2025;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.IntExpr;
 import dpr.commons.Day;
-import dpr.commons.Pair;
 import dpr.commons.Util;
 
 class Day10 implements Day {
@@ -20,12 +22,17 @@ class Day10 implements Day {
     public void execute() {
         var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");
         System.out.println(part1(lines));
-//        System.out.println(part2(lines));
+        System.out.println(part2(lines, SolverAlgorithm.Z3));
     }
 
     @Override
     public int dayNum() {
         return 10;
+    }
+
+    enum SolverAlgorithm {
+        BRUTE_FORCE,
+        Z3
     }
 
     long part1(List<String> lines) {
@@ -78,16 +85,21 @@ class Day10 implements Day {
         }
     }
 
-    long part2(List<String> lines) {
-        long result = 0;
+    long part2(List<String> lines, SolverAlgorithm solverAlgorithm) {
+        var result = new LongAdder();
         for (int i = 0; i < lines.size(); i++) {
 //            System.out.println((i + 1) + "/" + lines.size() + ": " + lines.get(i));
-            result += solveLine(lines.get(i));
+            var line = lines.get(i);
+            result.add(
+                    switch (solverAlgorithm) {
+                        case BRUTE_FORCE -> solveLineWithBruteForce(line);
+                        case Z3 -> solveLineWithZ3(line);
+                    });
         }
-        return result;
+        return result.longValue();
     }
 
-    private static long solveLine(String line) {
+    private static long solveLineWithBruteForce(String line) {
         String[] parts = line.split(" ");
         String lastPart = parts[parts.length - 1];
         String[] splitIndicators = lastPart.substring(1, lastPart.length() - 1).split(",");
@@ -100,7 +112,6 @@ class Day10 implements Day {
         }
         buttons.sort((o1, o2) -> o2.size() - o1.size());
 
-        var bestIndexToOptimize = getBestIndexToOptimize(buttons);
 //        System.out.println("Button analysis: " + bestIndexToOptimize);
 
 //        System.out.println(buttons);
@@ -129,7 +140,7 @@ class Day10 implements Day {
                 }
             }
         }
-//        System.out.println("Solve with best: " + best);
+        System.out.println("Solve with best: " + best);
         return best;
     }
 
@@ -197,6 +208,47 @@ class Day10 implements Day {
                 ++times;
             }
             return result;
+        }
+    }
+
+    private long solveLineWithZ3(String line) {
+        String[] parts = line.split(" ");
+        String lastPart = parts[parts.length - 1];
+        String[] splitIndicators = lastPart.substring(1, lastPart.length() - 1).split(",");
+        var target = Arrays.stream(splitIndicators).map(Integer::parseInt).collect(Collectors.toList());
+//        System.out.println(target);
+        var buttons = new ArrayList<Set<Integer>>();
+        for (int i = 1; i < parts.length - 1; i++) {
+            var button = Arrays.stream(parts[i].substring(1, parts[i].length() - 1).split(",")).map(Integer::parseInt).collect(Collectors.toSet());
+            buttons.add(button);
+        }
+
+        try (var ctx = new Context()) {
+            var solver = ctx.mkOptimize();
+            var vars = new ArrayList<IntExpr>();
+            var booleanExpr = new ArrayList<BoolExpr>();
+            var zero = ctx.mkInt(0);
+            var targetParts = target.stream().map(v -> new ArrayList<IntExpr>()).toList();
+            for (int b = 0; b < buttons.size(); b++) {
+                var v = ctx.mkIntConst("b" + b);
+                vars.add(v);
+                booleanExpr.add(ctx.mkGe(v, zero));
+                for (int button : buttons.get(b)) {
+                    targetParts.get(button).add(v);
+                }
+            }
+            for (int i = 0; i < targetParts.size(); i++) {
+                booleanExpr.add(ctx.mkEq(ctx.mkAdd(targetParts.get(i).toArray(new IntExpr[0])), ctx.mkInt(target.get(i))));
+            }
+            var constraints = ctx.mkAnd(booleanExpr.toArray(new BoolExpr[0]));
+            var sum = ctx.mkAdd(vars.toArray(new IntExpr[0]));
+
+            solver.Assert(constraints);
+            solver.MkMinimize(sum);
+            solver.Check();
+            long best = Long.parseLong(solver.getModel().eval(sum, true).toString());
+//            System.out.println("Solve with best: " + best);
+            return best;
         }
     }
 
