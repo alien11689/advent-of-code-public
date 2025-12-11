@@ -30,7 +30,7 @@ class Day11 implements Day {
     long part1(List<String> lines) {
         var result = 0L;
         var connections = readConnections(lines);
-        result = findUniquePaths("you", connections, "out", Set.of());
+        result = findUniquePaths("you", "out", Set.of(), connections);
         return result;
     }
 
@@ -50,9 +50,9 @@ class Day11 implements Day {
     long part2Naive(List<String> lines) {
         var connections = readConnections(lines);
         System.out.println(connections);
-        return findUniquePaths("svr", connections, "fft", Set.of()) *
-                findUniquePaths("fft", connections, "dac", Set.of())*
-                findUniquePaths("dac", connections, "out", Set.of());
+        return findUniquePaths("svr", "fft", Set.of(), connections) *
+                findUniquePaths("fft", "dac", Set.of(), connections) *
+                findUniquePaths("dac", "out", Set.of(), connections);
     }
 
     long part2(List<String> lines) {
@@ -60,70 +60,21 @@ class Day11 implements Day {
 //        drawGraph(connections);
         var passes = new HashMap<Pair<String, String>, Long>();
         var hub1 = Set.of("wjw", "wzb", "ury", "lob", "bzl");
-        for (String target : hub1) {
-            var from = "svr";
-            long uniquePaths = findUniquePaths(from, connections, target, hub1);
-            passes.put(new Pair<>(from, target), uniquePaths);
-//            System.out.println(from + " -> " + target + " paths: " + uniquePaths);
-        }
+        var fft = Set.of("fft");
         var hub2 = Set.of("vwz", "wef", "ych", "rpp");
-        for (String from : hub1) {
-            var target = "fft";
-            long uniquePaths = findUniquePaths(from, connections, target, hub2);
-            passes.put(new Pair<>(from, target), uniquePaths);
-//            System.out.println(from + " -> " + target + " paths: " + uniquePaths);
-        }
-        // fft -> hub2
-        for (String target : hub2) {
-            var from = "fft";
-            long uniquePaths = findUniquePaths(from, connections, target, hub2);
-            passes.put(new Pair<>(from, target), uniquePaths);
-//            System.out.println(from + " -> " + target + " paths: " + uniquePaths);
-        }
-        // hub2 -> hub3
         var hub3 = Set.of("pxb", "czt", "nhb");
-        for (String from : hub2) {
-            for (String target : hub3) {
-                long uniquePaths = findUniquePaths(from, connections, target, hub3);
-                passes.put(new Pair<>(from, target), uniquePaths);
-//                System.out.println(from + " -> " + target + " paths: " + uniquePaths);
-            }
-        }
-
-        // hub3 -> hub4
         var hub4 = Set.of("qqs", "wtz", "jnn", "fkf", "xal");
-        for (String from : hub3) {
-            for (String target : hub4) {
-                long uniquePaths = findUniquePaths(from, connections, target, hub4);
-                passes.put(new Pair<>(from, target), uniquePaths);
-//                System.out.println(from + " -> " + target + " paths: " + uniquePaths);
-            }
-        }
-
-        // hub4 -> dac excluding hub5
+        var dac = Set.of("dac");
         var hub5 = Set.of("gui", "you", "wyy", "ydw", "sbh");
-        for (String from : hub4) {
-            var target = "dac";
-            long uniquePaths = findUniquePaths(from, connections, target, hub5);
-            passes.put(new Pair<>(from, target), uniquePaths);
-//            System.out.println(from + " -> " + target + " paths: " + uniquePaths);
-        }
-
-        // dac -> hub5
-        for (String target : hub5) {
-            String from = "dac";
-            long uniquePaths = findUniquePaths(from, connections, target, hub5);
-            passes.put(new Pair<>(from, target), uniquePaths);
-//            System.out.println(from + " -> " + target + " paths: " + uniquePaths);
-        }
-
-        // hub5 -> out
-        for (String from : hub5) {
-            var target = "out";
-            long uniquePaths = findUniquePaths(from, connections, target, hub5);
-            passes.put(new Pair<>(from, target), uniquePaths);
-//            System.out.println(from + " -> " + target + " paths: " + uniquePaths);
-        }
+        var out = Set.of("out");
+        findGraphPasses(Set.of("svr"), hub1, hub1, connections, passes);
+        findGraphPasses(hub1, fft, hub2, connections, passes);
+        findGraphPasses(fft, hub2, hub2, connections, passes);
+        findGraphPasses(hub2, hub3, hub3, connections, passes);
+        findGraphPasses(hub3, hub4, hub4, connections, passes);
+        findGraphPasses(hub4, dac, hub5, connections, passes);
+        findGraphPasses(dac, hub5, hub5, connections, passes);
+        findGraphPasses(hub5, out, out, connections, passes);
 
         var result = 0L;
         var queue = new LinkedList<Pair<List<String>, Long>>();
@@ -147,6 +98,16 @@ class Day11 implements Day {
         return result;
     }
 
+    private static void findGraphPasses(Set<String> froms, Set<String> targets, Set<String> excluding, Map<String, Set<String>> connections, Map<Pair<String, String>, Long> passes) {
+        for (String from : froms) {
+            for (String target : targets) {
+                long uniquePaths = findUniquePaths(from, target, excluding, connections);
+                passes.put(new Pair<>(from, target), uniquePaths);
+//                System.out.println(from + " -> " + target + " paths: " + uniquePaths);
+            }
+        }
+    }
+
     private static void drawGraph(HashMap<String, Set<String>> connections) {
         System.out.println("digraph {");
         connections.forEach((from, value) -> {
@@ -157,7 +118,7 @@ class Day11 implements Day {
         System.out.println("}");
     }
 
-    private static long findUniquePaths(String origin, HashMap<String, Set<String>> connections, String target, Set<String> omitting) {
+    private static long findUniquePaths(String origin, String target, Set<String> omitting, Map<String, Set<String>> connections) {
         PriorityQueue<List<String>> queue = new PriorityQueue<>(Comparator.comparing(List::size));
         var res = 0L;
         var path = List.of(origin);
@@ -166,7 +127,7 @@ class Day11 implements Day {
 //            System.out.println("Queue size is " + queue.size());
             List<String> cur = queue.poll();
             String last = cur.getLast();
-            if(connections.containsKey(last)) {
+            if (connections.containsKey(last)) {
                 for (String next : connections.get(last)) {
                     if (target.equals(next)) {
                         ++res;
