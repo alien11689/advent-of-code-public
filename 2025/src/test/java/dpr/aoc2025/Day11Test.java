@@ -19,7 +19,7 @@ class Day11Test {
     @Test
     void part2() {
         var lines = Util.getNotEmptyLinesFromFile(day.dayNum(), "test2.txt");
-        assertEquals(2, day.part2Naive(lines));
+        assertEquals(2, day.part2(lines));
     }
 
 }
