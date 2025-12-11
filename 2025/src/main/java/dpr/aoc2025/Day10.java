@@ -140,7 +140,7 @@ class Day10 implements Day {
                 }
             }
         }
-        System.out.println("Solve with best: " + best);
+//        System.out.println("Solve with best: " + best);
         return best;
     }
 
