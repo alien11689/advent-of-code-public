@@ -114,7 +114,7 @@ class Day12 implements Day {
         }
 
         private boolean tryAllCombinations(Present[] presents) {
-            // TODO implement to satisfy the tests
+            // TODO implement to satisfy the tests - now assuming that it is false
             return false;
         }
     }

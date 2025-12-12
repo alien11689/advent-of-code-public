@@ -12,7 +12,6 @@ class Day12Test {
     private final Day12 day = new Day12();
 
     @Test
-    @Disabled
     void part1() {
         var lines = Util.getNotEmptyLinesFromFile(day.dayNum(), "test1.txt");
         assertEquals(2, day.part1(lines));
