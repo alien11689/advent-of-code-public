@@ -13,7 +13,7 @@
 
     <properties>
         <main.class>dpr.aoc2025.All</main.class>
-        <z3-turnkey.version>4.14.0</z3-turnkey.version>
+        <z3-turnkey.version>4.14.1</z3-turnkey.version>
     </properties>
 
     <dependencies>
