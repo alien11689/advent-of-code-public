@@ -14,6 +14,42 @@ component_management:
         branches:
           - "!main"
   individual_components:
+    - component_id: AoC_2015
+      name: AoC 2015
+      paths:
+        - 2015/**
+    - component_id: AoC_2016
+      name: AoC 2016
+      paths:
+        - 2016/**
+    - component_id: AoC_2017
+      name: AoC 2017
+      paths:
+        - 2017/**
+    - component_id: AoC_2018
+      name: AoC 2018
+      paths:
+        - 2018/**
+    - component_id: AoC_2019
+      name: AoC 2019
+      paths:
+        - 2019/**
+    - component_id: AoC_2020
+      name: AoC 2020
+      paths:
+        - 2020/**
+    - component_id: AoC_2021
+      name: AoC 2021
+      paths:
+        - 2021/**
+    - component_id: AoC_2022
+      name: AoC 2022
+      paths:
+        - 2022/**
+    - component_id: AoC_2023
+      name: AoC 2023
+      paths:
+        - 2023/**
     - component_id: AoC_2024
       name: AoC 2024
       paths:

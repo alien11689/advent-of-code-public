@@ -19,6 +19,8 @@ on:
       - '2024/**'
       - '2025/**'
       - 'commons/**'
+      - 'parent/**'
+      - 'pom.xml'
 
 jobs:
   Build-And-Test:
@@ -55,9 +57,6 @@ jobs:
 
   Coverage:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        year: [2024, 2025]
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -75,10 +74,12 @@ jobs:
           distribution: 'temurin'
       - name: Prepare resources
         run: |
-          mkdir -p ${{matrix.year}}/src/main/resources
-          cp -r private/${{matrix.year}}/src/main/resources/* ${{matrix.year}}/src/main/resources
+          for year in 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025 ; do
+            mkdir -p $year/src/main/resources
+            cp -r private/$year/src/main/resources/* $year/src/main/resources
+          done
       - name: Run
-        run: ./mvnw clean test -Pcoverage -am -pl ${{ matrix.year }}
+        run: ./mvnw -U -e -B -ntp clean test -Pcoverage
       - name: Upload coverage
         uses: codecov/codecov-action@v5
         with:
