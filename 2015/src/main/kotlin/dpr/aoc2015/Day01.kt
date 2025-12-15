@@ -31,6 +31,6 @@ object Day01 {
                 return pos
             }
         }
-        throw RuntimeException("No Solution")
+        return -1
     }
 }

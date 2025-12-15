@@ -6,16 +6,18 @@ object Day02 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/02/input.txt")
-        val boxes = input.map { line -> Box(line.split("x").map { it.toInt() }) }
+        val boxes = readInput(input)
         println(part1(boxes))
         println(part2(boxes))
     }
 
-    private fun part1(boxes: List<Box>): Any {
+    fun readInput(input: List<String>): List<Box> = input.map { line -> Box(line.split("x").map { it.toInt() }) }
+
+    fun part1(boxes: List<Box>): Any {
         return boxes.sumOf { it.area() + it.smallestSideArea() }
     }
 
-    private fun part2(boxes: List<Box>): Any {
+    fun part2(boxes: List<Box>): Any {
         return boxes.sumOf { it.volume() + it.dimensionsToWrap() }
     }
 
