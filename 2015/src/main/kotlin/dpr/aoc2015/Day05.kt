@@ -10,7 +10,8 @@ object Day05 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Any {
         return input
             .filter { line -> line.count { it in setOf('a', 'e', 'i', 'o', 'u') } >= 3 }
             .filter { inp -> setOf("ab", "cd", "pq", "xy").none { inp.contains(it) } }
@@ -28,7 +29,8 @@ object Day05 {
             }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Any {
         return input
             .filter {
                 var i = 0
