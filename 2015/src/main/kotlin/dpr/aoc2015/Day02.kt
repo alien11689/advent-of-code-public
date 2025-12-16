@@ -11,12 +11,15 @@ object Day02 {
         println(part2(boxes))
     }
 
+    @JvmStatic
     fun readInput(input: List<String>): List<Box> = input.map { line -> Box(line.split("x").map { it.toInt() }) }
 
+    @JvmStatic
     fun part1(boxes: List<Box>): Any {
         return boxes.sumOf { it.area() + it.smallestSideArea() }
     }
 
+    @JvmStatic
     fun part2(boxes: List<Box>): Any {
         return boxes.sumOf { it.volume() + it.dimensionsToWrap() }
     }
