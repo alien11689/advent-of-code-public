@@ -1,8 +1,9 @@
 package dpr.aoc2015;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -12,15 +13,15 @@ class Day01Test {
     @ParameterizedTest
     @MethodSource("part1Parameters")
     void testPart1(String input, int expected) {
-        Object result = Day01.part1(input);
-        Assertions.assertEquals(expected, ((Number) result).intValue());
+        var result = Day01.part1(input);
+        assertEquals(expected, ((Number) result).intValue());
     }
 
     @ParameterizedTest
     @MethodSource("part2Parameters")
     void testPart2(String input, int expected) {
-        Object result = Day01.part2(input);
-        Assertions.assertEquals(expected, ((Number) result).intValue());
+        var result = Day01.part2(input);
+        assertEquals(expected, ((Number) result).intValue());
     }
 
     private static Stream<Arguments> part1Parameters() {

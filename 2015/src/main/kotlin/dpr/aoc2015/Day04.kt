@@ -13,7 +13,8 @@ object Day04 {
         println(part1And2(input, "000000", init = part1Result))
     }
 
-    private fun part1And2(input: String, prefix: String, init: Int = 0): Int {
+    @JvmStatic
+    fun part1And2(input: String, prefix: String, init: Int = 0): Int {
         val md5 = MessageDigest.getInstance("MD5")
         val zero = 0.toByte()
         val f = 15.toByte()
