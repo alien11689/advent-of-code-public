@@ -7,17 +7,23 @@ import dpr.commons.Util
 object Day01 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-        val input = Util.getFileContent("/01/input.txt").trim().split(Regex("[ ,]+"))
+        val fileContent = Util.getFileContent("/01/input.txt")
+        val input = parseInput(fileContent)
         println(part1(input))
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun parseInput(fileContent: String): List<String> = fileContent.trim().split(Regex("[ ,]+"))
+
+    @JvmStatic
+    fun part1(input: List<String>): Any {
         val zero = Point2D(0, 0)
         return input.fold(Position(zero)) { acc, c -> acc.go(c) }.point.manhattan(zero)
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Any {
         val mem = mutableSetOf<Point2D>()
         val zero = Point2D(0, 0)
         var cur = Position(zero)
