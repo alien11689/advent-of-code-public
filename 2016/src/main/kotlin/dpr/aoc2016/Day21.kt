@@ -10,7 +10,7 @@ object Day21 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    private fun part1(input: List<String>): String {
         val rules = parse(input)
         val password = "abcdefgh".toList()
         return scramble(rules, password)
@@ -45,7 +45,7 @@ object Day21 {
         }
     }
 
-    private fun part2(input: List<String>): Any {
+    private fun part2(input: List<String>): String {
         val rules = parse(input)
         val password = "abcdefgh".toList()
         return permutations(password.toSet()).find { scramble(rules, it) == "fbgdceah" }!!.joinToString("")

@@ -10,13 +10,13 @@ object Day04 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    private fun part1(input: List<String>): Int {
         return input.map { line -> Line.from(line.split(Regex("[-\\[\\]]+")).filter { it.isNotEmpty() }) }
             .filter { it.isValid() }
             .sumOf { it.id }
     }
 
-    private fun part2(input: List<String>): Any {
+    private fun part2(input: List<String>): Int {
         return input.map { line -> Line.from(line.split(Regex("[-\\[\\]]+")).filter { it.isNotEmpty() }) }
             .first { it.decrypt().contains("north") }
             .id

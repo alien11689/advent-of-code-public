@@ -10,7 +10,7 @@ object Day16 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    private fun part1(input: String): String {
         return solve(input, 272)
     }
 
@@ -35,7 +35,7 @@ object Day16 {
         return text
     }
 
-    private fun part2(input: String): Any {
+    private fun part2(input: String): String {
         return solve(input, 35651584)
     }
 }

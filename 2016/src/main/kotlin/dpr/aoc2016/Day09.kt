@@ -10,7 +10,7 @@ object Day09 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    private fun part1(input: String): Int {
         var i = 0
         var count = 0
         while (i < input.length) {

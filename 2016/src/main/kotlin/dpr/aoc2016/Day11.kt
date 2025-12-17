@@ -11,7 +11,7 @@ object Day11 {
         println(part2())
     }
 
-    private fun part2() = solve(
+    private fun part2(): Int = solve(
         listOf(
             setOf(1, 2, -2, 3, 4, -4, 5, -5, 6, -6, 7, -7),
             setOf(-1, -3),
@@ -20,7 +20,7 @@ object Day11 {
         )
     )
 
-    private fun part1() = solve(
+    private fun part1(): Int = solve(
         listOf(
             setOf(1, 2, -2, 3, 4, -4, 5, -5),
             setOf(-1, -3),
@@ -29,7 +29,7 @@ object Day11 {
         )
     )
 
-    private fun solve(input: List<Set<Int>>): Any {
+    private fun solve(input: List<Set<Int>>): Int {
         val mem = mutableSetOf<Any>()
         val q: Queue<Move> = LinkedList()
         val init = Move(0, Stage(0, input))

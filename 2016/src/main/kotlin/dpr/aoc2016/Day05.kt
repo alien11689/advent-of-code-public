@@ -12,7 +12,7 @@ object Day05 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    private fun part1(input: String): String {
         return generateSequence(0) { it + 1 }
             .map {
                 md5.reset()
@@ -29,7 +29,7 @@ object Day05 {
             .joinToString("")
     }
 
-    private fun part2(input: String): Any {
+    private fun part2(input: String): String {
         var i = 0
         val mutableList: MutableList<Char?> = (0..7).map { null }.toMutableList()
         while (true) {

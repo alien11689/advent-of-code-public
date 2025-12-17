@@ -10,7 +10,7 @@ object Day20 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    private fun part1(input: List<String>): Long {
         val ranges = parseInput(input)
         var minNotExcluded = 0L
         ranges.forEach { range ->
@@ -21,7 +21,7 @@ object Day20 {
                 return minNotExcluded
             }
         }
-        return -1
+        return -1L
     }
 
     private fun parseInput(input: List<String>) = input.map {
@@ -29,7 +29,7 @@ object Day20 {
         IpRange(parts[0].toLong(), parts[1].toLong())
     }.sorted()
 
-    private fun part2(input: List<String>): Any {
+    private fun part2(input: List<String>): Int {
         val ranges = parseInput(input)
         var minNotExcluded = 0L
         val notExcluded = mutableListOf<Long>()

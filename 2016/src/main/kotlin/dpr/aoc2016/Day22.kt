@@ -10,7 +10,7 @@ object Day22 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    private fun part1(input: List<String>): Int {
         val nodes = input
             .drop(2)
             .map { Node.fromLine(it) }
@@ -25,7 +25,7 @@ object Day22 {
         return count
     }
 
-    private fun part2(input: List<String>): Any {
+    private fun part2(input: List<String>): Int {
         input
             .drop(2)
             .map { Node.fromLine(it) }

@@ -9,7 +9,7 @@ object Day25 {
         println(part1(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    private fun part1(input: List<String>): Int {
         var i = 0
         while (true) {
             val message = Assembunny(input).run(mapOf(Pair("a", i)), emitLimit = 20).second

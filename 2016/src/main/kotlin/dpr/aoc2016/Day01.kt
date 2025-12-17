@@ -17,13 +17,13 @@ object Day01 {
     fun parseInput(fileContent: String): List<String> = fileContent.trim().split(Regex("[ ,]+"))
 
     @JvmStatic
-    fun part1(input: List<String>): Any {
+    fun part1(input: List<String>): Int {
         val zero = Point2D(0, 0)
         return input.fold(Position(zero)) { acc, c -> acc.go(c) }.point.manhattan(zero)
     }
 
     @JvmStatic
-    fun part2(input: List<String>): Any {
+    fun part2(input: List<String>): Int {
         val mem = mutableSetOf<Point2D>()
         val zero = Point2D(0, 0)
         var cur = Position(zero)

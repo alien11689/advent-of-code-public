@@ -10,7 +10,7 @@ object Day06 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    private fun part1(input: List<String>): String {
         return (0 until input[0].length).map { col ->
             input.map { it[col] }
                 .groupingBy { it }
@@ -20,7 +20,7 @@ object Day06 {
         }.joinToString("")
     }
 
-    private fun part2(input: List<String>): Any {
+    private fun part2(input: List<String>): String {
         return (0 until input[0].length).map { col ->
             input.map { it[col] }
                 .groupingBy { it }

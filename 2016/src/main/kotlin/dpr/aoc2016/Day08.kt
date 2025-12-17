@@ -11,7 +11,7 @@ object Day08 {
         println(part2)
     }
 
-    private fun part1And2(input: List<String>): Pair<Any, Any> {
+    private fun part1And2(input: List<String>): Pair<Int, String> {
         val board = (0..5).map {
             (0..49).map { false }
         }

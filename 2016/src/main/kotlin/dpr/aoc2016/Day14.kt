@@ -13,7 +13,7 @@ object Day14 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    private fun part1(input: String): Int {
         val res = mutableListOf<Int>()
         val mem = mutableMapOf<Int, String>()
         var i = 0
@@ -54,7 +54,7 @@ object Day14 {
         return false
     }
 
-    private fun part2(input: String): Any {
+    private fun part2(input: String): Int {
         val res = mutableListOf<Int>()
         val mem = mutableMapOf<Int, String>()
         var i = 0

@@ -12,7 +12,7 @@ object Day24 {
         println(part2(input))
     }
 
-    private fun part1(maze: List<String>): Any {
+    private fun part1(maze: List<String>): Int {
         val init = find0(maze)
         val expected = findNumbers(maze)
 
@@ -34,7 +34,7 @@ object Day24 {
         throw RuntimeException("No solution")
     }
 
-    private fun part2(maze: List<String>): Any {
+    private fun part2(maze: List<String>): Int {
         val init = find0(maze)
         val expected = findNumbers(maze)
 

@@ -10,7 +10,7 @@ object Day18 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    private fun part1(input: String): Int {
         val size = 40
         return solve(input, size)
     }
@@ -29,7 +29,7 @@ object Day18 {
         return safe
     }
 
-    private fun part2(input: String): Any {
+    private fun part2(input: String): Int {
         val size = 400000
         return solve(input, size)
     }

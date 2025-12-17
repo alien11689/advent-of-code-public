@@ -10,7 +10,7 @@ object Day10 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    private fun part1(input: List<String>): String {
         val bots = readInput(input)
         while (true) {
             val readyBots = bots.values.filter { it.values.size == 2 && !it.used }
@@ -32,7 +32,7 @@ object Day10 {
         }
     }
 
-    private fun part2(input: List<String>): Any {
+    private fun part2(input: List<String>): Int {
         val outputs = mutableMapOf<String, Int>()
         val bots = readInput(input)
         while (true) {

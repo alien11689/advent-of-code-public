@@ -12,7 +12,7 @@ object Day13 {
         println(part2(input))
     }
 
-    private fun part1(input: Int): Any {
+    private fun part1(input: Int): Int {
         val s = Stage(Point2D(1, 1), 0)
         val q = LinkedList<Stage>()
         val mem = mutableSetOf<Point2D>()
@@ -29,7 +29,7 @@ object Day13 {
         throw RuntimeException()
     }
 
-    private fun part2(input: Int): Any {
+    private fun part2(input: Int): Int {
         val s = Stage(Point2D(1, 1), 0)
         val q = LinkedList<Stage>()
         val mem = mutableSetOf<Point2D>()

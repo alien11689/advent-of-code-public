@@ -10,11 +10,11 @@ object Day23 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    private fun part1(input: List<String>): Int {
         return Assembunny(input).run(mapOf(Pair("a", 7))).first["a"]!!
     }
 
-    private fun part2(input: List<String>): Any {
+    private fun part2(input: List<String>): Int {
         return Assembunny(input).run(mapOf(Pair("a", 12)), f = { registers, cur ->
             if (cur == 5 && registers["b"]!! > 0 && registers["c"]!! > 0 && registers["d"]!! > 0) {
                 registers["a"] = registers["c"]!! * registers["d"]!!
