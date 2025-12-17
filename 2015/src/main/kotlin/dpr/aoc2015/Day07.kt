@@ -11,7 +11,8 @@ object Day07 {
         println(part2(input, a))
     }
 
-    private fun part1(input: List<String>): Int {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val inputs = mapOf<String, Int>()
         val operations = readOperations(input)
         return process(operations, inputs)
@@ -35,7 +36,8 @@ object Day07 {
         return -1
     }
 
-    private fun readOperations(input: List<String>, overrides: Map<String, Int> = mapOf()): Set<Operation> {
+    @JvmStatic
+    fun readOperations(input: List<String>, overrides: Map<String, Int> = mapOf()): Set<Operation> {
         val operations = mutableSetOf<Operation>()
         input.forEach { line ->
             val parts = line.split(" ")
@@ -60,7 +62,8 @@ object Day07 {
         return operations.toSet()
     }
 
-    private fun part2(input: List<String>, a: Int): Any {
+    @JvmStatic
+    fun part2(input: List<String>, a: Int): Int {
         val inputs = mapOf<String, Int>()
         val operations = readOperations(input, mapOf(Pair("b", a)))
         return process(operations, inputs)

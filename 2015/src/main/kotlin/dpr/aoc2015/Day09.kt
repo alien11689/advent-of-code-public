@@ -11,7 +11,8 @@ object Day09 {
         println(part2(paths))
     }
 
-    private fun part1(paths: Map<Set<String>, Int>): Int {
+    @JvmStatic
+    fun part1(paths: Map<Set<String>, Int>): Int {
         return generateRoutes(paths.keys.flatten().toSet(), paths).minOf { it.second }
     }
 
@@ -27,11 +28,13 @@ object Day09 {
         }.toSet()
     }
 
-    private fun part2(paths: Map<Set<String>, Int>): Any {
+    @JvmStatic
+    fun part2(paths: Map<Set<String>, Int>): Int {
         return generateRoutes(paths.keys.flatten().toSet(), paths).maxOf { it.second }
     }
 
-    private fun readPaths(input: List<String>) = input.associate {
+    @JvmStatic
+    fun readPaths(input: List<String>) = input.associate {
         val parts = it.split(Regex("[ =]+"))
         Pair(setOf(parts[0], parts[2]), parts[3].toInt())
     }

@@ -10,7 +10,8 @@ object Day08 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Int {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         return input.sumOf { it.length - countStringChars(it) }
     }
 
@@ -43,7 +44,8 @@ object Day08 {
         return count
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         return input.sumOf { escapedStringLength(it) - it.length }
     }
 

@@ -10,20 +10,24 @@ object Day14 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    @JvmOverloads
+    fun part1(input: List<String>, steps: Int = 2503): Int {
         var reeinders: List<Pair<Reeinder, ReeinderState>> = readReeinders(input)
         var t = 0
-        while (t < 2503) {
+        while (t < steps) {
             reeinders = reeinders.map { Pair(it.first, it.first.tick(it.second)) }
             ++t
         }
         return reeinders.maxOf { it.second.dist }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    @JvmOverloads
+    fun part2(input: List<String>, steps: Int = 2503): Int {
         var reeinders: List<Pair<Reeinder, ReeinderState>> = readReeinders(input)
         var t = 0
-        while (t < 2503) {
+        while (t < steps) {
             reeinders = reeinders.map { Pair(it.first, it.first.tick(it.second)) }
             val leaderDist = reeinders.maxOf { it.second.dist }
             reeinders = reeinders.map {
@@ -38,7 +42,8 @@ object Day14 {
         return reeinders.maxOf { it.second.score }
     }
 
-    private fun readReeinders(input: List<String>): List<Pair<Reeinder, ReeinderState>> {
+    @JvmStatic
+    fun readReeinders(input: List<String>): List<Pair<Reeinder, ReeinderState>> {
         return input.map {
             val parts = it.split(" ")
             Pair(Reeinder(parts[3].toInt(), parts[6].toInt(), parts[13].toInt()), ReeinderState())

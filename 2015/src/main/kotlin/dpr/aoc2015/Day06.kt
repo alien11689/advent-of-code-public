@@ -11,7 +11,8 @@ object Day06 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val lights = buildLights(false)
         input.forEach { instr ->
             val parts = instr.split(Regex("[ ,]+"))
@@ -52,7 +53,8 @@ object Day06 {
         return lights
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val lights = buildLights(0)
         input.forEach { instr ->
             val parts = instr.split(Regex("[ ,]+"))

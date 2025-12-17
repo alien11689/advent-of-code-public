@@ -11,11 +11,13 @@ object Day13 {
         println(part2(paths))
     }
 
-    private fun part1(paths: Map<Set<String>, Int>): Int {
+    @JvmStatic
+    fun part1(paths: Map<Set<String>, Int>): Int {
         return generateRoutes(paths.keys.flatten().toSet(), paths).maxOf { it.second + paths[setOf(it.first.first(), it.first.last())]!! }
     }
 
-    private fun readPaths(input: List<String>): MutableMap<Set<String>, Int> {
+    @JvmStatic
+    fun readPaths(input: List<String>): MutableMap<Set<String>, Int> {
         val paths = mutableMapOf<Set<String>, Int>()
         input.forEach {
             val parts = it.split(Regex("[ .]+"))
@@ -43,7 +45,8 @@ object Day13 {
         }.toSet()
     }
 
-    private fun part2(paths: MutableMap<Set<String>, Int>): Any {
+    @JvmStatic
+    fun part2(paths: MutableMap<Set<String>, Int>): Int {
         paths.keys.flatten().toSet().forEach {
             paths[setOf("me", it)] = 0
         }

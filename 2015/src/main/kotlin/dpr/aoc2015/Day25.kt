@@ -8,9 +8,8 @@ object Day25 {
         println(part1())
     }
 
-    private fun part1(): Any {
-        val column = 3083
-        val row = 2978
+    @JvmStatic
+    fun part1(column: Int = 3083, row: Int = 2978): Long {
         var i = 1 //row
         var j = 1 //column
         var cur = 20151125L

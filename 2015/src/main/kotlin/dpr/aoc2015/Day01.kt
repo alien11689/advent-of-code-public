@@ -10,7 +10,7 @@ object Day01 {
         println(part2(input))
     }
     @JvmStatic
-    fun part1(input: String): Any {
+    fun part1(input: String): Int {
         return input.fold(0) { acc, c ->
             when (c) {
                 '(' -> acc + 1
@@ -21,7 +21,7 @@ object Day01 {
     }
 
     @JvmStatic
-    fun part2(input: String): Any {
+    fun part2(input: String): Int {
         var floor = 0
         var pos = 0
         for (s in input) {

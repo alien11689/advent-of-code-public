@@ -11,14 +11,17 @@ object Day18 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    @JvmOverloads
+    fun part1(input: List<String>, steps: Int = 100): Int {
         var points = input.map { line ->
             line.map { it == '#' }
         }
-        repeat(100) {
+        val size = input.size
+        repeat(steps) {
             points = points.mapIndexed { y, line ->
                 line.mapIndexed { x, on ->
-                    val onNeighbours = neighbours(x, y).count { points[it.y][it.x] }
+                    val onNeighbours = neighbours(x, y, size).count { points[it.y][it.x] }
                     on && onNeighbours in setOf(2, 3) || !on && onNeighbours == 3
                 }
             }
@@ -26,20 +29,26 @@ object Day18 {
         return points.flatten().count { it }
     }
 
-    private fun neighbours(x: Int, y: Int): Set<Point2D> =
+    private fun neighbours(x: Int, y: Int, size: Int): Set<Point2D> =
         Point2D(x, y).adjacentPoints()
-            .filter { it.x in 0..99 && it.y in 0..99 }
+            .filter { it.x in 0..<size && it.y in 0..<size }
             .toSet()
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    @JvmOverloads
+    fun part2(input: List<String>, steps: Int = 100): Int {
         var points = input.mapIndexed { y, line ->
             line.mapIndexed { x, c -> c == '#' || x in setOf(0, 99) && y in setOf(0, 99) }
         }
-        repeat(100) {
+        val size = input.size
+        repeat(steps) {
             points = points.mapIndexed { y, line ->
                 line.mapIndexed { x, on ->
-                    val onNeighbours = neighbours(x, y).count { points[it.y][it.x] }
-                    x in setOf(0, 99) && y in setOf(0, 99) || on && onNeighbours in setOf(2, 3) || !on && onNeighbours == 3
+                    val onNeighbours = neighbours(x, y, size).count { points[it.y][it.x] }
+                    x in setOf(0, size - 1) && y in setOf(0, size - 1) || on && onNeighbours in setOf(
+                        2,
+                        3
+                    ) || !on && onNeighbours == 3
                 }
             }
         }

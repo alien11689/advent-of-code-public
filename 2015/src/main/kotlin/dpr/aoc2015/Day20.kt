@@ -11,7 +11,8 @@ object Day20 {
         println(part2(input))
     }
 
-    private fun part1(input: Int): Any {
+    @JvmStatic
+    fun part1(input: Int): Int {
         var cur = 1
         while (true) {
             val res = divisors(cur).sumOf { it * 10 }
@@ -26,7 +27,7 @@ object Day20 {
         val ms = mutableSetOf(1, n)
         var i = 2
         val limit = sqrt(n.toDouble())
-        while (i < limit) {
+        while (i <= limit) {
             if (n % i == 0) {
                 ms.add(i)
                 ms.add(n / i)
@@ -36,7 +37,8 @@ object Day20 {
         return ms
     }
 
-    private fun part2(input: Int): Any {
+    @JvmStatic
+    fun part2(input: Int): Int {
         var cur = 1
         while (true) {
             val res = divisors(cur).filter { it * 50 >= cur }.sumOf { it * 11 }

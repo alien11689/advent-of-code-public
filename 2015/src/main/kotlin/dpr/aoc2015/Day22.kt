@@ -10,9 +10,10 @@ object Day22 {
         println(part2())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(initialState: State = State()): Int {
         val pq = PriorityQueue<State>()
-        pq.offer(State())
+        pq.offer(initialState)
         while (pq.isNotEmpty()) {
             val curState = pq.poll()
             val nextActions = curState.nextActions()
@@ -32,7 +33,8 @@ object Day22 {
         throw RuntimeException("Solution not found")
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): Int {
         val pq = PriorityQueue<State>()
         pq.offer(State().hurt())
         while (pq.isNotEmpty()) {
@@ -56,12 +58,19 @@ object Day22 {
 
     data class Boss(val hitPoints: Int = 55, val damage: Int = 8)
 
+    @JvmStatic
+    fun initState(
+        hp: Int = 50,
+        mana: Int = 500,
+        boss: Boss = Boss()
+    ): State = State(hp, mana, boss)
+
     data class State(
-        val round: Int = 1,
         val hp: Int = 50,
         val mana: Int = 500,
-        val currentEffects: Map<Action, Int> = mapOf(),
         val boss: Boss = Boss(),
+        val round: Int = 1,
+        val currentEffects: Map<Action, Int> = mapOf(),
         val usedMana: Int = 0,
         val armor: Int = 0,
         val usedActions: List<Action> = listOf()

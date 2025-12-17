@@ -10,7 +10,8 @@ object Day19 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val (molecule, formulas) = readInput(input)
         val ms = mutableSetOf<String>()
         formulas.forEach { f ->
@@ -41,7 +42,8 @@ object Day19 {
         return Pair(molecule, formulas)
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         var (molecule, formulas) = readInput(input)
         var cur = molecule
         formulas = formulas.shuffled()

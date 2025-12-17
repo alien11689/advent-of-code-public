@@ -11,13 +11,15 @@ object Day23 {
         println(part2(instr))
     }
 
-    private fun part1(instr: List<List<String>>): Any {
+    @JvmStatic
+    fun part1(instr: List<List<String>>, register: String = "b"): Int {
         val reg = mutableMapOf(Pair("a", 0), Pair("b", 0))
         runProgram(instr, reg)
-        return reg["b"]!!
+        return reg[register]!!
     }
 
-    private fun readInput(input: List<String>) = input.map { it.split(Regex("[ ,]+")).toList() }
+    @JvmStatic
+    fun readInput(input: List<String>) = input.map { it.split(Regex("[ ,]+")).toList() }
 
     private fun runProgram(instr: List<List<String>>, reg: MutableMap<String, Int>) {
         var i = 0
@@ -47,7 +49,8 @@ object Day23 {
         }
     }
 
-    private fun part2(instr: List<List<String>>): Any {
+    @JvmStatic
+    fun part2(instr: List<List<String>>): Int {
         val reg = mutableMapOf(Pair("a", 1), Pair("b", 0))
         runProgram(instr, reg)
         return reg["b"]!!

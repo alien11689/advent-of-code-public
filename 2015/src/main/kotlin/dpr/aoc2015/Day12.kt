@@ -11,7 +11,8 @@ object Day12 {
         println(part2(json))
     }
 
-    private fun part1(json: Json): Int {
+    @JvmStatic
+    fun part1(json: Json): Int {
         return sumNumbers(json)
     }
 
@@ -24,7 +25,9 @@ object Day12 {
         }
     }
 
-    private fun parseJson(input: String, pos: Int = 0): Pair<Json, Int> {
+    @JvmStatic
+    @JvmOverloads
+    fun parseJson(input: String, pos: Int = 0): Pair<Json, Int> {
         return when (input[pos]) {
             '{' -> parseObject(input, pos + 1)
             '[' -> parseArray(input, pos + 1)
@@ -107,7 +110,8 @@ object Day12 {
         throw RuntimeException("Invalid end $i")
     }
 
-    private fun part2(json: Json): Any {
+    @JvmStatic
+    fun part2(json: Json): Int {
         return sumNumbersFilteringRed(json)
     }
 

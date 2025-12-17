@@ -11,8 +11,16 @@ object Day11 {
         println(part1And2[1]);
     }
 
-    private fun part1And2(input: String): List<String> {
-        return generateSequence({ input.toMutableList() }) { generateNext(it) }
+    @JvmStatic
+    fun part1And2(input: String, limit: Int = 2): List<String> {
+        val forbiddenChars = setOf('i', 'o', 'l')
+        var resetToA = false
+        val seed = input.map {
+            if (resetToA) 'a' else if (it in forbiddenChars) {
+                resetToA = true; it + 1
+            } else it
+        }.toMutableList()
+        return generateSequence({ seed }) { generateNext(it) }
             .filter {
                 var i = it.size - 1
                 while (i > 1) {
@@ -34,7 +42,7 @@ object Day11 {
                 }
                 pairs.size >= 2
             }
-            .take(2)
+            .take(limit)
             .map { it.joinToString(separator = "") }
             .toList()
     }

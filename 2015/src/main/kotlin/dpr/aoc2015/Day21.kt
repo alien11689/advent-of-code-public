@@ -10,13 +10,15 @@ object Day21 {
         println(part2(itemSets))
     }
 
-    private fun part1(itemSets: List<Set<Item>>): Any {
+    @JvmStatic
+    fun part1(itemSets: List<Set<Item>>): Int {
         return itemSets
             .filter { fight(it) }
             .minOf { item -> item.sumOf { it.cost } }
     }
 
-    private fun generateItemSets(): List<Set<Item>> {
+    @JvmStatic
+    fun generateItemSets(): List<Set<Item>> {
         val itemSets = mutableListOf<Set<Item>>()
         weapons().forEach { weapon ->
             armors().forEach { armor ->
@@ -62,7 +64,8 @@ object Day21 {
         }
     }
 
-    private fun part2(itemSets: List<Set<Item>>): Any {
+    @JvmStatic
+    fun part2(itemSets: List<Set<Item>>): Int {
         return itemSets
             .filter { !fight(it) }
             .maxOf { item -> item.sumOf { it.cost } }

@@ -11,17 +11,17 @@ object Day10 {
         println(part2)
     }
 
-    private fun part1And2(input: String): Pair<Int?, Int?> {
+    @JvmStatic
+    fun part1And2(input: String, interestingIterations: List<Int> = listOf(40, 50)): List<Int> {
         var cur = input.toList()
-        val interestingIterations = setOf(40, 50)
-        val m = mutableMapOf<Int, Int>();
-        (1..50).forEach { iter ->
+        val m = mutableListOf<Int>()
+        (1..interestingIterations.max()).forEach { iter ->
             cur = next(cur)
             if (iter in interestingIterations) {
-                m[iter] = cur.size
+                m.add(cur.size)
             }
         }
-        return Pair(m[40], m[50]);
+        return m
     }
 
     private fun next(input: List<Char>): List<Char> {

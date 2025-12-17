@@ -11,12 +11,14 @@ object Day15 {
         println(part2(ingredients))
     }
 
-    private fun part1(ingredients: List<Ingredient>): Any {
+    @JvmStatic
+    fun part1(ingredients: List<Ingredient>): Int {
         return calculate(ingredients, 100)
             .maxOf { score(ingredients, it) }
     }
 
-    private fun parseIngredients(input: List<String>): List<Ingredient> {
+    @JvmStatic
+    fun parseIngredients(input: List<String>): List<Ingredient> {
         val ingredients = input.map {
             val parts = it.split(Regex("[ ,:]+"))
             Ingredient(parts[2].toInt(), parts[4].toInt(), parts[6].toInt(), parts[8].toInt(), parts[10].toInt())
@@ -45,7 +47,8 @@ object Day15 {
         }
     }
 
-    private fun part2(ingredients: List<Ingredient>): Any {
+    @JvmStatic
+    fun part2(ingredients: List<Ingredient>): Int {
         return calculate(ingredients, 100)
             .filter { calories(ingredients, it) == 500 }
             .maxOf { score(ingredients, it) }

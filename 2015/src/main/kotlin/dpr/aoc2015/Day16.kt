@@ -11,7 +11,8 @@ object Day16 {
         println(part2(sues))
     }
 
-    private fun part1(sues: List<Sue>): Any {
+    @JvmStatic
+    fun part1(sues: List<Sue>): Int {
         return sues.asSequence()
             .filter { !it.info.containsKey("children") || it.info.getValue("children") == 3 }
             .filter { !it.info.containsKey("cats") || it.info.getValue("cats") == 7 }
@@ -27,7 +28,8 @@ object Day16 {
             .first()
     }
 
-    private fun readSues(input: List<String>) = input.map {
+    @JvmStatic
+    fun readSues(input: List<String>) = input.map {
         val parts = it.split(Regex("[ :,]+"))
         val info = mutableMapOf<String, Int>()
         var i = 2
@@ -38,7 +40,8 @@ object Day16 {
         Sue(parts[1].toInt(), info.toMap())
     }
 
-    private fun part2(sues: List<Sue>): Any {
+    @JvmStatic
+    fun part2(sues: List<Sue>): Int {
         return sues.asSequence()
             .filter { !it.info.containsKey("children") || it.info.getValue("children") == 3 }
             .filter { !it.info.containsKey("cats") || it.info.getValue("cats") > 7 }

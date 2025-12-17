@@ -6,13 +6,18 @@ object Day17 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/17/input.txt")
-        val containers = input.map { it.toInt() }
+        val containers = parseInput(input)
         println(part1(containers))
         println(part2(containers))
     }
 
-    private fun part1(containers: List<Int>): Any {
-        return countContainers(containers, 150)
+    @JvmStatic
+    fun parseInput(input: List<String>): List<Int> = input.map { it.toInt() }
+
+    @JvmStatic
+    @JvmOverloads
+    fun part1(containers: List<Int>, capacity: Int = 150): Int {
+        return countContainers(containers, capacity)
     }
 
     private fun countContainers(containers: List<Int>, capacity: Int): Int {
@@ -30,8 +35,10 @@ object Day17 {
         return countContainers(tail, capacity) + countContainers(tail, capacity - current)
     }
 
-    private fun part2(containers: List<Int>): Any {
-        val containerList = listContainers2(containers, 150, listOf())
+    @JvmStatic
+    @JvmOverloads
+    fun part2(containers: List<Int>, capacity: Int = 150): Int {
+        val containerList = listContainers2(containers, capacity, listOf())
         val minContainerListSize = containerList.minOf { it.size }
         return containerList
             .count { it.size == minContainerListSize }

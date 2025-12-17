@@ -12,14 +12,14 @@ object Day03 {
     }
 
     @JvmStatic
-    fun part1(input: String): Any {
+    fun part1(input: String): Int {
         return input.fold(listOf(Point2D(0, 0))) { acc, s ->
             acc + nextPos(s, acc.last())
         }.toSet().count()
     }
 
     @JvmStatic
-    fun part2(input: String): Any {
+    fun part2(input: String): Int {
         return IntRange(0, 1).flatMap { santa ->
             input.foldIndexed(listOf(Point2D(0, 0))) { i, acc, s ->
                 if (i % 2 == santa) {
