@@ -10,7 +10,8 @@ object Day03 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Int {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         return input
             .asSequence()
             .map { line -> line.trim().split(Regex(" +")).map { it.toInt() } }
@@ -24,7 +25,8 @@ object Day03 {
         return a + b > c && a + c > b && b + c > a
     }
 
-    private fun part2(input: List<String>): Int {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val triples = input
             .asSequence()
             .map { line -> line.trim().split(Regex(" +")).map { it.toInt() } }
