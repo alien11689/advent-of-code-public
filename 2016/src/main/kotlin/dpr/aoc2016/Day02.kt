@@ -11,7 +11,8 @@ object Day02 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): String {
+    @JvmStatic
+    fun part1(input: List<String>): String {
         val board: Map<Pos, Char> = mapOf(
             Pair(Pos(0, 0), '1'),
             Pair(Pos(1, 0), '2'),
@@ -49,7 +50,8 @@ object Day02 {
         }
     }
 
-    private fun part2(input: List<String>): String {
+    @JvmStatic
+    fun part2(input: List<String>): String {
         val board: Map<Pos, Char> = mapOf(
             Pair(Pos(2, 0), '1'),
             Pair(Pos(1, 1), '2'),
