@@ -11,9 +11,10 @@ object Day08 {
         println(part2)
     }
 
-    private fun part1And2(input: List<String>): Pair<Int, String> {
-        val board = (0..5).map {
-            (0..49).map { false }
+    @JvmStatic
+    fun part1And2(input: List<String>, maxX: Int = 49, maxY: Int = 5): Pair<Int, String> {
+        val board = (0..maxY).map {
+            (0..maxX).map { false }
         }
         val res = input.fold(board) { acc, command ->
             val parts = command.split(Regex("[ xy=]+"))
@@ -61,11 +62,11 @@ object Day08 {
         }
         val part1 = res.flatten().count { it }
         val part2 = StringBuilder()
-        (0..5).forEach { y ->
-            (0..49).forEach { x ->
+        (0..maxY).forEach { y ->
+            (0..maxX).forEach { x ->
                 part2.append(if (res[y][x]) '#' else ' ')
             }
-            if (y < 5) {
+            if (y < maxY) {
                 part2.append("\n")
             }
         }
