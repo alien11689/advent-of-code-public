@@ -18,7 +18,7 @@ class Day04Test {
 
     @Test
     void testPart2() {
-        var line = new Day04.Line(List.of("qzmt", "zixmtkozy","ivhz"), 343, "z");
+        var line = new Day04.Line(List.of("qzmt", "zixmtkozy", "ivhz"), 343, "z");
         assertEquals("veryencryptedname", line.decrypt());
     }
 }

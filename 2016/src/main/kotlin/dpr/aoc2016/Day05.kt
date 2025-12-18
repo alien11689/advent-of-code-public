@@ -12,7 +12,8 @@ object Day05 {
         println(part2(input))
     }
 
-    private fun part1(input: String): String {
+    @JvmStatic
+    fun part1(input: String): String {
         return generateSequence(0) { it + 1 }
             .map {
                 md5.reset()
@@ -29,7 +30,8 @@ object Day05 {
             .joinToString("")
     }
 
-    private fun part2(input: String): String {
+    @JvmStatic
+    fun part2(input: String): String {
         var i = 0
         val mutableList: MutableList<Char?> = (0..7).map { null }.toMutableList()
         while (true) {
@@ -42,7 +44,9 @@ object Day05 {
             }
             if (hash[0] == zero && hash[1] == zero && hash[2] >= zero && hash[2] <= f) {
                 val hashString = String.format("%032x", BigInteger(1, hash))
-                if (hashString.startsWith("00000") && hashString[5] in ('0'..'7') && mutableList[hashString[5].toString().toInt()] == null) {
+                if (hashString.startsWith("00000") && hashString[5] in ('0'..'7') && mutableList[hashString[5].toString()
+                        .toInt()] == null
+                ) {
                     mutableList[hashString[5].toString().toInt()] = hashString[6]
                     if (mutableList.all { it != null }) {
                         return mutableList.joinToString("")
