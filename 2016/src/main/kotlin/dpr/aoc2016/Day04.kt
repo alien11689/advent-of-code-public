@@ -10,7 +10,8 @@ object Day04 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Int {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         return input.map { line -> Line.from(line.split(Regex("[-\\[\\]]+")).filter { it.isNotEmpty() }) }
             .filter { it.isValid() }
             .sumOf { it.id }
@@ -24,6 +25,7 @@ object Day04 {
 
     data class Line(val words: List<String>, val id: Int, val checksum: String) {
         companion object {
+            @JvmStatic
             fun from(parts: List<String>): Line {
                 return Line(parts.take(parts.size - 2), parts[parts.size - 2].toInt(), parts[parts.size - 1])
             }
