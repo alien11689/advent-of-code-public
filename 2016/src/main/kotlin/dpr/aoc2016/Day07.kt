@@ -10,13 +10,15 @@ object Day07 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Int {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         return input.asSequence()
             .map { Ip.from(it) }
             .count { it.supportsTls() }
     }
 
-    private fun part2(input: List<String>): Int {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         return input.asSequence()
             .map { Ip.from(it) }
             .count { it.supportsSsl() }
