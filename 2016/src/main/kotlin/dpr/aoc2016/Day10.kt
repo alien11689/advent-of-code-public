@@ -10,12 +10,13 @@ object Day10 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): String {
+    @JvmStatic
+    fun part1(input: List<String>, microchips: Set<Int> = setOf(61, 17)): String {
         val bots = readInput(input)
         while (true) {
             val readyBots = bots.values.filter { it.values.size == 2 && !it.used }
             readyBots.forEach { b ->
-                if (b.values.toSet() == setOf(61, 17)) {
+                if (b.values.toSet() == microchips) {
                     return b.num.split("_")[1]
                 }
                 bots[b.num] = b.copy(used = true)
@@ -32,7 +33,8 @@ object Day10 {
         }
     }
 
-    private fun part2(input: List<String>): Int {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val outputs = mutableMapOf<String, Int>()
         val bots = readInput(input)
         while (true) {
@@ -68,7 +70,11 @@ object Day10 {
             val parts = line.split(" ")
             if (parts[0] == "bot") {
                 val id = listOf(parts[0], parts[1]).joinToString("_")
-                bots[id] = Bot(id, listOf(parts[5], parts[6]).joinToString("_"), listOf(parts[10], parts[11]).joinToString("_"))
+                bots[id] = Bot(
+                    id,
+                    listOf(parts[5], parts[6]).joinToString("_"),
+                    listOf(parts[10], parts[11]).joinToString("_")
+                )
             } else {
                 val id = listOf(parts[4], parts[5]).joinToString("_")
                 val dest = bots[id]!!
