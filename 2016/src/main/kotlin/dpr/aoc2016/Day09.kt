@@ -10,7 +10,8 @@ object Day09 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Int {
+    @JvmStatic
+    fun part1(input: String): Int {
         var i = 0
         var count = 0
         while (i < input.length) {
@@ -26,7 +27,8 @@ object Day09 {
         return count
     }
 
-    private fun part2(input: String): Long {
+    @JvmStatic
+    fun part2(input: String): Long {
         var i = 0
         var count = 0L
         while (i < input.length) {
