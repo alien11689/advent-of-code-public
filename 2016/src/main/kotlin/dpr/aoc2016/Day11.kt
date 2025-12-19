@@ -11,23 +11,24 @@ object Day11 {
         println(part2())
     }
 
-    private fun part2(): Int = solve(
-        listOf(
+    private fun part2(
+        input: List<Set<Int>> = listOf(
             setOf(1, 2, -2, 3, 4, -4, 5, -5, 6, -6, 7, -7),
             setOf(-1, -3),
             setOf(),
             setOf()
         )
-    )
+    ): Int = solve(input)
 
-    private fun part1(): Int = solve(
-        listOf(
+    @JvmStatic
+    fun part1(
+        input: List<Set<Int>> = listOf(
             setOf(1, 2, -2, 3, 4, -4, 5, -5),
             setOf(-1, -3),
             setOf(),
             setOf()
         )
-    )
+    ): Int = solve(input)
 
     private fun solve(input: List<Set<Int>>): Int {
         val mem = mutableSetOf<Any>()
