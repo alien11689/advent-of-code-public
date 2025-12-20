@@ -32,7 +32,8 @@ object Day15 {
         )
     }
 
-    private fun part1And2(input: List<Disk>): Int {
+    @JvmStatic
+    fun part1And2(input: List<Disk>): Int {
         val biggest = input.maxByOrNull { it.positions }!!
         var time = biggest.first()
         val step = biggest.positions
