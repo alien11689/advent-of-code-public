@@ -12,7 +12,8 @@ object Day13 {
         println(part2(input))
     }
 
-    private fun part1(input: Int): Int {
+    @JvmStatic
+    fun part1(input: Int, target: Point2D = Point2D(31, 39)): Int {
         val s = Stage(Point2D(1, 1), 0)
         val q = LinkedList<Stage>()
         val mem = mutableSetOf<Point2D>()
@@ -21,7 +22,7 @@ object Day13 {
         while (q.isNotEmpty()) {
             val cur = q.poll()
             mem.add(cur.point)
-            if (cur.point.x == 31 && cur.point.y == 39) {
+            if (cur.point == target) {
                 return cur.step
             }
             q.addAll(cur.neighbours(input).filter { it.point !in mem })
@@ -29,7 +30,8 @@ object Day13 {
         throw RuntimeException()
     }
 
-    private fun part2(input: Int): Int {
+    @JvmStatic
+    fun part2(input: Int): Int {
         val s = Stage(Point2D(1, 1), 0)
         val q = LinkedList<Stage>()
         val mem = mutableSetOf<Point2D>()
