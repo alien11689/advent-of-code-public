@@ -10,8 +10,8 @@ object Day16 {
         println(part2(input))
     }
 
-    private fun part1(input: String): String {
-        return solve(input, 272)
+    @JvmStatic fun part1(input: String, size : Int = 272): String {
+        return solve(input, size)
     }
 
     private fun solve(input: String, size: Int): String {
