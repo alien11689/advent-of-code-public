@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import dpr.commons.Point2D;
-
 class Day14Test {
     @Test
     void testPart1() {

@@ -1,4 +1,3 @@
-
 package dpr.aoc2016;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,9 +1,6 @@
-
 package dpr.aoc2016;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 

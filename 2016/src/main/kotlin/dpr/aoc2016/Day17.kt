@@ -13,7 +13,8 @@ object Day17 {
         println(part2(input))
     }
 
-    private fun part1(input: String): String {
+    @JvmStatic
+    fun part1(input: String): String {
         val pos = Pos(path = input)
         val q = LinkedList<Pos>()
         q.add(pos)
@@ -26,7 +27,8 @@ object Day17 {
         }
     }
 
-    private fun part2(input: String): Int {
+    @JvmStatic
+    fun part2(input: String): Int {
         var pos = Pos(path = input)
         val q = LinkedList<Pos>()
         q.add(pos)
