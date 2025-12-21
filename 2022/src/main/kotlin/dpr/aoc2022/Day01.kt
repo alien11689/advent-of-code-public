@@ -6,17 +6,17 @@ object Day01 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getLinesFromFile("/01/input.txt")
-//        println("Part 1:")
         println(part1(lines))
-//        println("Part 2:")
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Any {
         return elvesCaloriesDescending(lines).first()
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Any {
         return elvesCaloriesDescending(lines).take(3).sum()
     }
 
