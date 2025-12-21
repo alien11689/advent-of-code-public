@@ -10,8 +10,8 @@ object Day18 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Int {
-        val size = 40
+    @JvmStatic
+    fun part1(input: String, size: Int = 40): Int {
         return solve(input, size)
     }
 
