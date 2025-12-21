@@ -10,7 +10,8 @@ object Day20 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Long {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         val ranges = parseInput(input)
         var minNotExcluded = 0L
         ranges.forEach { range ->
