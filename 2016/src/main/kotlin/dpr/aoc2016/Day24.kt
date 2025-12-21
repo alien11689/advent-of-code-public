@@ -12,7 +12,8 @@ object Day24 {
         println(part2(input))
     }
 
-    private fun part1(maze: List<String>): Int {
+    @JvmStatic
+    fun part1(maze: List<String>): Int {
         val init = find0(maze)
         val expected = findNumbers(maze)
 
