@@ -10,14 +10,16 @@ object Day01 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Any {
         return lines.sumOf { line ->
             val digits = line.filter { it.isDigit() }
             Integer.parseInt("${digits[0]}${digits[digits.length - 1]}")
         }
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Any {
         val mapping = mapOf(
             "one" to "1",
             "two" to "2",
@@ -31,8 +33,10 @@ object Day01 {
             "zero" to "0",
         ) + (0..9).associate { "$it" to "$it" }
         return lines.sumOf { line ->
-            val firstDigit = mapping.entries.filter { line.contains(it.key) }.minByOrNull { line.indexOf(it.key) }!!.value
-            val lastDigit = mapping.entries.filter { line.contains(it.key) }.maxByOrNull { line.lastIndexOf(it.key) }!!.value
+            val firstDigit =
+                mapping.entries.filter { line.contains(it.key) }.minByOrNull { line.indexOf(it.key) }!!.value
+            val lastDigit =
+                mapping.entries.filter { line.contains(it.key) }.maxByOrNull { line.lastIndexOf(it.key) }!!.value
             Integer.parseInt("${firstDigit}${lastDigit}")
         }
     }
