@@ -10,14 +10,17 @@ object Day01 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Any {
         return input.sumOf { it.toInt() }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Any {
         val numbers = input.map { it.toInt() }
         val m = mutableSetOf<Int>()
         var start = 0
+        m.add(start)
         while (true) {
             start = numbers.fold(start) { acc, cur ->
                 val next = acc + cur
