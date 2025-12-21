@@ -12,11 +12,13 @@ object Day01 {
         println(part2(numbers))
     }
 
-    private fun part1(numbers: List<Int>): Int {
+    @JvmStatic
+    fun part1(numbers: List<Int>): Int {
         return numbers.zipWithNext().count { it.first < it.second }
     }
 
-    private fun part2(numbers: List<Int>): Int {
+    @JvmStatic
+    fun part2(numbers: List<Int>): Int {
         return numbers.windowed(3, 1).map { it.sum() }.zipWithNext().count { it.first < it.second }
     }
 }
