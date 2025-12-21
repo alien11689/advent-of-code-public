@@ -10,7 +10,8 @@ object Day23 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Int {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         return Assembunny(input).run(mapOf(Pair("a", 7))).first["a"]!!
     }
 
