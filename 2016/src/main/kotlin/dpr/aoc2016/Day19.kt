@@ -10,7 +10,8 @@ object Day19 {
         println(part2(input))
     }
 
-    private fun part1(input: Int): Int {
+    @JvmStatic
+    fun part1(input: Int): Int {
         val begin = Node(1)
         var cur = begin
         (2..input).forEach {
@@ -28,7 +29,8 @@ object Day19 {
         return cur.x
     }
 
-    private fun part2(input: Int): Int {
+    @JvmStatic
+    fun part2(input: Int): Int {
         val begin = Node(1)
         var cur = begin
         var mid = begin
