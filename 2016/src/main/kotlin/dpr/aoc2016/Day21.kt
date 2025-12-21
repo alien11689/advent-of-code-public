@@ -10,9 +10,10 @@ object Day21 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): String {
+    @JvmStatic
+    fun part1(input: List<String>, init: String = "abcdefgh"): String {
         val rules = parse(input)
-        val password = "abcdefgh".toList()
+        val password = init.toList()
         return scramble(rules, password)
     }
 
@@ -45,10 +46,11 @@ object Day21 {
         }
     }
 
-    private fun part2(input: List<String>): String {
+    @JvmStatic
+    fun part2(input: List<String>, target: String = "fbgdceah"): String {
         val rules = parse(input)
-        val password = "abcdefgh".toList()
-        return permutations(password.toSet()).find { scramble(rules, it) == "fbgdceah" }!!.joinToString("")
+        val password = target.toList()
+        return permutations(password.toSet()).find { scramble(rules, it) == target }!!.joinToString("")
     }
 
     private fun permutations(input: Set<Char>): List<List<Char>> {
