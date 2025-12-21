@@ -9,7 +9,8 @@ object Day15 {
         println(part2())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(): Int {
         var genA = 883L
         var genB = 879L
 
@@ -33,7 +34,8 @@ object Day15 {
         return judge
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): Int {
         var genA = 883L
         var genB = 879L
 

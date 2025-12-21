@@ -9,7 +9,8 @@ object Day17 {
         println(part2())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(): Int {
         val input = 344
 
         val buf = mutableListOf(0)
@@ -26,7 +27,8 @@ object Day17 {
         return buf[cur + 1]
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): Int {
         val input = 344
         val amount = 50000000
 

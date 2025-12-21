@@ -10,7 +10,8 @@ object Day12 {
         println(part2(input))
     }
 
-    private fun part1(routesDef: List<String>): Any {
+    @JvmStatic
+    fun part1(routesDef: List<String>): Int {
         val routes = readRoutes(routesDef)
 
         val group = mutableSetOf(0)
@@ -37,7 +38,8 @@ object Day12 {
         return routes
     }
 
-    private fun part2(routesDef: List<String>): Any {
+    @JvmStatic
+    fun part2(routesDef: List<String>): Int {
         val routes = readRoutes(routesDef)
 
         val used = mutableSetOf<Set<Int>>()

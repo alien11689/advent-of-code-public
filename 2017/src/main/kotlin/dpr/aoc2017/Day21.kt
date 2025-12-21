@@ -9,7 +9,8 @@ object Day21 {
         part1And2(input).forEach { println(it) }
     }
 
-    private fun part1And2(lines: List<String>): Collection<Any> {
+    @JvmStatic
+    fun part1And2(lines: List<String>): List<String> {
         var image = listOf(".#.".toList(), "..#".toList(), "###".toList())
         val result = mutableListOf<Int>()
 
@@ -76,7 +77,7 @@ object Day21 {
                 break
             }
         }
-        return result
+        return result.map { it.toString() }
     }
 
     data class Rule(val size: Int, val inputs: Set<List<List<Char>>>, val output: MutableList<MutableList<Char>>) {

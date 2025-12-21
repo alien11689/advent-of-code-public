@@ -7,10 +7,13 @@ object Day19 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/19/input.txt")
-        part1And2(input).forEach { println(it) }
+        var (part1, part2) = part1And2(input)
+        println(part1)
+        println(part2)
     }
 
-    private fun part1And2(grid: List<String>): Collection<Any> {
+    @JvmStatic
+    fun part1And2(grid: List<String>): Pair<String, Int> {
         var dir = Pair(0, 1)
         var cur = Point2D(grid[0].indexOf('|'), 0)
 
@@ -23,7 +26,7 @@ object Day19 {
             cur = Point2D(cur.x + dir.first, cur.y + dir.second)
             val sign = grid[cur.y][cur.x]
             if (sign == ' ') {
-                return listOf(letters.joinToString(""), steps)
+                return Pair(letters.joinToString(""), steps)
             }
             if (sign !in setOf('-', '+', '|')) {
                 letters.add(sign)

@@ -10,7 +10,8 @@ object Day04 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         return input.map {
             it.split(" ")
         }.count {
@@ -18,7 +19,8 @@ object Day04 {
         }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         return input.map { line ->
             line.split(" ").toList().map { it.toCharArray().sorted() }
         }.count {

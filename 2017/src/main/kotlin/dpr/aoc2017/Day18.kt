@@ -11,7 +11,8 @@ object Day18 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): String {
         val actions = parseInput(input)
 
         val context = Context(0)
@@ -53,7 +54,8 @@ object Day18 {
         }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val actions = parseInput(input)
 
         val context0 = Context(0)

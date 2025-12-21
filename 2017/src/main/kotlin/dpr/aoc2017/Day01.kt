@@ -10,14 +10,16 @@ object Day01 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Int {
         return input.mapIndexed { index, s ->
             val next = input[(index + 1) % input.length]
             if (next == s) s.toString().toInt() else 0
         }.sum()
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Int {
         return input.mapIndexed { index, s ->
             val next = input[(index + input.length / 2) % input.length]
             if (next == s) s.toString().toInt() else 0

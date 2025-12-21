@@ -12,14 +12,17 @@ object Day24 {
         println(part2(chains))
     }
 
-    private fun part1(chains: Set<Chain>) = chains.maxOf { it.strength() }
+    @JvmStatic
+    fun part1(chains: Set<Chain>) = chains.maxOf { it.strength() }
 
-    private fun part2(chains: Set<Chain>): Int {
+    @JvmStatic
+    fun part2(chains: Set<Chain>): Int {
         val maxLength = chains.maxOf { it.cpus.size }
         return chains.filter { it.cpus.size == maxLength }.maxOf { it.strength() }
     }
 
-    private fun chains(lines: List<String>): Set<Chain> {
+    @JvmStatic
+    fun chains(lines: List<String>): Set<Chain> {
         val cpus = lines.map { line ->
             Cpu(line.split('/').map { it.toInt() })
         }

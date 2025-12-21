@@ -12,7 +12,8 @@ object Day03 {
         println(part2(input))
     }
 
-    private fun part1(input: Int): Any {
+    @JvmStatic
+    fun part1(input: Int): Int {
 //        println("Search for $input")
 // left 2, 11, 28,
 // diff 9, 17, 24
@@ -44,7 +45,8 @@ object Day03 {
         return distSide + leftOrRight
     }
 
-    private fun part2(input: Int): Any {
+    @JvmStatic
+    fun part2(input: Int): Int {
         val mesh = mutableMapOf<Cur, Int>()
         var cur = Cur(0, 0)
         var dir = Dir.E

@@ -10,13 +10,15 @@ object Day02 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         return input
             .map { line -> line.split('\t').map { it.toInt() } }
             .sumOf { it.max() - it.min() }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         return input
             .map { line -> line.split('\t').map { it.toInt() }.sorted().reversed() }
             .sumOf { findDivisible(it) }

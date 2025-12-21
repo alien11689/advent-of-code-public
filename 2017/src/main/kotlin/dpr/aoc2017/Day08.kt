@@ -9,7 +9,8 @@ object Day08 {
         part1And2(input).forEach { println(it) }
     }
 
-    private fun part1And2(input: List<String>): Collection<Int> {
+    @JvmStatic
+    fun part1And2(input: List<String>): List<Int> {
         val registers = mutableMapOf<String, Int>().withDefault { 0 }
         val highestEver = input.map { it.split(' ') }.map {
             Instruction(

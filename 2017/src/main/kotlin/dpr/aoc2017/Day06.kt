@@ -10,7 +10,8 @@ object Day06 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Int {
         val blocks = input.split("\t").map { it.toInt() }.toMutableList()
         val memory = mutableSetOf(blocks.toList())
         var re = 0
@@ -36,7 +37,8 @@ object Day06 {
     }
 
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Int {
         val blocks = input.split("\t").map { it.toInt() }.toMutableList()
         val memory = mutableMapOf(Pair(blocks.toList(), 0))
         var re = 0

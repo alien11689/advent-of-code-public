@@ -10,7 +10,8 @@ object Day05 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val steps = input.map { it.toInt() }.toMutableList()
         var cur = 0
         var jumps = 0
@@ -23,7 +24,8 @@ object Day05 {
         return jumps
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val steps = input.map { it.toInt() }.toMutableList()
         var cur = 0
         var jumps = 0

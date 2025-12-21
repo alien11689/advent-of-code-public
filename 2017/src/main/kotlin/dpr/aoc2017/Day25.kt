@@ -8,7 +8,8 @@ object Day25 {
         println(part1())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(): Int {
         var state = 'A'
 
         val steps = 12656374

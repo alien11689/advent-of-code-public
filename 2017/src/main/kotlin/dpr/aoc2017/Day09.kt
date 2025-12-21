@@ -9,7 +9,8 @@ object Day09 {
         part1And2(input).forEach { println(it) }
     }
 
-    private fun part1And2(input: String): Collection<Any> {
+    @JvmStatic
+    fun part1And2(input: String): List<Int> {
         var score = 0
         var sum = 0
         var garbage = false

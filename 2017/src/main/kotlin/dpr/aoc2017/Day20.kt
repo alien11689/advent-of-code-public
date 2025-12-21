@@ -11,7 +11,8 @@ object Day20 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val particles = readInput(input)
 
         repeat(1000) {
@@ -35,7 +36,8 @@ object Day20 {
         }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         var particles = readInput(input)
         repeat(1000) {
             val hits = mutableMapOf<Coord, Int>()

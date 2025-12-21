@@ -10,7 +10,8 @@ object Day16 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): String {
         val (a, acc) = parseInput(input)
 
         return acc.fold(a) { cur, action -> action.apply(cur) }.joinToString("")
@@ -44,7 +45,8 @@ object Day16 {
         return Pair(a, acc)
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): String {
         var (a, acc) = parseInput(input)
         var iter = 0
         val mem = mutableMapOf<List<Char>, Int>()

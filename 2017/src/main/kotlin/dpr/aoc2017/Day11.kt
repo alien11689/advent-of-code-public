@@ -11,7 +11,8 @@ object Day11 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Int {
         val processSteps = input.split(",").toList()
         val bd05 = BigDecimal("0.5")
         val dest = processSteps.fold(Point(BigDecimal.ZERO, BigDecimal.ZERO)) { it, step ->
@@ -20,7 +21,8 @@ object Day11 {
         return (dest.x / bd05 + dest.y - dest.x).toInt()
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Int {
         val processSteps = input.split(",").toList()
         val bd05 = BigDecimal("0.5")
         var max = BigDecimal.ZERO

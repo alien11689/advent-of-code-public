@@ -10,7 +10,8 @@ object Day10 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Int {
         val lengths = input.split(',').map { it.toInt() }
 
         var curPos = 0
@@ -32,9 +33,9 @@ object Day10 {
         return inp[0] * inp[1]
     }
 
-    private fun part2(text: String): Any {
-        return knotHash(text)
-
+    @JvmStatic
+    fun part2(input: String): String {
+        return knotHash(input)
     }
 
     fun knotHash(text: String): String {

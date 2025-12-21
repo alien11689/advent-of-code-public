@@ -10,7 +10,8 @@ object Day23 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val actions = Day18.parseInput(input)
         val context = Day18.Context(0)
         var mul = 0
@@ -24,7 +25,8 @@ object Day23 {
         return mul
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Long {
         val actions = Day18.parseInput(input)
         val context = Day18.Context(0)
         context.reg.put("a", 1)

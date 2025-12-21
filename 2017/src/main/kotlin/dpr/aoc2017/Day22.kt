@@ -12,7 +12,8 @@ object Day22 {
         println(part2(input))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val grid = mutableMapOf<Point2D, Boolean>()
         val cur = Point2D(lines[0].length / 2, lines.size / 2)
 
@@ -38,7 +39,8 @@ object Day22 {
 
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val grid = mutableMapOf<Point2D, Status>()
         val cur = Point2D(lines[0].length / 2, lines.size / 2)
 

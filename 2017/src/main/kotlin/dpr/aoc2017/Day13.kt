@@ -10,7 +10,8 @@ object Day13 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val pos2Range = readInput(input)
 
         var myPos = 0
@@ -67,7 +68,8 @@ object Day13 {
         return start
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val pos2Range = readInput(input)
         var delay = 0
         val max = pos2Range.keys.maxOrNull()!!

@@ -10,7 +10,8 @@ object Day07 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): String {
         val (discs, allChildren) = parseInput(input)
 
         return (discs.keys - allChildren).first()
@@ -32,7 +33,8 @@ object Day07 {
         return Pair(discs, allChildren)
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val (discs, allChildren) = parseInput(input)
         val root = (discs.keys - allChildren).first()
         var cur = discs[root]!!

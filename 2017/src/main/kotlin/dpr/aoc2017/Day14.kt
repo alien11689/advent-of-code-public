@@ -31,7 +31,8 @@ object Day14 {
         Pair('f', "1111"),
     )
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Int {
         val grid = buildGrid(input)
         return grid.joinToString("").filter { it == '1' }.length
     }
@@ -43,7 +44,8 @@ object Day14 {
             }
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Int {
         val grid = buildGrid(input).map { it.toMutableList() }.toMutableList()
 
         var currentGroup = 0
