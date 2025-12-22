@@ -13,14 +13,14 @@ object Day02 {
     @JvmStatic
     fun part1(input: List<String>): Int {
         return input
-            .map { line -> line.split('\t').map { it.toInt() } }
+            .map { line -> line.split(Regex("\\s+")).map { it.toInt() } }
             .sumOf { it.max() - it.min() }
     }
 
     @JvmStatic
     fun part2(input: List<String>): Int {
         return input
-            .map { line -> line.split('\t').map { it.toInt() }.sorted().reversed() }
+            .map { line -> line.split(Regex("\\s+")).map { it.toInt() }.sorted().reversed() }
             .sumOf { findDivisible(it) }
     }
 
