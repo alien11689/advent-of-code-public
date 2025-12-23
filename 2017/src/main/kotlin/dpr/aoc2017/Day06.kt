@@ -12,7 +12,7 @@ object Day06 {
 
     @JvmStatic
     fun part1(input: String): Int {
-        val blocks = input.split("\t").map { it.toInt() }.toMutableList()
+        val blocks = input.split(Regex("\\s+")).map { it.toInt() }.toMutableList()
         val memory = mutableSetOf(blocks.toList())
         var re = 0
         while (true) {
@@ -39,7 +39,7 @@ object Day06 {
 
     @JvmStatic
     fun part2(input: String): Int {
-        val blocks = input.split("\t").map { it.toInt() }.toMutableList()
+        val blocks = input.split(Regex("\\s+")).map { it.toInt() }.toMutableList()
         val memory = mutableMapOf(Pair(blocks.toList(), 0))
         var re = 0
         while (true) {
