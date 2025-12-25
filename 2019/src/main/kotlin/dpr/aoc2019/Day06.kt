@@ -11,7 +11,8 @@ object Day06 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val v = input.map { it.split(')') }.toMutableList()
         val m = mutableMapOf(Pair("COM", 0))
 
@@ -31,7 +32,8 @@ object Day06 {
         return m.values.filter { it > 0 }.sum()
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val v = input.map { it.split(')') }.toMutableList()
         val m = mutableMapOf(Pair("YOU", 0))
 

@@ -119,7 +119,8 @@ object Day24 {
         }
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         val memory = mutableSetOf<Map<Point, Boolean>>()
         var board = createBoard(input)
         while (true) {
@@ -141,7 +142,8 @@ object Day24 {
         return res
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val minutes = 200
         var board = createBoard2(input, 0)
 

@@ -11,14 +11,14 @@ object Day01 {
     }
 
     @JvmStatic
-    fun part1(input: List<String>): Any {
+    fun part1(input: List<String>): Int {
         return input.fold(0) { a, v ->
             a + calculateFuel(v.toInt())
         }
     }
 
     @JvmStatic
-    fun part2(input: List<String>): Any {
+    fun part2(input: List<String>): Int {
         var sum = 0
         input.forEach { vv ->
             var v = vv.toInt()

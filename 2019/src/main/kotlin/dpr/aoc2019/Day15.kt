@@ -14,7 +14,8 @@ object Day15 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Long {
         val board = createBoard(input)
         val dest = board.toList().find { it.second == 2L }!!.first
 
@@ -31,7 +32,8 @@ object Day15 {
         throw RuntimeException()
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Long {
         val board = createBoard(input)
         val dest = board.toList().find { it.second == 2L }!!.first
 

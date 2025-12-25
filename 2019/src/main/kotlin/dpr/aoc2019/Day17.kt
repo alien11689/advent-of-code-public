@@ -12,7 +12,8 @@ object Day17 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Long {
         val state = IntCodeComputerState.init(input)
         program(state)
 
@@ -75,7 +76,8 @@ object Day17 {
         return sum
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Long {
         val state = IntCodeComputerState.init(input)
         val inputQ = state.input
         state.v[0L] = 2L

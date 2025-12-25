@@ -12,7 +12,8 @@ object Day20 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val (map, warps) = parseInput(input)
 
         val betterWarps = warps.map { warp ->
@@ -86,7 +87,8 @@ object Day20 {
         return Pair(map, warps)
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val (map, warps) = parseInput(input)
 
         val sizeY = input.size

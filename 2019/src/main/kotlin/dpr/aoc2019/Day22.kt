@@ -12,12 +12,14 @@ object Day22 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         val res = input.fold(buildMap(10007)) { m, inp -> apply(inp.split(" "), m) }
         return inOrder(res).toList().find { it.second == 2019L }!!.first
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): BigInteger {
         val reversedInput = input.reversed()
         var size = 10007L
 

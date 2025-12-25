@@ -12,7 +12,8 @@ object Day23 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Long {
         val computers = (0L until 50).map {
             val state = IntCodeComputerState.init(input)
             state.input.offer(it)
@@ -47,7 +48,8 @@ object Day23 {
 
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Long {
         val computers = (0L until 50).map {
             val state = IntCodeComputerState.init(input)
             state.input.offer(it)

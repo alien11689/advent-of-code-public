@@ -12,7 +12,8 @@ object Day07 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Long {
         val phasesSet = permutations((0L..4L).toSet())
 
         return phasesSet.maxOf { phases ->
@@ -39,7 +40,8 @@ object Day07 {
         }
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Long {
         val phasesSet = permutations((5L..9L).toSet())
 
         return phasesSet.maxOf { phases ->

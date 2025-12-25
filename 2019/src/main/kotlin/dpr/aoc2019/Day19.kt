@@ -11,7 +11,8 @@ object Day19 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Long {
         val m = mutableMapOf<Pair<Long, Long>, Long>()
         for (j in 0L until 50) {
             for (i in 0L until 50) {
@@ -22,7 +23,8 @@ object Day19 {
         return m.values.sum()
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Long {
         val j = 10L
         val i = 0L
         var last = findLast(input, i, j)

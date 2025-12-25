@@ -11,7 +11,8 @@ object Day16 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): String {
         var nums = input.map { it.toString().toInt() }
         val phases = 100
 
@@ -49,7 +50,8 @@ object Day16 {
         return pattern
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): String {
         var nums = input.map { it.toString().toLong() }
         var offset = nums.subList(0, 7).dropWhile { it == 0L }.joinToString("").toInt()
 

@@ -9,7 +9,8 @@ object Day04 {
         println(part2())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(): Int {
         var start = 156218
         val end = 652527
         var c = 0
@@ -22,7 +23,8 @@ object Day04 {
         return c
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): Int {
         var start = 156218
         val end = 652527
         var c = 0

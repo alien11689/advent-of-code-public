@@ -13,7 +13,8 @@ object Day13 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Int {
         val state = IntCodeComputerState.init(input)
         val output = state.output
 
@@ -32,7 +33,8 @@ object Day13 {
         return countB
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Long {
         val state = IntCodeComputerState.init(input)
         val output = state.output
         val inputQ = state.input

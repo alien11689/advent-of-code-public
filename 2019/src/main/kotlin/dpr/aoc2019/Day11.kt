@@ -14,7 +14,8 @@ object Day11 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Int {
         val state = IntCodeComputerState.init(input)
 
         val panel = createPanel(state)
@@ -42,7 +43,8 @@ object Day11 {
         return panel
     }
 
-    private fun part2(input: String): String {
+    @JvmStatic
+    fun part2(input: String): String {
         val state = IntCodeComputerState.init(input)
 
         val panel = createPanel(state, 1L)

@@ -10,7 +10,8 @@ object Day08 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Int {
         val row = 25
         val tall = 6
 
@@ -18,7 +19,8 @@ object Day08 {
         return sol.filter { it == '1' }.length * sol.filter { it == '2' }.length
     }
 
-    private fun part2(input: String): String {
+    @JvmStatic
+    fun part2(input: String): String {
         val row = 25
         val tall = 6
         val black = '0'

@@ -10,7 +10,8 @@ object Day14 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         val initReactions = readReactions(input)
         val fuel = 1L
         return countOre(initReactions, fuel)
@@ -47,7 +48,8 @@ object Day14 {
         Reaction(fromRaw.map { Chemical.create(it) }, Chemical.create(right))
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Long {
         val initReactions = readReactions(input)
         val expected = 1000000000000L
         var a = 1L

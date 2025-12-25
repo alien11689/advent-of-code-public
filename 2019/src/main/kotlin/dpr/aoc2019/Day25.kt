@@ -92,7 +92,8 @@ object Day25 {
             ?: throw RuntimeException("Turn on writing")
     }
 
-    private fun part1(input: String): String {
+    @JvmStatic
+    fun part1(input: String): String {
 //        runInteractive(input)
         val solution = solve(input)
         return solution.split(" ")[11]

@@ -12,7 +12,8 @@ object Day02 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Long {
         val state = IntCodeComputerState.init(input)
         state.v[1L] = 12L
         state.v[2L] = 2L
@@ -20,7 +21,8 @@ object Day02 {
         return state.v[0L]!!
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Int {
         for (i in 0 until 100) {
             for (j in 0 until 100) {
                 val state = IntCodeComputerState.init(input)

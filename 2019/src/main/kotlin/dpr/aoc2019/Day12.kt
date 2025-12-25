@@ -10,7 +10,8 @@ object Day12 {
         println(part2())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(): Int {
         val xxs = initXXS()
 
         val vvs = initVVS()
@@ -27,7 +28,8 @@ object Day12 {
         return sum
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): Long {
         val xxs = initXXS()
 
         val vvs = initVVS()

@@ -12,7 +12,8 @@ object Day10 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val points = mutableSetOf<Point>()
 
         for (i in input.indices) {
@@ -32,7 +33,8 @@ object Day10 {
         return solution
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val points = mutableSetOf<Point>()
 
         for (i in input.indices) {

@@ -12,7 +12,8 @@ object Day18 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val (map, keysAndDoors, curPos) = parseInput(input)
 
         // Closing blind tunnels
@@ -98,7 +99,8 @@ object Day18 {
         return Triple(map, keysAndDoors, curPos)
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val (map, keysAndDoors, curPos) = parseInput(input)
 
         val curPoses = curPos.neighboursDiag()

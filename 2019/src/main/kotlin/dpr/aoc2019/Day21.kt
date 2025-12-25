@@ -14,7 +14,8 @@ object Day21 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Long {
         val state = IntCodeComputerState.init(input)
         val output = state.output
         val inputQ = state.input
@@ -36,7 +37,8 @@ object Day21 {
         return process(state, output)
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Long {
         val state = IntCodeComputerState.init(input)
         val output = state.output
         val inputQ = state.input
@@ -81,6 +83,7 @@ object Day21 {
         return process(state, output)
     }
 
+    @JvmStatic
     private fun process(state: IntCodeComputerState, output: LinkedList<Long>): Long {
         program(state)
 

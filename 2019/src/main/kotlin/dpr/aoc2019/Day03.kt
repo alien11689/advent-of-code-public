@@ -11,14 +11,16 @@ object Day03 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val a = getVisited1(input[0].split(','))
         val b = getVisited1(input[1].split(','))
 
         return a.intersect(b - (0 to 0)).minOf { it.first.absoluteValue + it.second.absoluteValue }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val a = getVisited2(input[0].split(','))
         val b = getVisited2(input[1].split(','))
 
