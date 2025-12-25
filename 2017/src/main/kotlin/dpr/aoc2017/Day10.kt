@@ -11,13 +11,13 @@ object Day10 {
     }
 
     @JvmStatic
-    fun part1(input: String): Int {
+    fun part1(input: String, lenght: Int = 255): Int {
         val lengths = input.split(',').map { it.toInt() }
 
         var curPos = 0
         var skipSize = 0
 
-        val inp = (0..255).toMutableList()
+        val inp = (0..lenght).toMutableList()
 
         lengths.forEach { length ->
             val reversed = (0 until length).map {
