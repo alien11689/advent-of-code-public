@@ -1,7 +1,8 @@
 package dpr.aoc2017
 
+import dpr.commons.Point2D
 import dpr.commons.Util
-import java.math.BigDecimal
+import kotlin.math.abs
 
 object Day11 {
     @JvmStatic
@@ -14,38 +15,54 @@ object Day11 {
     @JvmStatic
     fun part1(input: String): Int {
         val processSteps = input.split(",").toList()
-        val bd05 = BigDecimal("0.5")
-        val dest = processSteps.fold(Point(BigDecimal.ZERO, BigDecimal.ZERO)) { it, step ->
-            nextStep(step, it, bd05)
+        val dest = processSteps.fold(Point2D(0, 0)) { it, step ->
+            nextStep(step, it)
         }
-        return (dest.x / bd05 + dest.y - dest.x).toInt()
+
+        return dist(dest)
     }
 
     @JvmStatic
     fun part2(input: String): Int {
         val processSteps = input.split(",").toList()
-        val bd05 = BigDecimal("0.5")
-        var max = BigDecimal.ZERO
-        processSteps.fold(Point(BigDecimal.ZERO, BigDecimal.ZERO)) { it, step ->
-            val point = nextStep(step, it, bd05)
-            val dist = (point.x / bd05 + point.y - point.x)
+        var max = 0
+        processSteps.fold(Point2D(0, 0)) { it, step ->
+            val point = nextStep(step, it)
+            val dist = dist(point)
             if (dist > max) {
                 max = dist
             }
             point
         }
-        return max.toInt()
+        return max
     }
 
-    private fun nextStep(step: String, it: Point, bd05: BigDecimal) = when (step) {
-        "n" -> Point(it.x, it.y - BigDecimal.ONE)
-        "ne" -> Point(it.x + bd05, it.y - bd05)
-        "nw" -> Point(it.x - bd05, it.y - bd05)
-        "s" -> Point(it.x, it.y + BigDecimal.ONE)
-        "se" -> Point(it.x + bd05, it.y + bd05)
-        "sw" -> Point(it.x - bd05, it.y + bd05)
+    /**
+     * Distances: https://www.redblobgames.com/grids/hexagons/#distances
+     */
+    private fun dist(a: Point2D, b: Point2D = Point2D(0, 0)): Int {
+        val aq = a.x
+        val ar = a.y - (a.x - (a.x and 1)) / 2
+
+        val bq = b.x
+        val br = b.y - (b.x - (b.x and 1)) / 2
+
+        val aas = -aq - ar
+        val bs = -bq - br
+
+        return (abs(aq - bq) + abs(ar - br) + abs(aas - bs)) / 2
+    }
+
+    /**
+     * Coordinates odd-q: https://www.redblobgames.com/grids/hexagons/#coordinates
+     */
+    private fun nextStep(step: String, it: Point2D) = when (step) {
+        "n" -> Point2D(it.x, it.y - 1)
+        "ne" -> Point2D(it.x + 1, if (it.x % 2 == 0) it.y - 1 else it.y)
+        "nw" -> Point2D(it.x - 1, if (it.x % 2 == 0) it.y - 1 else it.y)
+        "s" -> Point2D(it.x, it.y + 1)
+        "se" -> Point2D(it.x + 1, if (it.x % 2 == 0) it.y else it.y + 1)
+        "sw" -> Point2D(it.x - 1, if (it.x % 2 == 0) it.y else it.y + 1)
         else -> throw RuntimeException(step)
     }
-
-    data class Point(val x: BigDecimal, val y: BigDecimal)
 }
