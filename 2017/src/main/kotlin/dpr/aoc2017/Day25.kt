@@ -1,5 +1,6 @@
 package dpr.aoc2017
 
+import dpr.commons.Pair
 import dpr.commons.Util
 
 object Day25 {
@@ -9,81 +10,19 @@ object Day25 {
     }
 
     @JvmStatic
-    fun part1(): Int {
-        var state = 'A'
+    fun part1(turingMachine: TuringMachine = TuringMachine()): Int {
+        var state = turingMachine.initState
 
-        val steps = 12656374
+        val steps = turingMachine.steps
 
         val tape = Tape()
 
         repeat(steps) {
-            when (state) {
-                'A' ->
-                    state = if (tape.read() == 0) {
-                        tape.write(1)
-                        tape.right()
-                        'B'
-                    } else {
-                        tape.write(0)
-                        tape.left()
-                        'C'
-                    }
-
-                'B' ->
-                    state = if (tape.read() == 0) {
-                        tape.write(1)
-                        tape.left()
-                        'A'
-                    } else {
-                        tape.write(1)
-                        tape.left()
-                        'D'
-                    }
-
-                'C' ->
-                    state = if (tape.read() == 0) {
-                        tape.write(1)
-                        tape.right()
-                        'D'
-                    } else {
-                        tape.write(0)
-                        tape.right()
-                        'C'
-                    }
-
-                'D' ->
-                    state = if (tape.read() == 0) {
-                        tape.write(0)
-                        tape.left()
-                        'B'
-                    } else {
-                        tape.write(0)
-                        tape.right()
-                        'E'
-                    }
-
-                'E' ->
-                    state = if (tape.read() == 0) {
-                        tape.write(1)
-                        tape.right()
-                        'C'
-                    } else {
-                        tape.write(1)
-                        tape.left()
-                        'F'
-                    }
-
-                'F' ->
-                    state = if (tape.read() == 0) {
-                        tape.write(1)
-                        tape.left()
-                        'E'
-                    } else {
-                        tape.write(1)
-                        tape.right()
-                        'A'
-                    }
-            }
+            val cur = Pair(state, tape.read())
+            val (write, move, next) = turingMachine.transistions[cur]!!
+            tape.write(write)
+            tape.move(move)
+            state = next
         }
 
         return tape.value()
@@ -102,16 +41,33 @@ object Day25 {
             values[cur] = v
         }
 
-        fun left() {
-            --cur
-        }
-
-        fun right() {
-            ++cur
-        }
-
         fun value(): Int {
             return values.values.sum()
         }
+
+        fun move(move: Int) {
+            cur += move
+        }
     }
+
+    data class TuringMachine(
+        val initState: Char = 'A',
+        val steps: Int = 12656374,
+        val transistions: Map<Pair<Char, Int>, Transition> = mapOf(
+            Pair('A', 0) to Transition(1, 1, 'B'),
+            Pair('A', 1) to Transition(0, -1, 'C'),
+            Pair('B', 0) to Transition(1, -1, 'A'),
+            Pair('B', 1) to Transition(1, -1, 'D'),
+            Pair('C', 0) to Transition(1, 1, 'D'),
+            Pair('C', 1) to Transition(0, 1, 'C'),
+            Pair('D', 0) to Transition(0, -1, 'B'),
+            Pair('D', 1) to Transition(0, 1, 'E'),
+            Pair('E', 0) to Transition(1, 1, 'C'),
+            Pair('E', 1) to Transition(1, -1, 'F'),
+            Pair('F', 0) to Transition(1, -1, 'E'),
+            Pair('F', 1) to Transition(1, 1, 'A'),
+        )
+    )
+
+    data class Transition(val write: Int, val move: Int, val next: Char)
 }
