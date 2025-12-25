@@ -6,7 +6,7 @@ import java.util.List;
 import dpr.commons.Day;
 import dpr.commons.Util;
 
-class Day03 implements Day {
+public class Day03 implements Day {
     @Override
     public void execute() {
         var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");

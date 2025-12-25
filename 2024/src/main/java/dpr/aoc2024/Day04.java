@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-class Day04 implements Day {
+public class Day04 implements Day {
     private static final Character x = 'X';
     private static final Character m = 'M';
     private static final Character a = 'A';

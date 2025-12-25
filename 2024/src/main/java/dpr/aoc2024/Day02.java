@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class Day02 implements Day {
+public class Day02 implements Day {
     @Override
     public void execute() {
         var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");

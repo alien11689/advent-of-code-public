@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import dpr.commons.Day;
 import dpr.commons.Util;
 
-class Day05 implements Day {
+public class Day05 implements Day {
     @Override
     public void execute() {
         var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");

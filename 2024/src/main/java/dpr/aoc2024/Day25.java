@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class Day25 implements Day {
+public class Day25 implements Day {
     @Override
     public void execute() {
         var lines = Util.getLinesFromFile(dayNum(), "input.txt");

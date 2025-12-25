@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-class Day20 implements Day {
+public class Day20 implements Day {
     @Override
     public void execute() {
         var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");

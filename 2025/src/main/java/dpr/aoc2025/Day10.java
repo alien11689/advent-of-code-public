@@ -17,7 +17,7 @@ import com.microsoft.z3.IntExpr;
 import dpr.commons.Day;
 import dpr.commons.Util;
 
-class Day10 implements Day {
+public class Day10 implements Day {
     @Override
     public void execute() {
         var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");

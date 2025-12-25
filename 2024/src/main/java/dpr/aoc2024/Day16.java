@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-class Day16 implements Day {
+public class Day16 implements Day {
     @Override
     public void execute() {
         var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");

@@ -12,7 +12,7 @@ import dpr.commons.Pair;
 import dpr.commons.Point2D;
 import dpr.commons.Util;
 
-class Day09 implements Day {
+public class Day09 implements Day {
     @Override
     public void execute() {
         var lines = Util.getNotEmptyLinesFromFile(dayNum(), "input.txt");

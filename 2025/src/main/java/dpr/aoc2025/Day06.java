@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import dpr.commons.Day;
 import dpr.commons.Util;
 
-class Day06 implements Day {
+public class Day06 implements Day {
 
     @Override
     public void execute() {
