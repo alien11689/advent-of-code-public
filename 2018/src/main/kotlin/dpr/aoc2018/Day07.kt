@@ -30,11 +30,15 @@ object Day07 {
     }
 
     @JvmStatic
-    fun part2(input: List<String>): Int {
+    fun part2(input: List<String>, workers: Int = 5, slowDown: Int = 60): Int {
         val instructions = parseInstructions(input)
         val order = mutableListOf<Char>()
 
-        val workers = (1..5).map { Worker() }
+        val workers = (1..workers).map { Worker() }
+
+        val times = ('A'..'Z').associateWith {
+            (it.code - 64 + slowDown)
+        }
 
         var ticks = 0
         while (true) {
@@ -60,7 +64,7 @@ object Day07 {
                 }.minByOrNull { it.dest }
                 if (available != null) {
                     val letter = available.dest
-                    nextWorker.assign(letter)
+                    nextWorker.assign(letter, times)
                     shouldTick = false
                 }
             }
@@ -98,12 +102,6 @@ object Day07 {
     data class Instr(val dest: Char, val before: TreeSet<Char> = TreeSet())
 
     data class Worker(var cur: Char? = null, var timeout: Int? = null, var seconds: Int = 0) {
-        companion object {
-            val times = ('A'..'Z').associateWith {
-                (it.code - 64 + 60)
-            }
-        }
-
         fun isFinished() =
             timeout == seconds
 
@@ -121,7 +119,7 @@ object Day07 {
             timeout = null
         }
 
-        fun assign(letter: Char) {
+        fun assign(letter: Char, times: Map<Char, Int>) {
             cur = letter
             timeout = times[letter]
             seconds = 0
