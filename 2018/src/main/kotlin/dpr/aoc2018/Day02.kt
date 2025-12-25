@@ -10,7 +10,8 @@ object Day02 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         var count2 = 0
         var count3 = 0
 
@@ -27,7 +28,8 @@ object Day02 {
         return count2 * count3
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): String {
         (0 until (lines.size - 1)).forEach { i ->
             val a = lines[i]
             ((i + 1) until (lines.size)).forEach { j ->
