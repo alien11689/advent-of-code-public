@@ -10,9 +10,7 @@ object Day17 {
     }
 
     @JvmStatic
-    fun part1(): Int {
-        val input = 344
-
+    fun part1(input: Int = 344): Int {
         val buf = mutableListOf(0)
         var cur = 0
 
