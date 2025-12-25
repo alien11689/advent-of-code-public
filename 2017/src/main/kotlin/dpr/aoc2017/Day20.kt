@@ -29,9 +29,9 @@ object Day20 {
             val parts = line.split(Regex("[<>]"))
             Particle(
                 index,
-                p = Coord.from(parts[1]),
-                v = Coord.from(parts[3]),
-                a = Coord.from(parts[5])
+                p = Coord.from(parts[1].trim()),
+                v = Coord.from(parts[3].trim()),
+                a = Coord.from(parts[5].trim())
             )
         }
     }
