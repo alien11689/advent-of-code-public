@@ -39,8 +39,7 @@ object Day19 {
 
     private fun changeDir(grid: List<String>, oldCur: Point2D, cur: Point2D): Pair<Int, Int> {
         return cur.neighboursCross()
-            .filter { it != oldCur }
-            .filter { grid[it.y][it.x] != ' ' }
+            .filter { it != oldCur && it.y < grid.size && it.x < grid[it.y].length && grid[it.y][it.x] != ' ' }
             .map { Pair(it.x - cur.x, it.y - cur.y) }
             .first()
     }
