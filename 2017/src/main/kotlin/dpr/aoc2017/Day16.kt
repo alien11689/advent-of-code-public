@@ -11,16 +11,14 @@ object Day16 {
     }
 
     @JvmStatic
-    fun part1(input: String): String {
-        val (a, acc) = parseInput(input)
+    fun part1(input: String, range: Int = 16): String {
+        val (a, acc) = parseInput(input, range)
 
         return acc.fold(a) { cur, action -> action.apply(cur) }.joinToString("")
     }
 
-    private fun parseInput(input: String): Pair<List<Char>, List<Action>> {
-        val range = 15
-
-        val a = (0..range).map {
+    private fun parseInput(input: String, range: Int): Pair<List<Char>, List<Action>> {
+        val a = (0..<range).map {
             'a' + it
         }
 
@@ -46,8 +44,8 @@ object Day16 {
     }
 
     @JvmStatic
-    fun part2(input: String): String {
-        var (a, acc) = parseInput(input)
+    fun part2(input: String, range: Int = 16): String {
+        var (a, acc) = parseInput(input, range)
         var iter = 0
         val mem = mutableMapOf<List<Char>, Int>()
 
