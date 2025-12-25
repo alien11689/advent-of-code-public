@@ -10,16 +10,18 @@ object Day09 {
     }
 
     @JvmStatic
-    fun part1(): Long {
-        val playersCount = 465
-        val maxScore = 71498
+    fun part1(
+        playersCount: Int = 465,
+        maxScore: Int = 71498
+    ): Long {
         return findHighestScore(playersCount, maxScore)
     }
 
     @JvmStatic
-    fun part2(): Long {
-        val playersCount = 465
-        val maxScore = 71498
+    fun part2(
+        playersCount: Int = 465,
+        maxScore: Int = 71498
+    ): Long {
         return findHighestScore(playersCount, maxScore * 100)
     }
 
