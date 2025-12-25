@@ -13,7 +13,7 @@ object Day22 {
     }
 
     @JvmStatic
-    fun part1(lines: List<String>): Int {
+    fun part1(lines: List<String>, iterations: Int = 10_000): Int {
         val grid = mutableMapOf<Point2D, Boolean>()
         val cur = Point2D(lines[0].length / 2, lines.size / 2)
 
@@ -31,7 +31,7 @@ object Day22 {
         }
 
         val virus = Virus(cur)
-        repeat(10000) {
+        repeat(iterations) {
             virus.burst(grid)
         }
 
@@ -40,7 +40,7 @@ object Day22 {
     }
 
     @JvmStatic
-    fun part2(lines: List<String>): Int {
+    fun part2(lines: List<String>, iterations: Int = 10_000_000): Int {
         val grid = mutableMapOf<Point2D, Status>()
         val cur = Point2D(lines[0].length / 2, lines.size / 2)
 
@@ -58,7 +58,7 @@ object Day22 {
         }
 
         val virus = Virus(cur)
-        repeat(10000000) {
+        repeat(iterations) {
             virus.burst2(grid)
         }
 
