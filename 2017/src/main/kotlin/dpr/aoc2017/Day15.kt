@@ -10,9 +10,9 @@ object Day15 {
     }
 
     @JvmStatic
-    fun part1(): Int {
-        var genA = 883L
-        var genB = 879L
+    fun part1(initA: Long = 883L, initB: Long = 879L): Int {
+        var genA = initA
+        var genB = initB
 
         val factorA = 16807
         val factorB = 48271
@@ -35,9 +35,9 @@ object Day15 {
     }
 
     @JvmStatic
-    fun part2(): Int {
-        var genA = 883L
-        var genB = 879L
+    fun part2(initA: Long = 883L, initB: Long = 879L): Int {
+        var genA = initA
+        var genB = initB
 
         val factorA = 16807
         val factorB = 48271
