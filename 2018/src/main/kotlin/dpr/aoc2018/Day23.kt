@@ -11,7 +11,8 @@ object Day23 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val drones = readInput(input)
 
         val max = drones.maxByOrNull { it.range }!!
@@ -26,7 +27,8 @@ object Day23 {
         return drones
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val drones = readInput(input)
         val zero = Point(0, 0, 0)
 

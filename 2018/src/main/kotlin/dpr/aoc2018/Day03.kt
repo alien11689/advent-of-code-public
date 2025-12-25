@@ -10,7 +10,8 @@ object Day03 {
         println(part2(input))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val size = 1000
         val carpets = createCarpets(lines)
         val field = createField(size, carpets)
@@ -39,7 +40,8 @@ object Day03 {
         )
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): String {
         val size = 1000
         val carpets = createCarpets(lines)
         val field = createField(size, carpets)

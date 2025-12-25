@@ -9,7 +9,8 @@ object Day14 {
         println(part2())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(): String {
         val input = 640441
 
         val scores = mutableListOf(3, 7)
@@ -24,7 +25,8 @@ object Day14 {
         return scores.subList(input, input + steps + 1).joinToString("")
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): Int {
         val input = 640441
         val scores = mutableListOf(3, 7)
 

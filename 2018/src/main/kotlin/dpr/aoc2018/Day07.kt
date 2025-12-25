@@ -11,7 +11,8 @@ object Day07 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): String {
         val instructions = parseInstructions(input)
         val order = mutableListOf<Char>()
 
@@ -28,7 +29,8 @@ object Day07 {
         return order.joinToString("")
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val instructions = parseInstructions(input)
         val order = mutableListOf<Char>()
 

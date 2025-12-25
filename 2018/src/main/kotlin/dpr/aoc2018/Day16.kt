@@ -11,7 +11,8 @@ object Day16 {
         println(part2)
     }
 
-    private fun part1And2(lines: List<String>):Pair<Any, Any> {
+    @JvmStatic
+    fun part1And2(lines: List<String>): Pair<Int, Int> {
         var i = 0
         val availableOperations = mutableListOf(
             Operation.Addi,

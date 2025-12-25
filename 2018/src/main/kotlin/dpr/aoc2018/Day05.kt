@@ -10,7 +10,8 @@ object Day05 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Int {
         val changes = ('a'..'z').flatMap { listOf(Regex("$it${it.uppercaseChar()}"), Regex("${it.uppercaseChar()}$it")) }
 
         return reduce(input, changes).length
@@ -30,7 +31,8 @@ object Day05 {
         return before
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Int {
         val changes = ('a'..'z').flatMap { listOf(Regex("$it${it.uppercaseChar()}"), Regex("${it.uppercaseChar()}$it")) }
         val reducing = ('a'..'z').flatMap { listOf(Regex("[$it${it.uppercaseChar()}]")) }
 

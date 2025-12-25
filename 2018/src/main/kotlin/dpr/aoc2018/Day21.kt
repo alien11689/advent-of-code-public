@@ -10,7 +10,8 @@ object Day21 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         val ip = input[0].split(" ").last().toInt()
         val instructions = parseInstructions(input)
 
@@ -44,7 +45,8 @@ object Day21 {
         }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Long {
         val ip = input[0].split(" ").last().toInt()
         val instructions = parseInstructions(input)
         val threshold = 100000

@@ -11,7 +11,8 @@ object Day25 {
         println(part1(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         return findConstellation(readPoints(input)).size
     }
 

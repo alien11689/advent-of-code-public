@@ -9,7 +9,8 @@ object Day11 {
         println(part2())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(): String {
         val serialNumber = 7165
 
         val n = 300
@@ -21,7 +22,8 @@ object Day11 {
         return "${rack.x},${rack.y}"
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): String {
         val serialNumber = 7165
 
         val n = 300

@@ -9,13 +9,15 @@ object Day24 {
         println(part2())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(): Int {
         val groups = generateGroups()
         val res = fight(groups)
         return res.sum!!
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): Int {
         var minBound = 0
         var maxBound = 1000
         var score = 0

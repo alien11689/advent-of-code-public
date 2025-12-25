@@ -14,7 +14,8 @@ object Day04 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         var lastGuardId: Int? = null
         var fall: LocalDateTime? = null
         val m = mutableMapOf<Int, MutableList<Sleep>>()
@@ -49,7 +50,8 @@ object Day04 {
         return max.key * minutes.maxByOrNull { it.value }!!.key
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         var lastGuardId: Int? = null
         var fall: LocalDateTime? = null
         val m = mutableMapOf<Int, MutableList<IntRange>>()

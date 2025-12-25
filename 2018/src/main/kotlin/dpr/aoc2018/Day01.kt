@@ -11,12 +11,12 @@ object Day01 {
     }
 
     @JvmStatic
-    fun part1(input: List<String>): Any {
+    fun part1(input: List<String>): Int {
         return input.sumOf { it.toInt() }
     }
 
     @JvmStatic
-    fun part2(input: List<String>): Any {
+    fun part2(input: List<String>): Int {
         val numbers = input.map { it.toInt() }
         val m = mutableSetOf<Int>()
         var start = 0

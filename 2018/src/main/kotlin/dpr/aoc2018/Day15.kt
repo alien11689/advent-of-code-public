@@ -15,7 +15,8 @@ object Day15 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val (board, initPlayers) = buildBoard(input)
         val players = initPlayers.toMutableList()
         val round = game(players, board)
@@ -23,7 +24,8 @@ object Day15 {
         return (round * sum)
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val (board, initPlayers) = buildBoard(input)
         var minBound = 1
         var maxBound = MAX_HIT_POINTS

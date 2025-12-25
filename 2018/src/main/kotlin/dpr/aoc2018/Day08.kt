@@ -10,7 +10,8 @@ object Day08 {
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): Long {
         val root = readNode(input.split(" ").map { it.toInt() }.toMutableList())
         val toCheck = mutableListOf(root)
         var metadatadSum = 0L
@@ -22,7 +23,8 @@ object Day08 {
         return metadatadSum
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Int {
         val root = readNode(input.split(" ").map { it.toInt() }.toMutableList())
         return root.calculateMeta()
     }

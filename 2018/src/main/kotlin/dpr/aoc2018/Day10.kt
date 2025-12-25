@@ -11,7 +11,8 @@ object Day10 {
         println(part2)
     }
 
-    private fun part1And2(input: List<String>): Pair<Any, Any> {
+    @JvmStatic
+    fun part1And2(input: List<String>): Pair<String, Int> {
         val points = input.map {
             val line = it.split(Regex("[<>, ]+"))
             Point(

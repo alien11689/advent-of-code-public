@@ -11,7 +11,8 @@ object Day22 {
         println(part2())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(): Long {
         val pos2Erosion = mutableMapOf<Pos, Long>()
         val geoIndex = mutableMapOf<Pos, Long>()
         val target = Pos(14, 778)
@@ -26,7 +27,8 @@ object Day22 {
         return riskLevel
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): Int {
         val pos2Erosion = mutableMapOf<Pos, Long>()
         val geoIndex = mutableMapOf<Pos, Long>()
         val target = Pos(14, 778)

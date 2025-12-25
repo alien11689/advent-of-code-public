@@ -6,10 +6,13 @@ object Day17 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/17/input.txt")
-        part1And2(input).forEach { println(it) }
+        val (a, b) = part1And2(input)
+        println(a)
+        println(b)
     }
 
-    private fun part1And2(input: List<String>): Collection<Int> {
+    @JvmStatic
+    fun part1And2(input: List<String>): Pair<Int, Int> {
         val claysSet = createClaysSet(input)
         val visitedDown = mutableSetOf<Pair<Int, Int>>()
         val filled = mutableSetOf<Pair<Int, Int>>()
@@ -18,7 +21,7 @@ object Day17 {
         goDown(claysSet, filled, 500, y, drained, visitedDown)
         filled.addAll(drained)
 //        printClays(claysSet, filled, drained)
-        return listOf(filled.size, drained.size)
+        return Pair(filled.size, drained.size)
     }
 
     private fun createClaysSet(input: List<String>): MutableSet<Pair<Int, Int>> {

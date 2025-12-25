@@ -12,7 +12,8 @@ object Day13 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): String {
         val (cells, drivers) = readInput(input)
 
         var tick = 0
@@ -70,7 +71,8 @@ object Day13 {
         return Pair(cells, drivers)
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): String {
         val (cells, drivers) = readInput(input)
 
         var tick = 0

@@ -11,7 +11,8 @@ object Day06 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         var counter = 'a'.code
         val points = input.map {
             val parts = it.split(", ")
@@ -52,7 +53,8 @@ object Day06 {
         return Cell1(ids)
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         var counter = 'a'.code
         val points = input.map {
             val parts = it.split(", ")

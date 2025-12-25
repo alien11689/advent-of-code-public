@@ -10,7 +10,8 @@ object Day19 {
         println(part2())
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val ip = lines[0].split(" ").last().toInt()
         val registers = mutableListOf(0, 0, 0, 0, 0, 0, 0)
         val instructions = lines.drop(1).map { line ->
@@ -32,9 +33,10 @@ object Day19 {
         return registers[0]
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): Long {
 //        println("After optimizations and observations:")
-        return (1..10551314).sumOf { if (10551314 % it == 0) 10551314 / it else 0 }
+        return (1..10551314).sumOf { if (10551314 % it == 0) 10551314L / it else 0L }
     }
 
     data class Operation(val name: String, val a: Int, val b: Int, val c: Int) {

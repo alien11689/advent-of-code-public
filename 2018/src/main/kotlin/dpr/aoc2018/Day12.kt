@@ -10,7 +10,8 @@ object Day12 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val initialState = input[0].split(":")[1].trim()
         val rules = readRules(input.drop(1))
         var generation = 0
@@ -58,7 +59,8 @@ object Day12 {
         return newGeneration
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Long {
         val initialState = input[0].split(":")[1].trim()
         val rules = readRules(input.drop(1))
         var generation = 0

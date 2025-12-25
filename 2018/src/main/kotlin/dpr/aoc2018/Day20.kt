@@ -8,10 +8,13 @@ object Day20 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getFileContent("/20/input.txt").trim()
-        part1And2(input).forEach { println(it) }
+        val (a, b) = part1And2(input)
+        println(a)
+        println(b)
     }
 
-    private fun part1And2(input: String): Collection<Any> {
+    @JvmStatic
+    fun part1And2(input: String): Pair<Int, Int> {
         val cross = Stack<Pos>()
         val posToDist = mutableMapOf<Pos, Int>()
         var curPos = Pos(0, 0)
@@ -44,7 +47,7 @@ object Day20 {
             }
         }
 
-        return listOf(
+        return Pair(
             posToDist.values.maxOrNull()!!,
             posToDist.values.count { it >= 1000 }
         )
