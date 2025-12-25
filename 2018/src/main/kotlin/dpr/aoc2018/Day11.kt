@@ -10,9 +10,7 @@ object Day11 {
     }
 
     @JvmStatic
-    fun part1(): String {
-        val serialNumber = 7165
-
+    fun part1(serialNumber: Int = 7165): String {
         val n = 300
         val m = 300
 
@@ -23,9 +21,7 @@ object Day11 {
     }
 
     @JvmStatic
-    fun part2(): String {
-        val serialNumber = 7165
-
+    fun part2(serialNumber: Int = 7165): String {
         val n = 300
         val m = 300
         val board = buildBoard(n, m, serialNumber)
