@@ -10,7 +10,7 @@ object Day21 {
     }
 
     @JvmStatic
-    fun part1And2(lines: List<String>): List<String> {
+    fun part1And2(lines: List<String>, neededInterations: Set<Int> = setOf(5, 18)): List<Int> {
         var image = listOf(".#.".toList(), "..#".toList(), "###".toList())
         val result = mutableListOf<Int>()
 
@@ -33,7 +33,7 @@ object Day21 {
         }
 
         var iter = 0
-        while (iter < 18) {
+        while (iter < neededInterations.max()) {
             ++iter
             val newImage = mutableListOf<MutableList<Char>>()
             val split = if (image.size % 2 == 0) 2 else 3
@@ -51,7 +51,11 @@ object Day21 {
                 }
                 newImage.addAll(
                     parts.fold(
-                        if (parts[0].size == 3) mutableListOf(mutableListOf(), mutableListOf(), mutableListOf()) else mutableListOf(
+                        if (parts[0].size == 3) mutableListOf(
+                            mutableListOf(),
+                            mutableListOf(),
+                            mutableListOf()
+                        ) else mutableListOf(
                             mutableListOf(),
                             mutableListOf(),
                             mutableListOf(),
@@ -70,14 +74,14 @@ object Day21 {
 //                println()
 //            }
             image = newImage
-            if (iter in setOf(5, 18)) {
+            if (iter in neededInterations) {
                 result.add(image.flatten().filter { it == '#' }.size)
             }
             if (result.size == 2) {
                 break
             }
         }
-        return result.map { it.toString() }
+        return result
     }
 
     data class Rule(val size: Int, val inputs: Set<List<List<Char>>>, val output: MutableList<MutableList<Char>>) {
