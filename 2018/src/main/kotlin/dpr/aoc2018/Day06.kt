@@ -54,7 +54,7 @@ object Day06 {
     }
 
     @JvmStatic
-    fun part2(input: List<String>): Int {
+    fun part2(input: List<String>, maxDist: Int = 10_000): Int {
         var counter = 'a'.code
         val points = input.map {
             val parts = it.split(", ")
@@ -67,7 +67,7 @@ object Day06 {
             }
         }
 
-        val inBound = board.flatten().filter { it.distance < 10000 }
+        val inBound = board.flatten().filter { it.distance < maxDist }
         return inBound.size
 
     }
