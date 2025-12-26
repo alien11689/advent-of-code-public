@@ -10,9 +10,7 @@ object Day14 {
     }
 
     @JvmStatic
-    fun part1(): String {
-        val input = 640441
-
+    fun part1(input: Int = 640441): String {
         val scores = mutableListOf(3, 7)
 
         val steps = 9
@@ -26,22 +24,19 @@ object Day14 {
     }
 
     @JvmStatic
-    fun part2(): Int {
-        val input = 640441
+    fun part2(input: String = "640441"): Int {
         val scores = mutableListOf(3, 7)
 
         val elves = mutableListOf(0, 1)
 
-        val inputString = input.toString()
-
         while (true) {
             play(scores, elves)
 
-            if (scores.size > inputString.length) {
-                val substring = scores.subList(scores.size - inputString.length - 1, scores.size).joinToString("")
-                if (substring.contains(inputString)) {
-                    val toAdd = substring.indexOf(inputString)
-                    return scores.size - inputString.length - (if (toAdd > 0) 0 else 1)
+            if (scores.size > input.length) {
+                val substring = scores.subList(scores.size - input.length - 1, scores.size).joinToString("")
+                if (substring.contains(input)) {
+                    val toAdd = substring.indexOf(input)
+                    return scores.size - input.length - (if (toAdd > 0) 0 else 1)
                 }
             }
         }
