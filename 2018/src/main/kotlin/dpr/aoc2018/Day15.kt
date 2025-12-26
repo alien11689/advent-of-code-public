@@ -33,10 +33,13 @@ object Day15 {
         while (minBound <= maxBound) {
 //            println("Checking $minBound $maxBound")
             val i = (minBound + maxBound) / 2
-            val players = initPlayers.map { if (it.type == PlayerType.E) it.copy(attackPower = i) else it.copy() }.toMutableList()
+            val players =
+                initPlayers.map { if (it.type == PlayerType.E) it.copy(attackPower = i) else it.copy() }.toMutableList()
             try {
                 val round = game(players, board, true)
                 val sum = players.sumOf { it.hitPoints }
+//                println("Current best is attack $i with rounds $round and sum $sum")
+//                println(players.joinToString(separator = "\n") { it.toString() })
                 maxSum = (round * sum)
                 maxBound = i - 1
             } catch (e: ElfDied) {
@@ -191,6 +194,9 @@ object Day15 {
                     if (!player.isDead()) {
                         player.move(players, board)
                         player.moved = true
+                        if (elfCannotDie && players.any { it.type == PlayerType.E && it.isDead() }) {
+                            throw ElfDied()
+                        }
                         if (!players.any { !it.isDead() && it.type != player.type }) {
                             players.removeAll { it.isDead() }
                             if (players.all { it.moved }) {
@@ -199,9 +205,6 @@ object Day15 {
                             throw End(round)
                         }
                     }
-                }
-                if (elfCannotDie && players.find { it.type == PlayerType.E && it.isDead() } != null) {
-                    throw ElfDied()
                 }
                 players.removeAll { it.isDead() }
                 ++round
