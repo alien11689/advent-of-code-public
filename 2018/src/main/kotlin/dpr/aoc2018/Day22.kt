@@ -12,11 +12,12 @@ object Day22 {
     }
 
     @JvmStatic
-    fun part1(): Long {
+    fun part1(
+        target: Pos = Pos(14, 778),
+        depth: Int = 11541
+    ): Long {
         val pos2Erosion = mutableMapOf<Pos, Long>()
         val geoIndex = mutableMapOf<Pos, Long>()
-        val target = Pos(14, 778)
-        val depth = 11541
         var riskLevel = 0L
         for (y in 0..target.y) {
             for (x in 0..target.x) {
@@ -28,11 +29,12 @@ object Day22 {
     }
 
     @JvmStatic
-    fun part2(): Int {
+    fun part2(
+        target: Pos = Pos(14, 778),
+        depth: Int = 11541
+    ): Int {
         val pos2Erosion = mutableMapOf<Pos, Long>()
         val geoIndex = mutableMapOf<Pos, Long>()
-        val target = Pos(14, 778)
-        val depth = 11541
         val mem = mutableSetOf<Pair<Pos, Equip>>()
 
         val pq = PriorityQueue<Here>()
