@@ -5,6 +5,7 @@ import java.util.Queue
 
 object IntCodeComputer {
 
+    @JvmStatic
     fun run(programCode: String, input: Collection<Long>): Queue<Long> {
         val state = IntCodeComputerState.init(programCode)
         state.input.addAll(input)
