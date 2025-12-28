@@ -10,9 +10,8 @@ object Day04 {
     }
 
     @JvmStatic
-    fun part1(): Int {
-        var start = 156218
-        val end = 652527
+    fun part1(from: Int = 156218, end: Int = 652527): Int {
+        var start = from
         var c = 0
         while (start <= end) {
             if (isPassword1(start.toString().map { Integer.parseInt(it.toString()) })) {
@@ -24,9 +23,8 @@ object Day04 {
     }
 
     @JvmStatic
-    fun part2(): Int {
-        var start = 156218
-        val end = 652527
+    fun part2(from: Int = 156218, end: Int = 652527): Int {
+        var start = from
         var c = 0
         while (start <= end) {
             if (isPassword2(start.toString().map { Integer.parseInt(it.toString()) })) {
