@@ -2,6 +2,7 @@ package dpr.aoc2018
 
 import dpr.commons.Util
 import kotlin.math.abs
+import kotlin.math.max
 
 object Day23 {
     @JvmStatic
@@ -48,12 +49,12 @@ object Day23 {
         var minDist = 1000000000
 
         var iter = 0
-        while (distX > 1) {
+        while (distX > 0 || distY > 0 || distZ > 0) {
             ++iter
-//    println("Iter $iter - dists ($distX, $distY, $distZ)")
-            for (x in minX..maxX step distX) {
-                for (y in minY..maxY step distY) {
-                    for (z in minZ..maxZ step distZ) {
+//    println("Iter $iter - dists ($distX, $distY, $distZ) for x in range $minX to $maxX, $minY to $maxY, $minZ to $maxZ")
+            for (x in minX..maxX step max(distX, 1)) {
+                for (y in minY..maxY step max(distY, 1)) {
+                    for (z in minZ..maxZ step max(distZ, 1)) {
                         val p = Point(x, y, z)
                         val fdest = p.fDest(drones)
                         val dist = p.manhattan(zero)
