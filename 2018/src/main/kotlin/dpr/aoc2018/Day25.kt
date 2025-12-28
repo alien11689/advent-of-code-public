@@ -24,7 +24,7 @@ object Day25 {
 
     private fun readPoints(lines: List<String>): List<Point> {
         return lines.map { line ->
-            val parts = line.split(Regex("[ ,]+")).map { it.toInt() }
+            val parts = line.trim().split(Regex("[ ,]+")).map { it.toInt() }
             Point(parts[0], parts[1], parts[2], parts[3])
         }
     }
