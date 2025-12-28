@@ -10,20 +10,19 @@ object Day24 {
     }
 
     @JvmStatic
-    fun part1(): Int {
-        val groups = generateGroups()
-        val res = fight(groups)
+    fun part1(initGroup: List<Group> = generateGroups()): Int {
+        val res = fight(initGroup.map { it.copy() }.toMutableList())
         return res.sum!!
     }
 
     @JvmStatic
-    fun part2(): Int {
+    fun part2(initGroup: List<Group> = generateGroups()): Int {
         var minBound = 0
         var maxBound = 1000
         var score = 0
         while (maxBound >= minBound) {
 
-            val groups = generateGroups()
+            val groups = initGroup.map { it.copy() }.toMutableList()
 
             val boost = minBound + (maxBound - minBound) / 2
 //    println("Checking boost $boost")
@@ -91,7 +90,7 @@ object Day24 {
         }
     }
 
-    private fun generateGroups(): MutableList<Group> {
+    private fun generateGroups(): List<Group> {
         val bludgeoning = "bludgeoning"
         val cold = "cold"
         val slashing = "slashing"
