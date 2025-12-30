@@ -34,7 +34,7 @@ object Day10 {
     }
 
     @JvmStatic
-    fun part2(input: List<String>): Int {
+    fun part2(input: List<String>, target: Int = 200): Int {
         val points = mutableSetOf<Point>()
 
         for (i in input.indices) {
@@ -73,11 +73,11 @@ object Day10 {
         val stats = stats2p.keys.sorted()
         var i = 0
 
-        while (i < 200) {
+        while (i < target) {
             val ps = stats2p[stats[i % stats.size]]!!
             val p = ps.removeAt(0)
             stats2p[stats[i % stats.size]] = ps
-            if (++i == 200) {
+            if (++i == target) {
                 return p.x * 100 + p.y
             }
         }
