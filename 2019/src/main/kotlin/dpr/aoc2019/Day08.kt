@@ -11,18 +11,13 @@ object Day08 {
     }
 
     @JvmStatic
-    fun part1(input: String): Int {
-        val row = 25
-        val tall = 6
-
+    fun part1(input: String, row: Int = 25, tall: Int = 6): Int {
         val sol = input.chunked(row * tall).minByOrNull { it.filter { letter -> letter == '0' }.length }!!
         return sol.filter { it == '1' }.length * sol.filter { it == '2' }.length
     }
 
     @JvmStatic
-    fun part2(input: String): String {
-        val row = 25
-        val tall = 6
+    fun part2(input: String, row: Int = 25, tall: Int = 6): String {
         val black = '0'
 //        val white = '1'
         val transparent = '2'
