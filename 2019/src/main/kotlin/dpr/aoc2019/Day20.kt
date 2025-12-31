@@ -77,8 +77,11 @@ object Day20 {
 
                     else -> {
                         val m = (p.neighboursCross() + p).filter {
-                            it.x >= 0 && it.x < input[j].length && it.y >= 0 && it.y < sizeY
-                        }.map { it to input[it.y][it.x] }.filter { it.second !in setOf(' ', '#', '.') }.toMap()
+                            it.y >= 0 && it.y < sizeY && it.x >= 0 && it.x < input[it.y].length
+                        }
+                            .map { it to input[it.y][it.x] }
+                            .filter { it.second !in setOf(' ', '#', '.') }
+                            .toMap()
                         warps[m.keys] = m.values.toSet()
                     }
                 }
@@ -92,7 +95,7 @@ object Day20 {
         val (map, warps) = parseInput(input)
 
         val sizeY = input.size
-        val sizeX = input[2].length
+        val sizeX = input.maxOf { it.length }
 
         val betterWarps = warps.map { warp ->
             val k = warp.key.flatMap { it.neighboursCross() }.find { map[it] == true }
