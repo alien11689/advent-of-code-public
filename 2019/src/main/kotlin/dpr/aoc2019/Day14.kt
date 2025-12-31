@@ -53,7 +53,7 @@ object Day14 {
         val initReactions = readReactions(input)
         val expected = 1000000000000L
         var a = 1L
-        var b = 10000000L
+        var b = 1000000000L
         var best = 1L
         var bestOre = -1L
         while (a < b) {
