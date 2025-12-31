@@ -23,7 +23,7 @@ object Day18 {
             for (j in input.indices) {
                 for (i in input[j].indices) {
                     val point = Point(i, j)
-                    if (map[point] == true && keysAndDoors[point] == null &&
+                    if (map[point] == true && keysAndDoors[point] == null && curPos != point &&
                         point.neighboursCross().filter { map[it] != true }.size == 3
                     ) {
                         changed = true
@@ -37,6 +37,7 @@ object Day18 {
             }
         }
 //        println("Changes: $changes")
+//        printMap(map)
 
         val state = State1(curPos, keysAndDoors, 0, listOf())
 
@@ -129,6 +130,7 @@ object Day18 {
                 break
             }
         }
+//        printMap(map)
 //        println("Changes: $changes")
 
         val state = State2(curPoses.map { LocalState(it, 0) }, keysAndDoors, listOf())
@@ -136,19 +138,21 @@ object Day18 {
         val pq = PriorityQueue<State2>()
         pq.offer(state)
 
-        val mem = mutableSetOf<Map<Point, Char>>()
+        val mem = mutableSetOf<Pair<List<Point>, Set<Char>>>()
 
         while (!pq.isEmpty()) {
             val s = pq.poll()
 //    println("=========================")
-            if (s.toVisit in mem) {
+            val key = s.localStates.map { it.cur } to s.path.toSet()
+            if (key in mem) {
                 continue
             }
-            mem.add(s.toVisit)
-//    println("Checking $s")
+            mem.add(key)
+//            println("Checking $s")
 //    println(s.localStates.sum { it.length })
+            val length = s.localStates.sumOf { it.length }
             if (s.ended()) {
-                return s.localStates.sumOf { it.length }
+                return length
             }
             s.localStates.forEach { ls ->
 //        println("Checking local state $ls")
@@ -168,6 +172,15 @@ object Day18 {
 
         throw RuntimeException()
     }
+
+//    private fun printMap(map: MutableMap<Point, Boolean>) {
+//        for (y in map.minOf { it.key.y }..map.maxOf { it.key.y }) {
+//            for (x in map.minOf { it.key.x }..map.maxOf { it.key.x }) {
+//                print(if (map.getOrDefault(Point2D(x, y), false)) "." else "#")
+//            }
+//            println()
+//        }
+//    }
 
     data class LocalState(val cur: Point, val length: Int) : Comparable<LocalState> {
         override fun compareTo(other: LocalState): Int {
@@ -206,7 +219,12 @@ object Day18 {
         }
     }
 
-    private fun findReachable(start: Point, map: Map<Point, Boolean>, keysAndDoors: Map<Point, Char>, passages: Set<Char>?): Map<Char, Int> {
+    private fun findReachable(
+        start: Point,
+        map: Map<Point, Boolean>,
+        keysAndDoors: Map<Point, Char>,
+        passages: Set<Char>?
+    ): Map<Char, Int> {
         val visited = mutableSetOf<Point>()
         val pq = PriorityQueue<LocalState>()
         pq.offer(LocalState(start, 0))
