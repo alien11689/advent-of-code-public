@@ -12,9 +12,8 @@ object Day16 {
     }
 
     @JvmStatic
-    fun part1(input: String): String {
+    fun part1(input: String, phases: Int = 100): String {
         var nums = input.map { it.toString().toInt() }
-        val phases = 100
 
         val basePattern = listOf(0, 1, 0, -1)
 
