@@ -13,9 +13,9 @@ object Day22 {
     }
 
     @JvmStatic
-    fun part1(input: List<String>): Long {
-        val res = input.fold(buildMap(10007)) { m, inp -> apply(inp.split(" "), m) }
-        return inOrder(res).toList().find { it.second == 2019L }!!.first
+    fun part1(input: List<String>, deckSize: Long = 10007L, toFind: Long = 2019L): Long {
+        val res = input.fold(buildMap(deckSize)) { m, inp -> apply(inp.split(" "), m) }
+        return inOrder(res).toList().find { it.second == toFind }!!.first
     }
 
     @JvmStatic
