@@ -10,7 +10,8 @@ object Day11 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         var seats = readSeats(input)
         while (true) {
             val newSeats = mutableMapOf<Seat, Boolean>()
@@ -44,7 +45,8 @@ object Day11 {
         return seats
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         var seats = readSeats(input)
         val maxI = input.size
         val maxJ = input[0].length
@@ -79,7 +81,14 @@ object Day11 {
         return seats.count { it.value }
     }
 
-    private fun findValidOccupied(seats: MutableMap<Seat, Boolean>, current: Seat, changeI: Int, changeJ: Int, maxI: Int, maxJ: Int): Boolean {
+    private fun findValidOccupied(
+        seats: MutableMap<Seat, Boolean>,
+        current: Seat,
+        changeI: Int,
+        changeJ: Int,
+        maxI: Int,
+        maxJ: Int
+    ): Boolean {
         var cur = current
         while (true) {
             val next = Seat(cur.i + changeI, cur.j + changeJ)

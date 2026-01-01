@@ -11,7 +11,7 @@ object Day01 {
     }
 
     @JvmStatic
-    fun part1(input: List<String>): Any {
+    fun part1(input: List<String>): Int {
         val mem = mutableSetOf<Int>()
         return input
             .flatMap { s ->
@@ -28,7 +28,7 @@ object Day01 {
     }
 
     @JvmStatic
-    fun part2(input: List<String>): Any {
+    fun part2(input: List<String>): Int {
         val nums = input.map { it.toInt() }
         for ((i, a) in nums.withIndex()) {
             for ((ii, b) in nums.withIndex().filter { it.index > i }) {

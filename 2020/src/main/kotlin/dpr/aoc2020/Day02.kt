@@ -10,13 +10,15 @@ object Day02 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         return input
             .map { Line.fromLine(it) }
             .count { it.valid() }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         return input
             .map { Line.fromLine(it) }
             .count { it.valid2() }

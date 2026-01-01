@@ -7,14 +7,13 @@ import java.util.Queue
 object Day22 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-//        val input = Util.getNotEmptyLinesFromFile("/22/sample.txt")
-//        val input = Util.getNotEmptyLinesFromFile("/22/sample2.txt")
         val input = Util.getNotEmptyLinesFromFile("/22/input.txt")
         println(part1(input))
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         val (player1: Queue<Int>, player2: Queue<Int>) = readPlayers(input)
         while (player1.isNotEmpty() && player2.isNotEmpty()) {
             val p1 = player1.poll()
@@ -51,7 +50,8 @@ object Day22 {
         return Pair(player1, player2)
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Long {
         val (player1: Queue<Int>, player2: Queue<Int>) = readPlayers(input)
         val (p1, p2) = play(player1, player2, 1)
         val winner = p1.ifEmpty { p2 }

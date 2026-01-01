@@ -6,19 +6,13 @@ import java.math.BigInteger
 object Day13 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-//        val input = Util.getNotEmptyLinesFromFile("/12/test.txt")
         val input = Util.getNotEmptyLinesFromFile("/13/input.txt")
         println(part1(input))
-//        Util.test(part2("7,13,x,x,59,x,31,19"), 1068781.toBigInteger())
-//        Util.test(part2("17,x,13,19"), 3417.toBigInteger())
-//        Util.test(part2("67,7,59,61"), 754018.toBigInteger())
-//        Util.test(part2("67,x,7,59,61"), 779210.toBigInteger())
-//        Util.test(part2("67,7,x,59,61"), 1261476.toBigInteger())
-//        Util.test(part2("1789,37,47,1889"), 1202161486.toBigInteger())
         println(part2(input[1]))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         val timestamp = input[0].toLong()
         val buses = input[1].split(',').filter { it != "x" }.map { it.toLong() }
         var i = 0
@@ -32,7 +26,8 @@ object Day13 {
         }
     }
 
-    private fun part2(input: String): BigInteger {
+    @JvmStatic
+    fun part2(input: String): BigInteger {
         val buses = input.split(",").toList()
         val busToMinut = mutableMapOf<BigInteger, BigInteger>()
         buses.forEachIndexed { index, s ->
@@ -54,7 +49,12 @@ object Day13 {
         return res
     }
 
-    private fun solve(base: BigInteger, increment: BigInteger, keys: List<BigInteger>, busToMinut: Map<BigInteger, BigInteger>): BigInteger {
+    private fun solve(
+        base: BigInteger,
+        increment: BigInteger,
+        keys: List<BigInteger>,
+        busToMinut: Map<BigInteger, BigInteger>
+    ): BigInteger {
         var cur: BigInteger = base
         while (true) {
             if (busToMinut.filter { it.key in keys }.all { entry ->

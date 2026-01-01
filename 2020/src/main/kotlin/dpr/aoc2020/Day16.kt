@@ -10,7 +10,8 @@ object Day16 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         var i = 0
         val rules = mutableSetOf<Rule>()
         var readingRules = true
@@ -24,7 +25,12 @@ object Day16 {
                 continue
             } else if (readingRules) {
                 val parts = input[i].split(":")[1].split(Regex("[ -]+"))
-                rules.add(Rule(IntRange(parts[1].toInt(), parts[2].toInt()), IntRange(parts[4].toInt(), parts[5].toInt())))
+                rules.add(
+                    Rule(
+                        IntRange(parts[1].toInt(), parts[2].toInt()),
+                        IntRange(parts[4].toInt(), parts[5].toInt())
+                    )
+                )
                 ++i
             } else if (input[i] == "nearby tickets:") {
                 nearbyTickets = true
@@ -41,7 +47,8 @@ object Day16 {
         return sumNotMatching
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Long {
         var i = 0
         val rules = mutableSetOf<Rule>()
         var readingRules = true
@@ -59,7 +66,13 @@ object Day16 {
             } else if (readingRules) {
                 val split1 = input[i].split(":")
                 val parts = split1[1].split(Regex("[ -]+"))
-                rules.add(Rule(IntRange(parts[1].toInt(), parts[2].toInt()), IntRange(parts[4].toInt(), parts[5].toInt()), split1[0]))
+                rules.add(
+                    Rule(
+                        IntRange(parts[1].toInt(), parts[2].toInt()),
+                        IntRange(parts[4].toInt(), parts[5].toInt()),
+                        split1[0]
+                    )
+                )
                 ++i
             } else if (input[i] == "your ticket:") {
                 myTicket = true

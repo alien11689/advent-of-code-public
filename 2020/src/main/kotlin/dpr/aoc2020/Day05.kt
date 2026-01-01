@@ -6,17 +6,19 @@ object Day05 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/05/input.txt")
+        println(part1(input))
+        println(part2(input))
+    }
+
+    @JvmStatic
+    fun part1(input: List<String>): Int {
+        return input.map { Seat.from(it) }.maxOf { it.toId() }
+    }
+
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val seats = input.map { Seat.from(it) }
-        println(part1(seats))
-        println(part2(seats))
-    }
-
-    private fun part1(input: List<Seat>): Any {
-        return input.maxOf { it.toId() }
-    }
-
-    private fun part2(input: List<Seat>): Any {
-        val sortedSeats = input.sortedBy { it.toId() }
+        val sortedSeats = seats.sortedBy { it.toId() }
         var previous = sortedSeats.first()
         sortedSeats.forEach {
             if (it != previous) {

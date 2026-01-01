@@ -9,7 +9,8 @@ object Day25 {
         println(part1(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         val publicKey1 = input[0].toLong()
         val publicKey2 = input[1].toLong()
         val pn = 20201227

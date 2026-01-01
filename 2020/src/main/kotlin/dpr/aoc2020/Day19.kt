@@ -11,7 +11,8 @@ object Day19 {
         println(part2(input2))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val (rules, text) = parseInput(input)
         val rule0Raw = rules[0]!!
         val rule0 = resolveRule(rule0Raw, rules)
@@ -80,7 +81,8 @@ object Day19 {
         }
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val (rules, text) = parseInput(input)
 //        println("0: ${rules[0]}")
 //        println("8: ${rules[8]}")

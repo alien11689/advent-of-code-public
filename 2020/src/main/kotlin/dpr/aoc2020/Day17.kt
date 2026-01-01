@@ -6,12 +6,12 @@ object Day17 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getLinesFromFile("/17/input.txt")
-//        val input = Util.getLinesFromFile("/17/test.txt")
         println(part1(input))
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         var points = initPoints(input)
         repeat(6) {
             points = cycle(points)
@@ -19,7 +19,8 @@ object Day17 {
         return points.size
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         var points = initPoints(input)
         repeat(6) {
             points = cycle2(points)

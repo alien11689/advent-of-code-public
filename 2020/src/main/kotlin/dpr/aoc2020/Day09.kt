@@ -12,7 +12,8 @@ object Day09 {
         println(part2(input, solutionPart1))
     }
 
-    private fun part1(input: List<Long>): Long {
+    @JvmStatic
+    fun part1(input: List<Long>): Long {
         var i = 25
         while (i < input.size) {
             val nums: List<Long> = input.subList(i - 25, i).sorted()
@@ -41,7 +42,8 @@ object Day09 {
         throw RuntimeException("No solution for part 1")
     }
 
-    private fun part2(input: List<Long>, targetValue: Long): Any {
+    @JvmStatic
+    fun part2(input: List<Long>, targetValue: Long): Long {
         var i = 0
         var j = 1
         while (j < input.size) {

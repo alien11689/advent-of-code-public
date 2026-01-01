@@ -10,7 +10,8 @@ object Day08 {
         println(part2(input))
     }
 
-    private fun part1(instr: List<String>): Any {
+    @JvmStatic
+    fun part1(instr: List<String>): Int {
         val usedInstructions = mutableSetOf<Int>()
         var pointer = 0
         var acc = 0
@@ -26,7 +27,8 @@ object Day08 {
         return acc
     }
 
-    private fun part2(instr: List<String>): Any {
+    @JvmStatic
+    fun part2(instr: List<String>): Int {
         var i = 0
         while (i < instr.size) {
             if (instr[i].contains("nop") || instr[i].contains("jmp")) {
@@ -66,7 +68,12 @@ object Day08 {
         return Pair(acc, infiniteLoop)
     }
 
-    private fun execute(usedInstructions: MutableSet<Int>, pointer: Int, instr: List<String>, acc: Int): Pair<Int, Int> {
+    private fun execute(
+        usedInstructions: MutableSet<Int>,
+        pointer: Int,
+        instr: List<String>,
+        acc: Int
+    ): Pair<Int, Int> {
         var pointer1 = pointer
         var acc1 = acc
         usedInstructions.add(pointer1)

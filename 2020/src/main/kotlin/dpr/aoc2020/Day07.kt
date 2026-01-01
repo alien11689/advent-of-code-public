@@ -11,7 +11,8 @@ object Day07 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val rules = input.map { Rule.parse(it) }
         val target = Bag("shiny", "gold")
         val stack = Stack<Bag>()
@@ -29,7 +30,8 @@ object Day07 {
         return needed.size - 1
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val rules = input.map { Rule.parse(it) }
         val target = Bag("shiny", "gold")
         var count = 0

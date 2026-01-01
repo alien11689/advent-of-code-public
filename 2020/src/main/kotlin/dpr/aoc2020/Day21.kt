@@ -10,7 +10,8 @@ object Day21 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val ingredientList = input.map { IngredientsList.from(it) }
         val glossary = buildGlossary(ingredientList)
         return ingredientList.flatMap { it.ingredients }.count { it !in glossary.values.toSet() }
@@ -24,7 +25,8 @@ object Day21 {
             allergens.forEach { allergen ->
                 if (allergen !in glossary) {
                     val possibleDishes = ingredientList.filter { allergen in it.allergens }.map { it.ingredients }
-                    val couldBeIn = possibleDishes.fold(allIngredients) { acc, set -> acc.intersect(set) } - glossary.values.toSet()
+                    val couldBeIn =
+                        possibleDishes.fold(allIngredients) { acc, set -> acc.intersect(set) } - glossary.values.toSet()
                     if (couldBeIn.size == 1) {
                         glossary[allergen] = couldBeIn.first()
                     }
@@ -34,7 +36,8 @@ object Day21 {
         return glossary
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): String {
         val ingredientList = input.map { IngredientsList.from(it) }
         val glossary = buildGlossary(ingredientList)
         return glossary.keys.sorted().joinToString(",") { glossary[it]!! }

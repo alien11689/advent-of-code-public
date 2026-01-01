@@ -8,15 +8,11 @@ object Day18 {
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/18/input.txt")
         println(part1(input))
-//        Util.test(solve2("((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2"), 23340L)
-//        Util.test(solve2("1 + (2 * 3) + (4 * (5 + 6))"), 51L)
-//        Util.test(solve2("2 * 3 + (4 * 5)"), 46L)
-//        Util.test(solve2("5 + (8 * 3 + 9 + 3 * 4 * 3)"), 1445L)
-//        Util.test(solve2("5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))"), 669060L)
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         return input.sumOf { solve(it) }
     }
 
@@ -68,7 +64,8 @@ object Day18 {
         return res
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Long {
         return input.sumOf { solve2(it) }
     }
 

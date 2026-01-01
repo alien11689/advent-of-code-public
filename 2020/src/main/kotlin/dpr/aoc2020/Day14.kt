@@ -10,7 +10,8 @@ object Day14 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): String {
         val memory = mutableMapOf<Long, Long>()
         var mask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         input.map { it.split(Regex("[ =\\[\\]]+")).toList() }.forEach {
@@ -34,7 +35,8 @@ object Day14 {
         return memory.values.sum().toString()
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): String {
         val memory = mutableMapOf<Long, Long>()
         var mask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         input.map { it.split(Regex("[ =\\[\\]]+")).toList() }.forEach { parts ->

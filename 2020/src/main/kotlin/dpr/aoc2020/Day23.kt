@@ -6,12 +6,12 @@ object Day23 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = "186524973"
-//        val input = "389125467" //sample
         println(part1(input))
         println(part2(input))
     }
 
-    private fun part1(input: String): Any {
+    @JvmStatic
+    fun part1(input: String): String {
         val cups = input.map { it.toString().toInt() }.toList()
         val pair = buildNodes(cups)
         var current: Node? = pair.first
@@ -30,7 +30,8 @@ object Day23 {
         return res.toString()
     }
 
-    private fun part2(input: String): Any {
+    @JvmStatic
+    fun part2(input: String): Long {
         val initCups = input.map { it.toString().toInt() }.toList()
         val elements = initCups + ((initCups.maxOrNull()!! + 1)..1000000)
         val pair = buildNodes(elements)
@@ -66,7 +67,8 @@ object Day23 {
 
     private fun move(current: Node, max: Int, mem: Map<Int, Node>): Node {
         val pickedUpNodeBegin = current.next!!
-        val pickedUpValues = setOf(current.next!!.value, current.next!!.next!!.value, current.next!!.next!!.next!!.value)
+        val pickedUpValues =
+            setOf(current.next!!.value, current.next!!.next!!.value, current.next!!.next!!.next!!.value)
         val nextNode = current.next!!.next!!.next!!.next!!
         var destination = if (current.value == 1) max else (current.value - 1)
         while (destination in pickedUpValues) {

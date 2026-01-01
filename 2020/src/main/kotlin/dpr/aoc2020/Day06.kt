@@ -10,7 +10,8 @@ object Day06 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         var sum = 0
         var current = setOf<Char>()
         input.forEach { line ->
@@ -24,7 +25,8 @@ object Day06 {
         return sum
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         var sum = 0
         var current = ('a'..'z').toSet()
         input.forEach { line ->

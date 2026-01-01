@@ -11,7 +11,8 @@ object Day03 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         val stepX = 3
         val stepY = 1
         return countTrees(input, stepY, stepX)
@@ -29,12 +30,13 @@ object Day03 {
         return trees
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Long {
         return countTrees(input, 1, 1) *
-            countTrees(input, 1, 3) *
-            countTrees(input, 1, 5) *
-            countTrees(input, 1, 7) *
-            countTrees(input, 2, 1)
+                countTrees(input, 1, 3) *
+                countTrees(input, 1, 5) *
+                countTrees(input, 1, 7) *
+                countTrees(input, 2, 1)
 
     }
 

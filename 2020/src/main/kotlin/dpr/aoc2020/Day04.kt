@@ -10,7 +10,8 @@ object Day04 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         var valid = 0
         var current = mutableSetOf<String>()
         input.forEach { line ->
@@ -26,7 +27,8 @@ object Day04 {
         return valid
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         var valid = 0
         var current = mutableMapOf<String, String>()
         input.forEach { line ->

@@ -2,20 +2,20 @@ package dpr.aoc2020
 
 import dpr.commons.Util
 import java.util.Stack
+import kotlin.text.toInt
 
 object Day10 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
-//        val input = Util.getFileContent("/10/test.txt")
-//        val input = Util.getFileContent("/10/test2.txt")
         val input = Util.getNotEmptyLinesFromFile("/10/input.txt")
-            .map { it.toInt() }
         println(part1(input))
         println(part2(input))
     }
 
-    private fun part1(input: List<Int>): Any {
-        val sorted = input.sorted() + (input.maxOrNull()!! + 3)
+    @JvmStatic
+    fun part1(input: List<String>): Int {
+        val numbers = input.map { it.toInt() }
+        val sorted = numbers.sorted() + (numbers.maxOrNull()!! + 3)
         var current = 0
         var difference1 = 0
         var difference3 = 0
@@ -31,8 +31,10 @@ object Day10 {
         return difference1 * difference3
     }
 
-    private fun part2(input: List<Int>): Any {
-        val sorted = input.sorted() + (input.maxOrNull()!! + 3)
+    @JvmStatic
+    fun part2(input: List<String>): Long {
+        val numbers = input.map { it.toInt() }
+        val sorted = numbers.sorted() + (numbers.maxOrNull()!! + 3)
         var base = 0
         var current = 0
         var set = mutableListOf<Int>()

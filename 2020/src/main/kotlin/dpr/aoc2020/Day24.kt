@@ -6,12 +6,12 @@ object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val input = Util.getNotEmptyLinesFromFile("/24/input.txt")
-//        val input = Util.getNotEmptyLinesFromFile("/24/sample.txt")
         println(part1(input))
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Int {
         val blackTiles = readInitialTiles(input)
         return blackTiles.size
     }
@@ -61,7 +61,8 @@ object Day24 {
         return cur
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         var blackTiles: Set<Tile> = readInitialTiles(input)
         repeat(100) {
             blackTiles = blackTiles.flatMap { it.neighbours() }.toSet().flatMap { curTile ->

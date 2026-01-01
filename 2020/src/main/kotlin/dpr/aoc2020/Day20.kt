@@ -10,7 +10,8 @@ object Day20 {
         println(part2(input))
     }
 
-    private fun part1(input: List<String>): Any {
+    @JvmStatic
+    fun part1(input: List<String>): Long {
         val tiles = readTiles(input)
         val borders = tiles.values.flatMap { it.borders }.groupBy { it }.mapValues { it.value.size }
         val uniqueBorders = borders.filter { it.value == 1 }.keys.toSet()
@@ -39,7 +40,8 @@ object Day20 {
         return tiles.toMap()
     }
 
-    private fun part2(input: List<String>): Any {
+    @JvmStatic
+    fun part2(input: List<String>): Int {
         val tiles = readTiles(input).toMutableMap()
         val whole = buildWholeImage(tiles)
         return findRoughWaterWithoutDragons(whole)
@@ -73,7 +75,8 @@ object Day20 {
                 if (colIdx != 0) {
                     val left = wholeImage[rowIdx][colIdx - 1]!!
                     if (rowIdx == 0) {
-                        matching = tiles.values.find { cur -> left.column(9) in cur.borders && uniqueBorders.any { it in cur.borders } }!!
+                        matching =
+                            tiles.values.find { cur -> left.column(9) in cur.borders && uniqueBorders.any { it in cur.borders } }!!
                         var i = 0
                         while (matching.row(0) !in uniqueBorders || matching.column(0) != left.column(9)) {
                             matching = if (i % 4 == 3) matching.transpose() else matching.rotate()
@@ -81,7 +84,8 @@ object Day20 {
                         }
                     } else {
                         val upper = wholeImage[rowIdx - 1][colIdx]!!
-                        matching = tiles.values.find { cur -> left.column(9) in cur.borders && upper.row(9) in cur.borders }!!
+                        matching =
+                            tiles.values.find { cur -> left.column(9) in cur.borders && upper.row(9) in cur.borders }!!
                         var i = 0
                         while (matching.row(0) != upper.row(9) || matching.column(0) != left.column(9)) {
                             matching = if (i % 4 == 3) matching.transpose() else matching.rotate()
@@ -92,7 +96,8 @@ object Day20 {
                     // colIdx == 0
                     if (rowIdx != 0) {
                         val upper = wholeImage[rowIdx - 1][colIdx]!!
-                        matching = tiles.values.find { cur -> upper.row(9) in cur.borders && uniqueBorders.any { it in cur.borders } }!!
+                        matching =
+                            tiles.values.find { cur -> upper.row(9) in cur.borders && uniqueBorders.any { it in cur.borders } }!!
                         var i = 0
                         while (matching.column(0) !in uniqueBorders || matching.row(0) != upper.row(9)) {
                             matching = if (i % 4 == 3) matching.transpose() else matching.rotate()
@@ -119,7 +124,8 @@ object Day20 {
         var found = 0
         (0..(whole.image.size - 3)).forEach { rowId ->
             (0..(whole.image[rowId].size - 20)).forEach { colId ->
-                if (dragon.map { p -> Pair(p.first + rowId, p.second + colId) }.all { whole.image[it.first][it.second] == '#' }) {
+                if (dragon.map { p -> Pair(p.first + rowId, p.second + colId) }
+                        .all { whole.image[it.first][it.second] == '#' }) {
                     ++found
                 }
             }
