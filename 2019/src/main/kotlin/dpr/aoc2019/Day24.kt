@@ -143,8 +143,7 @@ object Day24 {
     }
 
     @JvmStatic
-    fun part2(input: List<String>): Int {
-        val minutes = 200
+    fun part2(input: List<String>, minutes: Int = 200): Int {
         var board = createBoard2(input, 0)
 
         var iter = 0
