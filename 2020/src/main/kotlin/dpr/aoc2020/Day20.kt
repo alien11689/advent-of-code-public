@@ -1,6 +1,7 @@
 package dpr.aoc2020
 
 import dpr.commons.Util
+import kotlin.math.sqrt
 
 object Day20 {
     @JvmStatic
@@ -64,8 +65,9 @@ object Day20 {
     private fun buildWholeImage(tiles: MutableMap<Long, Tile>): Tile {
         val borders = tiles.values.flatMap { it.borders }.groupBy { it }.mapValues { it.value.size }
         val uniqueBorders = borders.filter { it.value == 1 }.keys.toSet()
-        val wholeImage: MutableList<MutableList<Tile?>> = IntRange(0, 11).map {
-            IntRange(0, 11).map {
+        val size = sqrt(tiles.size.toDouble()).toInt()
+        val wholeImage: MutableList<MutableList<Tile?>> = (0..<size).map {
+            (0..<size).map {
                 null
             }.toMutableList<Tile?>()
         }.toMutableList()
