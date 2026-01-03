@@ -1,8 +1,8 @@
 package dpr.aoc2021
 
 import dpr.commons.Util
-import dpr.commons.Point2D as Point
 import java.util.Stack
+import dpr.commons.Point2D as Point
 
 object Day11 {
     @JvmStatic
@@ -12,7 +12,8 @@ object Day11 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val numbers = lines.map { line -> line.map { it.toString().toInt() }.toMutableList() }.toMutableList()
         var flashesCount = 0L
         for (i in 1..100) {
@@ -50,7 +51,8 @@ object Day11 {
         return flashed
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val numbers = lines.map { line -> line.map { it.toString().toInt() }.toMutableList() }.toMutableList()
         var i = 0
         while (true) {

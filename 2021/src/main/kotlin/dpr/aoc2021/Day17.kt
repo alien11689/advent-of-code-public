@@ -11,7 +11,8 @@ object Day17 {
         part1And2(target).forEach(::println)
     }
 
-    private fun part1And2(target: Target): List<Int> {
+    @JvmStatic
+    fun part1And2(target: Target): List<Int> {
         var maxHeight = 0
         var count = 0
         for (dx in 1..target.xRange.maxOrNull()!!) {

@@ -11,7 +11,8 @@ object Day12 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val connections = lines.map { it.split("-").toSet() }.toSet()
         val pq = initPQ()
         var fullPaths = 0
@@ -48,7 +49,8 @@ object Day12 {
 
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val connections = lines.map { it.split("-").toSet() }.toSet()
         val pq = initPQ()
         var fullPaths = 0
@@ -77,7 +79,8 @@ object Day12 {
         return fullPaths
     }
 
-    private fun getNeighbours(connections: Set<Set<String>>, cur: Path) = connections.filter { cur.last in it }.map { (it - cur.last).first() }
+    private fun getNeighbours(connections: Set<Set<String>>, cur: Path) =
+        connections.filter { cur.last in it }.map { (it - cur.last).first() }
 
     private fun initPQ(): PriorityQueue<Path> {
         val pq = PriorityQueue<Path>()

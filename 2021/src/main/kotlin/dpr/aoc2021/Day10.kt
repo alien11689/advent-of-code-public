@@ -11,7 +11,8 @@ object Day10 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         return lines.map { findIllegalCharacter(it).second }.mapNotNull {
             when (it) {
                 ')' -> 3L
@@ -56,7 +57,8 @@ object Day10 {
         return Pair(stack, null)
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val results = lines.map { findIllegalCharacter(it) }
             .filter { it.second == null }
             .map { score(it.first) }

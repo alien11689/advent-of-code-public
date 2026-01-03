@@ -57,7 +57,8 @@ object Day04 {
         }
     }
 
-    private fun part1(input: Input): Int {
+    @JvmStatic
+    fun part1(input: Input): Int {
         val extendedBoards = input.boards.map { it.toExtendedBoard() }
         for (n in input.numbers) {
             for (b in extendedBoards) {
@@ -70,7 +71,8 @@ object Day04 {
         return -1
     }
 
-    private fun part2(input: Input): Int {
+    @JvmStatic
+    fun part2(input: Input): Int {
         val extendedBoards = input.boards.map { it.toExtendedBoard() }
         val winningBoards = mutableListOf<ExtendedBoard>()
         for (n in input.numbers) {
@@ -90,7 +92,8 @@ object Day04 {
         return -1
     }
 
-    private fun readInput(lines: List<String>): Input {
+    @JvmStatic
+    fun readInput(lines: List<String>): Input {
         var numbers = emptyList<Int>()
         val boards = mutableListOf<Board>()
         var board = mutableListOf<List<Int>>()

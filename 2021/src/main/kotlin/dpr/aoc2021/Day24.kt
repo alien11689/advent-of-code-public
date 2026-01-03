@@ -13,7 +13,8 @@ object Day24 {
         println(part2())
     }
 
-    private fun part1(): Any {
+    @JvmStatic
+    fun part1(): String {
 //        val instructions = lines.map { Instruction(it.split(' ')) }
         val res = (1..14).map { 0 }.toMutableList()
         val usedInstructions = mutableSetOf<Int>()
@@ -41,7 +42,12 @@ object Day24 {
 //        return -1
     }
 
-    private fun findMatching(res: MutableList<Int>, p: Pair<Int, Int>, instructionList: List<List<Int>>, digitPrecedence: IntProgression) {
+    private fun findMatching(
+        res: MutableList<Int>,
+        p: Pair<Int, Int>,
+        instructionList: List<List<Int>>,
+        digitPrecedence: IntProgression
+    ) {
         for (i in digitPrecedence) {
             for (j in digitPrecedence) {
                 res[p.first] = i
@@ -146,14 +152,19 @@ object Day24 {
         return res.reversed()
     }
 
-    private fun part2(): Any {
+    @JvmStatic
+    fun part2(): String {
         val res = (1..14).map { 0 }.toMutableList()
         val usedInstructions = mutableSetOf<Int>()
         val digitPrecedence = 1..9
         return process(usedInstructions, res, digitPrecedence)
     }
 
-    private fun process(usedInstructions: MutableSet<Int>, res: MutableList<Int>, digitPrecedence: IntProgression): String {
+    private fun process(
+        usedInstructions: MutableSet<Int>,
+        res: MutableList<Int>,
+        digitPrecedence: IntProgression
+    ): String {
         val stackPars = buildStackPairs(vars)
         stackPars.forEach { p ->
             usedInstructions.addAll(p.toList())

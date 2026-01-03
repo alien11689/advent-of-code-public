@@ -12,7 +12,8 @@ object Day05 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val m = mutableMapOf<Pair<Int, Int>, Int>()
         lines.map { line -> line.split(' ', '>', ',', '-').filter { it.isNotEmpty() }.map { it.toInt() } }
             .filter { it[0] == it[2] || it[1] == it[3] }
@@ -27,7 +28,8 @@ object Day05 {
         return m.values.count { it > 1 }
     }
 
-    private fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val m = mutableMapOf<Pair<Int, Int>, Int>()
         val coords = lines.map { line -> line.split(' ', '>', ',', '-').filter { it.isNotEmpty() }.map { it.toInt() } }
         coords.forEach {

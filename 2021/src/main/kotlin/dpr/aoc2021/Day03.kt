@@ -10,7 +10,8 @@ object Day03 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         var gamma = ""
         var epsilon = ""
         for (i in lines[0].indices) {
@@ -27,7 +28,8 @@ object Day03 {
         return Integer.parseInt(gamma, 2) * Integer.parseInt(epsilon, 2)
     }
 
-    private fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val oxygen = procesInput2(lines) { ones, zeros -> ones >= zeros }
         val co2 = procesInput2(lines) { ones, zeros -> ones < zeros }
         return Integer.parseInt(oxygen, 2) * Integer.parseInt(co2, 2)

@@ -29,7 +29,8 @@ object Day16 {
         Pair('F', "1111")
     )
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val message = lines.first().map { mapping[it]!! }.joinToString("")
 //        println("Message: $message")
         val result = readPackage(message, 0).second
@@ -88,7 +89,12 @@ object Day16 {
         }
     }
 
-    data class Package(val version: Int, val type: Int, val literal: Long? = null, val subPackages: List<Package> = emptyList()) {
+    data class Package(
+        val version: Int,
+        val type: Int,
+        val literal: Long? = null,
+        val subPackages: List<Package> = emptyList()
+    ) {
         fun sumVersions(): Int {
             return version + subPackages.sumOf { it.sumVersions() }
         }
@@ -108,7 +114,8 @@ object Day16 {
         }
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val message = lines.first().map { mapping[it]!! }.joinToString("")
         val result = readPackage(message, 0).second
         return result.doMath()

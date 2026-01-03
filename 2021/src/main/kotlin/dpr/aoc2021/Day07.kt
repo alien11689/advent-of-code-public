@@ -11,7 +11,8 @@ object Day07 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Long {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val positions = lines[0].split(",").map { it.toInt() }
         var minFuel = positions.maxOrNull()!!.toLong() * positions.size
         for (i in positions.minOrNull()!!..positions.maxOrNull()!!) {
@@ -24,7 +25,8 @@ object Day07 {
         return minFuel
     }
 
-    private fun part2(lines: List<String>): Long {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val positions = lines[0].split(",").map { it.toInt() }
         var minFuel: Long? = null
         for (i in positions.minOrNull()!!..positions.maxOrNull()!!) {

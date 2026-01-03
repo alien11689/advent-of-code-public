@@ -11,7 +11,8 @@ object Day18 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val result = lines.map { line -> readSnumber(line) }
             .reduce { first, second ->
                 val mm = add(first.toMutableList(), second.toMutableList())
@@ -79,7 +80,8 @@ object Day18 {
         return snumbers
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val nums = lines.map { line -> readSnumber(line).toList() }
 
         var maxMagnitude = 0L
@@ -190,7 +192,15 @@ object Day18 {
 //                    printExpr(snumbers)
 //                    println("Split $cur")
                     snumbers.removeAt(i)
-                    snumbers.addAll(i, listOf(Snumber.LeftParent, Snumber.Num(cur.n / 2), Snumber.Num((cur.n + 1) / 2), Snumber.RightParent))
+                    snumbers.addAll(
+                        i,
+                        listOf(
+                            Snumber.LeftParent,
+                            Snumber.Num(cur.n / 2),
+                            Snumber.Num((cur.n + 1) / 2),
+                            Snumber.RightParent
+                        )
+                    )
                     return
                 }
             }

@@ -11,7 +11,8 @@ object Day23 {
         println(part1And2(Util.getNotEmptyLinesFromFile("/23/input_2.txt")))
     }
 
-    private fun part1And2(lines: List<String>): Any {
+    @JvmStatic
+    fun part1And2(lines: List<String>): Int {
         val (state, openSpace) = readInput(lines)
         return processInput(state, openSpace)
     }
@@ -58,13 +59,20 @@ object Day23 {
                             curPos = curPos.down()
                         }
                         val newAmipod = amipod.copy(pos = curPos)
-                        pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, moves), cur.path + newAmipod))
+                        pq.offer(
+                            State(
+                                cur.amipods - amipod + newAmipod,
+                                cur.score + scoreFor(amipod.name, moves),
+                                cur.path + newAmipod
+                            )
+                        )
                     }
                 } else {
                     if (amipod.moved) {
                         continue
                     }
-                    if (cur.amipods.filter { it.pos.x == amipod.pos.x }.map { it.name }.toSet() == State.FULL_DEST[amipod.name]!!) {
+                    if (cur.amipods.filter { it.pos.x == amipod.pos.x }.map { it.name }
+                            .toSet() == State.FULL_DEST[amipod.name]!!) {
                         continue
                     }
                     var pos = amipod.pos
@@ -82,7 +90,13 @@ object Day23 {
                         while (left in openSpace && left !in takenPos) {
                             if (left.down() !in openSpace) {
                                 val newAmipod = amipod.copy(moved = true, pos = left)
-                                pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, movesV + movesH), cur.path + newAmipod))
+                                pq.offer(
+                                    State(
+                                        cur.amipods - amipod + newAmipod,
+                                        cur.score + scoreFor(amipod.name, movesV + movesH),
+                                        cur.path + newAmipod
+                                    )
+                                )
                             }
                             left = left.left()
                             movesH += 1
@@ -92,7 +106,13 @@ object Day23 {
                         while (right in openSpace && right !in takenPos) {
                             if (right.down() !in openSpace) {
                                 val newAmipod = amipod.copy(moved = true, pos = right)
-                                pq.offer(State(cur.amipods - amipod + newAmipod, cur.score + scoreFor(amipod.name, movesV + movesH), cur.path + newAmipod))
+                                pq.offer(
+                                    State(
+                                        cur.amipods - amipod + newAmipod,
+                                        cur.score + scoreFor(amipod.name, movesV + movesH),
+                                        cur.path + newAmipod
+                                    )
+                                )
                             }
                             right = right.right()
                             movesH += 1
@@ -136,7 +156,8 @@ object Day23 {
         return Pair(State(amipods, 0), openSpace.toSet())
     }
 
-    data class State(val amipods: Set<Amipod>, val score: Int, val path: List<Amipod> = emptyList()) : Comparable<State> {
+    data class State(val amipods: Set<Amipod>, val score: Int, val path: List<Amipod> = emptyList()) :
+        Comparable<State> {
         override fun compareTo(other: State): Int {
             return score.compareTo(other.score)
         }

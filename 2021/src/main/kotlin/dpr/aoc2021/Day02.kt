@@ -10,7 +10,8 @@ object Day02 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val horizontalAndDepth = lines.fold(Pair(0, 0)) { acc, cur ->
             val parts = cur.split(" ")
             val value = parts[1].toInt()
@@ -24,7 +25,8 @@ object Day02 {
         return horizontalAndDepth.first * horizontalAndDepth.second
     }
 
-    private fun part2(lines: List<String>): Long {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val horizontalAndDepth = lines.fold(Triple(0L, 0L, 0L)) { acc, cur ->
             val parts = cur.split(" ")
             val value = parts[1].toInt()

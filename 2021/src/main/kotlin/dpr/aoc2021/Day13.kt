@@ -11,7 +11,8 @@ object Day13 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val (instructions, paper) = readInput(lines)
         val newPaper = fold(paper, instructions.first())
         return newPaper.size
@@ -41,7 +42,8 @@ object Day13 {
 
     data class Fold(val axis: String, val idx: Int)
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): String {
         val (instructions, paper) = readInput(lines)
 
         val newPaper = instructions.fold(paper.toSet()) { acc, it -> fold(acc, it) }

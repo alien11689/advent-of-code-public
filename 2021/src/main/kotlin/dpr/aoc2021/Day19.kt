@@ -1,7 +1,7 @@
 package dpr.aoc2021
 
 import dpr.commons.Util
-import java.util.*
+import java.util.Stack
 import kotlin.math.absoluteValue
 
 object Day19 {
@@ -11,7 +11,8 @@ object Day19 {
         part1And2(lines).forEach(::println)
     }
 
-    private fun part1And2(lines: List<String>): List<Int> {
+    @JvmStatic
+    fun part1And2(lines: List<String>): List<Int> {
         val fullResult = mutableListOf<Int>()
 
         val scanners = readScanners(lines)
@@ -29,12 +30,14 @@ object Day19 {
                     val countOverlappingKeys = commonDistances.count()
                     if (countOverlappingKeys > 0) {
 //                        println("Scanner ${i} and ${j} have $countOverlappingKeys overlapping distances")
-                        val commonBeacons1 = m1.filter { it.key in commonDistances }.map { it.value }.flatten().flatten().toSet()
+                        val commonBeacons1 =
+                            m1.filter { it.key in commonDistances }.map { it.value }.flatten().flatten().toSet()
 //                        val commonBeacons2 = m1.filter { it.key in commonDistances }.map { it.value }.flatten().flatten().toSet()
 //                        println("Common beacons count is ${commonBeacons1.size}")
 //                        println("Common beacons is ${commonBeacons1}")
                         for (cb in commonBeacons1) {
-                            val x = m1.filter { it.key in commonDistances }.filter { (_, value) -> value.count { it.contains(cb) } > 0 }
+                            val x = m1.filter { it.key in commonDistances }
+                                .filter { (_, value) -> value.count { it.contains(cb) } > 0 }
                             val two = x.toList().take(2).toMap()
                             val matchingInSecond = m2.filter { it.key in two.keys }.map { it.value }.flatten().flatten()
                                 .groupBy { it }.maxByOrNull { it.value.count() }!!.key
@@ -109,12 +112,16 @@ object Day19 {
                 if (onlyFromJ.size != 2) {
                     continue
                 }
-                val zeroExpectedVector = onlyFrom0.map { it.second }.reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
+                val zeroExpectedVector = onlyFrom0.map { it.second }
+                    .reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
                 val rotations1 = onlyFromJ[0].second.allRotations()
                 val rotations2 = onlyFromJ[1].second.allRotations()
                 for (rotationId in rotations1.indices) {
                     val vector =
-                        listOf(rotations1[rotationId], rotations2[rotationId]).reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
+                        listOf(
+                            rotations1[rotationId],
+                            rotations2[rotationId]
+                        ).reduce { acc, cur -> Beacon(acc.x - cur.x, acc.y - cur.y, acc.z - cur.z) }
                     if (vector == zeroExpectedVector) {
 //                        println("Rotation $rotationId matches")
 //                        println("${rotations1[rotationId]}")

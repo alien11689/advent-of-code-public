@@ -10,7 +10,8 @@ object Day20 {
         println(part1And2(lines, 50))
     }
 
-    private fun part1And2(lines: List<String>, iterations: Int): Any {
+    @JvmStatic
+    fun part1And2(lines: List<String>, iterations: Int): Int {
         val imageAlgoritm = lines.first()
         val image = lines.drop(1).map { it.toList() }
         var newImage = image
@@ -40,8 +41,9 @@ object Day20 {
                     Pair(i, j - 1), Pair(i, j), Pair(i, j + 1),
                     Pair(i + 1, j - 1), Pair(i + 1, j), Pair(i + 1, j + 1),
                 )
-                val num = m.map { p -> if (p.first in indicesI && p.second in indicesJ) image[p.first][p.second] else defFill }
-                    .map { if (it == '#') 1 else 0 }
+                val num =
+                    m.map { p -> if (p.first in indicesI && p.second in indicesJ) image[p.first][p.second] else defFill }
+                        .map { if (it == '#') 1 else 0 }
                 val idx = Integer.parseInt(num.joinToString(""), 2)
                 line.add(imageAlgoritm[idx])
             }

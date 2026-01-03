@@ -9,10 +9,11 @@ object Day14 {
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/14/input.txt")
         println(part1(lines))
-        println(part2b(lines))
+        println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         var template = lines.first().toList()
         val mm = parseReactions(lines)
         for (i in 1..10) {
@@ -46,70 +47,8 @@ object Day14 {
 
     data class Instr(val pattern: Pair<Char, Char>, val insert: Char)
 
-//    private fun part2(lines: List<String>): Any {
-//        var template = lines.first().toList()
-//        val mm = HashMap<Pair<Char, Char>, Char>()
-//        val instructions = lines.subList(1, lines.size)
-//            .map { it.split(" -> ") }
-//            .map { Instr(Pair(it[0][0], it[0][1]), it[1][0]) }
-//            .forEach {
-//                mm[it.pattern] = it.insert
-//            }
-//        mm.toList().sortedBy { it.first.first }.forEach(::println)
-//        // ((B, H), B)
-//        // ((F, C), F)
-//        // ((H, B), H)
-//        val root = Node(template.first(), null)
-//        template.subList(1, template.size).fold(root) { acc, c ->
-//            val node = Node(c, null, acc)
-//            acc.next = node
-//            node
-//        }
-////        println(first)
-//        val countsInit = mutableMapOf<Char, Long>()
-//        for (i in 1..40) {
-//            println("Step $i")
-//            var cur = root
-//            var iter = 0
-//            while (cur.next != null) {
-////                println(++iter)
-//                val next = cur.next!!
-//                val k = Pair(cur.c, cur.next!!.c)
-//                if (k in mm) {
-//                    val insert = mm[k]!!
-////                    if (cur.c == insert && cur.prev != null && cur.prev!!.c != insert) {
-////                        countsInit[insert] = (countsInit[insert] ?: 0L) + 1
-////                    } else {
-//                        val node = Node(insert, cur.next, cur)
-//                        cur.next!!.prev = node
-//                        cur.next = node
-////                    }
-//                }else{
-//                    println("Unused $k")
-//                }
-//                cur = next
-//            }
-////            var tmp: Node? = root
-////            val res = mutableMapOf<Char, Long>()
-////            while (tmp != null) {
-////                res[tmp.c] = (res[tmp.c] ?: 0L) + 1
-////                tmp = tmp.next
-////            }
-////            println(res)
-////            println(res.values.maxOrNull()!! - res.values.minOrNull()!!)
-//        }
-////        println(countsInit)
-//        var cur: Node? = root
-//        while (cur != null) {
-//            countsInit[cur.c] = (countsInit[cur.c] ?: 0L) + 1
-//            cur = cur.next
-//        }
-//        return countsInit.values.maxOrNull()!! - countsInit.values.minOrNull()!!
-//    }
-//
-//    data class Node(val c: Char, var next: Node?, var prev: Node? = null)
-
-    private fun part2b(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): BigInteger {
         val template = lines.first().toList()
         val mm = parseReactions(lines)
         var memory = mutableMapOf<Pair<Char, Char>, BigInteger>()

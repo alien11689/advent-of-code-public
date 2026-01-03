@@ -12,7 +12,8 @@ object Day09 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val numbers = lines.map { line -> line.map { it.toString().toInt() } }
         var risks = 0
         for (y in numbers.indices) {
@@ -29,7 +30,8 @@ object Day09 {
         return risks
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val numbers = lines.map { line -> line.map { it.toString().toInt() } }
         val basins = mutableSetOf<MutableSet<Point>>()
         for (y in numbers.indices) {

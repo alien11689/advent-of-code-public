@@ -10,12 +10,14 @@ object Day08 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         return lines.flatMap { it.split(" | ")[1].split(" ") }
             .count { it.length in setOf(2, 3, 4, 7) }
     }
 
-    private fun part2(lines: List<String>): Long {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         return lines.map { it.split(" | ") }.sumOf { deduceNumber(it[0].split(" "), it[1].split(" ")) }
     }
 

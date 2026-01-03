@@ -12,7 +12,8 @@ object Day15 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val numbers = lines.map { line -> line.map { it.toString().toInt() } }
         val init = Pos(0, 0)
         val pq = PriorityQueue<Path>()
@@ -57,7 +58,8 @@ object Day15 {
         )
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val board = Board(lines.map { line -> line.map { it.toString().toInt() } })
         val init = Pos(0, 0)
         val pq = PriorityQueue<Path>()

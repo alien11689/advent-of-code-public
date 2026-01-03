@@ -10,14 +10,11 @@ object Day21 {
         println(part2())
     }
 
-    private fun part1(): Any {
-        // example
-//        val player1 = Player(1, 3, 0) // one less pos
-//        val player2 = Player(2, 7, 0) // one less pos
-        // my
-        val player1 = Player(1, 2, 0) // one less pos
-        val player2 = Player(2, 6, 0) // one less pos
-
+    @JvmStatic
+    fun part1(
+        player1: Player = Player(1, 2, 0),
+        player2: Player = Player(2, 6, 0)
+    ): Long {
         val deterministicDice = DeterministicDie()
         while (player1.score < 1000 || player2.score < 1000) {
             val rolls1 = listOf(deterministicDice.roll(), deterministicDice.roll(), deterministicDice.roll()).sum()
@@ -54,14 +51,11 @@ object Day21 {
         }
     }
 
-    private fun part2(): Any {
-// example
-//        val player1 = PlayerV2(1, 3, 0) // one less pos
-//        val player2 = PlayerV2(2, 7, 0) // one less pos
-        // my
-        val player1 = PlayerV2(1, 2, 0) // one less pos
-        val player2 = PlayerV2(2, 6, 0) // one less pos
-
+    @JvmStatic
+    fun part2(
+        player1: PlayerV2 = PlayerV2(1, 2, 0),
+        player2: PlayerV2 = PlayerV2(2, 6, 0)
+    ): Long {
         val wins = mutableMapOf(1 to 0L, 2 to 0L)
         val finalScore = 21
         val stack = Stack<Pair<PlayerV2, PlayerV2>>()

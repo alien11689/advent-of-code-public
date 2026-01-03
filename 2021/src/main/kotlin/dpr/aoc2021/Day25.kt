@@ -10,7 +10,8 @@ object Day25 {
         println(part1(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         var map = readInput(lines)
         val ySize = lines.size
         val xSize = lines[0].length

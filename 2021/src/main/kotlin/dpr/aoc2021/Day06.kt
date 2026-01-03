@@ -6,11 +6,12 @@ object Day06 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getLinesFromFile("/06/input.txt")
-        println(calculate(lines, 80))
-        println(calculate(lines, 256))
+        println(part1And2(lines, 80))
+        println(part1And2(lines, 256))
     }
 
-    private fun calculate(lines: List<String>, iter: Int): Long {
+    @JvmStatic
+    fun part1And2(lines: List<String>, iter: Int): Long {
         var m = mutableMapOf<Int, Long>()
         lines[0].split(",").map { it.toInt() }.forEach {
             m[it] = (m[it] ?: 0) + 1
