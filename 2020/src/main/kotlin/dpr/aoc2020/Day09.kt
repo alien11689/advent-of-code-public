@@ -13,10 +13,10 @@ object Day09 {
     }
 
     @JvmStatic
-    fun part1(input: List<Long>): Long {
-        var i = 25
+    fun part1(input: List<Long>, previous: Int = 25): Long {
+        var i = previous
         while (i < input.size) {
-            val nums: List<Long> = input.subList(i - 25, i).sorted()
+            val nums: List<Long> = input.subList(i - previous, i).sorted()
             val expected = input[i]
             var j = 0
             val checked = mutableSetOf<Long>()
