@@ -58,7 +58,8 @@ object Day23 {
         private fun west() = copy(x = x - 1)
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         var elves = parseElves(lines)
         val directions = listOf(Dir.N, Dir.S, Dir.W, Dir.E, Dir.N, Dir.S, Dir.W, Dir.E)
         repeat(10) { round ->
@@ -86,7 +87,8 @@ object Day23 {
         line.mapIndexed { x, cur -> if (cur == '#') Elf(x, y) else null }.filterNotNull()
     }.toSet()
 
-    @JvmStatic fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         var elves = parseElves(lines)
         val directions = listOf(Dir.N, Dir.S, Dir.W, Dir.E, Dir.N, Dir.S, Dir.W, Dir.E)
         var round = 0

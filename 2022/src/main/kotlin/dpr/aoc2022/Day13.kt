@@ -11,7 +11,8 @@ object Day13 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val pairs = parseExpressions(lines).chunked(2)
         return pairs.mapIndexed { i, pair ->
             if (pair.first() <= pair.last()) {
@@ -75,7 +76,8 @@ object Day13 {
         throw RuntimeException("Unfinished")
     }
 
-    @JvmStatic fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val firstPivot = Expr.L(listOf(Expr.L(listOf(Expr.V(2)))))
         val secondPivot = Expr.L(listOf(Expr.L(listOf(Expr.V(6)))))
         val expressions = parseExpressions(lines) + listOf(firstPivot, secondPivot)

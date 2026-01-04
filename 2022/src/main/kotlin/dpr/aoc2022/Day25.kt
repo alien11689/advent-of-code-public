@@ -9,7 +9,8 @@ object Day25 {
         println(part1(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): String {
+    @JvmStatic
+    fun part1(lines: List<String>): String {
         return convertToSnafu(readInput(lines))
     }
 

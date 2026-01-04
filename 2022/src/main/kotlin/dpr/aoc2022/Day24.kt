@@ -11,7 +11,8 @@ object Day24 {
         part1And2(lines).forEach { println(it) }
     }
 
-    @JvmStatic fun part1And2(lines: List<String>): List<Int> {
+    @JvmStatic
+    fun part1And2(lines: List<String>): List<Int> {
         val board = parseBoard(lines)
         val minY = board.minOf { it.key.y }
         val maxY = board.maxOf { it.key.y }
@@ -41,7 +42,14 @@ object Day24 {
         EMPTY
     }
 
-    private fun traverse(initTime: Int, start: Point, target: Point, boards: MutableMap<Int, Map<Point, List<Wind>>>, xRange: IntRange, yRange: IntRange): Int {
+    private fun traverse(
+        initTime: Int,
+        start: Point,
+        target: Point,
+        boards: MutableMap<Int, Map<Point, List<Wind>>>,
+        xRange: IntRange,
+        yRange: IntRange
+    ): Int {
         val visited = mutableSetOf<State>()
         val pq = PriorityQueue<State>()
         pq.offer(State(start, initTime, start.manhattan(target)))
@@ -61,7 +69,11 @@ object Day24 {
                 .filter { it.y in yRange }
                 .forEach { nextPoint ->
                     if (nextPoint !in newBoard) {
-                        val nextState = cur.copy(curPos = nextPoint, time = nextTime, distanceToTarget = nextPoint.manhattan(target))
+                        val nextState = cur.copy(
+                            curPos = nextPoint,
+                            time = nextTime,
+                            distanceToTarget = nextPoint.manhattan(target)
+                        )
                         if (nextState.curPos == target) {
                             return nextTime
                         }
@@ -72,7 +84,11 @@ object Day24 {
         return Int.MIN_VALUE
     }
 
-    private fun generateNextBoard(current: Map<Point, List<Wind>>, xRange: IntRange, yRange: IntRange): Map<Point, List<Wind>> {
+    private fun generateNextBoard(
+        current: Map<Point, List<Wind>>,
+        xRange: IntRange,
+        yRange: IntRange
+    ): Map<Point, List<Wind>> {
         val board = mutableMapOf<Point, List<Wind>>()
         val minY = yRange.min()
         val maxY = yRange.max()
@@ -84,10 +100,18 @@ object Day24 {
             } else {
                 winds.forEach { curWind ->
                     val next = when (curWind) {
-                        Wind.LEFT -> point.copy(x = point.x - 1).let { if (it.x != minX) it else point.copy(x = maxX - 1) }
-                        Wind.RIGHT -> point.copy(x = point.x + 1).let { if (it.x != maxX) it else point.copy(x = minX + 1) }
-                        Wind.UP -> point.copy(y = point.y - 1).let { if (it.y != minY) it else point.copy(y = maxY - 1) }
-                        Wind.DOWN -> point.copy(y = point.y + 1).let { if (it.y != maxY) it else point.copy(y = minY + 1) }
+                        Wind.LEFT -> point.copy(x = point.x - 1)
+                            .let { if (it.x != minX) it else point.copy(x = maxX - 1) }
+
+                        Wind.RIGHT -> point.copy(x = point.x + 1)
+                            .let { if (it.x != maxX) it else point.copy(x = minX + 1) }
+
+                        Wind.UP -> point.copy(y = point.y - 1)
+                            .let { if (it.y != minY) it else point.copy(y = maxY - 1) }
+
+                        Wind.DOWN -> point.copy(y = point.y + 1)
+                            .let { if (it.y != maxY) it else point.copy(y = minY + 1) }
+
                         else -> throw RuntimeException("Unknown wind $curWind")
                     }
                     board[next] = (board[next] ?: emptyList()) + curWind

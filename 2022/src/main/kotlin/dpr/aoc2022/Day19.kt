@@ -11,7 +11,8 @@ object Day19 {
         println(part2(lines))
     }
 
-    data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) : Comparable<State> {
+    data class State(val time: Int, val materials: Map<Material, Int>, val robots: Map<Material, Int>) :
+        Comparable<State> {
         val geodeCount = materials[Material.GEODE] ?: 0
 
         override fun compareTo(other: State): Int = if (other.possibleGeodes == possibleGeodes)
@@ -22,7 +23,8 @@ object Day19 {
         else other.possibleGeodes.compareTo(possibleGeodes)
 
         fun nexts(robotCosts: Map<Material, Map<Material, Int>>): List<State> {
-            if (time <= 1 && (robots[Material.GEODE] ?: 0) == 0 // you have to have at least one geode factory in last turn
+            if (time <= 1 && (robots[Material.GEODE]
+                    ?: 0) == 0 // you have to have at least one geode factory in last turn
                 // min geode factory cost is 7 so you need to have ready at least 1 obsidian factory
                 // 7 turn obs: 0, obsrobot: 0
                 // 6 turn obs: 0, obsrobot: 1
@@ -106,7 +108,9 @@ object Day19 {
                 cur.nexts(robotCosts).forEach {
                     if (it.possibleGeodes <= geodeMax) {
                         // skip worse
-                    } else if ((it.robots[Material.ORE] ?: 0) > 4 || (it.robots[Material.CLAY] ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8) {
+                    } else if ((it.robots[Material.ORE] ?: 0) > 4 || (it.robots[Material.CLAY]
+                            ?: 0) > 12 || (it.robots[Material.OBSIDIAN] ?: 0) > 8
+                    ) {
                         // it's ugly hack but works - maybe get rid of it in the future
                     } else if (it.time == 0) {
                         if (geodeMax < it.geodeCount) {
@@ -135,7 +139,8 @@ object Day19 {
         GEODE
     }
 
-    @JvmStatic fun part1(lines: List<String>): Long {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val blueprints = parseBlueprints(lines)
         return blueprints.parallelStream().map { it.id * it.findMostGeode(24) }.reduce { acc, it -> acc + it }.get()
     }
@@ -153,7 +158,8 @@ object Day19 {
         }
     }
 
-    @JvmStatic fun part2(lines: List<String>): Long {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val blueprints = parseBlueprints(lines).take(3)
         return blueprints.parallelStream().map { it.findMostGeode(32) }.reduce { acc, cur -> acc * cur }.get()
     }

@@ -11,7 +11,8 @@ object Day14 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val points = readPoints(lines)
         //printlnBoard(points)
         val maxY = points.maxOfOrNull { it.y }!!
@@ -41,7 +42,8 @@ object Day14 {
         return seen
     }
 
-    @JvmStatic fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val points = readPoints(lines)
 //        printlnBoard(points)
         val maxY = points.maxOf { it.y } + 2

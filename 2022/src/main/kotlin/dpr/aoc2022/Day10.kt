@@ -10,7 +10,8 @@ object Day10 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Long {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val values = getCyclesValues(lines)
         val pivotalIndexes = setOf(20, 60, 100, 140, 180, 220)
         return values.filter { it.key in pivotalIndexes }
@@ -39,7 +40,8 @@ object Day10 {
         return values
     }
 
-    @JvmStatic fun part2(lines: List<String>): String {
+    @JvmStatic
+    fun part2(lines: List<String>): String {
         val cyclesValues = getCyclesValues(lines)
         val sb = StringBuilder()
         repeat(240) { i ->

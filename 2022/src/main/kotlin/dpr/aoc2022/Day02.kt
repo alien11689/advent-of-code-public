@@ -10,7 +10,8 @@ object Day02 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         return lines.sumOf {
             val (e, m) = it.split(" ")
             val enemy = interpretEnemy(e)
@@ -43,7 +44,8 @@ object Day02 {
         ROCK(1), PAPER(2), SCISSORS(3),
     }
 
-    @JvmStatic fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         return lines.sumOf {
             val (e, m) = it.split(" ")
             val enemy = interpretEnemy(e)

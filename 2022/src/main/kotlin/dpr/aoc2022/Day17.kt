@@ -28,7 +28,8 @@ object Day17 {
         fun down(): Brick = copy(elems = elems.map { it.copy(y = it.y - 1) })
     }
 
-    @JvmStatic fun part1And2(lines: List<String>, limit: Long, print: Boolean = false): Long {
+    @JvmStatic
+    fun part1And2(lines: List<String>, limit: Long, print: Boolean = false): Long {
         val moves = parseMoves(lines)
         val board = mutableMapOf<Point, Pair<Int, Long>>() // point to (brickIdx to turn)
         repeat(7) { board[Point(it, 0)] = 9 to -1 }
@@ -37,7 +38,8 @@ object Day17 {
         var turn = 0L
         val turns = mutableMapOf<Long, Pair<Long, Int>>() // turn to (tall to move)
         var maskBoost: Long = 0
-        val possibleMasks = mutableMapOf<Map<Point, Int>, Pair<Long, Long>>() // mask to (firstSeenMask, tallAtFirstSeenMask)
+        val possibleMasks =
+            mutableMapOf<Map<Point, Int>, Pair<Long, Long>>() // mask to (firstSeenMask, tallAtFirstSeenMask)
         var maskUsed = false
         while (turn < limit) {
             val brickIdx = (turn % bricks.size).toInt()
@@ -54,7 +56,8 @@ object Day17 {
                 if (board.filter { it.key.y in ys }.all { it.value.second in turnsToCheck }) {
                     val firstSeenMask = turn - 5
                     val tallAtFirstSeenMask = turns[turn - 6]!!.first
-                    val mask = possibleMask.map { it.key.copy(y = it.key.y - tallAtFirstSeenMask) to it.value.first }.toMap()
+                    val mask =
+                        possibleMask.map { it.key.copy(y = it.key.y - tallAtFirstSeenMask) to it.value.first }.toMap()
                     possibleMasks[mask] = firstSeenMask to tallAtFirstSeenMask
 //                    println("Found possible mask: $possibleMask being in $firstSeenMask")
                 }

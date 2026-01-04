@@ -11,7 +11,8 @@ object Day05 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): String {
+    @JvmStatic
+    fun part1(lines: List<String>): String {
         val stacks = initStacks()
         lines.filter { it.startsWith("move") }
             .forEach {
@@ -26,7 +27,8 @@ object Day05 {
         return stacks.map { it.peek() }.joinToString("")
     }
 
-    @JvmStatic fun part2(lines: List<String>): String {
+    @JvmStatic
+    fun part2(lines: List<String>): String {
         val stacks = initStacks()
         lines.filter { it.startsWith("move") }
             .forEach {

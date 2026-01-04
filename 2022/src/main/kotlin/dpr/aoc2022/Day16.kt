@@ -38,7 +38,11 @@ object Day16 {
         }.toMap()
     }
 
-    private fun findShortestTransitionsToAll(origin: String, interesting: Set<String>, transitions: Map<String, List<String>>): Map<String, Int> {
+    private fun findShortestTransitionsToAll(
+        origin: String,
+        interesting: Set<String>,
+        transitions: Map<String, List<String>>
+    ): Map<String, Int> {
         val pq = PriorityQueue<List<String>> { o1, o2 ->
             o1.size.compareTo(o2.size)
         }
@@ -61,7 +65,8 @@ object Day16 {
         return found
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val (valves, transitions) = parseInput(lines)
         val startRoom = "AA"
         val realTransitions = findRealTransitions(startRoom, valves, transitions)
@@ -70,7 +75,8 @@ object Day16 {
         //return findMaxPresure(startRoom, valves, realTransitions)
     }
 
-    @JvmStatic fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val (valves, transitions) = parseInput(lines)
         val startRoom = "AA"
         val realTransitions = findRealTransitions(startRoom, valves, transitions)
@@ -108,7 +114,12 @@ object Day16 {
         return Pair(valves, transitions)
     }
 
-    private fun findPaths(startRoom: String, time: Int, valves: Map<String, Int>, realTransitions: Map<Set<String>, Int>): Map<List<String>, Int> {
+    private fun findPaths(
+        startRoom: String,
+        time: Int,
+        valves: Map<String, Int>,
+        realTransitions: Map<Set<String>, Int>
+    ): Map<List<String>, Int> {
         val options = mutableMapOf<List<String>, Int>()
         val pq = PriorityQueue<State>()
         pq.offer(State(listOf(startRoom), time, valves))
@@ -122,7 +133,8 @@ object Day16 {
         return options
     }
 
-    data class State(val path: List<String>, val time: Int, val notOpenValves: Map<String, Int>, val presure: Int = 0) : Comparable<State> {
+    data class State(val path: List<String>, val time: Int, val notOpenValves: Map<String, Int>, val presure: Int = 0) :
+        Comparable<State> {
         fun nexts(transitions: Map<Set<String>, Int>): List<State> {
             val options = mutableListOf<State>()
             notOpenValves.forEach {
@@ -131,7 +143,14 @@ object Day16 {
                 val price = transitions[setOf(path.last(), target)]!!
                 if (price < time) {
                     val newTime = time - price
-                    options.add(copy(path = path + target, time = newTime, presure = presure + newTime * rate, notOpenValves = notOpenValves - target))
+                    options.add(
+                        copy(
+                            path = path + target,
+                            time = newTime,
+                            presure = presure + newTime * rate,
+                            notOpenValves = notOpenValves - target
+                        )
+                    )
                 }
             }
             return options

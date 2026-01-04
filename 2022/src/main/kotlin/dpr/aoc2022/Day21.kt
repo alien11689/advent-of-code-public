@@ -52,7 +52,8 @@ object Day21 {
         }
     }
 
-    @JvmStatic fun part1(lines: List<String>): Long {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val (values, monkeys) = parseInput(lines)
         calculateSimpleValues(monkeys, values)
         return values["root"]!!
@@ -73,7 +74,8 @@ object Day21 {
         return Pair(values, monkeys)
     }
 
-    @JvmStatic fun part2(lines: List<String>): Long {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val (values, monkeys) = parseInput(lines)
         values.remove("humn")
         val rootComparison: Pair<String, String> = monkeys["root"]!!.let { it.left to it.right }

@@ -12,7 +12,8 @@ object Day03 {
 
     private val priorities = ('a'..'z') + ('A'..'Z')
 
-    @JvmStatic fun part1(lines: List<String>): Long {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         return lines.sumOf { line ->
             val char = line.chunked(line.length / 2)
                 .map { it.toSet() }
@@ -22,7 +23,8 @@ object Day03 {
         }
     }
 
-    @JvmStatic fun part2(lines: List<String>): Long {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         return lines.chunked(3).sumOf { line ->
             val char = line.map { it.toSet() }
                 .reduce { a, b -> a.intersect(b) }

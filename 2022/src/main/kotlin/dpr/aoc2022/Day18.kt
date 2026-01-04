@@ -12,7 +12,8 @@ object Day18 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val points = readPoints(lines)
         val surface = points.flatMap { it.neighboursCross() - points }
         return surface.size
@@ -23,7 +24,8 @@ object Day18 {
         Point(x, y, z)
     }.toSet()
 
-    @JvmStatic fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val points = readPoints(lines)
         val surface = points.flatMap { it.neighboursCross() - points }
         val surfacePoints = surface.toSet()

@@ -10,7 +10,8 @@ object Day09 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val state = State(List(2) { Point(0, 0) })
         val tailVisited = traverse(state, lines)
         return tailVisited.size
@@ -53,7 +54,8 @@ object Day09 {
         )
     }
 
-    @JvmStatic fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val state = State(List(10) { Point(0, 0) })
         val tailVisited = traverse(state, lines)
         return tailVisited.size

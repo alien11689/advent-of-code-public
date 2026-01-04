@@ -10,14 +10,16 @@ object Day20 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Long {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val elements = processElements(parseInput(lines, 1L).toMutableMap())
         return calculateFinalScore(elements)
     }
 
     data class Elem(val v: Long, val origin: Long)
 
-    @JvmStatic fun part2(lines: List<String>): Long {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val encryptionKey = 811589153L
         val elements = parseInput(lines, encryptionKey).toMutableMap()
         repeat(10) {

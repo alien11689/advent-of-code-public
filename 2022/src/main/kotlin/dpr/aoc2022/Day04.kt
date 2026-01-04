@@ -10,14 +10,16 @@ object Day04 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         return lines.count { line ->
             val (range1, range2) = readRanges(line)
             if (range1.size > range2.size) range1.containsAll(range2) else range2.containsAll(range1)
         }
     }
 
-    @JvmStatic fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         return lines.count { line ->
             val (range1, range2) = readRanges(line)
             range1.intersect(range2).isNotEmpty()

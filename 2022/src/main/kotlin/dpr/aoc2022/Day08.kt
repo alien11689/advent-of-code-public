@@ -10,7 +10,8 @@ object Day08 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val grid = lines.map { line -> line.map { it.toString().toInt() } }
         var notVisible = 0
         for (i in grid.indices) {
@@ -38,7 +39,8 @@ object Day08 {
         return s1 && s2 && s3 && s4
     }
 
-    @JvmStatic fun part2(lines: List<String>): Long {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val grid = lines.map { line -> line.map { it.toString().toInt() } }
         var bestScore = 0L
         for (i in grid.indices) {

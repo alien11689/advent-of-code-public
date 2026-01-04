@@ -12,7 +12,8 @@ object Day12 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val points2 = readPoints(lines)
         val start = points2.filter { it.value == 'S' }.keys.first()
         val target = points2.filter { it.value == 'E' }.keys.first()
@@ -56,7 +57,8 @@ object Day12 {
         }
     }
 
-    @JvmStatic fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val points2 = readPoints(lines)
         val target = points2.filter { it.value == 'E' }.keys.first()
         val points = normalizePoints(points2)

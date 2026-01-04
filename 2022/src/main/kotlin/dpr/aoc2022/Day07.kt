@@ -21,7 +21,12 @@ object Day07 {
 
     }
 
-    data class Dir(override val name: String, val parent: Dir?, val children: MutableList<Element>, var size: Long = -1) : Element {
+    data class Dir(
+        override val name: String,
+        val parent: Dir?,
+        val children: MutableList<Element>,
+        var size: Long = -1
+    ) : Element {
         override fun toString(): String = "Dir($name, children=$children)"
 
         override fun calculateSize(): Long {
@@ -32,7 +37,8 @@ object Day07 {
         }
     }
 
-    @JvmStatic fun part1(lines: List<String>): Long {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val root = buildRoot(lines)
 
         var totalSize = 0L
@@ -87,7 +93,8 @@ object Day07 {
         return root
     }
 
-    @JvmStatic fun part2(lines: List<String>): Long {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val root = buildRoot(lines)
 
         val totalCapability = 70000000

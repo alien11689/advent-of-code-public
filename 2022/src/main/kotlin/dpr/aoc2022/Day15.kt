@@ -34,7 +34,8 @@ object Day15 {
         }
     }
 
-    @JvmStatic fun part1(lines: List<String>, interestingRow: Int): Int {
+    @JvmStatic
+    fun part1(lines: List<String>, interestingRow: Int): Int {
         val sensors2Beacon = readInput(lines)
         val beacons = sensors2Beacon.map { it.beacon }.toSet()
 
@@ -82,7 +83,8 @@ object Day15 {
         SensorBeacon(sensor, beacon, sensor.manhattan(beacon))
     }
 
-    @JvmStatic fun part2(lines: List<String>, maxCoord: Int): Long {
+    @JvmStatic
+    fun part2(lines: List<String>, maxCoord: Int): Long {
         val sensors2Beacon = readInput(lines).sortedByDescending { it.dist }
         repeat(maxCoord) { y ->
 //            println("Checking row $y")

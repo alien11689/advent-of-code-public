@@ -10,7 +10,8 @@ object Day11 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Long {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val monkeys = readMonkeys(lines).toMap()
         return multipleTwoBiggestInspected(monkeys, 20) { a -> a / 3 }
     }
@@ -60,13 +61,18 @@ object Day11 {
         return monkeys
     }
 
-    @JvmStatic fun part2(lines: List<String>): Long {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val monkeys = readMonkeys(lines).toMap()
         val base = monkeys.values.fold(1L) { acc, cur -> acc * cur.test }
         return multipleTwoBiggestInspected(monkeys, 10000) { a -> a % base }
     }
 
-    private fun multipleTwoBiggestInspected(monkeys: Map<Int, Monkey>, iterations: Int, magnitudeModifier: (Long) -> Long): Long {
+    private fun multipleTwoBiggestInspected(
+        monkeys: Map<Int, Monkey>,
+        iterations: Int,
+        magnitudeModifier: (Long) -> Long
+    ): Long {
         repeat(iterations) {
             monkeys.values.sortedBy { it.id }.forEach { monkey ->
                 monkey.play(monkeys, magnitudeModifier)

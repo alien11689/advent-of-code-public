@@ -10,11 +10,13 @@ object Day06 {
         println(part2(lines))
     }
 
-    @JvmStatic fun part1(lines: List<String>): Int {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         return getFirstIndexAfterDistinctSequence(lines, 4)
     }
 
-    @JvmStatic fun part2(lines: List<String>): Int {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         return getFirstIndexAfterDistinctSequence(lines, 14)
     }
 
