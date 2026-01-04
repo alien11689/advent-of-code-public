@@ -6,15 +6,11 @@ object Day11 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/11/input.txt")
-//        println("Part 1:")
-//        println(part1(Util.getNotEmptyLinesFromFile("/11/test1.txt")))
         println(part1(lines))
-//        println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/11/test1.txt")))
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): Long {
         val monkeys = readMonkeys(lines).toMap()
         return multipleTwoBiggestInspected(monkeys, 20) { a -> a / 3 }
     }
@@ -64,7 +60,7 @@ object Day11 {
         return monkeys
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): Long {
         val monkeys = readMonkeys(lines).toMap()
         val base = monkeys.values.fold(1L) { acc, cur -> acc * cur.test }
         return multipleTwoBiggestInspected(monkeys, 10000) { a -> a % base }

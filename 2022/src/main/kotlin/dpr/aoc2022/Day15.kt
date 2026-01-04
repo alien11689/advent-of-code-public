@@ -8,11 +8,7 @@ object Day15 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/15/input.txt")
-//        println("Part 1:")
-//        println(part1(Util.getNotEmptyLinesFromFile("/15/test1.txt"), 10))
         println(part1(lines, 2000000))
-//        println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/15/test1.txt"), 20))
         println(part2(lines, 4000000))
     }
 
@@ -38,7 +34,7 @@ object Day15 {
         }
     }
 
-    private fun part1(lines: List<String>, interestingRow: Int): Any {
+    @JvmStatic fun part1(lines: List<String>, interestingRow: Int): Int {
         val sensors2Beacon = readInput(lines)
         val beacons = sensors2Beacon.map { it.beacon }.toSet()
 
@@ -86,7 +82,7 @@ object Day15 {
         SensorBeacon(sensor, beacon, sensor.manhattan(beacon))
     }
 
-    private fun part2(lines: List<String>, maxCoord: Int): Any {
+    @JvmStatic fun part2(lines: List<String>, maxCoord: Int): Long {
         val sensors2Beacon = readInput(lines).sortedByDescending { it.dist }
         repeat(maxCoord) { y ->
 //            println("Checking row $y")

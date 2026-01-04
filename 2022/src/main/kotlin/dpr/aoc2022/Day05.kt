@@ -7,13 +7,11 @@ object Day05 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/05/input.txt")
-//        println("Part 1:")
         println(part1(lines))
-//        println("Part 2:")
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): String {
         val stacks = initStacks()
         lines.filter { it.startsWith("move") }
             .forEach {
@@ -28,7 +26,7 @@ object Day05 {
         return stacks.map { it.peek() }.joinToString("")
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): String {
         val stacks = initStacks()
         lines.filter { it.startsWith("move") }
             .forEach {

@@ -6,13 +6,9 @@ object Day17 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/17/input.txt")
-//        println("Part 1:")
         val part1TurnLimit = 2022L
-//        println(part1And2(Util.getNotEmptyLinesFromFile("/17/test1.txt"), part1TurnLimit, false))
         println(part1And2(lines, part1TurnLimit, false))
-//        println("Part 2:")
         val part2TurnLimit = 1000000000000L
-//        println(part1And2(Util.getNotEmptyLinesFromFile("/17/test1.txt"), part2TurnLimit, false))
         println(part1And2(lines, part2TurnLimit, print = false))
     }
 
@@ -32,7 +28,7 @@ object Day17 {
         fun down(): Brick = copy(elems = elems.map { it.copy(y = it.y - 1) })
     }
 
-    private fun part1And2(lines: List<String>, limit: Long, print: Boolean = false): Any {
+    @JvmStatic fun part1And2(lines: List<String>, limit: Long, print: Boolean = false): Long {
         val moves = parseMoves(lines)
         val board = mutableMapOf<Point, Pair<Int, Long>>() // point to (brickIdx to turn)
         repeat(7) { board[Point(it, 0)] = 9 to -1 }

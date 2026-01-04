@@ -11,12 +11,12 @@ object Day01 {
     }
 
     @JvmStatic
-    fun part1(lines: List<String>): Any {
+    fun part1(lines: List<String>): Long {
         return elvesCaloriesDescending(lines).first()
     }
 
     @JvmStatic
-    fun part2(lines: List<String>): Any {
+    fun part2(lines: List<String>): Long {
         return elvesCaloriesDescending(lines).take(3).sum()
     }
 

@@ -7,11 +7,7 @@ object Day19 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/19/input.txt")
-//        println("Part 1:")
-//        println(part1(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
         println(part1(lines))
-//        println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/19/test1.txt")))
         println(part2(lines))
     }
 
@@ -139,7 +135,7 @@ object Day19 {
         GEODE
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): Long {
         val blueprints = parseBlueprints(lines)
         return blueprints.parallelStream().map { it.id * it.findMostGeode(24) }.reduce { acc, it -> acc + it }.get()
     }
@@ -157,7 +153,7 @@ object Day19 {
         }
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): Long {
         val blueprints = parseBlueprints(lines).take(3)
         return blueprints.parallelStream().map { it.findMostGeode(32) }.reduce { acc, cur -> acc * cur }.get()
     }

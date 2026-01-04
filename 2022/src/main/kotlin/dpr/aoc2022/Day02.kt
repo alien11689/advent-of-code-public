@@ -6,13 +6,11 @@ object Day02 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/02/input.txt")
-//        println("Part 1:")
         println(part1(lines))
-//        println("Part 2:")
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): Int {
         return lines.sumOf {
             val (e, m) = it.split(" ")
             val enemy = interpretEnemy(e)
@@ -45,7 +43,7 @@ object Day02 {
         ROCK(1), PAPER(2), SCISSORS(3),
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): Int {
         return lines.sumOf {
             val (e, m) = it.split(" ")
             val enemy = interpretEnemy(e)

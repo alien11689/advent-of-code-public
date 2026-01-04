@@ -8,14 +8,11 @@ object Day12 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/12/input.txt")
-//        println("Part 1:")
-//        println(part1(Util.getNotEmptyLinesFromFile("/12/test1.txt")))
         println(part1(lines))
-//        println("Part 2:")
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): Int {
         val points2 = readPoints(lines)
         val start = points2.filter { it.value == 'S' }.keys.first()
         val target = points2.filter { it.value == 'E' }.keys.first()
@@ -59,7 +56,7 @@ object Day12 {
         }
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): Int {
         val points2 = readPoints(lines)
         val target = points2.filter { it.value == 'E' }.keys.first()
         val points = normalizePoints(points2)

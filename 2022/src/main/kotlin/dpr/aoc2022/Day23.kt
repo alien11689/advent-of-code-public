@@ -7,11 +7,7 @@ object Day23 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/23/input.txt")
-//        println("Part 1:")
-//        println(part1(Util.getNotEmptyLinesFromFile("/23/test1.txt")))
         println(part1(lines))
-//        println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/23/test1.txt")))
         println(part2(lines))
     }
 
@@ -62,7 +58,7 @@ object Day23 {
         private fun west() = copy(x = x - 1)
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): Int {
         var elves = parseElves(lines)
         val directions = listOf(Dir.N, Dir.S, Dir.W, Dir.E, Dir.N, Dir.S, Dir.W, Dir.E)
         repeat(10) { round ->
@@ -90,7 +86,7 @@ object Day23 {
         line.mapIndexed { x, cur -> if (cur == '#') Elf(x, y) else null }.filterNotNull()
     }.toSet()
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): Int {
         var elves = parseElves(lines)
         val directions = listOf(Dir.N, Dir.S, Dir.W, Dir.E, Dir.N, Dir.S, Dir.W, Dir.E)
         var round = 0

@@ -6,14 +6,11 @@ object Day08 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/08/input.txt")
-//        println("Part 1:")
         println(part1(lines))
-//        println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/08/test1.txt")))
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): Int {
         val grid = lines.map { line -> line.map { it.toString().toInt() } }
         var notVisible = 0
         for (i in grid.indices) {
@@ -41,7 +38,7 @@ object Day08 {
         return s1 && s2 && s3 && s4
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): Long {
         val grid = lines.map { line -> line.map { it.toString().toInt() } }
         var bestScore = 0L
         for (i in grid.indices) {

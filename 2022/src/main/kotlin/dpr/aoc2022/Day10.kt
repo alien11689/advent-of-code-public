@@ -6,15 +6,11 @@ object Day10 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/10/input.txt")
-//        println("Part 1:")
-//        println(part1(Util.getNotEmptyLinesFromFile("/10/test1.txt")))
         println(part1(lines))
-//        println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/10/test1.txt")))
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): Long {
         val values = getCyclesValues(lines)
         val pivotalIndexes = setOf(20, 60, 100, 140, 180, 220)
         return values.filter { it.key in pivotalIndexes }
@@ -43,7 +39,7 @@ object Day10 {
         return values
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): String {
         val cyclesValues = getCyclesValues(lines)
         val sb = StringBuilder()
         repeat(240) { i ->

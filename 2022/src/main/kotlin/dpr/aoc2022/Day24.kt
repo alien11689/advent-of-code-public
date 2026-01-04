@@ -8,11 +8,10 @@ object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/24/input.txt")
-//        part1And2(Util.getNotEmptyLinesFromFile("/24/test1.txt"))
-        part1And2(lines)
+        part1And2(lines).forEach { println(it) }
     }
 
-    private fun part1And2(lines: List<String>) {
+    @JvmStatic fun part1And2(lines: List<String>): List<Int> {
         val board = parseBoard(lines)
         val minY = board.minOf { it.key.y }
         val maxY = board.maxOf { it.key.y }
@@ -26,9 +25,11 @@ object Day24 {
         val xRange = minX..maxX
 
         val journeyToTarget = traverse(0, start, target, boards, xRange, yRange)
-        println(journeyToTarget) // Part 1
+        var result = ArrayList<Int>()
+        result.add(journeyToTarget) // part1
         val journeyToStart = traverse(journeyToTarget, target, start, boards, xRange, yRange)
-        println(traverse(journeyToStart, start, target, boards, xRange, yRange)) // Part 2
+        result.add(traverse(journeyToStart, start, target, boards, xRange, yRange)) // Part 2
+        return result
     }
 
     enum class Wind {

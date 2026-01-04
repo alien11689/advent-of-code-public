@@ -7,15 +7,11 @@ object Day13 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/13/input.txt")
-//        println("Part 1:")
-//        println(part1(Util.getNotEmptyLinesFromFile("/13/test1.txt")))
         println(part1(lines))
-//        println("Part 2:")
-//        println(part2(Util.getNotEmptyLinesFromFile("/13/test1.txt")))
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): Int {
         val pairs = parseExpressions(lines).chunked(2)
         return pairs.mapIndexed { i, pair ->
             if (pair.first() <= pair.last()) {
@@ -79,7 +75,7 @@ object Day13 {
         throw RuntimeException("Unfinished")
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): Int {
         val firstPivot = Expr.L(listOf(Expr.L(listOf(Expr.V(2)))))
         val secondPivot = Expr.L(listOf(Expr.L(listOf(Expr.V(6)))))
         val expressions = parseExpressions(lines) + listOf(firstPivot, secondPivot)

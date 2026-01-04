@@ -13,11 +13,7 @@ object Day22 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getLinesFromFile("/22/input.txt")
-//        println("Part 1:")
-//        println(part1(Util.getLinesFromFile("/22/test1.txt")))
         println(part1(lines))
-//        println("Part 2:")
-//        println(part2(Util.getLinesFromFile("/22/test1.txt")))
         println(part2(lines))
         // 132088 is too low
     }
@@ -61,7 +57,7 @@ object Day22 {
 
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): Int {
         val map = readMap(lines)
         val handleWrap: (Position) -> Position = { cur ->
             Position(facing = cur.facing, point = when (cur.facing) {
@@ -99,7 +95,7 @@ object Day22 {
         return Position(Point(minX, minY), E)
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): Int {
         val map = readMap(lines)
         val handleWrap = getHandleWrapPart2(map)
         return traverseMap(map, lines, handleWrap).score()

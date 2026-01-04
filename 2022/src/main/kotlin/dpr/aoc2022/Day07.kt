@@ -7,9 +7,7 @@ object Day07 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/07/input.txt")
-//        println("Part 1:")
         println(part1(lines))
-//        println("Part 2:")
         println(part2(lines))
     }
 
@@ -34,7 +32,7 @@ object Day07 {
         }
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic fun part1(lines: List<String>): Long {
         val root = buildRoot(lines)
 
         var totalSize = 0L
@@ -89,7 +87,7 @@ object Day07 {
         return root
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic fun part2(lines: List<String>): Long {
         val root = buildRoot(lines)
 
         val totalCapability = 70000000
