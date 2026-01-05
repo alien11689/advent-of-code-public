@@ -12,8 +12,7 @@ object Day05 {
     }
 
     @JvmStatic
-    fun part1(lines: List<String>): String {
-        val stacks = initStacks()
+    fun part1(lines: List<String>, stacks: List<Stack<Char>> = initStacks()): String {
         lines.filter { it.startsWith("move") }
             .forEach {
                 val parts = it.split(" ")
@@ -28,8 +27,7 @@ object Day05 {
     }
 
     @JvmStatic
-    fun part2(lines: List<String>): String {
-        val stacks = initStacks()
+    fun part2(lines: List<String>, stacks: List<Stack<Char>> = initStacks()): String {
         lines.filter { it.startsWith("move") }
             .forEach {
                 val parts = it.split(" ")
