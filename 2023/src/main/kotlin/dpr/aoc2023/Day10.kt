@@ -53,7 +53,7 @@ object Day10 {
 
     private fun detectRealStartSign(board: MutableMap<Point2D, Sign>, start: Point2D): Sign {
         val possibleStartSign = mutableSetOf(Sign.L, Sign.J, Sign.UP_DOWN, Sign.MINUS, Sign._7, Sign.F)
-        if (board[start.up()]!!.canDown()) {
+        if (board[start.up()]?.canDown() ?: false) {
             possibleStartSign.removeAll(possibleStartSign.filter { !it.canUp() })
         } else {
             possibleStartSign.removeAll(possibleStartSign.filter { it.canUp() })
@@ -63,7 +63,7 @@ object Day10 {
         } else {
             possibleStartSign.removeAll(possibleStartSign.filter { it.canDown() })
         }
-        if (board[start.left()]!!.canRight()) {
+        if (board[start.left()]?.canRight() ?: false) {
             possibleStartSign.removeAll(possibleStartSign.filter { !it.canLeft() })
         } else {
             possibleStartSign.removeAll(possibleStartSign.filter { it.canLeft() })

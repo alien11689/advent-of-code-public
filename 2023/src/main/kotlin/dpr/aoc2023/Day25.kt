@@ -17,25 +17,31 @@ object Day25 {
         // naive solution creating all paths and counting most used vertices works well for my input but not for test input
         // when more than 6 most used vertices are taken (I tested with 10) than both input and test are fine
         // it needs ~2 minutes to finish
-//        val takeMostUsedVertices = 6
-//        val vertices = connections.flatten().toSet().sorted()
-//        val counts = mutableMapOf<String, Int>()
-//        vertices.forEach { counts[it] = 0 }
-//        vertices.forEach { v ->
-////            println("Checking $v")
-//            findPaths(v, connections, counts)
-//        }
-//        val mostUsed = counts.toList().sortedBy { -it.second }.take(takeMostUsedVertices)
-////        mostUsed.forEach { println(it) }
-//        val mostUsedConnections = mostUsed.flatMap { v1 ->
-//            mostUsed.map { v2 -> setOf(v1.first, v2.first) }
-//        }.filter { it in connections }.toSet()
-////        println("Most used connections $mostUsedConnections")
-//        return splitGraph(connections - mostUsedConnections)
 
         // look at the graph in the resources
         val connectionsToCut = setOf(setOf("zhb", "vxr"), setOf("jbx", "sml"), setOf("szh", "vqj"))
         return splitGraph(connections - connectionsToCut)
+    }
+
+    @JvmStatic fun part1Iter(lines: List<String>): Int {
+        val connections = readConnections(lines)
+
+        // 6 should be good for my input, for test it needs to be higher
+        val takeMostUsedVertices = 10
+        val vertices = connections.flatten().toSet().sorted()
+        val counts = mutableMapOf<String, Int>()
+        vertices.forEach { counts[it] = 0 }
+        vertices.forEach { v ->
+//            println("Checking $v")
+            findPaths(v, connections, counts)
+        }
+        val mostUsed = counts.toList().sortedBy { -it.second }.take(takeMostUsedVertices)
+//        mostUsed.forEach { println(it) }
+        val mostUsedConnections = mostUsed.flatMap { v1 ->
+            mostUsed.map { v2 -> setOf(v1.first, v2.first) }
+        }.filter { it in connections }.toSet()
+//        println("Most used connections $mostUsedConnections")
+        return splitGraph(connections - mostUsedConnections)
     }
 
     private fun splitGraph(connections: Set<Set<String>>): Int {
