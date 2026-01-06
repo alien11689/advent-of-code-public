@@ -6,12 +6,12 @@ object Day15 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/15/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/15/test1.txt")
         println(part1(lines))
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         return lines.sumOf { line ->
             line.split(",").sumOf { hash(it) }
         }
@@ -23,7 +23,8 @@ object Day15 {
 
     data class Lens(val name: String, var value: Int)
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val boxes = mutableListOf<MutableList<Lens>>()
         repeat(256) { boxes.add(mutableListOf()) }
         lines.forEach { line ->
@@ -47,7 +48,8 @@ object Day15 {
                 }
             }
         }
-        return boxes.flatMapIndexed { boxId, lenses -> lenses.mapIndexed { lId, lens -> 1L * (boxId + 1) * (lId + 1) * lens.value } }.sum()
+        return boxes.flatMapIndexed { boxId, lenses -> lenses.mapIndexed { lId, lens -> 1L * (boxId + 1) * (lId + 1) * lens.value } }
+            .sum()
     }
 }
 

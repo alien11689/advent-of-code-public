@@ -11,7 +11,8 @@ object Day08 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val directions = lines[0]
         val mapping = readMapping(lines)
         var cur = "AAA"
@@ -24,7 +25,8 @@ object Day08 {
         return steps
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val directions = lines[0]
         val mapping = readMapping(lines)
         val startingPoints = mapping.filter { it.key.endsWith("A") }.keys

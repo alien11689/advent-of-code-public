@@ -6,12 +6,12 @@ object Day13 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getLinesFromFile("/13/input.txt")
-//        val lines = Util.getLinesFromFile("/13/test1.txt")
         println(part1(lines))
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         var i = 0
         var sum = 0L
         val rows = mutableListOf<String>()
@@ -73,7 +73,8 @@ object Day13 {
         return true
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         var i = 0
         var sum = 0L
         val rows = mutableListOf<String>()

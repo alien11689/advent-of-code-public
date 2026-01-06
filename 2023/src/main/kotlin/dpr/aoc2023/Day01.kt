@@ -11,7 +11,7 @@ object Day01 {
     }
 
     @JvmStatic
-    fun part1(lines: List<String>): Any {
+    fun part1(lines: List<String>): Int {
         return lines.sumOf { line ->
             val digits = line.filter { it.isDigit() }
             Integer.parseInt("${digits[0]}${digits[digits.length - 1]}")
@@ -19,7 +19,7 @@ object Day01 {
     }
 
     @JvmStatic
-    fun part2(lines: List<String>): Any {
+    fun part2(lines: List<String>): Int {
         val mapping = mapOf(
             "one" to "1",
             "two" to "2",

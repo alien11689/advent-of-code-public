@@ -9,7 +9,6 @@ object Day17 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/17/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/17/test1.txt")
         val (board, target) = readBoard(lines)
         println(part1(board, target))
         println(part2(board, target))
@@ -39,15 +38,18 @@ object Day17 {
 
     }
 
-    private fun part1(board: Map<Point2D, Int>, target: Point2D): Any {
+    @JvmStatic
+    fun part1(board: Map<Point2D, Int>, target: Point2D): Int {
         return traverse(board, target, 1, 3)
     }
 
-    private fun part2(board: Map<Point2D, Int>, target: Point2D): Any {
+    @JvmStatic
+    fun part2(board: Map<Point2D, Int>, target: Point2D): Int {
         return traverse(board, target, 4, 10)
     }
 
-    private fun readBoard(lines: List<String>): Pair<Map<Point2D, Int>, Point2D> {
+    @JvmStatic
+    fun readBoard(lines: List<String>): Pair<Map<Point2D, Int>, Point2D> {
         val board = Util.readBoard(lines) { it.digitToInt() }
         return Pair(board, Point2D(lines[0].length - 1, lines.size - 1))
     }

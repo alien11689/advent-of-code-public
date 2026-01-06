@@ -8,18 +8,19 @@ object Day14 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/14/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/14/test1.txt")
         println(part1(lines))
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val (rocks, movableRocks) = readInput(lines)
         val next = moveRocks(movableRocks, Dir.N, rocks, lines[0].length, lines.size)
         return calculateLoad(next, lines.size)
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val (rocks, movableRocks) = readInput(lines)
         val maxCycles = 1000000000
         val sizeY = lines.size
@@ -52,7 +53,15 @@ object Day14 {
     private fun calculateLoad(current: Set<Point2D>, sizeY: Int): Int = current.sumOf { sizeY - it.y }
 
     private fun cycle(start: Set<Point2D>, rocks: Set<Point2D>, sizeX: Int, sizeY: Int): Set<Point2D> {
-        return listOf(Dir.N, Dir.W, Dir.S, Dir.E).fold(start) { cur: Set<Point2D>, dir: Dir -> moveRocks(cur, dir, rocks, sizeX, sizeY) }
+        return listOf(Dir.N, Dir.W, Dir.S, Dir.E).fold(start) { cur: Set<Point2D>, dir: Dir ->
+            moveRocks(
+                cur,
+                dir,
+                rocks,
+                sizeX,
+                sizeY
+            )
+        }
     }
 
     private fun moveRocks(start: Set<Point2D>, dir: Dir, rocks: Set<Point2D>, sizeX: Int, sizeY: Int): Set<Point2D> {

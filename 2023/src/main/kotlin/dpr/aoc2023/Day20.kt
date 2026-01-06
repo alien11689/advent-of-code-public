@@ -8,8 +8,6 @@ object Day20 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/20/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/20/test1.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/20/test2.txt")
         println(part1(lines))
         println(part2(lines))
     }
@@ -68,7 +66,8 @@ object Day20 {
         }
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val elements = readElements(lines)
         var resLow = 0L
         var resHigh = 0L
@@ -95,7 +94,8 @@ object Day20 {
             elements[element.name] = element
         }
         elements.values.filterIsInstance<Conjunction>().forEach { conjunction ->
-            conjunction.updateMemory(elements.values.filter { conjunction.name in it.outputs }.associate { it.name to false })
+            conjunction.updateMemory(elements.values.filter { conjunction.name in it.outputs }
+                .associate { it.name to false })
         }
         return elements
     }
@@ -121,7 +121,8 @@ object Day20 {
         return low to high
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val elements = readElements(lines)
         var i = 1
         while (true) {

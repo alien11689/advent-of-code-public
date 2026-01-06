@@ -6,7 +6,6 @@ object Day07 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/07/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/07/test1.txt")
         println(part1(lines))
         println(part2(lines))
     }
@@ -92,16 +91,20 @@ object Day07 {
     }
 
 
-    private fun part1(lines: List<String>): Any {
-        val cardsToPoints = lines.map { it.split(Regex("\\s+")) }.map { Card.from(it[0], withJoker = false) to it[1].toLong() }
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
+        val cardsToPoints =
+            lines.map { it.split(Regex("\\s+")) }.map { Card.from(it[0], withJoker = false) to it[1].toLong() }
         return cardsToPoints.sortedBy { it.first }.mapIndexed { i, cur -> (i + 1) * cur.second }.sum()
         // 251420309 is too high
         // 251133479 is too high
         // 251195241
     }
 
-    private fun part2(lines: List<String>): Any {
-        val cardsToPoints = lines.map { it.split(Regex("\\s+")) }.map { Card.from(it[0], withJoker = true) to it[1].toLong() }
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
+        val cardsToPoints =
+            lines.map { it.split(Regex("\\s+")) }.map { Card.from(it[0], withJoker = true) to it[1].toLong() }
         return cardsToPoints.sortedBy { it.first }.mapIndexed { i, cur -> (i + 1) * cur.second }.sum()
         // is too low 249723387
     }

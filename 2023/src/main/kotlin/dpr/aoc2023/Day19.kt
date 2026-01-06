@@ -9,7 +9,6 @@ object Day19 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/19/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/19/test1.txt")
         val (ruleLists, items) = parseInput(lines)
         println(part1(ruleLists, items))
         println(part2(ruleLists))
@@ -25,11 +24,13 @@ object Day19 {
         fun accepts(item: Map<String, Int>): Boolean = condition.test(item)
     }
 
-    private fun part1(ruleLists: Map<String, List<Rule>>, items: List<Map<String, Int>>): Any {
+    @JvmStatic
+    fun part1(ruleLists: Map<String, List<Rule>>, items: List<Map<String, Int>>): Int {
         return items.sumOf { if (pipeline(it, ruleLists)) it.values.sum() else 0 }
     }
 
-    private fun parseInput(lines: List<String>): Pair<Map<String, List<Rule>>, List<Map<String, Int>>> {
+    @JvmStatic
+    fun parseInput(lines: List<String>): Pair<Map<String, List<Rule>>, List<Map<String, Int>>> {
         val ruleLists = mutableMapOf<String, List<Rule>>()
         val items = mutableListOf<Map<String, Int>>()
         lines.forEach { line ->
@@ -135,7 +136,8 @@ object Day19 {
         fun count(): Int = if (from <= to) to - from + 1 else 0
     }
 
-    private fun part2(ruleLists: Map<String, List<Rule>>): Any {
+    @JvmStatic
+    fun part2(ruleLists: Map<String, List<Rule>>): Long {
         val acceptingConditions = findPipelinesResolvingToAccepted(ruleLists)
         return acceptingConditions.sumOf { conditions ->
             val ranges = conditions.fold(listOf("x", "m", "a", "s").associateWith { ItemRange() }) { acc, cur ->
@@ -156,7 +158,12 @@ object Day19 {
             rules.forEach {
                 val condition = it.condition
                 when (it.target) {
-                    "A" -> acceptingConditions.add(cur.conditions + prevConditionsNegated + if (condition.sign != Sign.ALWAYS) setOf(condition) else emptySet())
+                    "A" -> acceptingConditions.add(
+                        cur.conditions + prevConditionsNegated + if (condition.sign != Sign.ALWAYS) setOf(
+                            condition
+                        ) else emptySet()
+                    )
+
                     "R" -> {}
                     else -> stack.push(
                         Current(
@@ -187,7 +194,10 @@ object Day19 {
         }
     }
 
-    private fun replaceTarget(simplified: Map<String, List<Rule>>, reducedRules: Map<String, List<Rule>>): Map<String, List<Rule>> {
+    private fun replaceTarget(
+        simplified: Map<String, List<Rule>>,
+        reducedRules: Map<String, List<Rule>>
+    ): Map<String, List<Rule>> {
         return simplified.map { (key, value) ->
             if (value.any { it.target in reducedRules.keys }) {
                 key to shortcut(value, reducedRules)

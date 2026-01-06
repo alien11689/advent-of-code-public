@@ -7,12 +7,12 @@ object Day21 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/21/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/21/test1.txt")
         println(part1(lines))
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val (garden, start) = readGarden(lines)
         var i = 0
         var prev = emptySet<Point2D>()
@@ -35,7 +35,8 @@ object Day21 {
         return Pair(garden, start)
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val (garden, start) = readGarden(lines)
         var i = 0
         var prevSize = 0L

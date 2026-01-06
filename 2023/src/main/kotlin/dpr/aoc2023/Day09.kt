@@ -11,7 +11,8 @@ object Day09 {
         println(part2)
     }
 
-    private fun part1And2(lines: List<String>): Pair<Long, Long> {
+    @JvmStatic
+    fun part1And2(lines: List<String>): Pair<Long, Long> {
         val results = lines.map { line ->
             val values = line.split(" ").map { it.toLong() }
             findPrevAndNextValue(values)

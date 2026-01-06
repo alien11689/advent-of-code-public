@@ -15,11 +15,8 @@ object Day24 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/24/input.txt")
-        val min: Long = 200000000000000
-        val max: Long = 400000000000000
-//        val lines = Util.getNotEmptyLinesFromFile("/24/test1.txt")
-//        val min: Long = 7
-//        val max: Long = 27
+        val min = 200000000000000L
+        val max = 400000000000000L
         println(part1(lines, min, max))
         println(part2(lines))
     }
@@ -40,7 +37,8 @@ object Day24 {
         }
     }
 
-    private fun part1(lines: List<String>, min: Long, max: Long): Any {
+    @JvmStatic
+    fun part1(lines: List<String>, min: Long, max: Long): Int {
         val points = readPointsAndVectors(lines)
         //        points.forEach { println(it) }
 //        points.forEach { println(it.line) }
@@ -80,7 +78,8 @@ object Day24 {
         return points
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): String {
         val points = readPointsAndVectors(lines)
         // Solve equation:
         // t1 > 0
@@ -115,9 +114,18 @@ object Day24 {
         }
         val command =
             listOf("python3", tmpFile.absolutePath) +
-                points.take(3)
-                    .map { pwv -> listOf(pwv.p.x, pwv.p.y, pwv.p.z, pwv.speed.dx, pwv.speed.dy, pwv.speed.dz).map { it.toLong().toString() } }
-                    .flatten()
+                    points.take(3)
+                        .map { pwv ->
+                            listOf(
+                                pwv.p.x,
+                                pwv.p.y,
+                                pwv.p.z,
+                                pwv.speed.dx,
+                                pwv.speed.dy,
+                                pwv.speed.dz
+                            ).map { it.toLong().toString() }
+                        }
+                        .flatten()
         processBuilder.command(command)
         val process = processBuilder.start()
         val reader = BufferedReader(InputStreamReader(process.inputStream))

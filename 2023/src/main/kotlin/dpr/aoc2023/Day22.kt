@@ -7,7 +7,6 @@ object Day22 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/22/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/22/test1.txt")
         val (part1, part2) = part1And2(lines)
         println(part1)
         println(part2)
@@ -74,14 +73,16 @@ object Day22 {
         Brick(y, blocks)
     }
 
-    private fun part1And2(lines: List<String>): Pair<Any, Any> {
+    @JvmStatic
+    fun part1And2(lines: List<String>): Pair<Int, Int> {
         val initialBricks = readBricks(lines)
         val ids = initialBricks.map { it.id }
         val stableBlocks = findStableBlocks(initialBricks)
         val bricksNotToRemove = findBlocksNotToRemove(stableBlocks, ids)
         val part1Result = ids.size - bricksNotToRemove.size
         val stableBlocksAsSet = stableBlocks.toList().toSet()
-        val stableBricks = stableBlocksAsSet.groupBy { it.second }.map { (id, blocks) -> Brick(id, blocks.map { it.first }) }
+        val stableBricks =
+            stableBlocksAsSet.groupBy { it.second }.map { (id, blocks) -> Brick(id, blocks.map { it.first }) }
         return part1Result to bricksNotToRemove.sumOf { brickIdToRemove ->
 //            println("Checking ${++i}/${bricksNotToRemove.size}")
             val bricks = stableBricks.filter { it.id != brickIdToRemove }

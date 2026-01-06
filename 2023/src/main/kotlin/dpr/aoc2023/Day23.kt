@@ -10,7 +10,6 @@ object Day23 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/23/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/23/test1.txt")
         val (result1, knownPaths) = part1(lines)
         println(result1)
         println(part2(lines, knownPaths))
@@ -18,7 +17,8 @@ object Day23 {
 
     data class Route(val point: Point2D, val dir: Dir, val length: Int)
 
-    private fun part1(lines: List<String>): Pair<Int, Map<Set<Point2D>, Set<Point2D>>> {
+    @JvmStatic
+    fun part1(lines: List<String>): Pair<Int, Map<Set<Point2D>, Set<Point2D>>> {
         val (board, start, end) = readBoard(lines)
         val routes = Stack<Route>()
         routes.push(Route(start, Dir.S, 0))
@@ -103,7 +103,8 @@ object Day23 {
 
     }
 
-    private fun part2(lines: List<String>, knownPaths: Map<Set<Point2D>, Set<Point2D>>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>, knownPaths: Map<Set<Point2D>, Set<Point2D>>): Int {
         val (board, start, end) = readBoard(lines)
 //        println("From $start to $end")
         val routes = PriorityQueue<Route2>()
@@ -114,7 +115,8 @@ object Day23 {
             newKey to (value + newKey).size - 1
         }.toMap()
         // little speed up that some longest paths need to be taken
-        val mustHaveEdges = knownEdges.toList().sortedBy { -it.second }.take(knownEdges.size / 2).flatMap { it.first }.toSet() - end - start
+        val mustHaveEdges = knownEdges.toList().sortedBy { -it.second }.take(knownEdges.size / 2).flatMap { it.first }
+            .toSet() - end - start
 //        println("strict graph {")
 //        knownEdges.forEach {
 //            val (a, b) = it.key.toList()
@@ -201,7 +203,8 @@ object Day23 {
                 continue
             }
             reachable.add(cur)
-            possiblePaths.filter { cur in it }.flatMap { it - cur }.filter { it !in reachable }.forEach { waitList.push(it) }
+            possiblePaths.filter { cur in it }.flatMap { it - cur }.filter { it !in reachable }
+                .forEach { waitList.push(it) }
         }
         reachableMem[unavailable] = reachable
         return reachable

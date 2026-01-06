@@ -7,18 +7,19 @@ object Day03 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/03/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/03/test1.txt")
         println(part1(lines))
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val (signs, numbers) = parseMap(lines)
         val adjacentPoints = signs.map { it.second }.flatMap { p -> p.adjacentPoints() }.toSet()
         return numbers.filter { it.second.any { p -> p in adjacentPoints } }.sumOf { it.first }
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val (signs, numbers) = parseMap(lines)
         return signs.filter { it.first == '*' }.map { it.second }.sumOf { p ->
             val adjacentPoints = p.adjacentPoints()

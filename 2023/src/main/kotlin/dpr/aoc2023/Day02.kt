@@ -16,7 +16,8 @@ object Day02 {
         "blue" to 14,
     )
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         return lines.sumOf { line ->
             val (header, rest) = line.split(": ")
             val rounds = rest.split("; ")
@@ -29,7 +30,8 @@ object Day02 {
         }
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         return lines.sumOf { line ->
             val rest = line.split(": ")[1]
             val rounds = rest.split("; ")

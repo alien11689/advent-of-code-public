@@ -11,7 +11,8 @@ object Day04 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         return lines.sumOf { line ->
             val (winning, my) = line.split(":")[1].split("|").map { it.trim().split(Regex("\\s+")) }
             val win = my.count { it in winning }
@@ -19,7 +20,8 @@ object Day04 {
         }
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val cards = lines.indices.associateWith { 1L }.toMutableMap()
         lines.forEachIndexed { i, line ->
             val win = calculateNumberOfWinningLots(line)

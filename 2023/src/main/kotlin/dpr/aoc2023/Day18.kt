@@ -9,13 +9,13 @@ object Day18 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/18/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/18/test1.txt")
         println(part1(lines))
         println(part2(lines))
         // it should be implementable with shoelace formula and pick's theorem but my solution just works
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val (border, borderSize) = readLines(lines) { line ->
             val (d, size) = line.split(Regex("[ )(#]+"))
             val dir = when (d) {
@@ -63,7 +63,8 @@ object Day18 {
         fun contains(p: Point2D): Boolean = p.x in start.x..end.x && p.y in start.y..end.y
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
         val (border, borderSize) = readLines(lines) { line ->
             val color = line.split(Regex("[ )(#]+"))[2]
             val length = color.take(5).toInt(16)

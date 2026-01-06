@@ -1,6 +1,5 @@
 package dpr.aoc2023
 
-import dpr.commons.Point2D
 import dpr.commons.Util
 import kotlin.math.max
 import kotlin.math.min
@@ -9,13 +8,13 @@ object Day11 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/11/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/11/test1.txt")
         val (part1, part2) = part1And2(lines)
         println(part1)
         println(part2)
     }
 
-    private fun part1And2(lines: List<String>): Pair<Long, Long> {
+    @JvmStatic
+    fun part1And2(lines: List<String>): Pair<Long, Long> {
         val expandFactor1 = 2
         val expandFactor2 = 1_000_000
         val galaxies = Util.readBoard(lines).filter { it.value == '#' }.keys.sorted()

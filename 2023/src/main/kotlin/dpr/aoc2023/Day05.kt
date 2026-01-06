@@ -9,7 +9,6 @@ object Day05 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/05/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/05/test1.txt")
         println(part1(lines))
         println(part2(lines))
     }
@@ -65,13 +64,21 @@ object Day05 {
                 curSeed.min < sourceMin -> {
                     // ---
                     //  ---
-                    return SeedRange(translate(sourceMin)!!, translate(curSeed.max)!!) to listOf(SeedRange(curSeed.min, sourceMin - 1))
+                    return SeedRange(translate(sourceMin)!!, translate(curSeed.max)!!) to listOf(
+                        SeedRange(
+                            curSeed.min,
+                            sourceMin - 1
+                        )
+                    )
                 }
 
                 else -> {
                     //  ---
                     // ---
-                    return SeedRange(translate(curSeed.min)!!, translate(sourceMax)!!) to listOf(SeedRange(sourceMax + 1, curSeed.max))
+                    return SeedRange(
+                        translate(curSeed.min)!!,
+                        translate(sourceMax)!!
+                    ) to listOf(SeedRange(sourceMax + 1, curSeed.max))
                 }
             }
         }
@@ -97,7 +104,8 @@ object Day05 {
         val length = max - min + 1
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val seeds = lines[0].split(":")[1].trim().split(" ").map { it.toLong() }
         val mappings = parseMappings(lines)
         var curSeeds = seeds
@@ -105,13 +113,16 @@ object Day05 {
         while (curState != FINAL_STATE) {
             val (curMapping, transitions) = mappings.filter { it.key.first == curState }.entries.first()
             curState = curMapping.second
-            curSeeds = curSeeds.map { curValue -> transitions.firstNotNullOfOrNull { it.translate(curValue) } ?: curValue }
+            curSeeds =
+                curSeeds.map { curValue -> transitions.firstNotNullOfOrNull { it.translate(curValue) } ?: curValue }
         }
         return curSeeds.min()
     }
 
-    private fun part2(lines: List<String>): Any {
-        val seedsRanges = lines[0].split(":")[1].trim().split(" ").map { it.toLong() }.chunked(2).map { SeedRange(it[0], it[0] + it[1] - 1) }
+    @JvmStatic
+    fun part2(lines: List<String>): Long {
+        val seedsRanges = lines[0].split(":")[1].trim().split(" ").map { it.toLong() }.chunked(2)
+            .map { SeedRange(it[0], it[0] + it[1] - 1) }
         val mappings = parseMappings(lines)
         var curSeedRanges = seedsRanges
         var curState = INITIAL_STATE

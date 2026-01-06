@@ -9,7 +9,6 @@ object Day16 {
     @JvmStatic
     fun main(args: Array<String>) = Util.measureTime {
         val lines = Util.getNotEmptyLinesFromFile("/16/input.txt")
-//        val lines = Util.getNotEmptyLinesFromFile("/16/test1.txt")
         println(part1(lines))
         println(part2(lines))
     }
@@ -23,7 +22,8 @@ object Day16 {
         }
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Int {
         val mirrors = readMirrors(lines)
         val maxX = lines[0].length - 1
         val maxY = lines.size - 1
@@ -103,7 +103,8 @@ object Day16 {
         return energized
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val mirrors = readMirrors(lines)
         val maxX = lines[0].length - 1
         val maxY = lines.size - 1

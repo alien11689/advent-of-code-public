@@ -14,7 +14,8 @@ object Day10 {
         println(part2(lines))
     }
 
-    private fun part1(lines: List<String>): Any {
+    @JvmStatic
+    fun part1(lines: List<String>): Long {
         val board = Util.readBoard(lines) { Sign.from(it) }
         val start = board.filter { it.value == Sign.S }.keys.single()
         val realStartSign = detectRealStartSign(board, start)
@@ -130,7 +131,8 @@ object Day10 {
         }
     }
 
-    private fun part2(lines: List<String>): Any {
+    @JvmStatic
+    fun part2(lines: List<String>): Int {
         val board = Util.readBoard(lines) { Sign.from(it) }
         val start = board.filter { it.value == Sign.S }.keys.single()
         val realStartSign = detectRealStartSign(board, start)
@@ -160,14 +162,46 @@ object Day10 {
             interiorDirectionSelector = when {
                 nextSign == Sign.MINUS -> interiorDirectionSelector.filter { it in setOf(Dir.S, Dir.N) }.toSet()
                 nextSign == Sign.UP_DOWN -> interiorDirectionSelector.filter { it in setOf(Dir.W, Dir.E) }.toSet()
-                curDir == Dir.E && nextSign == Sign._7 -> if (Dir.S in interiorDirectionSelector) setOf(Dir.S, Dir.E) else setOf(Dir.N, Dir.W)
-                curDir == Dir.S && nextSign == Sign._7 -> if (Dir.E in interiorDirectionSelector) setOf(Dir.S, Dir.E) else setOf(Dir.N, Dir.W)
-                curDir == Dir.E && nextSign == Sign.J -> if (Dir.S in interiorDirectionSelector) setOf(Dir.S, Dir.W) else setOf(Dir.N, Dir.E)
-                curDir == Dir.N && nextSign == Sign.J -> if (Dir.W in interiorDirectionSelector) setOf(Dir.S, Dir.W) else setOf(Dir.N, Dir.E)
-                curDir == Dir.N && nextSign == Sign.L -> if (Dir.W in interiorDirectionSelector) setOf(Dir.N, Dir.W) else setOf(Dir.S, Dir.E)
-                curDir == Dir.W && nextSign == Sign.L -> if (Dir.N in interiorDirectionSelector) setOf(Dir.N, Dir.W) else setOf(Dir.S, Dir.E)
-                curDir == Dir.S && nextSign == Sign.F -> if (Dir.E in interiorDirectionSelector) setOf(Dir.N, Dir.E) else setOf(Dir.S, Dir.W)
-                curDir == Dir.W && nextSign == Sign.F -> if (Dir.N in interiorDirectionSelector) setOf(Dir.N, Dir.E) else setOf(Dir.S, Dir.W)
+                curDir == Dir.E && nextSign == Sign._7 -> if (Dir.S in interiorDirectionSelector) setOf(
+                    Dir.S,
+                    Dir.E
+                ) else setOf(Dir.N, Dir.W)
+
+                curDir == Dir.S && nextSign == Sign._7 -> if (Dir.E in interiorDirectionSelector) setOf(
+                    Dir.S,
+                    Dir.E
+                ) else setOf(Dir.N, Dir.W)
+
+                curDir == Dir.E && nextSign == Sign.J -> if (Dir.S in interiorDirectionSelector) setOf(
+                    Dir.S,
+                    Dir.W
+                ) else setOf(Dir.N, Dir.E)
+
+                curDir == Dir.N && nextSign == Sign.J -> if (Dir.W in interiorDirectionSelector) setOf(
+                    Dir.S,
+                    Dir.W
+                ) else setOf(Dir.N, Dir.E)
+
+                curDir == Dir.N && nextSign == Sign.L -> if (Dir.W in interiorDirectionSelector) setOf(
+                    Dir.N,
+                    Dir.W
+                ) else setOf(Dir.S, Dir.E)
+
+                curDir == Dir.W && nextSign == Sign.L -> if (Dir.N in interiorDirectionSelector) setOf(
+                    Dir.N,
+                    Dir.W
+                ) else setOf(Dir.S, Dir.E)
+
+                curDir == Dir.S && nextSign == Sign.F -> if (Dir.E in interiorDirectionSelector) setOf(
+                    Dir.N,
+                    Dir.E
+                ) else setOf(Dir.S, Dir.W)
+
+                curDir == Dir.W && nextSign == Sign.F -> if (Dir.N in interiorDirectionSelector) setOf(
+                    Dir.N,
+                    Dir.E
+                ) else setOf(Dir.S, Dir.W)
+
                 else -> throw RuntimeException()
             }
             cur = next
@@ -193,7 +227,8 @@ object Day10 {
         }
         possibleInterior1.removeAll(visited)
         possibleInterior2.removeAll(visited)
-        val possibleInterior = listOf(possibleInterior1, possibleInterior2).single { candidate -> !candidate.any { it !in board } }
+        val possibleInterior =
+            listOf(possibleInterior1, possibleInterior2).single { candidate -> !candidate.any { it !in board } }
         val knownInterior = mutableSetOf<Point2D>()
         for (dot in possibleInterior) {
             if (dot in knownInterior) {
