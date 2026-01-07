@@ -27,9 +27,9 @@ object Day21 {
             val rolls2 = listOf(deterministicDice.roll(), deterministicDice.roll(), deterministicDice.roll()).sum()
             player2.move(rolls2)
             if (player2.score >= 1000) {
-                println(deterministicDice)
-                println(player1)
-                println(player2)
+                // println(deterministicDice)
+                // println(player1)
+                // println(player2)
                 return 1L * player1.score * deterministicDice.rolls
             }
         }
