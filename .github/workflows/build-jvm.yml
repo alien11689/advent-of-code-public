@@ -81,7 +81,7 @@ jobs:
       - name: Run
         run: ./mvnw -U -e -B -ntp clean test -Pcoverage
       - name: Upload coverage
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
