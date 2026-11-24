@@ -29,6 +29,7 @@
     </modules>
 
     <properties>
+        <argLine />
         <imageName>AOC${project.artifactId}</imageName>
         <jacoco-maven-plugin.version>0.8.16</jacoco-maven-plugin.version>
         <junit.version>6.1.3</junit.version>

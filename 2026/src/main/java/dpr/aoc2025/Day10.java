@@ -11,9 +11,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
-import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.Context;
-import com.microsoft.z3.IntExpr;
 import dpr.commons.Day;
 import dpr.commons.Util;
 
