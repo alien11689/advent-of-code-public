@@ -58,6 +58,10 @@ component_management:
       name: AoC 2025
       paths:
         - 2025/**
+    - component_id: AoC_2026
+      name: AoC 2026
+      paths:
+        - 2026/**
     - component_id: AoC_Rust
       name: AoC Rust
       paths:
